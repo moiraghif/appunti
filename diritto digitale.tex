@@ -2,8 +2,11 @@
 
 \usepackage{amsmath}
 \usepackage[margin=0.7in,
-            bottom=1.5in]{geometry}\usepackage{eurosym}
-
+            bottom=1.5in]{geometry}
+\usepackage{eurosym}
+%metto lui per gli accenti che non vedo nel pdf
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
 
 \title{Juridical Issues in Computer Science}
 \date{}
@@ -12,19 +15,19 @@
 \maketitle
 
 \section{Norme.}
-Il diritto non può essere normato secondo schemi logici perchè i consociati hanno il diritto di conoscere le norme: è necessario un linguaggio parlato e non formale.
+Il diritto non può essere normato secondo schemi logici perché i consociati hanno il diritto di conoscere le norme: è necessario un linguaggio parlato e non formale.
 Un linguaggio parlato è \textit{polisemico}, \textit{ambiguo} e \textit{vago}, per cui il legislatore tenta di aumentare la chiarezza attribuendo nuovi significati a parole già esistenti; mentre l'uso di standard scritti evita la perdita di informazione (rumore) nella trasmissione. \newline
 Si definiscono più strati di norme:
 \begin{itemize}
-\item Regole tecniche: alla pari delle leggi fisiche, non possono essere mutate e non dipendono dalla legislazione vigente.
-\item Standard (o \textit{soft-law}): la comunità suggerisce il modo considerato migliore per una certa pratica (standard ISO per l'Europa).
-\item Norme sociali: sono comportamenti diffusi in una data cultura; sono difficili da modificare anche quando vanno in contrasto con norme positive.
-\item Norme positive: sono le regole poste dal legislatore; possono anche essere in contrasto con le regole tecniche.
+\item Regole tecniche: Sono lo strato più basso delle regole, sono alla pari delle leggi fisiche, non possono essere mutate e non dipendono dalla legislazione vigente. 
+\item Standard (o \textit{soft-law}): Sono basate sulle regole tecniche e la comunità suggerisce il modo considerato migliore per una certa pratica(regole) (standard ISO per l'Europa).
+\item Norme sociali: sono comportamenti diffusi in una data cultura; sono difficili da modificare anche quando vanno in contrasto con norme positive, riguardano l'uso che facciamo delle regole tecniche.
+\item Norme positive: Sono lo strato più alto. La parola postive deriva dal latino e significa poste, sono le regole poste dal legislatore; possono anche essere in contrasto con le regole tecniche.
 \end{itemize}
 Il diritto è l'interazione tra i vari livelli di regole. \newline
 È proprio a causa delle norme sociali che il legislatore non legifera su tecnologie \textit{distruptive}: non essendo noto l'uso, non sono poste regole nell'uso.
 
-Si preferisce utilizzare regolamenti anzichè norme, per le questioni tecniche, per facilitare eventuali modifiche e rendere indipendente la questione da questioni politiche.
+Si preferisce utilizzare regolamenti anzichè norme, per le questioni tecniche, per facilitare eventuali modifiche e rendere indipendente la questione da questioni politiche, poiché i regolamenti non devono essere approvati dal parlamento.
 
 \section{Obsolescenza.}
 L'obsolescenza digitale può avvenire per obsolescenza del supporto (dovuta a guasti meccanici o al tempo) o per obsolescenza software (il software utilizzato non è più supportato).
@@ -36,7 +39,7 @@ Il termine \textit{free} non si riferisce appunto al prezzo ma al concetto di li
 Esistono vari tipi di licenze \textit{free} ma non sono per forza compatibili tra di loro.
 
 Il copyright si differenzia dal diritto d'autore: il primo protegge l'editore garantendo protezione per gli investimenti effettuati, il secondo protegge l'autore garantendogli il controllo dell'opera anche dopo la pubblicazione.
-Il diritto d'autore moderno si differenzia in diritti morali (inalienabili), che corrispondono all'idea originale, e in diritti materiali, che normano come l'opera è accessibile al pubblico (o come sono gestite le opere derivate).
+Il diritto d'autore moderno si differenzia in diritti morali (inalienabili), che corrispondono all'idea originale del  diritto d'autore, e in diritti materiali, che normano come l'opera è accessibile al pubblico (o come sono gestite le opere derivate) che si sovrapone con l'idea del Copyright.
 
 \subsection{Storia del \textit{copyright}.}
 Prima della stampa (prima metà del XVI secolo), un testo scritto era considerato di pubblico dominio; ma con le prime pubblicazioni il sapere si trasmette pressochè invariato nel tempo (senza il \textit{rumore} della forma orale).
@@ -45,8 +48,8 @@ Un autore diffondeva il proprio manoscritto a più stampatori per permettere una
 
 Successivamente, il diritto d'autore nasce con Kant: dopo la pubblicazione di \textit{Critica della Ragion Pura}, circolavano copie modificate da terzi spacciate per originali.
 Il diritto d'autore è inalienabile e garantisce la paternità dell'opera mentre i diritti materiali normano lo sfruttamento dell'opera. \newline
-Precedentemente, gli artisti vivevano sotto la protezione di un Mecenate; ma grazie a questa istituzione un artista poteva vivere delle sue opere: i primi furono Beethoven e Manzoni.
-Il diritto d'autore era stato pensato per durare vita natural durante dell'autore e per i successivi 50 anni (70 nel caso di persone giuridiche) ma, negli anni '80 è stato aumentato di 20 anni a causa di pressioni della Walt Disney per proteggere il prodotto di Topolino.
+Precedentemente, gli artisti vivevano sotto la protezione di un Mecenate; ma grazie a questa istituzione un artista poteva vivere delle sue opere, rispondendo univamente al pubblico: i primi furono Beethoven e Manzoni.
+Il diritto d'autore era stato pensato per durare vita natural durante dell'autore e per i successivi 50 anni (70 nel caso di persone giuridiche) ma, negli anni '80 è stato aumentato di 20 anni (25 nel caso di persone giuridiche) a causa di pressioni della Walt Disney per proteggere il prodotto di Topolino.
 
 Col tempo l'intermediario acquista potere (la distribuzione costa più della metà delle spese complessive), ma l'avvento di Internet modifica leggermente le cose: da una parte i \textit{blog} risparmiano agli autori l'uso del linguaggio HTML per pubblicare, dall'altra nascono nuovi intermediari digitali, non regolamentati.
 Umberto Eco afferma che con l'avvento di Internet il sapere si appiattisce: è trasmesso tutto allo stesso modo, mentre prima erano selezionati solamente i testi considerati degni di nota dai sapienti del periodo.
@@ -56,21 +59,32 @@ Negli anni '60, IBM iniziava a vendere i suoi sistemi UNIX indipendenti dall'har
 Tuttavia nell'ambito di ricerca il software è considerato bene comune e viene scambiato gratuitamente senza conseguenze legali: non si applica l'idea di furto perchè non è rimossa la copia originale ma solamente copiata.
 
 Nel 1978, Bill Gates chiede che gli sviluppatori fossero tutelati ricevendo pagamenti a seguito della vendita del software prodotto. Nello stesso anno, negli USA si norma la diffusione del software che segue la medesima fattispecie della musica (ormai in musicassette).
-Sempre in quegli anni, Bill Gates firma un contratto con IBM per l'installazione di DOS sui PC; successivamente IBM tenta il lancio di OS2, ma senza successo.
+Sempre in quegli anni, Bill Gates firma un contratto con IBM per l'installazione di DOS sui PC; successivamente IBM, per rimediare a tale errore, tenta il lancio di OS2, ma senza successo.
 
 Richard Stallman invece teorizza l'informazione libera e le licenze free: chi ha le competenze può modificare un codice sorgente e ridistribuirlo.
-Nel 1985 fonda la \textit{Free Software Foundation} scrivendo la prima licenza \textit{free} (la GPL): è esplicitato solamente cosa è vietato.
-Il Sistema Operativo che porta avanti il progetto è però sviluppato da Linus Torvalds: egli voleva progettare il miglior sistema operativo esistente, e già le prime versioni di Linux ebbero successo, se pur in una nicchia di esperti, per la stabilità che offriva. \newline
+Nel 1985 fonda la \textit{Free Software Foundation} scrivendo la prima licenza \textit{free} (la GPL[\textbf{G}eneral \textbf{P}ublic \textbf{L}icense]): è esplicitato solamente cosa è vietato. La sua battaglia è una battaglia politica ma mancava un pezzo fondamentale: Il Sistema Operativo che porta avanti il progetto è però sviluppato da Linus Torvalds: egli voleva progettare il miglior sistema operativo esistente, e già le prime versioni di Linux ebbero successo, se pur in una nicchia di esperti, per la stabilità che offriva. \newline
 
-Nel 2002 Edgar David Villa Nueva Munez, parlamentare peruviano, propone l'uso di software libero (a parità di qualità) nella digitalizzazione della Pubblica Amministrazione.
+Nel 2002 Edgar David Villanueva Nunez, parlamentare peruviano, propone l'uso di software libero (a parità di qualità) nella digitalizzazione della Pubblica Amministrazione.
 Microsoft Perù risponde affermando che il costo delle licenze è irrisorio e cita il caso del Messico che aveva informatizzato le scuole messicane con dei computer Linux (quando nessuno aveva le competenze per usarli).
-Ma l'uso del software libero, afferma Villa Nueva, è per questioni politiche: è l'unico modo per garantire accesso libero, persistenza dei dati e sicurezza. \newline
+Ma l'uso del software libero, afferma Villanueva, è per questioni politiche: è l'unico modo per garantire accesso libero, persistenza dei dati e sicurezza. \newline
 
 La digitalizzazione della Pubblica Amministrazione italiana subisce pressioni da Microsoft Italia che offre licenze gratuite.
 
 \subsection{Creative Commons.}
-L'idea di licenza \textit{open} è stata portata a inizio 2000 al mondo analogico grazie alla licenze \textit{Creative Commons}, pensata per opere artistiche: il concetto di \textit{copyright} è uscito dalla sfera di competenza per cui è stato pensato, rendendo difficile se non impossibile la creazione artistica.
+L'idea di licenza \textit{open} è stata portata a inizio 2000 al mondo analogico grazie alla licenze \textit{Creative Commons}(CC), che nascono da un idea di Lessig Lawrence un professore di Stanford, pensata per opere artistiche: il concetto di \textit{copyright} è uscito dalla sfera di competenza per cui è stato pensato, rendendo difficile se non impossibile la creazione artistica.
 Il termine \textit{Commons} fa riferimento ai beni che, nel diritto anglosassone, non possono essere ridotti a proprietà privata perchè sono di pubblica utilità.
+Ma non diventano neanche un public domain infatti io posso recintare le mie opere con diverse modalità di licenze:
+\begin{enumerate}
+\item  \textbf{Solo attribuzione} : Le CC non sono delle public domain e inoltre ha come condizione almeno quella di attribuire l’opera all’autore principale nella sua integrità (nella forma originale). In questo caso uno può fare quello che vuole con la mia opera basta che mi attribuisca l’opera.
+\item \textbf{Attribuzione} opere\textbf{ non derivate} : Posso scegliere che non possano esistere delle opere derivate dalle mie senza il mio permesso, in tal caso uno come Mondadori può stampare la mia opera nella sua integrità, attribuendola a me e non mi deve dare i soldi (può convenire se sono un artista alle prime armi o se sono uno scienziato o un accademico come Kant).
+\item \textbf{Attribuzione} opere \textbf{non derivate} \textbf{non commerciali} : Posso aggiungere anche la non commerciabilità, in questo caso tu puoi pubblicarla ma non puoi far pagare il libro senza il mio consenso (possiamo decidere insieme il prezzo ma non lui da solo).
+\item \textbf{Attribuzione non commerciale} : Permetto tutte le modifiche e derivazioni affinché tu non la vendi. Se la vendi devi prendere il mio permesso.
+\item \textbf{Attribuzione non commericale condividi allo stesso modo} : Permetto la modifica e la sua divulgazione ma devi ridistribuirla con la stessa licenza con la quale l’ho dato a te e per modificare la licenza devi prendere permesso da me.
+\item \textbf{Attribuzione non commericale condividi allo stesso modo} : Permetto la modifica e la sua divulgazione ma devi ridistribuirla con la stessa licenza con la quale l’ho dato a te e per modificare la licenza devi prendere permesso da me.
+\item \textbf{Attribuzione condividi allo stesso modo} : Semplicemente non posso chiudere l’opera che sto mandando in giro, non posso recintarla in nessun modo, l’unica cosa che è che deve essere distribuito allo stesso modo in cui te l’ho diffusa io. In senso tutti gli altri possono prendere l’opera derivata e venderla se l’ho permesso io nell’opera originaria.
+\end{enumerate}
+
+
 
 \subsection{Open Access.}
 Il MIT, pagando abbonamenti a riviste scientifiche su cui pubblicavano i risultati delle proprie ricerche, presenta il concetto di Open Access: i risultati ottenuti da ricerche finanziate da denaro pubblico devono essere di pubblico dominio.
@@ -123,7 +137,7 @@ Esempio è la BSA (Business Software Association), società russa opearativa nel
 \paragraph{Hackers etici.} Eseguono \textit{pentesting} (anche non autorizzato) e comunicano a chi di dovere le falle di sicurezza trovate nel sistema; generalmente sono dotati di forti capacità tecniche.
 
 \subsection{Firma elettronica.}
-Negli anni '90 i processori sono sufficientemente potenti per implementare algoritmi di crittografia asimmetrica (PGP): la sicurezza non è data dalla segretezza dell'algoritmo, che è pubblico, ma dalla lunghezza e bontà della chiave.
+Negli anni '90 i processori sono sufficientemente potenti per implementare algoritmi di crittografia asimmetrica (PGP[\textbf{P}retty \textbf{G}ood\textbf{ P}rivacy]): la sicurezza non è data dalla segretezza dell'algoritmo, che è pubblico, ma dalla lunghezza e bontà della chiave.
 È così rispettata la triade CIA:
 \begin{itemize}
 \item confidenzialità: le informazioni sono leggibili solamente da chi autorizzato;
