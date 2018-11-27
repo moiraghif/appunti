@@ -5,4 +5,4 @@ e cercate di lavorare su branch separati, facciamo le cose per bene!
 Tutorial LaTeX: https://www.latex-tutorial.com/tutorials/
 
 Tutorial Git: http://rogerdudler.github.io/git-guide/index.it.html
-              https://www.tutorialspoint.com/git/
+(più avanzato: https://www.tutorialspoint.com/git/)
