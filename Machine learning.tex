@@ -6,9 +6,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 
-%\makeatletter
-%\@addtoreset{section}{part*}
-%\makeatother
 \usepackage{chngcntr}
 \counterwithin*{section}{part}
 
@@ -90,13 +87,13 @@ Si cerca una funzione:
 \end{align*}
 
 a cui si aggiunge un errore (o residuo) $\epsilon$ che rappresenta lo scarto del modello, dovuto a incertezza o ignoranza della formula reale. \newline
-Un modello di regressione lineare è una funzione lineare di una matrice (\textit{del disegno}) di valori X pesata con un vettore w.
+Un modello di regressione lineare è una funzione lineare di una matrice (\textit{del disegno}) di valori $X$ pesata con un vettore $\underline{w}$.
 Se la matrice del disegno è composta da una sola variabile indipendente, il modello è detto \textit{modello lineare semplice}: non ha funzioni pratiche ma è interessante dal punto di vista teorico perchè presenta le stesse problematiche dei modelli multivariati, polinomiali e con componenti rettangolari. \newline
-L'obiettivo è minimizzare l'errore standard commesso nel prevedere y tramite la funzione f:
+L'obiettivo è minimizzare l'errore standard commesso nel prevedere $y$ tramite la funzione $f$:
 \begin{align*}
   SSE &= \sum^m_{i=1}{e^2_i} \\
-      &= \sum^m_{i=1}{[y_i -f(\underline{X})]^2} \\
-      &= \sum^m_{i=1}{[y_i -x_iw_i - b]^2}
+      &= \sum^m_{i=1}{[y_i - f(\underline{X})]^2} \\
+      &= \sum^m_{i=1}{[y_i - \underline{x}_i \underline{w}_i - b]^2}
 \end{align*}
 Aggiungere variabili indipendenti non modifica il ragionamento nè la formulazione matematica del problema.
 Si possono aggiungere altre variabili dall'elevamento a potenza di quelle presenti o dalla loro moltiplicazione: i parametri sono detti \textit{gradi di libertà} del modello.
@@ -106,7 +103,7 @@ Aggiungere troppi gradi di libertà però può provocare overfitting dei dati, o
 Il modello lineare, pur essendo molto semplice, si basa su delle assunzioni molto forti.\newline
 
 \paragraph{Assunzioni relative ai residui.}
-I residui devono avere media nulla e devono essere indipendenti (e quindi anche incorrelati) per tutti i valori di x.
+I residui devono avere media nulla e devono essere indipendenti (e quindi anche incorrelati) per tutti i valori di $x$.
 Inoltre la varianza dei residui deve essere costante (devono cioè essere \textit{omoschedastici}).
 \begin{equation*}
   \underline{\epsilon} = N(\underline{\mu}, \sigma{}I)
@@ -356,16 +353,17 @@ l'indice di Fowlkes and Mallows e il $\Gamma$ statistic.
 
 \subsection{Indici interni.}
 Sono indici che, in generale, servono a valutare la bontà dell'adattamento.
-Tipicamente, la misura di validità è valutata come $sum_{i=1}^{k}{w_i·validity(c_i)}$.
+Tipicamente, la misura di validità è valutata come $\sum_{i=1}^{k}{w_i \cdot validity(c_i)}$.
 I pesi generalmente sono uguali a 1 $w_i = 1 \forall{i}$.
 La coesione $C_i$ è calcolata come la sommatoria delle prossimità (o similitudine) tra tutte le osservazioni:
 \begin{equation*}
   C_i = \sum{\text{similarity}(x, y)} \forall{x, y \in C_i}
 \end{equation*}
 La separazione invece è valutata tra coppie di cluster:
-\begin{equation*}
-  \text{separation}(C_i, C_j) = \sum{\text{similarity}(x, y)} \forall{x \in C_i, y \in C_j}
-\end{equation*}
+\begin{align*}
+  \text{separation}(C_i, C_j) = \sum{\text{similarity}(x, y)} \\
+  \forall{x, y: x \in C_i, y \in C_j}
+\end{align*}
 In caso di algoritmi che definiscono metoidi o centroidi, la coesione si calcola sommando le distanze tra le osservazioni e i loro metoidi (o centroidi); mentre la separazione si calcola, oltre che con la formula precedente, calcolando il metoide (o centroide) della distribuzione e calcolando la distanza tra il prototipo del cluster e quello della distribuzione.
 In base al valore dei pesi $w_i$, l'interpretazione del valore cambia:
 \begin{itemize}
@@ -379,7 +377,7 @@ In base al valore dei pesi $w_i$, l'interpretazione del valore cambia:
 Queste misure possono essere usate per migliorare la qualità dei cluster: cluster non molto coesi possono essere divisi in più cluster; analogamente possono essere uniti cluster molto vicini tra di loro.
 Si definisce la silhouette di ogni osservazione come indice di qualità del cluster per la singola osservazione:
 \begin{equation*}
-  s_i = \frac{b_i - a}{\max{(a_i, b_i)}} \in [-1; +1]
+  s_i = \frac{b_i - a}{\max{\{a_i, b_i\}}} \in [-1; +1]
 \end{equation*}
 dove $a_i$ è la distanza media della i-esima osservazione rispetto alle altre osservazioni del cluster, e $b_i$ è la distanza media minima dell'i-esima osservazione rispetto alle osservazioni degli altri cluster.
 L'osservazione appartiene tanto più al suo cluster quanto più $s_i$ tende a $+1$.
