@@ -1,0 +1,7 @@
+#Files generated from the LaTeX file so we exclude them
+*.log
+*.aux
+*.idx
+*.gz
+*.toc
+
