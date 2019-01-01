@@ -6,7 +6,7 @@
 \usepackage{eurosym}
 %metto lui per gli accenti che non vedo nel pdf
 \usepackage[utf8]{inputenc}
-\usepackage[italian]{babel}
+\usepackage{babel}
 
 \title{Juridical Issues in Computer Science}
 \date{}
@@ -183,10 +183,71 @@ L'obbligo di notifica si applica solamente in caso di incidenti a impatto rileva
 \end{itemize}
 
 La notifica deve avvenire senza giustificato ritardo, con pena pari compresa tra \euro{12.000} e \euro{120.000}, comunque contenuta rispetto a quella per la subita violazione di dati personali per insufficiente protezione.
-La notifica deve comprendere inoltre le policy aziendali di sicurezza e la certificazione di autitor esterni sull'implementazione di tali misure.
+La notifica deve comprendere inoltre le policy aziendali di sicurezza e la certificazione di autitor esterni sull'implementazione di tali misure	.
 
 \section{GDPR.}
 Secondo la nuova normativa, i dati sensibili tenuti da un'azienda devono essere crittografati (per garantire sia protezione che veridicità).
+
+La regolamentazione della tecnologia, partendo da alcune assunzione di base, la tecnologia è qualunque cosa che si pone come un medium tra l’ambiente e il soggetto che si relazione con tale ambiente. A partire da determinate innovazioni tecnologiche si è sviluppata l’esigenza di tutelare la sfera di riservatezza che è la classica definizione di privacy. A fronte delle PIT (Privacy Invading Technologies) si è creata l’esigenza di tutela e regolamentazione della privacy, ma la risposta non è sempre stata una risposta sempre normativa infatti ci sono le cosiddette PET (Privacy Enhancing Technologies) delle tecnologie che consentivano di rispondere a queste esigenze di tutela con altri strumenti tecnologiche ad esempio la crittografia, anonimato ecc. Anzi spesso è questa risposta non legale ad essere più efficace dei metodi legali con magari delle sanzioni. Ormai la distinzione tra ambiente vs digitale e online vs offline non ha più senso visto l’ambiente in cui ci troviamo. \newline
+Se trattiamo la privacy come concetto analogico e non digitale ( cioè la privacy non è solo 1 o 0 ma ha dei strati intermedi) quindi ha senso parlare di strumenti che ci permettono di aumentare il livello di protezione dei nostri dati. Il concetto classico della privacy fisica (tutela dall’essere visti in certe circostanze), ovviamente in un contesto digitale è quello della informational privacy, visto che le leggi trattano come privacy le sue informazioni. \newline
+Le fasi del ciclo di informazione sono: 
+a) apprensione $\rightarrow$ b) comunicazione $\rightarrow$ c) registrazione o archiviazione $\rightarrow$ d) telecomunicazione (trasmissione) $\rightarrow$ e) manipolazione \newline
+Rispetto a questi step ci sono stati vari sviluppi di tutela, ad esempio dall’ultima fase della manipolazione è nata la data protection. Nel 1890 il primo step in un articolo di Warren e Brandeis in cui si parla del diritto alla privacy, dice che non si possono diffondere le foto senza il consenso dell’individuo, era dovuto alla nascita delle telecamere portatili e della giornale scandalistica, che è uno dei primi oggetti che ha fatto sorgere l’esigenza della privacy.\newline
+Un altro step importante nel 1928 con il tema dell’intercettazione delle conversazione dentro le case, la polizia usa strumenti per captare le informazioni (conversazioni) dentro casa di uno spacciatore (il signor Olmstead) senza chiedere autorizzazione del magistratura (è una forma di trespassing ma allora non c’era nessuna legge a riguardo). La corte Suprema da ragione alla polizia poiché non erano mai entrati dentro la proprietà privata quindi nessuna violazione della privacy fisica (ATTENZIONE non c’era ancora informational privacy). L’avvocato Brandeis firma un dissenso dicendo non era d’accordo con il fatto di aver dato ragione alla polizia, dicendo che la legge non era formata in base alla tecnologie che avevano in quel momento altrimenti vi sarebbe stato una legge che avrebbe richiesto il permesso del magistrato per proteggere la privacy del cittadino americano. \newline
+Nel 1970 la privacy nel senso tradizionale piano piano si sviluppa a partire da USA, nel 1970 vediamo a livello mondiale la prima forma di regolamentazione dei dati personali, qua la PIT è il computer mainframe. Il problema è dovuto al fatto che non ci si fida ancora del governo tedesco e svedese (per la WWII) e quindi c’è la necessita di regolamentare i dati personali dovute ai censimenti per l’uso che ne potrebbe fare il governo. Le esigenze sono in pratica 2:
+\begin{itemize}
+	\item Impedire la nascita di banche dati segrete, rendere informazione per far sapere al soggetto a cui i dati si riferiscono il perché, la durata del trattamento dei dati.
+	\item Impedire usi secondari di questi dati, se raccogli i dati per un motivo non devi usare i dati per altre finalità.
+\end{itemize}
+Queste due esigenze anche oggi sono alla base della data protection. Oggi il caso più famoso della concretizzazione di questi due problemi è quello di Cambridge Analitica. \newline
+Differenze nella privacy nel senso tradizionale e data protection:
+\begin{itemize}
+	\item     • Privacy: Individuo non deve essere sottoposto a ingerenze da parte del pubblico, la sfera ecc. \newline
+	Privacy nel senso tradizionale: Sottrazione del individuo rispetto al contesto.
+	\item Data Protection: Rapporto di fiducia tra uno che gestisce un database (data collector) e l’individuo (data subject) a cui le informazioni si riferiscono, se nella privacy parlavamo della sottrazione qua si parla della limitazioni dell’uso dei dati, può essere definita come una sorte di attrito nella circolazione delle informazione. La privacy (informational) è una sorte di controllo in questo ambito, in particolare la privacy viene definita come la possibilità di decidere in maniera autonoma quando, come e in che misura comunicare ad altri informazione che li riguardano. 
+\end{itemize}
+
+L’ultimo step è nel 1994, La copertina di Time dedica la copertina ad internet, la data protection resta un questione legata a data controller e data subject. Qua la banca dati non è più in mano al governo come nel 1970 ma ad internet, quindi il fenomeno di violazione dei dati possono diventare un fenomeno di massa e gli attori principali sono le corporation private. \newline
+Nel GDPR la norma che riguarda la sicurezza informatica (Art. 32) ha come primo riferimento, quindi come primo strumento di tutela che il titolare del trattamento (il data controller) deve implementare, quello di incrementare strumenti volti all’anonimizzazione (pseudonimizzazione) e cifratura dei dati personali. Con il GDPR si eliminano le misure minime di sicurezza, essendo un elenco specifico a cui era collegato la sanzione penale dovevano essere tassative, ma con il periodo dovrebbero essere modificate, e per una norma a lunga durata diventerebbero obsolescenti e insicure. E’ rimasto il fatto di avere le misure di sicurezza idonee ed adeguate, che sono state specificati almeno 4 ambiti (tra cui anche quello di cifratura dei dati), che rappresentano punti di riferimento che il titolare del trattamento deve tenere in considerazione. I 4 ambiti sono:
+\begin{enumerate}
+	\item Cifratura dei dati
+	\item Utilizzo di sistemi di sicurezza perimetrale quindi avere l’antivirus aggiornato ecc.
+	\item Procedura Specifica in maniera informatica per garantire in tempi certi la disponibilità e l'accessibilità dei dati.
+	\item La verifica dei test (penetration test) a cadenza regolari per valutare il livello di sicurezza della propria azienda, per garantire i 3 punti appena elencati.
+\end{enumerate}
+Elemento fondamentale di questa norma è che tutti i soggetti bene e servizi ai cittadini europei sono tenuti a rispettare il GDPR. Il GDPR tiene in mente i grandi colossi come Facebook, Google ecc. Il nuovo regolamento si basa sull’accountability, fondamentalmente responsabilizzazione e rendicontazione, al data controller sono imposti tutta una serie di oneri che sostituiscono autorizzazioni, in buona sostanza deve predisporre un documento che dovrà descrivere in particolare il tipo di trattamento e dovrà descrivere le misure di sicurezza che ha adottato per limitare il rischio di violazione dei dati personali. Questo documento sarà la policy per tale tipo di trattamento. Il momento in cui si dovesse verificare un problema. In questa normativa viene fornita una cornice che verrà dopo riempita dalle regole tecniche, best practice e formazione specifica da parte dei operatori in modo tale da avere come rifermento con la norma ma patrimonio di conoscenze di un particolare settore. Il 3$^o$ aspetto da considerare è quello di sanzioni, le sanzioni previste sono due tipologie di sanzioni amministrazione con un massimale di 20 milioni per una categoria e 10 milioni per un’altra categoria di violazioni, nelle quali se 20 milioni di euro dovessero essere considerati poco si può arrivare al 4\% del fatturato annuo dell’anno precedente. \newline
+Il GDPR è applicabile dal 25 maggio 2018, prima di questa data tutti gli stati membri hanno avuto 2 anni dal maggio 2016 per emanare delle norme di coordinamento con la norma nazionale e quella europea. In Italia il d.lgs. 101/2018 (per il coordinamento) è entrato in vigore il 19 settembre 2018. 
+I 6 punti fondamentali della data protection sono:
+\begin{enumerate}
+	\item Fondamenti di liceità del trattamento: Ogni trattamento del dato personale che non sia svolto per motivi personali, deve basarsi su un fondamento di liceità (e quindi avere una base giuridica).
+	\item Informativa: I contenuti dell’informativa sono elencati in modo tassativo nel regolamento e in parte sono più ampi rispetto al Codice. Nell’informativa ci dovrà essere il titolare del trattamento, la finalità del trattamento e la base giuridica del trattamento.
+	\item Diritti degli interessati: Il titolare deve dare entro 1 mese dalla richiesta una risposta all’interessato e i diritti sono:
+	\begin{itemize}
+		\item Diritto di accesso
+		\item Diritto di rettifica
+		\item Diritto di cancellazione (nuovo)
+		\item Diritto di limitazione
+		\item Diritto alla portabilità (nuovo)
+		\item Diritto di opposizione
+		\item Diritto di revocare il consenso
+	\end{itemize}
+	\item Titolare, responsabile e incaricato
+	\item Approccio basato sul rischio e misure di accountability
+	\item Trasferimenti di dati verso paesi terzi
+\end{enumerate}
+
+La normativa, che in generale si applica solo alle persone fisiche (l’interessato), per quanto riguarda l’attività promozionale sia applica sia alle persone fisiche che alle persone giuridiche. Un dato non deve essere considerato pubblico solo se facilmente reperibile su internet. Un dato è pubblico se viene da determinate tipi di fonti che lo codificano come tale. Potrebbe essere che uno li abbia pubblicati per un altro motivo e io non posso cambiarne la finalità solo perché disponibile online. Questa sorta di raccolta dei dati ad esempio per arricchire i database è vietata dalla normativa europea e italiana. La normativa del 2013 individua una serie di modalità volta alle attività promozionale rispetto a queste modalità stabilisce e sceglie se esiste un obbligo di consenso preventivo (opt-in) o il di consenso preventivo – eccezione (opt-out) (posso oppormi al trattamento) 
+Gli aspetti dell’attività promozionale sono due: 
+
+\begin{itemize}
+	\item L’informativa che specifica non solo l’attività promozionale ma anche la modalità di come questa attività promozionale viene raggiunta, quindi se ti contattano tramite il telefono, mail ecc. 
+	\item Rispetto a tale modalità ricevere il consenso se necessario dell’interessato. Il consenso è la seconda modalità, in questi casi parla di opt-in.
+\end{itemize}
+Quindi non mi è consentito mandare le mail esplorative per richiedere il consenso se non l’ho a monte. Ma è possibile contattare telefonicamente mediante un operatore fisico per ricevere il consenso del contraente per ricevere comunicazione promozionale, ma si ha la possibilità di disiscriversi (opt-out) ad esempio iscrivendosi al registro delle opposizioni, un altro ambito dvoe si può esercitare il diritto all’opt-out è quello di marketing postale.\newline
+Il consenso deve essere staccato rispetto all’erogazione del servizio, rispetto alla raccolta di altri dati, deve essere libero e si deve basare sull’informativa. Queste caratteristiche sono rimaste anche nel GDPR. \newline
+Oltre al opt-in, opt-out esiste un terzo regime soft-spam in cui trattiamo i dati del nostro cliente, il cliente nel contratto ci lascia l’email o indirizzo postale, e prevede la possibilità di usare email o indirizzo per inviare comunicazioni di tipo promozionale o commerciale.\newline
+Per i dati sanitari invece, prima del GDPR c’era il divieto di utilizzare i dati sanitari salvo un autorizzazione del Garante, un informativa, consenso scritto e consenso scritto al trasferimento verso paesi terzi (in caso ce ne fosse bisogno). Il GDPR ha ribadito il fatto che il dato non è utilizzabile se non da un autorizzazione dell’interessato e non fosse per un uso pubblico, non è possibile farne uso promozionale, di profilazione o qualunque non consentito dall’utente. I dati della regione Lombardia potevano essere usati dopo l’anonimizzazione da un operatore. Le norme di sicurezza sono delle norme specifiche, devono garantire la segregazione dei dati, garantire i vari livelli di accessibilità dei dati in modo che non tutti possano accedere a tali dati e garantire la cifrature e copertura dei dati e garantire la data-recovery e comunicazione dei breech che hanno ricevuto. \newline
+La privacy su internet, l’elemento fondamentale è il cookie, i cookie sono divisibili in due macro categorie: cookie di prima parte (di tipo tecnico) e di terza parte (di profilazioni). Il 99\% dei cokie utilizzati sono di terza parte. In mezzo ai due tipi di cookie c’è un terzo tipo quello di cookie analitici che permettono di vedere le statistiche riguardante le pagine, e questi possono essere usati senza adempiere una serie di obblighi solo se sono anonimizzati. Per l’uso dei servizi cloud regole particolari non ne sono state introdotte, sta al cliente di scegliere il cloud che possa fornire un certo livello di sicurezza.\newline
 
 \subsection{\textit{Cyber Act.}}
 L'Organo Europeo ENISA, entro fine anno, stabilirà una bozza di regolamento (quindi valido senza recepimento da parte dei Paesi membri) per la certificazione di oggetti IoT e simili.
