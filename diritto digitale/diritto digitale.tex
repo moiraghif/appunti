@@ -4,9 +4,9 @@
 \usepackage[margin=0.7in,
             bottom=1.2in]{geometry}
 \usepackage{eurosym}
-%metto lui per gli accenti che non vedo nel pdf
+
 \usepackage[utf8]{inputenc}
-\usepackage{babel}
+\usepackage[italian]{babel}
 
 \title{Juridical Issues in Computer Science}
 \date{}
@@ -196,15 +196,15 @@ Rispetto a questi step ci sono stati vari sviluppi di tutela, ad esempio dall’
 Un altro step importante nel 1928 con il tema dell’intercettazione delle conversazione dentro le case, la polizia usa strumenti per captare le informazioni (conversazioni) dentro casa di uno spacciatore (il signor Olmstead) senza chiedere autorizzazione del magistratura (è una forma di trespassing ma allora non c’era nessuna legge a riguardo). La corte Suprema da ragione alla polizia poiché non erano mai entrati dentro la proprietà privata quindi nessuna violazione della privacy fisica (ATTENZIONE non c’era ancora informational privacy). L’avvocato Brandeis firma un dissenso dicendo non era d’accordo con il fatto di aver dato ragione alla polizia, dicendo che la legge non era formata in base alla tecnologie che avevano in quel momento altrimenti vi sarebbe stato una legge che avrebbe richiesto il permesso del magistrato per proteggere la privacy del cittadino americano. \newline
 Nel 1970 la privacy nel senso tradizionale piano piano si sviluppa a partire da USA (caso Olmstead), nel 1970 vediamo a livello mondiale la prima forma di regolamentazione dei dati personali in Germania e Svezia, qua la PIT è il computer mainframe. Il problema è dovuto al fatto che non ci si fida ancora del governo tedesco e svedese (per la WWII) e quindi c’è la necessita di regolamentare i dati personali dovute ai censimenti per l’uso che ne potrebbe fare il governo. Le esigenze sono in pratica 2:
 \begin{itemize}
-	\item Impedire la nascita di banche dati segrete, rendere informazione per far sapere al soggetto a cui i dati si riferiscono il perché, la durata del trattamento dei dati.
-	\item Impedire usi secondari di questi dati, se raccogli i dati per un motivo non devi usare i dati per altre finalità.
+  \item Impedire la nascita di banche dati segrete, rendere informazione per far sapere al soggetto a cui i dati si riferiscono il perché, la durata del trattamento dei dati.
+  \item Impedire usi secondari di questi dati, se raccogli i dati per un motivo non devi usare i dati per altre finalità.
 \end{itemize}
 Queste due esigenze anche oggi sono alla base della data protection. Oggi il caso più famoso della concretizzazione di questi due problemi è quello di Cambridge Analitica. \newline
 Differenze nella privacy nel senso tradizionale e data protection:
 \begin{itemize}
-	\item Privacy: Individuo non deve essere sottoposto a ingerenze da parte del pubblico, la sfera ecc. \newline
-	Privacy nel senso tradizionale: Sottrazione del individuo rispetto al contesto.
-	\item Data Protection: Rapporto di fiducia tra uno che gestisce un database (data collector) e l’individuo (data subject) a cui le informazioni si riferiscono, se nella privacy parlavamo della sottrazione qua si parla della limitazioni dell’uso dei dati, può essere definita come una sorte di attrito nella circolazione delle informazione. La privacy (informational) è una sorte di controllo in questo ambito, in particolare la privacy viene definita come la possibilità di decidere in maniera autonoma quando, come e in che misura comunicare ad altri informazione che li riguardano. 
+  \item Privacy: Individuo non deve essere sottoposto a ingerenze da parte del pubblico, la sfera ecc. \newline
+    Privacy nel senso tradizionale: Sottrazione del individuo rispetto al contesto.
+  \item Data Protection: Rapporto di fiducia tra uno che gestisce un database (data collector) e l’individuo (data subject) a cui le informazioni si riferiscono, se nella privacy parlavamo della sottrazione qua si parla della limitazioni dell’uso dei dati, può essere definita come una sorte di attrito nella circolazione delle informazione. La privacy (informational) è una sorte di controllo in questo ambito, in particolare la privacy viene definita come la possibilità di decidere in maniera autonoma quando, come e in che misura comunicare ad altri informazione che li riguardano. 
 \end{itemize}
 
 L’ultimo step è nel 1994, La copertina di Time dedica la copertina ad internet, la data protection resta un questione legata a data controller e data subject. Qua la banca dati non è più in mano al governo come nel 1970 ma ad internet, quindi il fenomeno di violazione dei dati possono diventare un fenomeno di massa e gli attori principali sono le corporation private. \newline
@@ -219,21 +219,21 @@ Elemento fondamentale di questa norma è che tutti i soggetti bene e servizi ai 
 Il GDPR è applicabile dal 25 maggio 2018, prima di questa data tutti gli stati membri hanno avuto 2 anni dal maggio 2016 per emanare delle norme di coordinamento con la norma nazionale e quella europea. In Italia il d.lgs. 101/2018 (per il coordinamento) è entrato in vigore il 19 settembre 2018. 
 I 6 punti fondamentali della data protection sono:
 \begin{enumerate}
-	\item Fondamenti di liceità del trattamento: Ogni trattamento del dato personale che non sia svolto per motivi personali, deve basarsi su un fondamento di liceità (e quindi avere una base giuridica).
-	\item Informativa: I contenuti dell’informativa sono elencati in modo tassativo nel regolamento e in parte sono più ampi rispetto al Codice. Nell’informativa ci dovrà essere il titolare del trattamento, la finalità del trattamento e la base giuridica del trattamento.
-	\item Diritti degli interessati: Il titolare deve dare entro 1 mese dalla richiesta una risposta all’interessato e i diritti sono:
-	\begin{itemize}
-		\item Diritto di accesso
-		\item Diritto di rettifica
-		\item Diritto di cancellazione (nuovo)
-		\item Diritto di limitazione
-		\item Diritto alla portabilità (nuovo)
-		\item Diritto di opposizione
-		\item Diritto di revocare il consenso
-	\end{itemize}
-	\item Titolare, responsabile e incaricato
-	\item Approccio basato sul rischio e misure di accountability
-	\item Trasferimenti di dati verso paesi terzi
+  \item Fondamenti di liceità del trattamento: Ogni trattamento del dato personale che non sia svolto per motivi personali, deve basarsi su un fondamento di liceità (e quindi avere una base giuridica).
+  \item Informativa: I contenuti dell’informativa sono elencati in modo tassativo nel regolamento e in parte sono più ampi rispetto al Codice. Nell’informativa ci dovrà essere il titolare del trattamento, la finalità del trattamento e la base giuridica del trattamento.
+  \item Diritti degli interessati: Il titolare deve dare entro 1 mese dalla richiesta una risposta all’interessato e i diritti sono:
+  \begin{itemize}
+    \item Diritto di accesso
+    \item Diritto di rettifica
+    \item Diritto di cancellazione (nuovo)
+    \item Diritto di limitazione
+    \item Diritto alla portabilità (nuovo)
+    \item Diritto di opposizione
+    \item Diritto di revocare il consenso
+  \end{itemize}
+  \item Titolare, responsabile e incaricato
+  \item Approccio basato sul rischio e misure di accountability
+  \item Trasferimenti di dati verso paesi terzi
 \end{enumerate}
 
 La normativa, che in generale si applica solo alle persone fisiche (l’interessato), per quanto riguarda l’attività promozionale sia applica sia alle persone fisiche che alle persone giuridiche. Un dato non deve essere considerato pubblico solo se facilmente reperibile su internet. Un dato è pubblico se viene da determinate tipi di fonti che lo codificano come tale. Potrebbe essere che uno li abbia pubblicati per un altro motivo e io non posso cambiarne la finalità solo perché disponibile online. Questa sorta di raccolta dei dati ad esempio per arricchire i database è vietata dalla normativa europea e italiana. La normativa del 2013 individua una serie di modalità volta alle attività promozionale rispetto a queste modalità stabilisce e sceglie se esiste un obbligo di consenso preventivo (opt-in) o il di consenso preventivo – eccezione (opt-out) (posso oppormi al trattamento) 
@@ -252,310 +252,159 @@ La privacy su internet, l’elemento fondamentale è il cookie, i cookie sono di
 \subsection{\textit{Cyber Act.}}
 L'Organo Europeo ENISA, entro fine anno, stabilirà una bozza di regolamento (quindi valido senza recepimento da parte dei Paesi membri) per la certificazione di oggetti IoT e simili.
 
+\newpage
+\part*{Letture}
+
 \section{The Cathedral and the Bazaar}
-L'autore prima credeva in un visione alla cattedrale, cioè ogni software
-viene attentamente lavorato senza alcuna versione beta e quando dovesse
-uscire doveva essere perfetto. Rimane stupefatto dal modo di fare di
-Linus Torvalds, questo modo sembra caotico come il bazaar. L'autore
-rimane stupefatto di come (e come mai) questo modo alla bazaar
-funzionasse bene. E per capirlo provò a fare un progetto open source
-seguendo questa visione.
+L'autore prima credeva in un visione \textit{a cattedrale}, cioè ogni software viene attentamente lavorato senza alcuna versione beta e al momento della pubblicazione doveva essere perfetto.
+Rimane stupefatto dal modo di fare di Linus Torvalds: caotico come il bazaar.
+L'autore rimane stupefatto di come (e come mai) questo modo \textit{alla bazaar} funzionasse così bene.
+E per capirlo provò a fare un progetto open source seguendo questa visione.
 
-Il progetto è sulla mail forwarding, lui non poteva farla inoltrare dal
-proprio PC personale a quello del lavoro visto che IP del PC non è
-statico, allora pensa di usare un POP3 client, ne trova diversi su
-internet ma tutti hanno qualche problema, anzi il problema in comune e
-che non vi era modo di fare reply perché le email non venivano
-registrate ma solo la parte iniziale prima di @. Allora con l'ideologia
-che ``Ogni buon software inizia dalla frenesia personale di uno
-sviluppatore.'', pensò di fare un POP client per le mail. Ma sfruttando
-la lezione: ``I bravi programmatori sanno cosa scrivere. I migliori
-sanno cosa riscrivere (o riusare).'' scelse un client POP3 più vicino a
-ciò che lui voleva e cominciò a lavorarci sopra. E' possibile che nel
-corso dello sviluppo, il codice iniziale scompaia totalmente, ma è
-sempre bene iniziare a scrivere il codice a partire da qualcosa. Non è
-neanche semplice da cosa partire ad esempio l'autore prima scelse un
-modello di un Coreano, ma più tardi si imbatté in un altro client che
-gli sembrava più utile per le sue esigenze. La decisione di cambiare la
-base può essere difficile, perché si perde tutto il lavoro fatto fino ad
-allora, ma bisognerà farlo come di qualcuno ``Preparati a buttarne via
-uno, dovrai farlo comunque.'' L'autore del secondo client di nome
-popclient, ma il suo autore aveva perso interesse in questo programma, e
-``Quando hai perso interesse in un programma, l'ultimo tuo dovere è
-passarlo a un successore competente'' e ``Se hai l'atteggiamento giusto,
-saranno i problemi interessanti a trovare te.'', infatti, in questo caso
-l'autore di popcliente diede all'autore il suo codice. Insieme al codice
-ereditò anche i suoi utenti e secondo l'ideologia di Linus i utenti si
-possono trasformare in co-sviluppatori anzi è la strada migliore per un
-rapido miglioramento del codice e per un debugging efficace. Il pensiero
-è rappresentato con ``Distribuisci presto. Distribuisci spesso. E presta
-ascolto agli utenti.'', un punto cruciale che permetteva a Linus di
-aggiornare il suo kernel anche diverse volte al giorno era internet e la
-sua di rete di co-sviluppatori. E da qui la legge di Linus: ``Dato un
-numero sufficiente di occhi, tutti i bug vengono a galla.''. Un altro
-motivo per il successo della visione bazaar è che secondo la visione
-cattedrale, l'utente dopo aver aspettato anche 6 mesi trova una versione
-incompleta e ne rimane insoddisfatto, mentre nella visione bazaar viene
-ricompensato con il fatto che la sua voce sulle imperfezioni vengono
-preso aggiustate. L'autore per il suo progetto seguì tutto ciò che era
-stato detto da Linus con una ricompensa immediata, grazie alle critiche
-e avvolte anche soluzioni da parte dei suoi beta tester. Il periodo di
-svolta ci fu quando un suo beta tester gli mandò il codice di SMTP
-forwarding, da qui ebbe l'idea di come risolvere/migliorare i suoi
-problemi e cambiò anche la prospettiva della sua domanda e giunse a una
-risposta, a questo punto cambiò anche il nome in fetchmail del suo
-client.
+Il progetto è sulla mail forwarding: lui non poteva farla inoltrare dal proprio PC personale a quello del lavoro visto che IP del PC non è
+statico.
+Allora pensa di usare un client POP3; ne trova diversi su internet ma tutti con qualche problema, e con nessuno era possibile rispondere perchè l'indirizzo del mittente era registrato senza dominio.
+Allora con l'ideologia che ``Ogni buon software inizia dalla frenesia personale di uno sviluppatore'', pensò di fare un proprio POP client per le mail.
+Ma sfruttando la lezione: ``I bravi programmatori sanno cosa scrivere. I migliori sanno cosa riscrivere (o riusare)'', scelse un client POP3 più vicino a ciò che lui voleva e cominciò a lavorarci sopra.
+È possibile che nel corso dello sviluppo il codice iniziale scompaia totalmente, ma è sempre bene iniziare a scrivere il codice a partire da qualcosa.
+Non è neanche semplice scegliere da cosa partire, ad esempio l'autore prima scelse un progetto di un Coreano, ma più tardi si imbatté in un altro client che gli sembrava migliore per le sue esigenze.
+La decisione di cambiare la base può essere difficile, perché si perde tutto il lavoro fatto fino ad allora: ``Preparati a buttarne via uno, dovrai farlo comunque.''
 
-Le pre-condizioni necessarie per lo stile bazaar: Innanzitutto, ci deve
-essere il materiale (del codice sorgente), a disposizione su cui
-iniziare a lavorare e dedurre dai propri utenti idee buone. Un altro
-fatto è la comunicazione con i propri co-sviluppatori, senza la quale
-non sarebbe possibile tutto lo sviluppo. Secondo l'idea di Brooks,
-aggiungendo altri sviluppatori la complessità della rete diventa
-esponenziale e diventa impossibile comunicare tra di loro, e ciò ritarda
-sempre di più il progetto. Ma ciò non può essere vero, altrimenti Linus
-non sarebbe mai diventato ciò che è. Brooks viene corretto da Gerald che
-spiega come ciò sia possibile se si programma senza ego. Questo modello
-non si sviluppò prima per una questione anche legale sulle licenze, e il
-fatto che internet non fosse così sviluppato. Questa programmazione
-senza ego avveniva solo nelle in comunità grandi come MIT, UC Berkley
-ecc., dov'è facile trovare persone in gamba disposte ad aiutare. Ma
-bisogna avere anche un certo stile di leadership per tenere insieme la
-squadra.
+Il secondo client si chiamava ``popclient'': il suo autore aveva perso interesse nel progetto, e ``Quando hai perso interesse in un programma, l'ultimo tuo dovere è passarlo a un successore competente'', ``Se hai l'atteggiamento giusto, saranno i problemi interessanti a trovare te.''
+Infatti, in questo caso l'autore di popclient diede all'autore il suo codice, e col codice anche gli utenti, e, secondo l'ideologia di Linus, gli utenti si possono trasformare in co-sviluppatori: questa è la strada migliore per un rapido miglioramento del codice e per un debugging efficace.
+Il pensiero è rappresentato con ``Distribuisci presto. Distribuisci spesso. E presta ascolto agli utenti'', metodo che permetteva a Linus di aggiornare il suo kernel anche diverse volte al giorno grazie a internet e alla sua di rete di co-sviluppatori.
+E da qui la legge di Linus: ``Dato un numero sufficiente di occhi, tutti i bug vengono a galla.''
+Un altro motivo del successo della visione a bazaar è che, a differenza del metodo a cattedrale in cui l'utente dopo aver aspettato anche 6 mesi trova una versione incompleta e ne rimane insoddisfatto, ora ha voce in capitolo riguardo alle imperfezioni.
+L'autore per il suo progetto seguì tutto ciò che era stato detto da Linus con una ricompensa immediata, grazie alle critiche e, a volte, anche soluzioni da parte dei suoi beta tester.
+Il periodo di svolta ci fu quando un suo beta tester gli mandò il codice di \textit{SMTP forwarding}, da qui ebbe l'idea di come risolvere e migliorare i suoi problemi.
+Aquesto punto cambiò anche il nome del suo client in \textit{fetchmail}.
+
+Le precondizioni necessarie per lo stile bazaar sono innanzitutto un codice sorgente condiviso su cui iniziare a lavorare e la possibilità di ricevere le proposte e critihe degli utenti.
+Un altro fatto è la comunicazione con i propri co-sviluppatori, senza la quale non sarebbe possibile tutto lo sviluppo.
+Secondo l'idea di Brooks, aggiungendo altri sviluppatori la complessità della rete diventa esponenziale e diventa impossibile comunicare, con ritardi nello sviluppo del progetto sempre maggiori.
+Ma ciò non può essere vero, altrimenti Linus non sarebbe mai diventato ciò che è.
+Brooks viene corretto da Gerald, che spiega come ciò sia possibile se si programma \textit{senza ego}: questo modello non si sviluppò prima per una questione legale sulle licenze, e perchè internet non era così sviluppato.
+Questa programmazione senza ego avveniva solo nelle in comunità grandi come MIT, UC Berkley ecc., dov'è facile trovare persone competenti disposte ad aiutare, ma il capo progetto deve avere doti di \textit{leadership} per gestire la squadra.
+
 
 \section{Cultural and Social Factors in Cybersecurity}
 
-\textbf{Le skill della cybersecurity nelle minacce odierne.}
-
-Dopo il 2015 tante università riconoscono l'utilità della parte
-umanitaria della cybersecurity, creando delle facoltà apposta per queste
-materie. In un sondaggio, che esaminava le skill necessarie per condurre
-le operazioni di cybersecurity, ci furono 3 casi, venivano poste domande
-riguardante la rilevanza tecnica e umanitaria, e come risultato si
-ebbero 5 skill tecniche e 5 umanitarie, queste 10 erano precedentemente
-già state individuate in un'altra ricerca. E come conclusioni giunsero
-alle seguente idee:
-
+\subsection{Le skill della cybersecurity nelle minacce odierne.}
+Dopo il 2015 tante università riconoscono la componente umana della cybersecurity, creando delle facoltà apposta per queste materie.
+Studi esaminano le \textit{skill} necessarie per condurre operazioni di cybersecurity: sono state definite $5$ skill tecniche e $5$ umane; come conclusione si ha che bisogna:
 \begin{itemize}
-	\item
-	Bisogna cercare nuovi approcci alla cybersecurity, non basati solo su
-	computer science ma anche aspetti umanitari.
-	\item
-	Includere approcci come sociologia, psicologia per capire i
-	comportamenti maliziosi in una maniera più efficace.
-	\item
-	Forzare una cooperazione tra programmi educazionali diversi e
-	approcciare la tecnologia in favore dell'umanità.
+  \item cercare nuovi approcci alla cybersecurity, non basati solo su computer science ma anche aspetti umanitari;
+  \item includere aspetti sociologici e psiclogici per capire i comportamenti maliziosi in modo più efficace;
+  \item forzare una cooperazione tra programmi educazionali diversi e approcciare la tecnologia in favore dell'umanità.
 \end{itemize}
 
-Le KSAs (Knowledge, Skills and Abilities), più pertinenti furono,
-iterazione macchina-uomo, psicologia criminologia, comportamento
-sociologico, e comportamento umano. Si analizzarono 10 lavori più vicini
-a cybersecurity e si analizzarono i loro KSA e si rimuovono i KSA
-ridondanti. Per ciascun KSA trovato si considerò l'opinione di un cyber
-analista nel campo del lavoro, ad esempio le skill nelle macchine
-virtuali sono più utili di un disassemblatore di PC. Facendo così si
-aggiungono altre KSA utile per il futuro sopratutto.
+Le KSAs (\textit{Knowledge, Skills and Abilities}), più pertinenti furono:
+\begin{itemize}
+  \item iterazione macchina-uomo;
+  \item psicologia criminologia;
+  \item comportamento sociologico;
+  \item comportamento del singolo.
+\end{itemize}
+Per individuarle si analizzarono i 10 lavori più vicini alla cybersecurity e le loro KSA.
+Per ciascun KSA trovato si considerò l'opinione di un cyber analista nel campo del lavoro: ad esempio le skill nelle macchine virtuali sono più utili di un disassemblatore di PC.
+Facendo così si aggiungono altre KSA utili soprattutto per il futuro.
 
-Uno dei punti cruciali per capire la cybersecurity oggi è capire i suoi
-bisogni da parte di altre materie e con l'aumento dei attacchi cyber
-diventa sempre più cruciale capirlo, le facoltà di cybersecurity non
-riescono a soddisfarli e quindi si crea un gap tra ciò che è richiesto
-al lavoro e ciò che uno ha imparato all'università. Altri modifiche
-verranno fatte al questionario per riempire il gap nei bisogni della
-cybersecurity.
+Uno dei punti cruciali per capire la cybersecurity oggi è capire le competenze trasversali ad altre materie.
+Le facoltà di cybersecurity oggi non riescono a soddisfarli e quindi si crea un gap tra ciò che è richiesto al lavoro e ciò che uno ha imparato all'università.
+Altre modifiche verranno fatte al questionario per riempire il gap nei bisogni della cybersecurity.
 
-\textbf{Il ruolo di fattori umani nella cybersecurity.}
-
-Nei cyber attacchi, che stanno aumentando sempre di più, il rischio più
-grande è umano stesso o meglio le sue vulnerabilità. Bisognerebbe
-insegnare a loro cosa fare e cosa no aumentando la cultura della
-cybersecurity. Il questionario è composto da 15 domande appartenenti
-all'ambito:
-
+\subsection{Il ruolo di fattori umani nella cybersecurity.}
+Nei cyber attacchi, che stanno aumentando sempre di più, la componente più vulnerabile è l'utente umano stesso, o meglio, le sue vulnerabilità.
+Bisognerebbe insegnare a loro cosa fare aumentando la cultura della cybersecurity.
+Il questionario è composto da 15 domande appartenenti all'ambito:
 \begin{enumerate}
-	\item
-	Fattori individuali riguardanti: percezione, valutazione e gestione
-	del rischio
-	\item
-	IT e cyber rischio
-	\item
-	Rischio nella vita privata e in organizzazione
-	\item
-	Comportamenti e misure di sicurezza
+  \item fattori individuali riguardanti: percezione, valutazione e gestione del rischio;
+  \item IT e cyber rischio;
+  \item rischio nella vita privata e in organizzazione;
+  \item comportamenti e misure di sicurezza.
 \end{enumerate}
 
-Analisi quantitativa:
+\subsubsection{Analisi quantitativa.}
+Nel primo caso si nota che tra i fattori che influenzano la percezione spicca ``l'abilità di poterlo controllare'' seguito da ``interesse riguardante l'oggetto'' e ``Le emozioni coinvolte''.
+Mentre per la valutazione abbiamo che vince ``E' difficile da controllare'' seguito dal ``numero di individui coinvolti''.
 
-Nel 1\textsuperscript{o} caso si nota che tra i fattori che influenzano
-la percezione spicca ``l'abilità di poterlo controllare'' seguito da
-``interesse riguardante l'oggetto'' e ``Le emozioni coinvolte''. Mentre
-per la valutazione abbiamo che vince ``E' difficile da controllare''
-seguito dal ``numero di individui coinvolti''.
+Nel secondo caso, nel ruolo dei social abbiamo il problema del rischio alla privacy individuale, seguito dall'eventualità di incontrare persone sgradevoli.
 
-Nel 2\textsuperscript{o} caso il ruolo dei social abbiamo il problema
-del rischio alla privacy individuale, seguito dal potenziale di
-incontrare persone sgradevoli.
+Nel terzo caso, nella valutazione del rischio nella vita privata, abbiamo il problema del furto d'identità seguito dalle frodi e malware, mentre nelle organizzazioni abbiamo il problema della perdita di informazione, frodi interne e attacchi critici contro le infrastrutture (cyberattack).
 
-Nel 3\textsuperscript{o} caso nella rischio nella vita privata abbiamo
-il problema del furto d'identità seguito dalle frodi e malware mentre
-nelle organizzazioni abbiamo il problema della perdita di informazione,
-frodi interne e attacchi critici contro le infrastrutture (cyberattack).
-
-Nel 4\textsuperscript{o} caso invece per la prevenzione vediamo
-prevalere ``analisi del rischio'' e ``aggiornamento e formazione''
-seguito da comunicazioni interne e tecnologie avanzate. Mentre su una
-scala da 1-5 sull'importanza dei parte del sistema abbiamo: Persone
-(4,43), tecnologie (4,23), procedure e risorse (4,05) e infine
-regolazioni (3,63).
-
-Analisi qualitativa:
-
-Usando come keywords: attitude, relationship, behavior e trust, e usando
-dei text analysis si ha che la parola attitude viene collegata a
-positivo 12\% delle volte seguito da responsabilità (5\%) e
-collaborazione (4\%). Mentre per la parola relationship abbiamo:
-comunicazione (18\%), cooperazione(6\%) e sharing(4\%). Behavior:
-correttezza (11\%), responsabilità (7\%). Trust: sicurezza(10\%),
-reciprocità (6\%) e affidabilità (4\%).
-
-Concludiamo che una cultura cybersecurity non può essere costruito senza
-umani e la loro conoscenza riguardanti i rischi. Ma è fondamentale
-un'adeguata formazione sopratutto nel campo pratico e nelle capacità
-comunicative.
-
-\textbf{Un percorso per migliorare l'awareness cybersecurity per le
-	facoltà ingegneristiche}.
-
-La crescente tecnologia in Germania mira a unire tante tecnologie in
-maniera gerarchica e quindi un cooperazione tra di loro. In questo caso
-è importante cercare le vulnerabilità sia software che hardware. Ma
-comunque la maggior parte di problemi di cybersecurity è dovuto agli
-errori umani e la loro mancanza di conoscenza. In uno studio i studenti
-devono leggere il report di altri studenti e dare un loro feedback.
-
-Il mondo digitale è senza frontiere quindi l'espansione è globale e
-questo porta ad altre vulnerabilità. In questo caso anche un semplice
-trasferimento di file può generare un attacco, quindi si ricorre alle
-crittografie, investendo più risorse. Nelle compagnie più grandi il data
-leak potrebbe presentarsi come un grosso problema, quindi per loro è un
-investimento usare strumenti di crittografia più robusti. Ma comunque la
-formazione del personale rimane cruciale. Vogliono introdurre nelle
-università di ingegneria la materia di crittografia, le regole più
-cruciali sono: La motivazione dell'insegnante sopratutto perché dovrà
-spiegarlo a persone che non hanno una formazione della materia, bisogna
-chiare l'obiettivo e il programma del corso. E queste cose in realtà
-sono una catena, una segue l'altra ma senza un pezzo non ha senso.
-L'obiettivo del corso deve essere portare lo studente a :
-
+Nel quarto caso invece, per la prevenzione, vediamo prevalere ``analisi del rischio'' e ``aggiornamento e formazione'' seguito da comunicazioni interne e tecnologie avanzate.
+Mentre su una scala da da 1 a 5 sull'importanza dei parte del sistema abbiamo:
 \begin{itemize}
-	\item
-	Identificare le sfide tecniche, sociale e politiche delle industrie
-	(4.0)
-	\item
-	Spiegazione delle tecnologie e metodi della cybersecurity.
-	\item
-	Spiegazione e chiarificazione delle contromisure per proteggere nelle
-	industrie 4.0
-	\item
-	Motivazione per auto-imparare contenuti complessi
-	\item
-	Acquisizione delle skill sociali per lavorare in squadra e skill delle
-	presentazioni
-	\item
-	Imparare a dare un feedback costruttivo e semantico
+  \item persone (4.43)
+  \item tecnologie (4.23)
+  \item procedure e risorse (4.05)
+  \item regolazioni (3.63)
 \end{itemize}
 
-L'esame consisterà in un progetto in team, dare un feedback a un altro
-team e infine un'esame orale sul progetto e sul corso.
 
-\textbf{Fattori di cittadini ingegneri sociali in situazioni critiche}.
-(Paper in Estonia 2014)
+\subsubsection{Analisi qualitativa.}
+Usando come keywords: ``attitude'', ``relationship'', ``behavior'' e ``trust'', e usando dei software di \textit{text analysis}, si ha che:
+\begin{itemize}
+  \item ``attitude'' è collegata a positivo (12\%), responsabilità (5\%) e collaborazione (4\%);
+  \item ``relationship'' a comunicazione (18\%), cooperazione(6\%) e sharing(4\%);
+  \item ``behavior'' a correttezza (11\%), responsabilità (7\%);
+  \item ``trust'' a sicurezza(10\%), reciprocità (6\%) e affidabilità (4\%).
+\end{itemize}
+Concludiamo che una cultura cybersecurity non può essere costruito senza umani e la loro conoscenza riguardo ai rischi.
+Ma è fondamentale un'adeguata formazione sopratutto nel campo pratico e nelle capacità comunicative.
 
-Ingegneria sociale è sempre esistita, usare le fake news per cambiare
-opinione riguardante le politiche, usando questa ingegneria diversi
-movimenti sono stati effettuati nel mondo odierno, quindi non deve
-essere sottovalutato, ad esempio nelle elezioni possono essere molto
-influenzanti.
+\subsubsection{Un percorso per migliorare l'\textit{awareness cybersecurity} per le facoltà ingegneristiche}.
+La crescente tecnologia in Germania mira a unire tante tecnologie in maniera gerarchica e quindi un cooperazione tra di loro.
+In questo caso è importante cercare le vulnerabilità sia software che hardware.
+Ma comunque la maggior parte di problemi di cybersecurity è dovuto agli errori degli umani e alla loro mancanza di conoscenza.
+In uno studio gli studenti devono leggere il report di altri studenti e dare un loro feedback.
 
-Le norme solitamente si concentrano su cyber crimine o sviluppo delle
-difese strategiche senza concentrarsi sulla cultura informazionale come
-Estonia. Per quanto riguarda lo studio, diversi paesi di UE hanno
-diverse ideologie, spesso dividono gli argomenti di cybersecurity in
-sotto-ambiti che finiscono per essere insegnati da professori di
-categorie completamente diverse e in diversi corsi, Estonia invece ha
-adottato una nuova soluzione di insegnarlo passo a passo in base a
-gradi:
+Il mondo digitale è senza frontiere quindi l'espansione è globale e questo porta ad altre vulnerabilità.
+In questo caso anche un semplice trasferimento di file può generare un attacco: si ricorre alla crittografia, investendo nella sicurezza.
+Nelle compagnie più grandi il \textit{data leak} potrebbe presentarsi come un grosso problema, quindi è un grande investimento usare strumenti di crittografia più robusti; ma comunque la formazione del personale rimane cruciale.
+Si vuole introdurre nelle Università di ingegneria la materia di crittografia.
+Cruciale è la motivazione dell'insegnante, che dovrà spiegare a persone che non hanno una formazione pregressa: bisogna chiare l'obiettivo e il programma del corso.
+L'obiettivo del corso deve essere portare lo studente a:
+\begin{itemize}
+  \item identificare le sfide tecniche, sociale e politiche delle industria 4.0;
+  \item spiegare le tecnologie e i metodi della cybersecurity;
+  \item spiegare e chiarire le contromisure per proteggersi nelle industrie 4.0;
+  \item motivare per imparare in autonomia contenuti complessi;
+  \item acquisire delle skill sociali per lavorare in squadra e presentare i propri lavori;
+  \item imparare a dare un feedback costruttivo e semantico.
+\end{itemize}
+L'esame consisterà in un progetto in team, dare un feedback a un altro team e infine un'esame orale sul progetto e sul corso.
 
+\subsubsection{Fattori di cittadini ingegneri sociali in situazioni critiche.}
+L'ingegneria sociale è sempre esistita: da sempre si usano \textit{fake news} per dirigere l'opinione pubblica in politica e modificare il risultato delle elezioni.
+Queste tecniche non sono da sottovalutare, essendo molto efficaci.
+
+Le norme solitamente si concentrano sul cyber crimine o sullo sviluppo di difese strategiche, senza però concentrarsi sulla cultura informazionale, come accadeva in Estonia prima del 2007.
+Per quanto riguarda lo studio accademico della materia, i Paesi dell'UE procedono in modo diverso, spesso dividendo gli argomenti di cybersecurity in sotto-ambiti che finiscono per essere insegnati da professori di categorie completamente diverse e in corsi diversi.
+L'Estonia invece, dopo i cyber-attacchi del 2007, ha adottato una nuova metodologia di insegnamento a gradini:
 \begin{enumerate}
-	\def\labelenumi{\arabic{enumi}.}
-	\item
-	Grado 1-3, Sicurezza digitale: Capire la differenza tra il mondo
-	online ed offline, capire cos'è una password sicura, i regolamenti
-	della privacy, cyberbullismo, applicazione e in-app a pagamento e
-	gratuiti, sovrauso della tecnologia e i rischi alla salute.
-	\item
-	Grado 4-6, Igiene digitale: Capire le norme di comportamento online,
-	sapere e valutare le fonti, proteggere la propria identità digitale e
-	strumenti (da virus, spyware), risolvere problemi basilari riguardante
-	la tecnologie e reti.
-	\item
-	Grado 7-9, Igiene cyber: Distinzione tra comportamento legale e
-	illegale, capire le norme, regolamenti e legge criminologica, saper
-	spiegare gli effetti della tecnologia sulla vita. Analizza e usa la
-	corretta terminologia di cybersecurity per risolvere i problemi.
-	Controlla a casa di aver migliorato la situazione seguendo i
-	suggerimenti. 
-	\item
-	Palestra, Difesa cyber: E' fedele al proprio paese, ha atteggiamento
-	giusto per proteggere il paesi e gli alleati, ha valori democratici ed
-	è responsabile delle proprie azioni. Ha le skill necessarie per
-	proteggere la propria casa da minacce cyber basilari. Capisce le norme
-	e regolamenti di Estonia riguardante la sicurezza ed e-governo.
-	Analizza data e informazione criticamente. Sa come spiegare,
-	documentare e condividere l'attacco cyber agli ufficiali e sa usare le
-	proprie skill e competenze per scegliere una professione futura.
+  %\def\labelenumi{\arabic{enumi}.}
+  \item Grado 1-3 sicurezza digitale: capire la differenza tra il mondo online ed offline, capire cos'è una password sicura, i regolamenti della privacy, cyberbullismo, applicazione e in-app a pagamento e gratuiti, sovrauso della tecnologia e i rischi alla salute.
+  \item	Grado 4-6 igiene digitale: capire le norme di comportamento online, sapere e valutare le fonti, proteggere la propria identità digitale e strumenti (da virus, spyware), risolvere problemi basilari riguardante la tecnologie e reti.
+  \item Grado 7-9, igiene cyber: distinzione tra comportamento legale e illegale, capire le norme, regolamenti e legge criminologica, saper spiegare gli effetti della tecnologia sulla vita; analizzare e usare la corretta terminologia di cybersecurity per risolvere i problemi; controllare a casa di aver migliorato la situazione seguendo i suggerimenti.
+  \item Palestra, difesa cyber: è fedele al proprio Paese; ha l'atteggiamento giusto per proteggere il Paesi e gli alleati; ha valori democratici ed è responsabile delle proprie azioni; ha le skill necessarie per proteggere la propria casa da minacce cyber basilari; capisce le norme e i regolamenti estoni riguardanti la sicurezza e il e-governo; analizza dati e informazioni criticamente; sa come spiegare, documentare e condividere l'attacco cyber agli Ufficiali e sa usare le	proprie skill e competenze per scegliere una professione futura.
 \end{enumerate}
 
-Fanno un sondaggio per i metodi per risolvere i problemi di
-manipolazione online, saper predire quando l'infrastruttura potrebbe
-fallire durante un attacco.
+Si è condotto un sondaggio riguardante i metodi per risolvere i problemi di manipolazione online, allo scopo di prevedere quando l'infrastruttura potrebbe fallire durante un attacco.
+Dai risultati si ha che per risolvere il problema di manipolazione online, nei casi più semplici basta analizzare il problema per accorgersi della frode: nel sondaggio la prima cosa che i candidati fecero era cercare un'altra fonte che confermasse la notizia, per poi discutere tra di loro arrivando alla conclusione di dover chiamare la polizia.
+Si nota che sono spesso i giovani a chiamare subito la polizia.
+La maggior parte degli intervistati cercò di leggere la storia e commenti per capire se è falsa o meno, come seconda opzione parlare con qualcuno più conoscente di loro
+per chiedere conferma.
+Quelli a dar credito a fake news sono spesso studenti.
 
-Dai risultati abbiamo che per risolvere il problema di manipolazione
-online, nei casi più semplici basta analizzare il problema e sentire la
-puzza. Nel sondaggio la prima cosa che fecero è cercare se un'altra
-fonte dicesse una cosa simile, poi hanno discusso tra di loro e come
-3\textsuperscript{o} step hanno voluto chiamare la polizia. Si nota che
-sono spesso i giovani a chiamare subito la polizia. La maggior parte in
-generale cercò di leggere la storia e commenti per capire se è falsa o
-meno, come seconda opzione parlare con qualcuno più conoscente di loro
-per chiedere conferma. Quelli a cascarci sono spesso studenti.
-
-Per i fattori determinati in situazioni critiche (collasso del sistema
-economico digitale ad es Estonia nel 2007) vediamo che durante:
-
+Per i fattori determinati in situazioni critiche (collasso del sistema economico digitale ad es Estonia nel 2007), in base al periodo dell'anno vediamo che:
 \begin{itemize}
-	\item
-	Estate, le persone si disconnettono e vanno alla spiaggia o a fare la
-	spesa, e se la situazione non si è risolta in 2 settimane, cercano
-	altre opzioni come lasciare il paese o commettere crimini. Ma in
-	generale rimangono rilassati.
-	\item
-	In autunno o primavera, c'è meno disconnessione, sopratutto i giovani
-	cominciano a pressare per la risoluzione della situazione
-	urgentemente, mentre le persone che lavorano o i genitori sono più
-	rilassati.
-	\item
-	In inverno invece stanno più a casa per il freddo e la stocca di cibo
-	che c'è, se c'è indisponibilità cominciano a rubare spesso i giovani
-	maschi, gli adulti lasciano il paese dopo 7 giorni, seguiti da altri.
+  \item in estate, le persone si disconnettono e vanno in spiaggia o a fare la spesa, e, se la situazione non si è risolta in 2 settimane, cercano altre opzioni come lasciare il Paese o commettere crimini, ma in generale rimangono rilassati.
+  \item in autunno o primavera, c'è meno disconnessione, sopratutto i giovani cominciano a pressare per una rapida risoluzione della situazione mentre le persone che lavorano o i genitori sono più rilassati.
+  \item in inverno invece stanno più a casa per il freddo e si affidano al cibo conservato,; i giovani (perlopiù maschi) cominciano a rubare mentre gli adulti lasciano il Paese dopo 7 giorni, seguiti dagli altri.
 \end{itemize}
 
-Per la responsabilità di awareness si nota che le femmine sono più
-disposte dei maschi, la maggior parte delle persone credono che la
-formazione debba avvenire nelle scuole e il modo meno efficace sia
-utilizzando i media tradizionali. Mentre gli adulti per loro hanno
-pensato come soluzione i media online. Gli Estoni si fidano più del
-governo riguardante questo ambito.
+Per la responsabilità di awareness si nota che le donne sono più disposte dei maschi, la maggior parte delle persone crede che la formazione debba avvenire nelle scuole e il modo meno efficace sia utilizzando i media tradizionali: la soluzione proposta è mediante l'uso di media online.
+Gli Estoni si fidano del loro governo riguardo a questo ambito.
 
 \end{document}
