@@ -1,5 +1,5 @@
 Appunti del corso di Data Science dell'Università degli Studi di
-Milano Bicocca.
+Milano Bicocca a.a. 2018/2019.
 
 Scrivete in italiano comprensibile!
 Andate a capo dopo ogni frase, così è più facile modificare il testo
