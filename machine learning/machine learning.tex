@@ -2,12 +2,12 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[margin=0.7in,
-            bottom=1.1in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{ragged2e}
 \usepackage{chngcntr}
+\usepackage{enumitem}
 \counterwithin*{section}{part}
 
 \title{\textbf{Machine Learning}}
@@ -42,23 +42,36 @@ Ogni dato è di un particolare tipo, in base al quale sono definite le operazion
 I dati, in fase esplorativa, sono analizzati mediante indici per ottenere una sintesi degli attributi.
 Generalmente per attributi qualitativi si usa la moda (o una tabella di frequenze) mentre per variabili quantitative si usano i quantili (per stime non parametriche).
 Stime parametriche (come quelle basate sui momenti) sono influenzate dalla presenza di \textit{outliers}, osservazioni così anomale da far pensare che vengano da un'altra distribuzione di dati: si usano anche stime parametriche corrette, come la \textit{trimmed mean} che esclude i valori più alti e più bassi in equal numero.
-Alla varianza e al range, essendo influenzati da outliers, sono preferiti la AAD (\textit{Absolute Average Deviation}) o la MAD (\textit{Median Absolute Deviation}).
+\begin{align*}
+  \overline{x} &= \frac{1}{N}\sum^N_{i=1}{x_i} \\ \\
+  \overline{x}_\text{trimmed} &= \frac{1}{N-2k}\sum^{N-k}_{i=k}{x_{(i)}}
+\end{align*}
+Alla varianza ($\sigma^2$) e al range, essendo influenzati da outliers, sono preferiti la AAD (\textit{Absolute Average Deviation}) o la MAD (\textit{Median Absolute Deviation}).
+\begin{align*}
+  \sigma^2 &= \frac{1}{N-1}\sum^N_{i=1}{(x_i - \overline{x})^2} \\ \\
+  AAD &= \frac{1}{N}\sum^N_{i=1}{| x_i - \overline{x} |} \\ \\
+  MAD &= \text{median}(\underline{x} - \overline{x})
+\end{align*}
 Altro indice non parametrico molto usato è l'IQR (\textit{Inter Quartile Range}), la distanza tra i percentili di ordine $0.25$ (\textit{Lower Quartile}) e $0.75$ (\textit{Upper Quartile}).
-Alla matrice di varianza-covarianza, nel caso l'ordine di grandezza tra le variabili sia molto diverso, è preferita la matrice di correlazione lineare (di Pearson). \newline
+Alla matrice di varianza-covarianza, nel caso l'ordine di grandezza tra le variabili sia molto diverso, è preferita la matrice di correlazione lineare (di Pearson).
+\begin{align*}
+  \sigma_{\underline{x}, \underline{y}} &= \frac{1}{N-1}\sum^N_{i=1}{(x_i - \overline{x}) \cdot (y_i - \overline{y})} \\ \\
+  \varrho_{\underline{x}, \underline{y}} &= \frac{\sigma_{\underline{x}, \underline{y}}}{\sqrt{\sigma_{\underline{x}} \cdot \sigma_{\underline{y}}}}
+\end{align*}
 
 Per rappresentare graficamente la distribuzione, si usa spesso l'istogramma, mentre per verificare gli indici non parametrici si usa la scatola con baffi (BoxPlot), che in un colpo solo mostra IQR, range e valori anomali (i baffi hanno lunghezza massima pari a $1.5 \cdot IQR$ a partire dal proprio quartile, sono considerati \textit{anomali} i valori ancora più lontani dal centro della distribuzione).
 
 
 
 \newpage
-\part{Preprocessing}
+\part{\textit{Preprocessing}}
 Di importanza fondamentale per la riduzione dei dati, il preprocessing permette di sfuggire alla \textit{maledizione di dimensionalità} mediante l'uso di tecniche di campionamento, aggregazione di dati o semplificazione dello spazio delle variabili (minimizzando la perdita di informazione).
 Infatti, spesso i modelli di machine learning non aumentano le prestazioni in modo lineare all'aumentare della popolosità del dataset, richiedendo però maggiori risorse computazionali.
 Inoltre è possibile anche creare nuove variabili, a partire dai dati di partenza, che aggiungano informazione alla distribuzione.
 
 
 \section{Semplificazione dello spazio.}
-Dataset con molte variabili possono portare alla \textit{maledizione della dimensionalità} (\textit{Curse of Dimensionality}): le performance del modello non crescono in modo lineare con la numerosità del dataset, ma possono addirittura diminuire; questo perchè lo spazio delle variabili è molto frammentato e difficilmente mappabile (parti dello spazio rimangono vuote).
+Dataset con molte variabili possono portare alla \textit{maledizione della dimensionalità} (\textit{Curse of Dimensionality}): le performance del modello non crescono in modo lineare con la numerosità del dataset, ma possono addirittura diminuire; questo perchè lo spazio delle variabili è molto frammentato e difficilmente mappabile (parti dello spazio rimangono vuote, per riempirle servirebbe un numero di osservazioni pari a $n^k$ con $k \to \infty$).
 Ciò non si verificherebbe, a livello teorico, con un dataset infinito ma è un fenomeno diffuso in situazioni reali.
 
 \subsection{Riduzione del numero di features.}
@@ -74,12 +87,16 @@ La \textit{discretizzazione} si applica ad attributi continui per costruire inte
 Paradossalmente, maggiore è il numero di intervalli utilizzati, migliore è il risultato: si tratta di una procedura degenere.
 La discretizzazione può essere fatta in caso di estrema ignoranza della distribuzione (\textit{unsupervized}) o avendone già qualche conoscenza.
 Nel primo caso, si divide il range in un numero $k$ arbitrario di intervalli, in modo tale che questi o siano di pari dimensione (metodo poco efficace in caso di outliers) o di ugual numero di elementi contenuti (si usano dunque i quantili per definire i limiti degli intervalli, più efficace ma più pesante computazionalmente).
-Conoscendo invece attributi correlati, è possibile discretizzare in base ad un'altra variabile nota, facendo sì che sia massimizzato un indice di purezza (come l'entropia o l'indice di Gini).
+Conoscendo invece attributi correlati, è possibile discretizzare in base ad un'altra variabile nota, facendo sì che sia massimizzato un indice di purezza (come l'entropia $E$ o l'indice di Gini).
+\begin{align*}
+  e_i &= -\sum^k_{i=1}{p_{k_i} \cdot \log_2{p_{k_i}}} \\ \\
+  E &= \sum^K_{i=1}{\frac{N_k}{N} e_i}
+\end{align*}
 
 Nel caso invece che attributi categorici assumano troppi valori, è possibile tentare di aggregarli per semplificare lo spazio: se possibile, si possono usare criteri noti in alternativa ai medesimi indici citati per la discretizzazione.
 
 \section{Trasformazione dello spazio.}
-Per aumentare di significato, le features possono essere trasformate secondo funzioni matematiche quali logaritmo o radice quadrata, o anche la normalizzazione.
+Per aumentare di significato, le features possono essere trasformate secondo funzioni matematiche quali logaritmo o radice quadrata, o anche la normalizzazione \textit{Z-score} ($Z = \frac{x - \mu}{\sigma}$).
 Quest'ultima funzione è utile per porre sullo stesso piano variabili con ordini di grandezza differenti.
 
 
@@ -97,7 +114,7 @@ Il campione deve essere sufficientemente grande da essere rappresentativo ma non
 
 
 \newpage
-\part{Classification}
+\part{Classificazione}
 Uno degli obiettivi del machine learning è quello di classificare i dati in categorie.
 Si individua dunque una variabile risposta con cui classificare le osservazioni e si costruisce un modello di classificazione che lo stimi su nuove osservazioni.
 Un \textit{classificatore} esegue una classificazione supervisionata.
@@ -126,7 +143,6 @@ Gli algoritmi di classificazione si basano su euristiche, reti neurali o calcoli
 Considerato uno dei più semplici algoritmi, l'albero decisionale mappa lo spazio partendo da un nodo radice e dividendo a ogni ramificazione la distribuzione secondo dei criteri (massimizzazione di un'euristica): la variabile della divisione è il valore di split sono calcolati in modo iterativo.
 Lo spil può essere effettuato anche su più variabili contemporaneamente (albero obliquo).
 La distribuzione è divisa in questo modo fino al raggiungimento di un nodo foglia, la cui distribuzione di frequenze è usata per effettuare la classificazione (le osservazioni sono classificate con la classe più frequente).
-% inserire immagine albero decisionale
 Il modello non è efficace se tutti i nodi foglia classificano allo stesso modo.
 
 
@@ -134,34 +150,49 @@ Il modello non è efficace se tutti i nodi foglia classificano allo stesso modo.
 Le due classi sono rappresentate da un'unica variabile che può assumere i valori $0$ (per la classe più rappresentata) o $1$.
 Ipotizzando che tutte le variabili siano continue, si calcolano le probabilità:
 \begin{align*}
-P(y=0 | X) &= \frac{1}{1 + \exp{\{\underline{w} \cdot \underline{x}\}}} \\ \\
-P(y=1 | X) &= \frac{\exp{\{\underline{w} \cdot \underline{x}\}}}{1 + \exp{\{\underline{w} \cdot \underline{x}\}}}
+P(y=0 | \underline{X}) &= \frac{1}{1 + \exp{\{\underline{w} \cdot \underline{x}\}}} \\ \\
+P(y=1 | \underline{X}) &= \frac{\exp{\{\underline{w} \cdot \underline{x}\}}}{1 + \exp{\{\underline{w} \cdot \underline{x}\}}}
 \end{align*}
 Si calcola cioè la probabilità a posteriori che Y assuma un dato valore: l'osservazione è classificata con la classe maggiormente probabile o con quella che supera una certa soglia.
 La funzione logistica varia in base al vettore dei pesi $\underline{w}$.
 
 
-\section{Support Vector Machine.}
+\section{\textit{Support Vector Machine}.}
 Con più variabili continue è possibile costruire un iperpiano che divida la distribuzione in classi.
 Per evitare che fenomeni di overfitting rovinino il modello, si usa il concetto di \textit{rischio} per effettuare una stima che sbagli il meno possibile (si prende quindi la retta col margine di errore $\delta$ maggiore).
 Le osservazioni sono poi classificate con una semplice operazione di segno (cioè si verifica da che parte stanno nello spazio rispetto all'iperpiano).
-L'iperpiano migliore per la classificazione deve minimizzare la formula $\frac{1}{2} \underline{w} \cdot \underline{w}'$.
+L'iperpiano migliore per la classificazione (ovvero quello che concede il maggior margine di errore) si ottiene con la formula:
+\begin{equation*}
+ \frac{1}{2} \underline{w} \cdot \underline{w}'
+\end{equation*}
 Può darsi che la retta non sia utile nella classificazione, si preferisce dunque definire una regione ammissibile:
 \begin{equation*}
   y_i (\underline{w} \cdot x_i + b) \ge 1 \hspace{20pt} \forall i \in [1; m]
 \end{equation*}
 È dunque sufficiente eseguire un'operazione lineare per ottenere i valori stimati della retta.
-Se l'insieme delle rette che dividono lo spazio è vuoto (cioè la distribuzione non è linearmente separabile), si modifica la funzione obiettivo per minimizzare la distanza dalla corretta classificazione $\xi_i$.
-Inoltre è possibile usare superfici curve rimappando lo spazio e calcolando nuovamente l'iperpiano: per fare questo generalmente si applica la \textit{Kernel Function} al vettore dei dati $x$.
+Se l'insieme delle rette che dividono lo spazio è vuoto (cioè la distribuzione non è linearmente separabile), si modifica la funzione obiettivo per minimizzare la distanza dalla corretta classificazione $\xi_i$:
+\begin{equation*}
+  \min{\frac{1}{2} \underline{w} \cdot \underline{w}' + \Delta \sum^N_{i=1}{\xi_i}}
+\end{equation*}
+con:
+\begin{align*}
+  \forall^N_{i=1} &: y_i(\underline{w} \cdot \underline{x}_i + b) \ge 1 - \xi_i \\
+  \forall^N_{i=1} &: \xi_i \ge 0
+\end{align*}
+Inoltre è possibile usare superfici curve rimappando lo spazio tramite funzioni $\Phi$ e calcolando nuovamente l'iperpiano: per fare questo generalmente si applica una \textit{Kernel Function} al vettore dei dati $\underline{x}$.
 
 
-\section{Multilayer Perception.}
-Le reti neurali del tipo \textit{multilayer perception} sono composte da una serie di nodi di input e output collegati tra di loro così da simulare una rete di neuroni biologici.
+\section{\textit{Multilayer Perceptron}.}
+Le reti neurali del tipo \textit{multilayer perceptron} sono composte da una serie di nodi di input e output collegati tra di loro così da simulare una rete di neuroni biologici.
 Ogni neurone $j$, eccettuando i neuroni di input, riceve in ingresso un valore $x$ ed esegue una funzione $f$, a cui è aggiunto un parametro $\theta$ (datto soglia di attivazione).
 \begin{equation*}
-  y_j = f( \sum{}{}{w_{i,j} x_i, \theta_j})
+  y_j = f( \sum{}{}{w_{i,j} x_i - \theta_j})
 \end{equation*}
 Storicamente, le funzioni di attivazione più usate erano la logistica o la iperbole-tangente, ma non essendo particolarmente efficaci in casi particolari si sono iniziate ad usare altre funzioni semplici, costanti fino alla soglia e poi crescenti in modo lineare.
+\begin{align*}
+  f_{\text{Hyperbolic tangent}}(x) &= \frac{e^x - e^{-x}}{e^x + e^{-x}} \\ \\
+  f_{\text{Logistic}}(x) &= \frac{1}{1 + e^{-x}}
+\end{align*}
 
 Il modello prevede l'inserimento di uno o più livelli di \textit{hidden neurons}, strati nascosti in cui ogni neurone è collegato a tutti i neuroni di input e che rilasciano l'output a tutti i neuroni dello strato successivo.
 I nodi non sono \textit{biorientati}, ovvero il segnale si propaga dall'input verso l'output senza tornare indietro, inoltre neuroni dello stesso livello non comunicano tra di loro; tuttavia il segnale può saltare uno o più strati di neuroni nascosti.
@@ -170,21 +201,24 @@ Non esiste un sistema per stimare il numero di strati nascosti o il numero di ne
 
 
 \section{Classificatore Bayesiano.}
-Questo modello sfrutta il concetto di probabilità condizionata del Teorema di Bayes ponendo una relazione tra il vettore risposta $Y$ e la matrice del disegno $X$.
+Questo modello sfrutta il concetto di probabilità condizionata del Teorema di Bayes ponendo una relazione tra il vettore risposta $\underline{y}$ e la matrice del disegno $\underline{X}$.
 Il modello calcola la probabilità a posteriori di $Y = y$ quando la matrice del disegno è composta da variabili dicotomiche:
 \begin{equation*}
-  P(Y | X) = \frac{P(X | Y) \cdot P(Y)}{P(X)}
+  P(y | \underline{X}) = \frac{P(\underline{X} | y) \cdot P(y)}{P(\underline{X})}
 \end{equation*}
 Il modello permette solamente classificazioni binarie calcolando la probabilità a posteriori dell'appartenenza a una data classe.
 Il fatto che il denominatore della formula non sia noto non influisce sull'esito, dato che conta solamente il valore del numeratore.
 Il numero di osservazioni richieste dall'algoritmo cresce in modo esponenziale al numero di features utilizzate ($2^k$), quindi è ipotizzata a priori l'indipendenza condizionata dei caratteri.
 In questo modo la probabilità a posteriori può essere scritta come una semplice produttoria:
 \begin{equation*}
-  P(Y | X) = \prod{}{}{P(X | Y)}
+  P(y
+  | \underline{X}) = \prod{}{}{P(\underline{X} | y)}
 \end{equation*}
 la complessità cresce in modo lineare; l'ipotesi è forte ma il modello è molto efficace soprattutto con dimensionalità elevate.
 
-\subsection{Tree Aumented}
+Il classificatore bayesiano riesce a gestire anche variabili numeriche calcolandone la probabilità grazie all'ipotesi di normalità.
+
+\subsection*{\textit{Tree Aumented}.}
 Nativamente, il modello gestisce solamente variabili binarie nella matrice del disegno, ma grazie a distribuzioni di probabilità (come la gaussiana o la Kernel function) è possibile calcolare la probabilità di realizzazione di variabili non binarie.
 
 A causa dell'ipotesi di indipendenza condizionale, il modello è considerato molto rigido.
@@ -194,7 +228,7 @@ Il grafo, tolta la variabile risposta, mostra una sequenza di nodi paragonabile 
 
 
 \newpage
-\part{Postprocessing}
+\part{\textit{Postprocessing}}
 
 \section{Prestazione del modello.}
 È fondamentale stimare la prestazione del modello con più di un sistema (onn effettuando quindi una previsione puntuale, che può risultare troppo ottimistica o pessimistica).
@@ -214,8 +248,8 @@ Il test-set ha il compito di testare le prestazioni del modello nella classifica
 Si usa quindi la tecnica dell'\textit{iterate holdout}, che prevede che per un numero $R$ di volte si divida il dataset e si calcoli poi la media delle accuratezze.
 Nulla garantisce che però le osservazioni si trovino solamente in una partizione e non in un'altra, essendo questo un metodo basato sul campionamento casuale.
 
-\subsection{Cross Validation.}
-Per ovviare ai problemi dell'iterate holdout, si usa il sistema del \textit{Cross Validation}: il dataset è ripartito in $k$ partizioni mutualmente distinte ed esaustive; al $k$-esimo passo è utilizzato come training-set la $k$-esima partizione e come test-set il resto delle osservazioni; si calcola infine la media delle prestazioni.
+\subsection{Metodo \textit{Cross Validation}.}
+Per ovviare ai problemi dell'\textit{iterate holdout}, si usa il sistema del \textit{Cross Validation}: il dataset è ripartito in $k$ partizioni mutualmente distinte ed esaustive; al $k$-esimo passo è utilizzato come training-set la $k$-esima partizione e come test-set il resto delle osservazioni; si calcola infine la media delle prestazioni.
 Generalmente si divide il dataset in partizioni uguali per evitare che abbiano poi pesi diversi nel calcolo della media.
 Valori tipici di $k$ sono $3$, $5$ o $10$, ma esiste anche il \textit{Leave One Out Cross Validation} che usa $k = N$ (è un sistema però molto pesante computazionalmente).
 
@@ -228,7 +262,7 @@ L'accuratezza è modellizzabile come una variabile aleatoria binomiale:
 È dunque possibile costruire intervalli di confidenza per la previsione del valore reale di accuratezza del modello.
 Grazie all'approssimazione alla normale della variabile binomiale (\textit{T. del Limite Centrale}), è possibile confrontare modelli tra loro diversi: si calcola la distanza $d = e_1 - e_2$ che si distribuisce come:
 \begin{equation*}
-  d \sim N(d, \frac{e_1 (1 - e_1)}{n_1} + \frac{e_2 (1 - e_2)}{n_2})
+  d \sim N(e_1 - e_2, \frac{e_1 (1 - e_1)}{n_1} + \frac{e_2 (1 - e_2)}{n_2})
 \end{equation*}
 Se l'intervallo di confidenza contiene il valore $0$, la distanza non è statisticamente significativa da dimostrare che un modello sia maggiormente prestante di un altro.
 
@@ -236,10 +270,12 @@ Se l'intervallo di confidenza contiene il valore $0$, la distanza non è statist
 Se la variabile risposta è molto sbilanciata, in linea teorica un modello che classifica tutte le osservazioni con la classe più frequente appare molto prestante.
 Oltre ad attuare campionamenti stratificati o \textit{bootstrap}, si usano indici alternativi per misurare la prestazione:
 \begin{align*}
-  precision &= \frac{TP}{TP + FP} \\ \\
-  recall &= \frac{TP}{TP + FN}
+  p &= \frac{TP}{TP + FP} \\ \\
+  r &= \frac{TP}{TP + FN} \\ \\
+  specificity &= \frac{TN}{TN + FP} \\ \\
+  sensivity &= \frac{TP}{TP + FN}
 \end{align*}
-Il primo indice misura il numero di positivi reali sul numero di positivi totali, mentre il secondo il numero di positivi catalogati tali.
+Il primo indice (\textit{precision}) misura il numero di positivi reali sul numero di positivi totali, mentre il secondo (\textit{recall}) il numero di positivi catalogati tali.
 I due valori generalmente sono complementari.
 Per calcolare la prestazione del modello, si calcola la media armonica dei due valori:
 \begin{equation*}
@@ -247,9 +283,9 @@ Per calcolare la prestazione del modello, si calcola la media armonica dei due v
 \end{equation*}
 Oppure, in alternativa:
 \begin{align*}
-  F_b = (b^2 + 1) &\frac{r \cdot p}{r + (b^2 \cdot p)} \\ \\
-  \lim_{b \to 0} F_b &= p \\
-  \lim_{b \to \infty} F_b &= r
+  F_\beta = (\beta^2 + 1) &\frac{r \cdot p}{r + p \beta^2} \\ \\
+  \lim_{\beta \to 0} F_\beta &= p \\
+  \lim_{\beta \to \infty} F_\beta &= r
 \end{align*}
 
 \subsection{Costi.}
@@ -258,15 +294,22 @@ Il modello decisionale deve dunque avere un'accuratezza elevata e un costo ragio
 I costi generalmente non sono noti: la matrice di costo è facilmente criticabile, ma è sensato supporre che il modello attui in modo corretto per ogni matrice dei costi sensata.
 
 In altri casi, il numero di azioni che si possono intraprendere è minore del numero di osservazioni classificate come positive: si selezionano dunque solamente le $N_1$ osservazioni che il modello ha stimato come più probabilmente positive.
-
 La classificazione in questo caso deve tenere conto anche del costo delle decisioni attuate in funzione dell'output del modello: il modello non deve solamente essere preciso ma deve anche garantire che non ci siano sprechi a livello economico.
 
+Si possono fare confronti tra più modelli diversi, tenendo conto del costo, grazie al \textit{cumulative gain}: ordinando le osservazioni secondo la probabilità di appartenenza alla classe risposta, si mette in relazione il numero di casi realmente positivi in percentuale sul totale ($\frac{\text{TP}}{\text{TP}+\text{FN}}$) rispetto alla percentuale delle osservazioni considerate sul totale.
+In questi modo si possono confrontare modelli diversi applicati a dataset di dimensioni diverse.
+
+\subsection{Curva ROC.}
+Sistema grafico per verificare la bontà di un modello è usare la curva ROC e l'indice AIC (\textit{Area Under Curve}): ordinate le osservazioni per la probabilità di appartenenza alla classe risposta, si calcola la percentuale di TP sull'asse delle ordinate sulla percentuale di TN sull'asse delle ascisse.
+L'assenza di modello equivale alla bisettrice del primo e terzo quadrante ($y = x$).
+Più una curva ROC tende verso l'alto, maggiore sarà la bontà di classificazione: questa curva sale infatti all'aumentare dei positivi correttamente classificati e si sposta verso destra o a causa di un falso positivo o quando sono state registrate tutte le osservazioni positive.
+Un modello ottimo infatti avrebbe una curva ROC che prima sale in verticale fino a raggiungere le coordinate $(0, 1)$ e poi si sposta verso destra fino a raggiungere ($(1, 1$): in questo caso l'indice AIC sarebbe pari a $1$, il suo valore massimo.
 
 
-\section{Gestione delle features.}
+\section{Gestione delle \textit{features}.}
 
-\subsection{Selezione delle features.}
-Un alto numero di features riduce l'interpretabilità del modello e consente una maggiore efficienza; rimuovere troppe variabili però può provocare perdite di informazione.
+\subsection{Selezione delle \textit{features}.}
+Un alto numero di features riduce l'interpretabilità del modello e consente una maggiore efficienza; rimuovere troppe variabili però può provocare perdita di informazione.
 È necessario dunque togliere solamente le variabili ridondanti o poco informative.
 Un attributo irrilevante non è detto che non sia collegato alla variabile risposta. \newline
 
@@ -277,7 +320,7 @@ Testare col bruteforce ogni modello possibile è dispendioso computazionalmente,
 Con un algoritmo di filtro, il dataset è analizzato da un algoritmo ricorsivo che cerca le variabili da inserire nel modello e restituisce l'elenco delle features.
 L'algoritmo genera una lista di features da passare ad una funzione obiettivo da massimizzare/minimizzare.
 
-\paragraph{Wrapper.}
+\paragraph{\textit{Wrapper}.}
 L'algoritmo di wrapper funziona allo stesso modo, ma la funzione obiettivo è direttamente un classificatore per cui è analizzata la prestazione. \newline
 
 Le variabili sono inserite nel modello se l'aumento dell'informazione riportato supera una certa soglia o solo semplicemente selezionate le $k$ variaibli più significative.
@@ -289,7 +332,7 @@ I metodi multivariati modellano le dipendenze tra gli attributi e offrono una pr
 
 I vantaggi della riduzione del numero delle features sono la riduzione della dimensione dei dati, la scalabilità dell'algoritmo, una maggiore interpretabilità e un miglioramento dell'accuratezza dovuta alla riduzione di dimensionalità del dataset (è meno probabile un overfitting).
 
-\subsection{Creazione di nuove Features.}
+\subsection{Creazione di nuove \textit{Features}.}
 In base alla conoscenza del dataset, è possibile creare nuove features partendo da quelle esistenti tramite semplici operazioni matematiche o rimappature dello spazio originale.
 
 
@@ -309,7 +352,7 @@ Per la classificazione multiclasse, è facile ipotizzare un modello per ogni var
 Nelle reti neurali, come in altri algoritmi, i valori stimati devono essere
 regolarizzati:
 \begin{equation*}
-  E(w, \lambda{}) = \frac{1}{m} \sum^m_{i=1}{(y_i - \widehat{y_i})^2} + \frac{\lambda{}}{2} \sum^K_{j=1}{w_i^2}
+  E(\underline{w}, \lambda) = \frac{1}{m} \sum^m_{i=1}{(y_i - \widehat{y_i})^2} + \frac{\lambda{}}{2} \sum^K_{j=1}{w_i^2}
 \end{equation*}
   
 Il parametro $\lambda$ regola il lisciamento della formula: bisogna selezionare un valore di $\lambda$ che sia ottimale per il compito svolto (ridurre l'errore per un nuovo insieme di dati).
@@ -329,15 +372,15 @@ Il modello spiega una variabile dall'insieme degli attributi del dataset.
 Si cerca una funzione: 
 \begin{align*}
   f &: R^k \rightarrow R \\
-  \widehat{Y} &= f(X) + \epsilon
+  \widehat{Y} &= f(\underline{X}) + \epsilon
 \end{align*}
 a cui si aggiunge un errore (o residuo) $\epsilon$ che rappresenta lo scarto del modello, dovuto a incertezza o ignoranza della formula reale. \newline
-Un modello di regressione lineare è una funzione lineare di una matrice (\textit{del disegno}) di valori $X$ pesata con un vettore $\underline{w}$.
+Un modello di regressione lineare è una funzione lineare di una matrice (\textit{del disegno}) di valori $\underline{X}$ pesata con un vettore $\underline{w}$.
 Se la matrice del disegno è composta da una sola variabile indipendente, il modello è detto \textit{modello lineare semplice}: non ha funzioni pratiche ma è interessante dal punto di vista teorico perchè presenta le stesse problematiche dei modelli multivariati, polinomiali e con componenti rettangolari. \newline
 L'obiettivo è minimizzare l'errore standard commesso nel prevedere $y$ tramite la funzione $f$:
 \begin{align*}
   SSE &= \sum^m_{i=1}{e^2_i} \\
-      &= \sum^m_{i=1}{[y_i - f(X)]^2} \\
+      &= \sum^m_{i=1}{[y_i - f(\underline{X})]^2} \\
       &= \sum^m_{i=1}{[y_i - x_i w_i - b]^2}
 \end{align*}
 Aggiungere variabili indipendenti non modifica il ragionamento nè la formulazione matematica del problema.
@@ -348,7 +391,7 @@ Aggiungere troppi gradi di libertà però può provocare overfitting dei dati, o
 Il modello lineare, pur essendo molto semplice, si basa su delle assunzioni molto forti.
 
 \paragraph{Assunzioni relative ai residui.}
-I residui devono avere media nulla e devono essere indipendenti (e quindi anche incorrelati) per tutti i valori di $x$.
+I residui devono avere media nulla e devono essere indipendenti (e quindi anche incorrelati) per tutti i valori di $\underline{X}$.
 Inoltre la varianza dei residui deve essere costante (devono cioè essere \textit{omoschedastici}).
 \begin{equation*}
   \underline{\epsilon} = N(\underline{\mu}, \sigma{}I)
@@ -379,15 +422,17 @@ che generalmente assume valori minori di $R^2$.
 Se la differenza tra i due valori non è particolarmente alta, (probabilmente) non si verifica l'overfitting. \newline
 
 \paragraph{Intervalli di confidenza e di previsione.}
-In un modello lineare semplice, si distinguono l'intervallo di confidenza, che contiene il valore medio $E[\underline{y} | X]$, e l'intervallo di previsione, che contiene la singola realizzazione $y$.
+In un modello lineare semplice, si distinguono l'intervallo di confidenza, che contiene il valore medio $E[\underline{y} | \underline{X}]$, e l'intervallo di previsione, che contiene la singola realizzazione $y$.
 
 \paragraph{Selezione variabili.}
 Sono possibili una selezione \textit{forward} e una selezione \textit{backward}.
 La prima parte dal modello vuoto e inserisce variabili a ogni passo del ciclo; si usa con un grande numero di variabili esplicative per semplificare il modello.
 L'approccio backward invece parte dal modello pieno ed esclude variabili a ogni ciclo; si usa con poche variabili per eliminare quelle poco significative.
 
+
+
 \newpage
-\part{Clustering}
+\part{\textit{Clustering}}
 La \textit{cluster analysis} non è risolvibile perchè la divisione in gruppi non è deterministica ma è un'interpretazione dello spettatore; tuttavia esistono metodi per verificare la bontà della divisione.
 La \textit{cluster analysis} serve per dividere le osservazioni in gruppi omogenei diversi tra di loro.
 Così si riduce la dimensionalità del dataset: è proposta una singola osservazione per ogni gruppo (si cerca l'archetipo).
@@ -406,9 +451,9 @@ Si forma una struttura gerarchica (deondogramma) che divide in cluster e sotto-c
 
 \paragraph{Esclusivo.}
 Ogni osservazione è assegnata ad un singolo cluster.
-\paragraph{Overlapping.}
+\paragraph{\textit{Overlapping}.}
 Un'osservazione può essere assegnata anche a più cluster.
-\paragraph{Fuzzy.}
+\paragraph{\textit{Fuzzy}.}
 Ogni osservazione è assegnata ad ogni cluster con un grado di \textit{membership} compreso in $[0;1]$.
 
 \paragraph{Completo.}
@@ -431,13 +476,13 @@ Infine si devono interpretare i dati (con l'aiuto di un esperto di dominio).
 Un'analisi di clustering difficilmente è significativa a livallo scientifico ma rappresenta delle linee guida per studi successivi del settore.
 
 \section{Prossimità.}
-La prossimità è calcolabile sia come similarità che come dissimilarità: la matrice di prossimità sostituisce completamente il dataset per utilità.
-Generalmente con una delle due misure si può calcolare anche l'altra se la scala è lineare; sono previste anche scale non lineari (che appiattiscono distanze troppo elevate).
+La prossimità è calcolabile sia come similarità che come dissimilarità: la matrice di prossimità sostituisce completamente il dataset.
+Generalmente con una delle due misure si può calcolare anche l'altra se la scala è lineare; sono previste tuttavia anche scale non lineari, ottenibili tramite formule come $d' = \frac{d}{d+1}$.
 
 La prossimità si calcola in modo diverso in base alla natura della variabile:
 
 \paragraph{Nominali.}
-Per osservazioni nominali si calcola $1$ se le variabili hanno lo stesso valore (per la similità, per la dissimilarità il contrario), $0$ altrimenti.
+Per osservazioni nominali la similarità si calcola $1$ se le variabili hanno lo stesso valore, $0$ altrimenti (per la dissimilarità il contrario).
 
 \paragraph{Ordinali.}
 Per preservare l'ordine, si misura la differenza in ordine assoluto: ogni valore è quantificato, in base all'ordine, come numero da $1$ a $p$ (dove $p$ è il numero di valori possibili).
@@ -450,7 +495,7 @@ Si presuppone che la distanza tra due elementi continui sia sempre la medesima.
 Per ovviare a questo problema, si usa una determinata funzione di utilità per mappare i valori della variabile ordinale.
 
 \paragraph{Variabili continue.}
-Generalmente si usa la distanza in ordine assoluto o particolari tipi di distanza (Minkowski).
+Generalmente si usa la distanza in ordine assoluto o particolari tipi di distanza.
 
 \section{Distanze e indici.}
 \subsection{Distanza di Minkowski.}
@@ -465,16 +510,20 @@ La distanza di Monkowski è una \textit{distanza} perchè ha alcune caratteristi
 \subsection{SMC.}
 Il Simple Matching Coefficient calcola il numero di match (in percentuale) tra due osservazioni:
 \begin{equation*}
-SMC(x, y) = \frac{\text{n matching attributes}}{\text{n attributes}}
+SMC(x, y) = \frac{\text{\# matching attributes}}{\text{\# attributes}}
 \end{equation*}
 Possono essere calcolati anche solamente i match se per qualche variabile il valore è $> 0$ se la mancanza dell'attributo non è sensata.
 
 \subsection{Coefficiente di Jaccard.}
+Misura la percentuale di match in due osservazioni, se la caratteristica è presente:
+\begin{equation*}
+J(A, B) = \frac{\text{\# matching attributes}}{\text{\# at least in one}}
+\end{equation*}
 
-\subsection{Cosine similarity.}
+\subsection{\textit{Cosine similarity}.}
 Si definisce la similarità al coseno (molto utilizzata in information retrival) che consente di calcolare da distanza tra due documenti.
 \begin{equation*}
-\cos(x, y) = \frac{x \cdot y}{\|x\| \cdot \|y\|}
+  \cos(\underline{x}, \underline{y}) = \frac{\underline{x} \cdot \underline{y}}{\|\underline{x}\| \cdot \|\underline{y}\|}
 \end{equation*}
 
 È utile per calcolare informazioni sparse.
@@ -496,8 +545,32 @@ similarity(x, y) = \frac{\sum^{n}_{k=1}{\delta_k \cdot S_k(x, y)}}{\sum^{n}_{k=1
 \end{equation*}
 Per pesare in modo diverso gli attriubuti basta inserire pesi nella formula precedente.
 
-\section{Algoritmi di clustering.}
-\subsection{K-Means.}
+
+\section{Algoritmi di \textit{clustering}.}
+\subsection{Metodi gerarchici.}
+I \textit{metodi gerarchici} sfruttano la matrice di distanza per dividere in modo agglomerativo o divisivo le osservazioni (costruendo un \textit{dendogramma}).
+La prima famiglia di algoritmi inizia ponendo ogni osservazione in un cluster distinto e unendo a ogni iterazione i due cluster più vicini, secondo un criterio; al contrario gli algoritmi divisivi, poco usati per l'elevato fabbisogno di risorse, collocano tutte le osservazioni in un unico cluster per poi dividere le osservazioni a ogni iterazione.
+Ponendo $\underline{d} = \{ d(a, b) \hspace{5pt} \forall a \in A, b \in B\}$ (dove $A$ e $B$ sono due cluster arbitrari), i criteri adottati per verificare l'inclusione o l'esclusione delle osservazioni sono:
+\begin{itemize}
+  \item distanza minima: $d(A, B) = min\{ \underline{d} \}$
+  \item distanza massima: $d(A, B = max\{ \underline{d} \}$
+  \item distanza media: $d(A, B) = \overline{d}$
+\end{itemize}
+I cluster possono dunque essere identificati in base al numero o alla distanza tra di loro; tuttavia rispetto ad altri algoritmi di clustering questi metodi richiedono molte risorse.
+
+
+\subsection{\textit{Density Based}.}
+L'algoritmo DB-Scan individua cluster di dimensione e forma variabile in base alla densità delle osservazioni nello spazio: i cluster sono definiti come zone altamente dense circondate da zone prive di osservazioni.
+Si definisce una distanza massima $Eps$ entro cui l'algoritmo verifica la quantità di osservazioni (i \textit{vicini}) per calcolare la densità: in base al valore (superiore o meno ad una certa soglia $MinPts$) si definiscono:
+\begin{itemize}
+  \item \textit{core points}: le osservazioni con un numero di vicini $\ge MinPts$;
+  \item \textit{border points}: osservazioni con un numero di vicini $< MinPts$ ma che rientrano nel vicinato di almeno un \textit{core point};
+  \item \textit{noise points}: sono \textit{border points} che non rientrano nel vicinato di nessun \textit{core point}.
+\end{itemize}
+A questo punto sono eliminati i \textit{noise points} e formati i cluster raggruppando \textit{core points} vicini tra di loro (si considerano \textit{vicini} due \textit{core points} se uno è nel vicinato dell'altro); i \textit{border points} infine sono assegnati al cluster più vicino.
+
+
+\subsection{\textit{K-Means}.}
 È un algoritmo di clustering esclusivo e completo che definisce un prototipo di osservazione per ogni cluster (centroide) non necessariamente coincidente con un'osservazione.
 Un'osservazione è assegnata al cluster il cui centroide ha distanza minore.
 I centroidi sono posizionati in modo iterativo e rappresentano la media degli attributi delle osservazioni appartenenti alla classe.
@@ -510,7 +583,7 @@ L'algoritmo individua solamente cluster iper-sferici e può dare problemi quando
 È possibile, alla fine dell'algoritmo, riunire cluster i cui centroidi distano meno di una certa soglia: può darsi che dividere le osservazioni in $k$ gruppi si insufficiente e sia opportuno usare un numero maggiore per poi fondere i cluster.
 Una variante più robusta è usare la variante PAM (\textit{Partitioning Around Metoid}): al posto dei centroidi usa le osservazioni medie, ma l'algoritmo risulta appesantito.
 
-\subsection{Fuzzy c-means.}
+\subsection{\textit{Fuzzy c-means}.}
 Quando il cluster di un'osservazione non è ben definito, l'appartenenza ad uno dei due è arbitrario: è utilizzato il concetto di \textit{membership} che indica il grado di appartenenza di un'osservazione a un dato cluster.
 Per ogni coppia è assegnato un valore $w_{i,j} \ge 0$ (dove $i$ indica l'osservazione ia, $j$ il $j$-esimo cluster).
 In questo modo non si formano cluster vuoti e ogni osservazione è assegnata a tutti i cluster.
@@ -522,7 +595,7 @@ Si considera così un problema diverso: il dataset è concepito come un aggregat
 Il ragionamento è generativo: i cluster esistono in quanto l'osservazione è regolato dalla componente che genera la distribuzione.
 Il processo generativo dunque avviene secondo la formula:
 \begin{equation*}
-p(\underline{x}|\Theta) = \sum^k_{j=1}{w_j \cdot p(\underline{x}|\theta_j)}
+p(\underline{x}|\underline{\Theta}) = \sum^k_{j=1}{w_j \cdot p(\underline{x}|\theta_j)}
 \end{equation*}
 
 Tuttavia le distribuzioni non sono note: è possibile stimarle grazie ad un algoritmo iterativo.
@@ -531,7 +604,7 @@ Le osservazioni sono assegnate al cluster con la probabilità più alta.
 
 L'algoritmo è molto pesante computazionalmente, e un'operazione di training è molto lenta ed onerosa (si rischia inoltre di raggiungere un minimo locale che non sia una stima della distribuzione reale); inoltre si applica bene solamente a dataset molto numerosi senza fenomeni di collinearità, ma l'algoritmo è più flessibile di k-means o c-means.
 
-\subsection{Kohonen MAPS o SOMs.}
+\subsection{\textit{Kohonen MAPS} e \textit{SOMs}.}
 Questi algoritmi usano reti neurali (convunazionali) che mappano lo spazio e assegnano l'osservazione ad un cluster.
 Ci si muove da uno spazio continuo (altamente dimensionale) ad uno spazio discreto (a bassa dimensionalità).
 
@@ -563,11 +636,11 @@ L'albero così ottenuto è lavorato eliminando gli archi corrispondenti alla dis
 % rivedere
 Questo algoritmo funziona su grafi di grandi dimensioni calcolando il grafo di sparsificazione.
 
-\subsection{Chameleon.}
-%rivedere
-Questo algoritmo unisce i cluster quando alcuni valori non sono particolarmente diversi tra di loro.
+%\subsection{Chameleon.}
+% rivedere
+%Questo algoritmo unisce i cluster quando alcuni valori non sono particolarmente diversi tra di loro.
 
-\section{Cluster Validity.}
+\section{Validazione.}
 Si analizzano i cluster per verificare che al loro interno contengano elementi simili e che cluster diversi contentgano elementi diversi.
 Per prima cosa bisogna chiedersi se si possono individuare strutture non randomiche alla distribuzione di cluster; inoltre è necessario verificare il numero ottimale di cluster.
 Per validare i cluster si usano indici esterni (o supervisionati), usati solamente a posteriori per verificare l'efficacia relativa rispetto ad un obiettivo; sono indici applicabili solametne a fine comparativo.
@@ -577,12 +650,12 @@ Le misure relative invece comparano differenti divisioni in cluster per verifica
 \subsection{Indici esterni.}
 Essendo già nota la divisione in cluster delle osservazioni, si può stabilire quanto la divisione data da un algoritmo sia efficace rispetto alla divisione \textit{esterna} (conosciuta prioristicamente) del dataset.
 Si possono verificare più casi:
-\begin{itemize}
+\begin{enumerate}[label=(\alph*)]
 \item $x$ e $y$ appartengono allo stesso cluster e alla stessa categoria a priori;
 \item $x$ e $y$ appartengono allo stesso cluster ma a diverse categorie a priori;
 \item $x$ e $y$ appartengono a diversi cluster ma alla stessa categoria a priori;
 \item $x$ e $y$ appartengono a diversi cluster e a diversi categorie a priori.
-\end{itemize}
+\end{enumerate}
 
 Iterando per tutte le coppie $x, y$, si può compilare una tabella analoga alla \textit{confusion matrix} dei modelli di Machine Learning.
 La misura Rand è concettualmente identica all'accuratezza:
@@ -590,36 +663,46 @@ La misura Rand è concettualmente identica all'accuratezza:
   M &= \frac{m(m-1)}{2} = a + b + c + d \\ \\
   R &= \frac{a+d}{M}
 \end{align*}
-Si definiscono anche l'indice di Jaccard:
+Si definiscono anche l'indice di Jaccard $J \in [0; 1]$:
 \begin{equation*}
   J = \frac{a}{a + b + c}
 \end{equation*}
-l'indice di Fowlkes and Mallows e il $\Gamma$ statistic.
+l'indice di Fowlkes and Mallow $FM \in [0; 1]$
+\begin{equation*}
+  FM = \sqrt{\frac{a}{a+b} \cdot \frac{a}{a+c}}
+\end{equation*}
+e il $\Gamma$ statistic $\Gamma \in [-1; +1]$
+\begin{equation*}
+  \Gamma = \frac{M \cdot a - (a+b)(a+c)}{\sqrt{(a+b)(a+c) \cdot (M - a - b)(M - a - c)}}
+\end{equation*}
+
 
 \subsection{Indici interni.}
 Sono indici che, in generale, servono a valutare la bontà dell'adattamento.
 Tipicamente, la misura di validità è valutata come $\sum_{i=1}^{k}{w_i \cdot validity(c_i)}$.
 I pesi generalmente hanno valore pari a $w_i = 1 \hspace{5pt} \forall{i}$.
-La coesione $C_i$ è calcolata come la sommatoria delle prossimità (o similitudine) tra tutte le osservazioni:
-\begin{equation*}
+La coesione $C_i$ è calcolata come la sommatoria delle prossimità (o similitudini) tra tutte le osservazioni:
+\begin{align*}
   C_i = \sum{\text{similarity}(x, y)} \hspace{25pt} \forall{x, y \in C_i}
-\end{equation*}
+\end{align*}
 La separazione invece è valutata tra coppie di cluster:
 \begin{align*}
-  \text{separation}(C_i, C_j) = \sum{\text{similarity}(x, y)} \\
-  \forall x, y : x \in C_i, \hspace{5pt} y \in C_j
+  \text{separation}(C_i, C_j) &= \sum{\text{similarity}(x, y)} \\
+  \forall x, y &: x \in C_i, \hspace{5pt} y \in C_j
 \end{align*}
 In caso di algoritmi che definiscono metoidi o centroidi, la coesione si calcola sommando le distanze tra le osservazioni e i loro metoidi (o centroidi); mentre la separazione si calcola, oltre che con la formula precedente, calcolando il metoide (o centroide) della distribuzione e calcolando la distanza tra il prototipo del cluster e quello della distribuzione.
+\begin{align*}
+  \text{cohesion}(C_i) &= \sum_{x \in C_i}{\text{similarity}(x, c_i)} \\ \\
+  \text{separation}(C_i) &= \text{similarity}(c_i, \underline{x})
+\end{align*}
 In base al valore dei pesi $w_i$, l'interpretazione del valore cambia:
 \begin{itemize}
-% per la coesione
 \item $w_i = \frac{1}{m_i}$: si ha una coesione graph-based;
 \item $w_i = 1$: si ha una coesione prototype-based;
-  %per altro, rivedere
-\item $w_i = m_i$: si ha una coesione ...
+\item $w_i = m_i$: si ha una separazione prototype-based.
 \end{itemize}
-
 Queste misure possono essere usate per migliorare la qualità dei cluster: cluster non molto coesi possono essere divisi in più cluster; analogamente possono essere uniti cluster molto vicini tra di loro.
+
 Si definisce la silhouette di ogni osservazione come indice di qualità del cluster per la singola osservazione:
 \begin{equation*}
   s_i = \frac{b_i - a}{\max{\{a_i, b_i\}}} \in [-1; +1]
@@ -645,12 +728,12 @@ Una tecnica consiste nel ridurre lo spazio in uno spazio bi (o tri) -dimensional
 Esistono anche indici numerici, quali l'indice di Calinski e Harabasz, l'indice di Dunn o l'indice Davis-Bouldin; inoltre esistono altre misure associate ad algoritmi probabilistici quali l'AIC, l'MDL o il BIC.
 
 Sono fissati un valore $k_{min}$ e un valore $k_{max}$, quindi costruite delle sequenze di strutture di clustering (per un numero $r$ di volte) ed è calcolato un indice per ogni divisione in cluster.
-È adottata la divisione in cluster il cui valore, nelle $r$ iterazioni, ha raggiunto il valore ottimale dell'indice. \newpage
+È adottata la divisione in cluster il cui valore, nelle $r$ iterazioni, ha raggiunto il valore ottimale dell'indice.
 
 
 
 \newpage
-\part{Association Analysis.}
+\part{\textit{Association Analysis}}
 L'analisi delle associazioni analizza le transizioni effettaute, ovvero insiemi di elementi di lunghezza variabile che corrispondono a operazioni unitarie effettuate dagli utenti.
 Un esempio può essere la lista della spesa degli acquirenti di un supermercato.
 L'obiettivo è trovare rapporti di conseguenza (antecedente e conseguente) che offrano dei vantaggi strategici.
@@ -679,9 +762,8 @@ Il problema è quindi spezzato in due modi: eliminando tutte le regole che si è
 
 \section{Generazione di \textit{Frequent Itemset}.}
 Si generano tutti gli itemset candidati a partire dall'insieme vuoto iniziando a generare insiemi di un elemento, poi di due elementi (non ordinati) e così via fino ad arrivare ad un unico itemset comprendentemente l'insieme degli item; il numero di sottoinsiemi generati è pari a $2^d - 1$ (perchè è escluso l'insieme vuoto).
-Con l'approccio brute-force si contana il numero di volte che l'itemset compare all'interno delle transazioni, calcolando quindi il supporto; si procede poi per tutti gli itemset; il costo computazionale di questo sistema è pari a $\mathcal{O}(NMw)$.
+Con l'approccio brute-force si contana il numero di volte che l'itemset compare all'interno delle transazioni, calcolando quindi il supporto; si procede poi per tutti gli itemset; il costo computazionale di questo sistema è pari a $\mathcal{O}(NMw)$. \newline
 
-\subsection{Apriori.}
 Di fatto si usano altri approcci: grazie al principio \textit{apriori}, si può inferire che se un itemset è frequente (cioè ha una frequenza minore del minimo) allora tutti gli itemset suoi sottoinsiemi sono frequenti (il numero di comparse che fa può solamente aumentare).
 Quindi, partendo da itemset frequente con una certa popolosità, si va a ritroso affermando che tutti i suoi sottoinsiemi sono frequenti.
 In realtà però il principio \textit{apriori} si usa al contrario: si presuppone che se un itemset non è frequente, allora tutti gli itemset che partono da lì non sono a loro volta frequenti (il numero di comparse può solamente diminuire).
@@ -701,8 +783,10 @@ Per aumentare l'informazione, si definiscono \textit{closed frequent itemset} gl
 Si evitano, cioè, regole associative ridondanti.
 \begin{align*}
   X &\rightarrow Y \\
-  X' &\rightarrow Y' \\
-  \text{se:}& \\
+  X' &\rightarrow Y'
+\end{align*}
+se:
+\begin{align*}
   X &\subseteq X' \\
   Y &\subseteq Y' \\
   s(X \rightarrow Y) &= s(X' \rightarrow Y') \\
