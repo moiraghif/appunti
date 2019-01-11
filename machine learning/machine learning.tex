@@ -230,7 +230,7 @@ Il grafo, tolta la variabile risposta, mostra una sequenza di nodi paragonabile 
 \part{\textit{Postprocessing}}
 
 \section{Prestazione del modello.}
-È fondamentale stimare la prestazione del modello con più di un sistema (onn effettuando quindi una previsione puntuale, che può risultare troppo ottimistica o pessimistica).
+È fondamentale stimare la prestazione del modello con più di un sistema (non effettuando quindi una previsione puntuale, che può risultare troppo ottimistica o pessimistica).
 Gli errori nel modello possono essere di training (quando il training-set è classificato male) o di generalizzazione (overfitting dei dati); un buon modello dovrebbe avere più o meno le stesse prestazioni su entrambi i dataset.
 L'overfitting del training-set accade spesso quando il modello è eccessivamente prestante rispetto alle previsioni: il modello è troppo complesso per effettuare previsioni.
 
@@ -238,7 +238,7 @@ Un modo semplice ma efficace per misurare la prestazione del modello è calcolar
 \begin{equation*}
   accuracy = \frac{TP + TN}{TP + FP + TN + FN}
 \end{equation*}
-Inoltre bisogna tenere conto anche del tempo impiegato dall'algoritmo a classificare i dati (potrebbero perdere di valore se il tempo impiegato è particolarmente nullo) e il fabbisogno di risorse richieste alla RAM della macchina.
+Inoltre bisogna tenere conto anche del tempo impiegato dall'algoritmo a classificare i dati (potrebbero perdere di valore se il tempo impiegato è particolarmente lungo) e il fabbisogno di risorse richieste alla macchina.
 Il modello è definito \textit{robusto} se non soffre per la presenza di valori anomali o mancanti, \textit{scalabile} se le prestazioni sono equiparabili all'aumentare del numero di osservazioni da classificare e \textit{interpretabile} se è comprensibile da esperti di dominio per prendere decisioni. \newline
 
 \subsection{Metodo \textit{Holdout}.}
