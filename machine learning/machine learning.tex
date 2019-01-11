@@ -41,7 +41,7 @@ Ogni dato è di un particolare tipo, in base al quale sono definite le operazion
 \section{Analisi esplorativa.}
 I dati, in fase esplorativa, sono analizzati mediante indici per ottenere una sintesi degli attributi.
 Generalmente per attributi qualitativi si usa la moda (o una tabella di frequenze) mentre per variabili quantitative si usano i quantili (per stime non parametriche).
-Stime parametriche (come quelle basate sui momenti) sono influenzate dalla presenza di \textit{outliers}, osservazioni così anomale da far pensare che vengano da un'altra distribuzione di dati: si usano anche stime parametriche corrette, come la \textit{trimmed mean} che esclude i valori più alti e più bassi in equal numero.
+Stime parametriche (come quelle basate sui momenti) sono influenzate dalla presenza di \textit{outliers}, osservazioni così anomale da far pensare che vengano da un'altra distribuzione di dati: si usano anche stime parametriche corrette, come la \textit{trimmed mean} che esclude i valori più alti e più bassi in ugual numero.
 \begin{align*}
   \overline{x} &= \frac{1}{N}\sum^N_{i=1}{x_i} \\ \\
   \overline{x}_\text{trimmed} &= \frac{1}{N-2k}\sum^{N-k}_{i=k}{x_{(i)}}
@@ -71,7 +71,7 @@ Inoltre è possibile anche creare nuove variabili, a partire dai dati di partenz
 
 
 \section{Semplificazione dello spazio.}
-Dataset con molte variabili possono portare alla \textit{maledizione della dimensionalità} (\textit{Curse of Dimensionality}): le performance del modello non crescono in modo lineare con la numerosità del dataset, ma possono addirittura diminuire; questo perchè lo spazio delle variabili è molto frammentato e difficilmente mappabile (parti dello spazio rimangono vuote, per riempirle servirebbe un numero di osservazioni pari a $n^k$ con $k \to \infty$).
+Dataset con molte variabili possono portare alla \textit{maledizione della dimensionalità} (\textit{Curse of Dimensionality}): le performance del modello non crescono in modo lineare con la numerosità del dataset, ma possono addirittura diminuire; questo perché lo spazio delle variabili è molto frammentato e difficilmente mappabile (parti dello spazio rimangono vuote, per riempirle servirebbe un numero di osservazioni pari a $n^k$ con $k \to \infty$).
 Ciò non si verificherebbe, a livello teorico, con un dataset infinito ma è un fenomeno diffuso in situazioni reali.
 
 \subsection{Riduzione del numero di features.}
@@ -121,7 +121,7 @@ Un \textit{classificatore} esegue una classificazione supervisionata.
 Gli scopi possono essere principalmente descrittivi (se conta più l'interpretazione del risultato) o predittivi (se il modello è utilizzato per classificare nuove osservazioni).
 Il modello è costruito su una porzione del dataset, chiamato \textit{train-set} (generalmente pari a $1/3$ dei dati), e testato su una seconda partizione del dataset (chiamata \textit{test-set}, comprendente il resto), per evitare che le performance siano deformate dal fenomeno dell'\textit{overfitting}.
 Il trainset è dato in pasto ad un \textit{learner} (l'algoritmo di classificazione) che restituisce in output il vettore della variabile risposta stimata.
-L'algoritmo non è l'unico possibile ma solamente una realizzazione di esso (perchè non sono noti i parametri reali della distribuzione ma si ha solamente un campione della popolazione): è una istanza (\textit{inducer}), costruito col trainset e interrogato col testset.
+L'algoritmo non è l'unico possibile ma solamente una realizzazione di esso (perché non sono noti i parametri reali della distribuzione ma si ha solamente un campione della popolazione): è una istanza (\textit{inducer}), costruito col trainset e interrogato col testset.
 Si possono quindi costruire tabelle a doppia entrata (\textit{confusion matrix}) per verificare la performance del learner:
 \begin{tabbing}
   dddddd \= dddddd \= dddddd \kill
@@ -140,7 +140,7 @@ Gli algoritmi di classificazione si basano su euristiche, reti neurali o calcoli
 
 
 \section{Albero di classificazione.}
-Considerato uno dei più semplici algoritmi, l'albero di classificazione mappa lo spazio partendo da un nodo radice e dividendo a ogni ramificazione la distribuzione massimizzazando un'euristica: la variabile della divisione e il valore di split sono calcolati in modo iterativo.
+Considerato uno dei più semplici algoritmi, l'albero di classificazione mappa lo spazio partendo da un nodo radice e dividendo a ogni ramificazione la distribuzione massimizzando un'euristica: la variabile della divisione e il valore di split sono calcolati in modo iterativo.
 Lo split può essere effettuato anche su più variabili contemporaneamente (albero obliquo).
 Il dataset è diviso in questo modo fino al raggiungimento di un nodo foglia, la cui distribuzione di frequenze è usata per effettuare la classificazione (le osservazioni sono classificate con la classe più frequente).
 Il modello non è efficace se tutti i nodi foglia classificano allo stesso modo.
@@ -184,7 +184,7 @@ Inoltre è possibile usare superfici curve rimappando lo spazio tramite funzioni
 
 \section{\textit{Multilayer Perceptron}.}
 Le reti neurali del tipo \textit{multilayer perceptron} sono composte da una serie di nodi di input e output collegati tra di loro così da simulare una rete di neuroni biologici.
-Ogni neurone $j$, eccettuando i neuroni di input, riceve in ingresso un valore $x$ ed esegue una funzione $f$, a cui è aggiunto un parametro $\theta$ (datto soglia di attivazione).
+Ogni neurone $j$, eccettuando i neuroni di input, riceve in ingresso un valore $x$ ed esegue una funzione $f$, a cui è aggiunto un parametro $\theta$ (detto soglia di attivazione).
 \begin{equation*}
   y_j = f( \sum{}{}{w_{i,j} x_i - \theta_j})
 \end{equation*}
@@ -195,8 +195,8 @@ Storicamente, le funzioni di attivazione più usate erano la logistica o la iper
 \end{align*}
 
 Il modello prevede l'inserimento di uno o più livelli di \textit{hidden neurons}, strati nascosti in cui ogni neurone è collegato a tutti i neuroni di input e che rilasciano l'output a tutti i neuroni dello strato successivo.
-I nodi non sono \textit{biorientati}, ovvero il segnale si propaga dall'input verso l'output senza tornare indietro, inoltre neuroni dello stesso livello non comunicano tra di loro; tuttavia il segnale può saltare uno o più strati di neuroni nascosti.
-L'algoritmo è particolarmente performante perchè il calcolo è parallelizzabile sui vari processori, che così possono operare in modo indipendente.
+I nodi non sono \textit{bi-orientati}, ovvero il segnale si propaga dall'input verso l'output senza tornare indietro, inoltre neuroni dello stesso livello non comunicano tra di loro; tuttavia il segnale può saltare uno o più strati di neuroni nascosti.
+L'algoritmo è particolarmente performante perché il calcolo è parallelizzabile sui vari processori, che così possono operare in modo indipendente.
 Non esiste un sistema per stimare il numero di strati nascosti o il numero di neuroni per ogni strato: si procede per tentativi.
 
 
@@ -322,11 +322,11 @@ L'algoritmo genera una lista di features da passare ad una funzione obiettivo da
 \paragraph{\textit{Wrapper}.}
 L'algoritmo di wrapper funziona allo stesso modo, ma la funzione obiettivo è direttamente un classificatore per cui è analizzata la prestazione. \newline
 
-Le variabili sono inserite nel modello se l'aumento dell'informazione riportato supera una certa soglia o solo semplicemente selezionate le $k$ variaibli più significative.
+Le variabili sono inserite nel modello se l'aumento dell'informazione riportato supera una certa soglia o solo semplicemente selezionate le $k$ variabili più significative.
 Con un filtro univariato, è facile selezionare le variabili irrilevanti ma non quelle ridondanti: per fare ciò è necessario usare un filtro multivariato.
 Un buon attributo deve essere fortemente associato con la variabile di classe e debolmente associato con le altre variabili del modello.
 I test univariati (parametrici) sono i test t, Anova, (non parametrici) Mann-Whitney, Kruskal-Wallis e Permutation test; i test multivariati sono i Correlation Feature Selection, Relief e Blanket.
-I vantaggi dei metodi univariati sono la velocità e la scabilità, inoltre sono indipendenti dalla natura del classificatore (cosa che può anche essere uno svantaggio); tuttavia ignora dipendenze tra gli attributi e le interazioni col classificatore. \newline
+I vantaggi dei metodi univariati sono la velocità e la scalabilità, inoltre sono indipendenti dalla natura del classificatore (cosa che può anche essere uno svantaggio); tuttavia ignora dipendenze tra gli attributi e le interazioni col classificatore. \newline
 I metodi multivariati modellano le dipendenze tra gli attributi e offrono una prestazione a metà tra i modelli Wrapper e i modelli univariati; sono algoritmi più pesanti rispetto ai filtri univariati.
 
 I vantaggi della riduzione del numero delle features sono la riduzione della dimensione dei dati, la scalabilità dell'algoritmo, una maggiore interpretabilità e un miglioramento dell'accuratezza dovuta alla riduzione di dimensionalità del dataset (è meno probabile un overfitting).
@@ -375,14 +375,14 @@ Si cerca una funzione:
 \end{align*}
 a cui si aggiunge un errore (o residuo) $\epsilon$ che rappresenta lo scarto del modello, dovuto a incertezza o ignoranza della formula reale. \newline
 Un modello di regressione lineare è una funzione lineare di una matrice (\textit{del disegno}) di valori $\underline{X}$ pesata con un vettore $\underline{w}$.
-Se la matrice del disegno è composta da una sola variabile indipendente, il modello è detto \textit{modello lineare semplice}: non ha funzioni pratiche ma è interessante dal punto di vista teorico perchè presenta le stesse problematiche dei modelli multivariati, polinomiali e con componenti rettangolari. \newline
+Se la matrice del disegno è composta da una sola variabile indipendente, il modello è detto \textit{modello lineare semplice}: non ha funzioni pratiche ma è interessante dal punto di vista teorico perché presenta le stesse problematiche dei modelli multivariati, polinomiali e con componenti rettangolari. \newline
 L'obiettivo è minimizzare l'errore standard commesso nel prevedere $y$ tramite la funzione $f$:
 \begin{align*}
   SSE &= \sum^m_{i=1}{e^2_i} \\
       &= \sum^m_{i=1}{[y_i - f(\underline{X})]^2} \\
       &= \sum^m_{i=1}{[y_i - x_i w_i - b]^2}
 \end{align*}
-Aggiungere variabili indipendenti non modifica il ragionamento nè la formulazione matematica del problema.
+Aggiungere variabili indipendenti non modifica il ragionamento né la formulazione matematica del problema.
 Si possono aggiungere altre variabili dall'elevamento a potenza di quelle presenti o dalla loro moltiplicazione: i parametri sono detti \textit{gradi di libertà} del modello.
 Aggiungere troppi gradi di libertà però può provocare overfitting dei dati, oltre a ridurre l'interpretabilità del modello.
 
@@ -431,7 +431,7 @@ L'approccio backward invece parte dal modello pieno ed esclude variabili a ogni 
 
 \newpage
 \part{\textit{Clustering}}
-La \textit{cluster analysis} non è risolvibile perchè la divisione in gruppi non è deterministica ma è un'interpretazione dello spettatore; tuttavia esistono metodi per verificare la bontà della divisione.
+La \textit{cluster analysis} non è risolvibile perché la divisione in gruppi non è deterministica ma è un'interpretazione dello spettatore; tuttavia esistono metodi per verificare la bontà della divisione.
 La \textit{cluster analysis} serve per dividere le osservazioni in gruppi omogenei diversi tra di loro.
 Così si riduce la dimensionalità del dataset: è proposta una singola osservazione per ogni gruppo (si cerca l'archetipo).
 Maggiore è l'omogeneità interna al gruppo, maggiore è la differenza tra i gruppi (è più precisa la classificazione). \newline
@@ -439,13 +439,13 @@ Il problema è capire cosa è simile e cosa diverso: si usano algoritmi di clust
 Gli algoritmi si dividono in diverse tipologie:
 \begin{itemize}
 \item partizionale / gerarchico;
-\item escusivo / overlapping / fuzzy;
+\item esclusivo / overlapping / fuzzy;
 \item completo / parziale.
 \end{itemize}
 \paragraph{Partizionale.}
 I cluster sono esaustivi e mutualmente esclusivi tra di loro; il problema è individuare il numero di cluster.
 \paragraph{Gerarchico.}
-Si forma una struttura gerarchica (deondogramma) che divide in cluster e sotto-cluster le osservazioni; il metodo più semplice è quello agglomerativo.
+Si forma una struttura gerarchica (dendogramma) che divide in cluster e sotto-cluster le osservazioni; il metodo più semplice è quello agglomerativo.
 
 \paragraph{Esclusivo.}
 Ogni osservazione è assegnata ad un singolo cluster.
@@ -471,7 +471,7 @@ Quindi si applica l'algoritmo di clustering selezionando la misura di prossimit�
 Infine bisogna validare il risultato ottenuto dall'algoritmo: si hanno una serie di indici di prestazione.
 Infine si devono interpretare i dati (con l'aiuto di un esperto di dominio).
 
-Un'analisi di clustering difficilmente è significativa a livallo scientifico ma rappresenta delle linee guida per studi successivi del settore.
+Un'analisi di clustering difficilmente è significativa a livello scientifico ma rappresenta delle linee guida per studi successivi del settore.
 
 \section{Prossimità.}
 La prossimità è calcolabile sia come similarità che come dissimilarità: la matrice di prossimità sostituisce completamente il dataset.
@@ -503,7 +503,7 @@ d(x, y) = \sqrt[r]{\sum^{n}_{k=1}{|x_k - y_k|^r}}
 \end{equation*}
 Se $r = 1$, si calcola la distanza di Manhattan; per $r = 2$ la distanza euclidea e per $n \to \infty$ si ha la distanza suprema.
 
-La distanza di Monkowski è una \textit{distanza} perchè ha alcune caratteristiche: non è mai negativa ed è simmetrica; inoltre vale la disuguaglianza triangolare.
+La distanza di Monkowski è una \textit{distanza} perché ha alcune caratteristiche: non è mai negativa ed è simmetrica; inoltre vale la disuguaglianza triangolare.
 
 \subsection{SMC.}
 Il Simple Matching Coefficient calcola il numero di match (in percentuale) tra due osservazioni:
@@ -541,7 +541,7 @@ Per calcolare la dissimilarità tra attributi diversi tra di loro, si definisce 
 \begin{equation*}
 similarity(x, y) = \frac{\sum^{n}_{k=1}{\delta_k \cdot S_k(x, y)}}{\sum^{n}_{k=1}{\delta_k}}
 \end{equation*}
-Per pesare in modo diverso gli attriubuti basta inserire pesi nella formula precedente.
+Per pesare in modo diverso gli attributi basta inserire pesi nella formula precedente.
 
 
 \section{Algoritmi di \textit{clustering}.}
@@ -572,7 +572,7 @@ A questo punto sono eliminati i \textit{noise points} e formati i cluster raggru
 È un algoritmo di clustering esclusivo e completo che definisce un prototipo di osservazione per ogni cluster (centroide) non necessariamente coincidente con un'osservazione.
 Un'osservazione è assegnata al cluster il cui centroide ha distanza minore.
 I centroidi sono posizionati in modo iterativo e rappresentano la media degli attributi delle osservazioni appartenenti alla classe.
-L'algoritmo piazza casualmente un numero $k$ (arbitrario) di centroidi, spostandoli ad ogni iterazione per far sì che coincidano col valore medio delle osservazioni di appartenenza; dunque si riassegnano le osservazioni e si spostano nuovamente i centroidi finchè due cicli successivi non convergono.
+L'algoritmo piazza casualmente un numero $k$ (arbitrario) di centroidi, spostandoli ad ogni iterazione per far sì che coincidano col valore medio delle osservazioni di appartenenza; dunque si riassegnano le osservazioni e si spostano nuovamente i centroidi finché due cicli successivi non convergono.
 
 L'algoritmo è molto utilizzato, grazie alla rapida velocità di esecuzione e della semplicità dell'algoritmo.
 Tuttavia presenta alcuni problemi: la scelta del numero di cluster e delle osservazioni di partenza sono cruciali e condizionano l'output.
@@ -583,7 +583,7 @@ Una variante più robusta è usare la variante PAM (\textit{Partitioning Around 
 
 \subsection{\textit{Fuzzy c-means}.}
 Quando il cluster di un'osservazione non è ben definito, l'appartenenza ad uno dei due è arbitrario: è utilizzato il concetto di \textit{membership} che indica il grado di appartenenza di un'osservazione a un dato cluster.
-Per ogni coppia è assegnato un valore $w_{i,j} \ge 0$ (dove $i$ indica l'osservazione ia, $j$ il $j$-esimo cluster).
+Per ogni coppia è assegnato un valore $w_{i,j} \ge 0$ (dove $i$ indica l'osservazione $i$-esima, $j$ il $j$-esimo cluster).
 In questo modo non si formano cluster vuoti e ogni osservazione è assegnata a tutti i cluster.
 
 L'algoritmo ha tutti i vantaggi e svantaggi del k-means, essendone la versione fuzzy, ma è computazionalmente più pesante.
@@ -627,7 +627,7 @@ Se il grafo risultante è ancora troppo coeso per effettuare una clusterizzazion
 \subsection{MST.}
 Il \textit{Minimum Spanning Tree} individua cluster in un grafo minimizzando la distanza tra le osservazioni in un albero di supporto.
 L'albero non può contenere cicli e deve contenere tutte le osservazioni; calcolando la somma dei pesi tra gli archi deve, tra tutte le classi di alberi, essere il minore possibile.
-Sono considerati i collegamenti col valore minore, finchè non è costruito un albero: da ogni osservazione partono solamente i due archi col minore valore (a patto che non si formino cicli).
+Sono considerati i collegamenti col valore minore, finché non è costruito un albero: da ogni osservazione partono solamente i due archi col minore valore (a patto che non si formino cicli).
 L'albero così ottenuto è lavorato eliminando gli archi corrispondenti alla distanza maggiore: è costruito un dendogramma ma in modo divisivo.
 
 \subsection{Opossum.}
@@ -639,9 +639,9 @@ Questo algoritmo funziona su grafi di grandi dimensioni calcolando il grafo di s
 %Questo algoritmo unisce i cluster quando alcuni valori non sono particolarmente diversi tra di loro.
 
 \section{Validazione.}
-Si analizzano i cluster per verificare che al loro interno contengano elementi simili e che cluster diversi contentgano elementi diversi.
+Si analizzano i cluster per verificare che al loro interno contengano elementi simili e che cluster diversi contengano elementi diversi.
 Per prima cosa bisogna chiedersi se si possono individuare strutture non randomiche alla distribuzione di cluster; inoltre è necessario verificare il numero ottimale di cluster.
-Per validare i cluster si usano indici esterni (o supervisionati), usati solamente a posteriori per verificare l'efficacia relativa rispetto ad un obiettivo; sono indici applicabili solametne a fine comparativo.
+Per validare i cluster si usano indici esterni (o supervisionati), usati solamente a posteriori per verificare l'efficacia relativa rispetto ad un obiettivo; sono indici applicabili solamente a fine comparativo.
 Esistono anche indici interni (o non supervisionati), che misurano i concetti di coesione (similitudine degli elementi interni) o separazione (dissimilitudine tra i cluster).
 Le misure relative invece comparano differenti divisioni in cluster per verificare il numero ottimale di cluster.
 
@@ -707,7 +707,7 @@ Si definisce la silhouette di ogni osservazione come indice di qualità del clus
 \end{equation*}
 dove $a_i$ è la distanza media della $i$-esima osservazione rispetto alle altre osservazioni del cluster, e $b_i$ è la distanza media minima dell'$i$-esima osservazione rispetto alle osservazioni degli altri cluster.
 L'osservazione appartiene tanto più al suo cluster quanto più $s_i$ tende a $+1$.
-Si calcola anche il valore di sihoulette del cluster facendo la media dei valori delle osservazioni, così come può essere calcolato un valore per la distribuzione.
+Si calcola anche il valore di silhouette del cluster facendo la media dei valori delle osservazioni, così come può essere calcolato un valore per la distribuzione.
 
 Per cluster gerarchici, questo indice è privo di senso: bisognerebbe calcolare in relazione dell'intero albero; dunque è usato l'indice cophenetico, che misura il livello di prossimità tra coppie di punti appartenenti per la prima volta al medesimo cluster.
 È sempre compreso tra $-1$ e $+1$, e serve per indicare quale divisione sia la migliore. \newline
@@ -732,7 +732,7 @@ Sono fissati un valore $k_{min}$ e un valore $k_{max}$, quindi costruite delle s
 
 \newpage
 \part{\textit{Association Analysis}}
-L'analisi delle associazioni analizza le transizioni effettaute, ovvero insiemi di elementi di lunghezza variabile che corrispondono a operazioni unitarie effettuate dagli utenti.
+L'analisi delle associazioni analizza le transizioni effettuate, ovvero insiemi di elementi di lunghezza variabile che corrispondono a operazioni unitarie effettuate dagli utenti.
 Un esempio può essere la lista della spesa degli acquirenti di un supermercato.
 L'obiettivo è trovare rapporti di conseguenza (antecedente e conseguente) che offrano dei vantaggi strategici.
 I dati sono generalmente rappresentati come variabili booleane dove ogni riga rappresenta una transazione e le colonne rappresentano gli \textit{item} presenti nella transazione.
@@ -751,29 +751,29 @@ Si definisce invece \textit{supporto} il numero in cui una regola è applicata n
 \begin{equation*}
 s(A \rightarrow B) = \frac{\sigma(A \cup B)}{N}
 \end{equation*}
-L'ideale è trovare regole con un grande supporto (perchè facilmente trovabili) e alta confidenza (perchè attendibili).
+L'ideale è trovare regole con un grande supporto (perché facilmente trovabili) e alta confidenza (perché attendibili).
 
 Il supporto serve anche a eliminare regole che occorrono per puro caso, o regole poco applicabili e dunque non interessanti nel mondo reale, riducendo quindi il numero di regole considerate. \newline
 
 Per individuare il numero di regole individuate è sconsigliato usare il sistema \textit{brute-force} dato l'elevato numero di regole (che segue una legge esponenziale).
-Il problema è quindi spezzato in due modi: eliminando tutte le regole che si è sicuri non soddisfino una soglia minima di frequenza (perchè poco presenti nell'itemset) e poi sono considerate le regole solo per gli elementi rimanenti.
+Il problema è quindi spezzato in due modi: eliminando tutte le regole che si è sicuri non soddisfino una soglia minima di frequenza (perché poco presenti nell'itemset) e poi sono considerate le regole solo per gli elementi rimanenti.
 
 \section{Generazione di \textit{Frequent Itemset}.}
-Si generano tutti gli itemset candidati a partire dall'insieme vuoto iniziando a generare insiemi di un elemento, poi di due elementi (non ordinati) e così via fino ad arrivare ad un unico itemset comprendentemente l'insieme degli item; il numero di sottoinsiemi generati è pari a $2^d - 1$ (perchè è escluso l'insieme vuoto).
-Con l'approccio brute-force si contana il numero di volte che l'itemset compare all'interno delle transazioni, calcolando quindi il supporto; si procede poi per tutti gli itemset; il costo computazionale di questo sistema è pari a $\mathcal{O}(NMw)$. \newline
+Si generano tutti gli itemset candidati a partire dall'insieme vuoto iniziando a generare insiemi di un elemento, poi di due elementi (non ordinati) e così via fino ad arrivare ad un unico itemset comprendente l'insieme degli item; il numero di sottoinsiemi generati è pari a $2^d - 1$ (perché è escluso l'insieme vuoto).
+Con l'approccio brute-force si conta il numero di volte che l'itemset compare all'interno delle transazioni, calcolando quindi il supporto; si procede poi per tutti gli itemset; il costo computazionale di questo sistema è pari a $\mathcal{O}(NMw)$. \newline
 
 Di fatto si usano altri approcci: grazie al principio \textit{apriori}, si può inferire che se un itemset è frequente (cioè ha una frequenza minore del minimo) allora tutti gli itemset suoi sottoinsiemi sono frequenti (il numero di comparse che fa può solamente aumentare).
 Quindi, partendo da itemset frequente con una certa popolosità, si va a ritroso affermando che tutti i suoi sottoinsiemi sono frequenti.
 In realtà però il principio \textit{apriori} si usa al contrario: si presuppone che se un itemset non è frequente, allora tutti gli itemset che partono da lì non sono a loro volta frequenti (il numero di comparse può solamente diminuire).
 L'idea fondamentale è che sono alternati passi di generazioni di candidati a tagli per ridurre la complessità del problema.
 
-I parametri dell'algoritmo sono il $minsup$, la frequenza minima di comparsa di un elemento per poterlo definire come frequente: con un valore alto, l'algoritmo è meno restrittivo e incude più itemset (per numero e per lunghezza).
+I parametri dell'algoritmo sono il $minsup$, la frequenza minima di comparsa di un elemento per poterlo definire come frequente: con un valore alto, l'algoritmo è meno restrittivo e include più itemset (per numero e per lunghezza).
 Inoltre il numero di item $\Omega$ impone la dimensione massima dell'albero che si può costruire.
 Il numero di transazioni e la loro lunghezza media anche influiscono sul tempo di esecuzione dell'algoritmo.
 
 Prendendo un k-itemset con frequenza $Y$, questo può generare $2^k - 2$ regole di associazione scambiando antecedente e conseguente.
 Le regole sono generate come $X \rightarrow Y - X$, a patto che $X$ e $Y$ siano insiemi non vuoti.
-Tutte le regole così generate rispettano il \textit{support threshold} perchè già testato, bisogna però verificare il rapporto di conseguenza.
+Tutte le regole così generate rispettano il \textit{support threshold} perché già testato, bisogna però verificare il rapporto di conseguenza.
 
 Un \textit{Maximal Frequent Itemset} è un itemset frequente oltre al quale, se esteso, non genera itemset frequenti; è una sorta di frontiera.
 Definire un nodo come \textit{maximal frequent itemset} non aiuta sul supporto dei suoi sottoinsiemi.
