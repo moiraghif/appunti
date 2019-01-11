@@ -75,11 +75,11 @@ Dataset con molte variabili possono portare alla \textit{maledizione della dimen
 Ciò non si verificherebbe, a livello teorico, con un dataset infinito ma è un fenomeno diffuso in situazioni reali.
 
 \subsection{Riduzione del numero di features.}
-Uno dei sistemi più usati per ridurre la dimensionalità è l'analisi delle componenti principali (PCA) o la decomposizione dei valori singoli (SVD): si tenta di massimizzare l'informazione contenuta dal dataet riducendo però la dimensione dello spazio.
+I sistemi più usati per ridurre la dimensionalità sono l'analisi delle componenti principali (PCA) e la decomposizione dei valori singoli (SVD): si tenta di massimizzare l'informazione contenuta dal dataset riducendo però la dimensione dello spazio.
 In questo modo tuttavia, il modello perde di interpretabilità.
 
 Per semplificare variabili nominali invece, una tecnica è quella della binarizzazione: la scala di valori (da $0$ a $k-1$, dove $k$ indica il numero di valori che può assumere la variabile) è sostituita da una serie di variabili dummies che ordinate rappresentano una sequenza binaria.
-Il numero di variabili dummies così è ridotto da $k-1$ a $|\frac{k}{2}|$.
+Il numero di variabili dummies così è ridotto da $k-1$ a $\frac{k}{2}$.
 Questo metodo però può distorcere il dataset.
 
 \subsection{Raggruppamenti.}
@@ -106,9 +106,9 @@ Generalmente si usa la moda per le variabili qualitative e la media (eventualmen
 
 
 \section{Campionamento.}
-Per ridurre la numerosità campionaria, il modo migliore è fare un campionamento del dataset originario.
+Per ridurre la popolosità del dataset, il modo migliore è effettuare un campionamento.
 Un campione sufficientemente grande dovrebbe avere le stesse caratteristiche del dataset di partenza, ma richiede minori risorse computazionali per l'esecuzione degli algoritmi.
-Il campionamento può essere fatto secondo diverse modalità, ma dovrebbe tenere conto anche di eventuali forti disparità di valori all'interno degli attributi.
+Il campionamento può essere fatto secondo diverse modalità, ma dovrebbe tenere conto anche di eventuali disparità di valori all'interno degli attributi.
 Il campione deve essere sufficientemente grande da essere rappresentativo ma non così grande da risultare problematico per la computazione.
 
 
@@ -139,10 +139,10 @@ Generalmente, elevati livelli di accuratezza sono dovuti a errori nel modello.
 Gli algoritmi di classificazione si basano su euristiche, reti neurali o calcoli probabilistici per classificare le osservazioni.
 
 
-\section{Albero decisionale.}
-Considerato uno dei più semplici algoritmi, l'albero decisionale mappa lo spazio partendo da un nodo radice e dividendo a ogni ramificazione la distribuzione secondo dei criteri (massimizzazione di un'euristica): la variabile della divisione è il valore di split sono calcolati in modo iterativo.
-Lo spil può essere effettuato anche su più variabili contemporaneamente (albero obliquo).
-La distribuzione è divisa in questo modo fino al raggiungimento di un nodo foglia, la cui distribuzione di frequenze è usata per effettuare la classificazione (le osservazioni sono classificate con la classe più frequente).
+\section{Albero di classificazione.}
+Considerato uno dei più semplici algoritmi, l'albero di classificazione mappa lo spazio partendo da un nodo radice e dividendo a ogni ramificazione la distribuzione massimizzazando un'euristica: la variabile della divisione e il valore di split sono calcolati in modo iterativo.
+Lo split può essere effettuato anche su più variabili contemporaneamente (albero obliquo).
+Il dataset è diviso in questo modo fino al raggiungimento di un nodo foglia, la cui distribuzione di frequenze è usata per effettuare la classificazione (le osservazioni sono classificate con la classe più frequente).
 Il modello non è efficace se tutti i nodi foglia classificano allo stesso modo.
 
 
@@ -172,7 +172,7 @@ Può darsi che la retta non sia utile nella classificazione, si preferisce dunqu
 È dunque sufficiente eseguire un'operazione lineare per ottenere i valori stimati della retta.
 Se l'insieme delle rette che dividono lo spazio è vuoto (cioè la distribuzione non è linearmente separabile), si modifica la funzione obiettivo per minimizzare la distanza dalla corretta classificazione $\xi_i$:
 \begin{equation*}
-  \min{\frac{1}{2} \underline{w} \cdot \underline{w}' + \Delta \sum^N_{i=1}{\xi_i}}
+  \min{\{\frac{1}{2} \underline{w} \cdot \underline{w}' + \Delta \sum^N_{i=1}{\xi_i}\}}
 \end{equation*}
 con:
 \begin{align*}
@@ -207,12 +207,11 @@ Il modello calcola la probabilità a posteriori di $Y = y$ quando la matrice del
   P(y | \underline{X}) = \frac{P(\underline{X} | y) \cdot P(y)}{P(\underline{X})}
 \end{equation*}
 Il modello permette solamente classificazioni binarie calcolando la probabilità a posteriori dell'appartenenza a una data classe.
-Il fatto che il denominatore della formula non sia noto non influisce sull'esito, dato che conta solamente il valore del numeratore.
+Il fatto che il denominatore della formula non sia noto non influisce sull'esito, dato che conta solamente il valore del numeratore (il denominatore è semplificato nei passaggi successivi).
 Il numero di osservazioni richieste dall'algoritmo cresce in modo esponenziale al numero di features utilizzate ($2^k$), quindi è ipotizzata a priori l'indipendenza condizionata dei caratteri.
 In questo modo la probabilità a posteriori può essere scritta come una semplice produttoria:
 \begin{equation*}
-  P(y
-  | \underline{X}) = \prod{}{}{P(\underline{X} | y)}
+  P(y | \underline{X}) = \prod{}{}{P(\underline{X} | y)}
 \end{equation*}
 la complessità cresce in modo lineare; l'ipotesi è forte ma il modello è molto efficace soprattutto con dimensionalità elevate.
 
@@ -222,8 +221,8 @@ Il classificatore bayesiano riesce a gestire anche variabili numeriche calcoland
 Nativamente, il modello gestisce solamente variabili binarie nella matrice del disegno, ma grazie a distribuzioni di probabilità (come la gaussiana o la Kernel function) è possibile calcolare la probabilità di realizzazione di variabili non binarie.
 
 A causa dell'ipotesi di indipendenza condizionale, il modello è considerato molto rigido.
-Tuttavia, generalizzando il modello con un grafo dove sono collegate tra di loro le variabili dipendneti (evitando però cicli), si riesce a ottenere una stima migliore facendo crescere la complessità del problema tra il lineare (del caso in cui tutte le variabili siano indipendenti) e l'esponenziale (nel caso in cui tutte le variabili siano tra di loro dipendenti).
-Il grafo, tolta la variabile risposta, mostra una sequenza di nodi paragonabile ad un albero decisionale: ogni nodo dipende dalla variabile risposta e da un altro attributo.
+Tuttavia, generalizzando il modello con un grafo dove sono collegate tra di loro le variabili dipendenti (evitando però cicli), si riesce a ottenere una stima migliore facendo crescere la complessità del problema tra il lineare (del caso in cui tutte le variabili siano indipendenti) e l'esponenziale (nel caso in cui tutte le variabili siano tra di loro dipendenti).
+Il grafo, tolta la variabile risposta, mostra una sequenza di nodi paragonabile ad un albero: ogni nodo dipende dalla variabile risposta e da un altro attributo.
 
 
 
@@ -249,7 +248,7 @@ Si usa quindi la tecnica dell'\textit{iterate holdout}, che prevede che per un n
 Nulla garantisce che però le osservazioni si trovino solamente in una partizione e non in un'altra, essendo questo un metodo basato sul campionamento casuale.
 
 \subsection{Metodo \textit{Cross Validation}.}
-Per ovviare ai problemi dell'\textit{iterate holdout}, si usa il sistema del \textit{Cross Validation}: il dataset è ripartito in $k$ partizioni mutualmente distinte ed esaustive; al $k$-esimo passo è utilizzato come training-set la $k$-esima partizione e come test-set il resto delle osservazioni; si calcola infine la media delle prestazioni.
+Per ovviare ai problemi dell'\textit{iterate holdout}, si usa il sistema del \textit{Cross Validation}: il dataset è ripartito in $k$ partizioni mutualmente distinte ed esaustive; al $k$-esimo passo è utilizzata come training-set la $k$-esima partizione e come test-set la rimanente parte delle osservazioni; si calcola infine la media delle prestazioni.
 Generalmente si divide il dataset in partizioni uguali per evitare che abbiano poi pesi diversi nel calcolo della media.
 Valori tipici di $k$ sono $3$, $5$ o $10$, ma esiste anche il \textit{Leave One Out Cross Validation} che usa $k = N$ (è un sistema però molto pesante computazionalmente).
 
@@ -408,10 +407,9 @@ Bisogna dunque calcolare quali coefficienti sono significativamente non nulli; t
 Altro approccio è effettuare un test statistico (t-test) sulla significatività del singolo coefficiente ed escludere con $\text{p-value} > \alpha$.
 
 \subsection{Valutazione del modello.}
-Il coefficiente $\tilde{R}^2$ di determinazione rappresenta la percentuale di varianza totale spiegata dal modello:
+Il coefficiente $R^2$ di determinazione rappresenta la percentuale di varianza totale spiegata dal modello:
 \begin{equation*}
-  \tilde{R}^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum^n_{i=1}{(y_i -
-      \hat{y}_i)^2}}{\sum^n_{i=1}{(y_i - \bar{y}_i)^2}}
+  R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum^n_{i=1}{(y_i - \hat{y}_i)^2}}{\sum^n_{i=1}{(y_i - \bar{y}_i)^2}}
 \end{equation*}
 
 Si può comunque verificare l'overfitting: si usa il coefficiente aggiustato.
