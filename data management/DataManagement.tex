@@ -2,18 +2,18 @@
 
 \usepackage{graphicx}
 \usepackage{mathtools}
-\usepackage[margin=1.2in]{geometry}
+\usepackage[margin=0.65in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
 \usepackage{enumitem}
 
 \graphicspath{ {./img/} }
-%opening
+
 \title{Data Management}
 \author{}
 \date{}
-%NEED TO IMPROVE SECTION 5 WIDE COLUMNS AND BIG TABLE
+%NEED TO IMPROVE SECTION 6 DATA DISTRIBUTION
 \begin{document}
 
 \maketitle
@@ -107,7 +107,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 	\item
 	Segue il teorema CAP:
 	\begin{itemize}
-		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(Infatti può soddisfare solo 2 di esse)
+		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(Infatti può soddisfare solo 2 di esse):
 		\begin{enumerate}		
 			\item
 			\textbf{(C)C}oerenza : Tutti i nodi vedano gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
@@ -131,7 +131,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 		\item
 		Basic Availability : completare una richiesta anche se parzialmente consistente, ad esempio nel caso di fallimento. E' possibile fare ciò grazie al fatto che usa server sparsi ovunque con un grado di	replicazione del database e in caso di malfunzionamento del database richiesto non tutto il sistema cede la Disponibilità.
 		\item
-		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente.
+		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente, cioè i dati possono avere schemi diversi.
 		\item
 		Eventual consistency : I sistemi NoSQL richiedono che a un certo punto i dati convergeranno a uno stato consistente (non si fa garanzie sul quando), e quindi prima di allora ho una consistenza ritardata cioè prima del momenti dello stato consistente posso ricevere come risposta qualunque valore come risposta di una query.
 	\end{itemize}
@@ -162,13 +162,13 @@ Esempi e tipologie di modelli NoSQL :
 	\item
 	Column family (Big Table, Cassandra) : In grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato ragruppato in collona.
 	\item
-	Document based (CouchDB, MongoDB) : Di solito salvati con file JSON, salvati come una \textless{}chiave -- valore\textgreater{}. E' facile ricercare dati in questo formato. JSOM è basato su due strutture :1) chiave -- valore per gli oggetti e 2) lista ordinata di elementi.
+	Document based (CouchDB, MongoDB) : Di solito salvati con file JSON, salvati come una \textless{}chiave -- valore\textgreater{}. E' facile ricercare dati in questo formato. JSON è basato su due strutture :1) chiave -- valore per gli oggetti e 2) lista ordinata di elementi.
 	\item
 	Graph based (Neo4J, FlockDB) : Uso i vertici/nodi e archi per
 	rappresentare i dati e legami tra di loro. E' difficile fare scaling	con i grafi.
 \end{enumerate}
 
-Abbiamo che dobbiamo sacrificare o la dimensione del database o la sua non complessità:
+Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 \begin{center}
 	\includegraphics[scale=0.5]{IMAGE1.jpg}
 \end{center}
@@ -176,12 +176,13 @@ Abbiamo che dobbiamo sacrificare o la dimensione del database o la sua non compl
 
 
 \section{MongoDB}
-MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs Mongo doesn't have the join feature. The name changes are:
+MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
 
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
-In case of a massive data upload one might decide to:
+
+In case of a massive data upload one might decide to do a few changes in the process to fasten  it up:
 
 \begin{itemize}[noitemsep]
 	 
@@ -194,10 +195,10 @@ In case of a massive data upload one might decide to:
 
 One must be attentive when doing so because any loss will not be registered and lost forever.
 
-For large data-sets it is useful to use some additional structures called indexes, they are similar to the book indexes and act as a faster way to retrieve information, the might require more time during the insertion but makes the queries faster later, one primary index (basic one) is always the defined for the id. How does it exactly works?
-Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result, it is the same we would do if we didn't have the index for our books we will have to read it whole until finding the point where we
-wanted to be. Indexing avoid this problem (more problematic if the database is large), it is an ordered list that points it's content.
-Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. Fact : MongoDB gives a limit of 64 indexes!
+For large data-sets it is useful to use some additional structures called indexes, they are similar to the book indexes and act as a faster way to retrieve information, they might require more time during the insertion but makes the queries faster later, one primary index (basic one) is always the defined for the id. How does it exactly works?
+Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result, The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
+Indexing avoid this problem (more problematic if the database is large), it is an ordered list that points it's content.
+Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. MongoDB gives, by default, a limit of 64 indexes!
 
 The aggregation uses pipeline and options. 
 The aggregation pipeline starts processing the documents of the collection and passes the result to the next pipeline in order to get result for example: \$match and \$group. 
@@ -207,7 +208,7 @@ Mongo for many reasons (mainly commercial) offers also a SQL interface, we need 
 
 \section{GraphDB}
 
-What is a graph? It is a collection of nodes and edges which represents their relations. 
+A graph is a collection of nodes and edges which represents their relations. 
 It has a lot of applications such as: social media, recommendations, Geo, Logistics network, financial transaction graphs (for fraud detection), master data management, Bioinformatics, authorization and access control.
 
 The labeled property graph model has the following characteristics:
@@ -226,23 +227,22 @@ The labeled property graph model has the following characteristics:
 	Relationships can contain properties like nodes.
 	\item
 	%magari migliorare questa parte
-	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones, this method is called generic relationship. Usually it's preferred the generic one especially in cases where I need to find all the address of a client all I need to do is find the ADDRESS relationship, in the fine-grained I needed to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
+	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones, this method is called generic relationship. Usually the generic one is preferred,  especially in cases where I need to find all the address of a client, all I need to do is find the ADDRESS relationship, in the fine-grained I need to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
 \end{itemize}
 
-A graph database (GD) can use either the native or non-native storage and processing engine.
+A Graph Database (GD) can use either the native or non-native storage and processing engine.
 
 Native Graph Storage is the one optimized for the native graph management \& the non native graph storage stores the data in non graph based model but this model supports a graph query language, examples: Relational, Object oriented DB, Wide Column, in a relational for example in a join bomb we can use a graph to connect two tables. But the problem
 with the relational DBs and most of NoSQL DBs is that it lacks relationships.
 Moreover in SQL joining tables adds more complexity, and in case of sparse table with null-able column require special checking in the code, in the case of a market, just to see what a customer bought we need to do a lot of expensive joins or the customers that buy a specific product with other products for the recommendation systems. 
-For the NoSQL DBs whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model and is
-costly operation since it's doesn't use index free adjacency, since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
+For the NoSQL DBs whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model and is costly operation since it's doesn't use index free adjacency(the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
 other interesting queries.
 
 In a native graph storage the attributes and nodes and the referenced nodes are stored together, to optimize the graph processing engine. 
 When we perform a query the graph model does not depend on the total number of nodes instead it remain nearly constant because it works locally to the portion of the graph which is connected to the base node, while the other SQL and NoSQL models will suffer in performance speed with the
 increase of data. Moreover we can add more data/nodes and relationship without disturbing the already existing model.
 
-The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB, this makes sure that the retrieval is faster but it comes at a cost, the efficiency of queries that do not use graph traversal, for example the writing time etc.
+The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB, this makes sure that the retrieval is faster but it comes at a cost: the efficiency of queries that do not use graph traversal, for example the writing time etc.
 
 It's important to note that it's neither good nor bad to use native or non-native engine, simply one needs to choose one based on his/her needs, for example my DB is based on a non-graph backend (like MySQL) so it would be useful to use a non native graph storage.
 
@@ -289,8 +289,9 @@ The values are not query-able, such as a BLOB, where a BLOB(Binary Large OBject)
 \begin{center}
 \includegraphics[scale=0.5]{IMAGE3.jpg}
 \end{center}
-An example is the amazon's cart system which uses DynamoDB a key-value system.
+An example is the amazon's cart system which uses DynamoDB, a key-value system.
 
+~\\
 The basic operation in a key-valued models are:
 
 \begin{itemize}[noitemsep]
@@ -336,7 +337,7 @@ The key value terminology is the following:
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value (k1,v1) basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 it simply finds the node with the key k1 and return it's value v1 from it.
 
 \section{Wide Column and BigTable}
-This two models are an evolution, in a certain way, of the key-value models, when we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
+These two models are an evolution, in a certain way, of the key-value models, when we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
 
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
@@ -382,7 +383,7 @@ The column is divided in families. The timestamp support the multi-version of mo
 	Each row can have different timestamp, so we can have more versions of this table.
 \end{center}
 
-The cells within The data is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The cells within the data (also the key) is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
 %cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
@@ -425,52 +426,114 @@ The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is
 	\end{tabular}
 \end{center}
 
-%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
 \section{Data Distribution}
-If we divide our database into n databases, called the fragmentation of data, the bottom-lake phenomena arises in which the slowest machine becomes the bottom-lake and the max time for a query is dependent on that machine. 
-Another way is to replicate the data 2 on 2 such as if a machine is not accessible we can have that data from another machine. We can also combine the fragmentation and replication.
+A centralized DB system is a system where the database is located, stored and maintained in a single location. If the processor fail all the system fails.
+If we need data periodically in different location we can distribute it or replicate it. The distribution is to divide the data and have it stored in different places, it provides opportunities for parallel execution. On the other hand we can also replicate it or replicate part of data in different location improving also the availability.
+
+In a Homogeneous Distributed Database all sites have identical software and aware of each other and agree to cooperate in processing user requests. They surrender their autonomy to change the schema appearing to user as a single system.
+
+In a Heterogeneous Distributed Database different sites may use different schema and software which creates a major problem for query and transaction processing. The sites may not be aware of each other and may provide only limited facilities for cooperation in transaction processing.
+
+The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem or where to allocate fragments to nodes.
+We have that with replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
+
+Dividing/fragmenting our database into n databases, the bottom-lake phenomena arises, in which the slowest machine becomes the bottom-lake: the maximum time for a query is dependent on that machine.
+
 The advantages of replication are:
 \begin{itemize}[noitemsep]
 	\item
-	availability
+	Availability: Since the failure of a site does not result in unavailability of it's data since it's replicas exist elsewhere.
 	\item
-	parallelism
+	Parallelism: Queries may be processed by several nodes in parallel thus faster.
 	\item
-	reduced data transfer.
+	Reduced data transfer: Since replicas of the data may exist in the node itself.
 \end{itemize}
 
-while the disadvantages are:
+While the disadvantages are:
 
 \begin{itemize}[noitemsep]
 	 
 	\item
-	increased cost of updates
+	increased cost of updates: Since each replica must be updated.
 	\item
-	increased complexity of concurrency control e.g. two people book a ticket at the same time solution : {[}\ldots{}.{]}.
+	increased complexity of concurrency control e.g. two people book a ticket at the same time solution. We may have that distinct replicas may lead to inconsistent data unless some special concurrency mechanisms are implemented. A solution could be to choose one copy as the primary copy and apply concurrency control operation only on the primary copy.
 \end{itemize}
 
-Data Transparency is very important so the users are not aware on the way we distribute the data.
+Now for simplicity imagine the database to be relational. 
+The fragmentation can be horizontal or vertical, but it must contain sufficient information to reconstruct the original "relation". In the horizontal each tuple of the data is assigned to one or more fragments while in the vertical the schema (in the case of relational) is split into several smaller schemas, and all of them must contain a common candidate key to ensure lossless join for example using a tuple-id attribute.
+The advantages are:
+\begin{itemize}
+	\item Horizontal:
+	\begin{itemize}
+		\item Allows parallel processing on fragments.
+		\item Allows the data to be split so the tuples are located where they are more frequently accessed.
+	\end{itemize}
+	\item Vertical
+	\begin{itemize}
+		\item Allows tuples to be split so that each part of tuples are stored where they are more accessed.
+		\item tuple-id allows efficient joining of vertical fragments.
+		\item Allows parallel processing on a relation.
+	\end{itemize}
+\end{itemize}
+The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. In the centralized system the primary criterion for the cost is the number of disk accesses, in the distributed system we must take in account also the cost of data transmission over the network and the potential gain in performance from having parallel query execution.
 
-Shared Everything : existed until 2000 (aprrox) we have one big complex costly data base shares everything and can be very slow, Share Disk : We have data saved on different disk connected between them,
-no one uses it.
+Data Transparency is very important it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system.
 
-Share Nothing : every thing is separated it is very easy to scale out it Model used by noSQL models.
+Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
+The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
 
-What to choose btwn Scaliblty or Avlblty? It depends on how much one wants to spend more availability means more money.
+There are 3 types of architecture:
+\begin{itemize}
+\item Shared Everything: Dominated the architecture market until 2000(approximately), we have one big complex costly data base, it shares everything and can be very slow. It is the centralized system.
 
-How to create replicas?
+\item Share Disk: We have data saved on different disks connected between them, no one uses it. The disks are all connected together and communicates to all the CPUs.
+
+\item Share Nothing: Every thing is separated every disk has it's own CPU and the disks does not communicate with other CPUs or disks, it is very easy to scale it out. Model adopted by NoSQL models. Only at the end the processors are connected together to combine the results from each of them. 
+\end{itemize}
+
+\begin{center}
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Shared Disk} & \textbf{Shared Nothing}\\
+		\hline
+		Quick adaptability to changing workloads & Can exploit simpler, cheaper hardware\\
+		\hline
+		High availability & Almost unlimited scalability\\
+		\hline
+		Performs best in a heavy read environment & Works well in high-volume, read/write environment\\
+		\hline
+		Data need not to be partitioned & Data is partitioned across the cluster\\
+		\hline
+	\end{tabular}
+\end{center}
+
+
+What to choose between Scalability or Availability? It depends on how much one wants to spend more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
+
+\textbf{Replication}:
+A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump).
+
+The replicas structures are:
+\begin{itemize}
+	\item One2Many: One source and many targets.
+	\item Many2One: Many sources and only one target.
+	\item Peer2Peer: Data is replicated across multiple nodes that communicates with each other.
+	\item Bi-directional: Conceptually a Peer2Peer with only two Peers.
+	\item Multi-Tier Staging: The replication is divided in more stages.
+\end{itemize}
+
+To create a replica we can:
 \begin{itemize}[noitemsep]
-	\item take the data form master either the backup copy or the data itself	(if we can stop the activity of the server) and move it.
-	\item Using log file : to maintain the replica as same as as the source even during the transfer (near real time).
+	\item take the data form master either the backup copy or the data itself	(if we can stop the activity of the server) and move it. (It could be useful if the data is not accessible from outside)
+	\item use log file : to maintain the replica the same as the source even during the transfer (near real time) using the Log to execute the same commands executed on the source.
 \end{itemize}
 
 
+%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
+%If you use Volume in project be attentive to the scalability!!!!!
+\textbf{MongoDB's Approach: Sharding}
 
-%If you use Volume in project be attentive to the %scalability!!!!!
-
-How MongoDB manages the distribution :
-
-It uses Sharding : Every document has a key in mongodb so we define a shard key which defines the range of data. 
+MongoDB uses Sharding : Every document has a key in mongodb so we define a shard key which defines the range of data. The key space is like points on a line and the range is a segment of that line.
 Example: Key is surname so we can decide all the surname staring from A to K save in first partition and
 the other in the second.
 
