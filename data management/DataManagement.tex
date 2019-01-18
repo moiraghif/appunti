@@ -398,7 +398,7 @@ HBase does not support joins, but this can be done in application layer using Sc
 Cassandra is a column oriented NoSQL system. 
 The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
 The Column Families, can be seen as a collection of rows or better a collection of key-value pairs as rows. 
-A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp.
+A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp. So a table is a list of “nested key-value pairs”: (ROW x COLUMN key x COLUMN value) and this is inside a column family.
 The Key Space is only a logical grouping of columns families.
 
 \begin{center}
@@ -408,7 +408,7 @@ The Key Space is only a logical grouping of columns families.
 
 While with RDBMS, we can have that JOIN of normalized tables can return almost anything, with C* the data model is designed for specific queries and the schema is adjusted as new queries are introduced. In C* there are no JOINS, relationship or foreign keys and the data required by multiple tables are denormalized across those tables.
 
-The Comparision between Apache Cassandra, Google Big Table and Amazon DynamoDB is:
+The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is:
 \begin{center}
 	\begin{tabular}{|p{3.6cm}|p{3.6cm}|p{3.3cm}|p{4cm}|}
 		\hline
