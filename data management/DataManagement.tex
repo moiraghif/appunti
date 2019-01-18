@@ -5,6 +5,7 @@
 \usepackage[margin=1.2in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage[autostyle]{csquotes}
 \usepackage{enumitem}
 
 \graphicspath{ {./img/} }
@@ -304,13 +305,29 @@ The basic operation in a key-valued models are:
 \end{itemize}
 
 There is no schema and the values of the data is opaque. The values can be accessed only through the key, and stored values can be anything : numbers, string, JSON, XML, images, binaries etc.
-%migliorare questa immagine rifacendo la da qualche slide.
+An example of key-value model is Riak and has the following terminology:
+%Quanto è figo minipage, l'ho scoperto dopo aver cercato come unire una tabella con un immagine xD!
 \begin{center}
+	\begin{minipage}[b]{0.4\textwidth}
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Relational} & \textbf{Riak}\\ \hline
+		database instance & Riak cluster\\ \hline
+		table & bucket \\ \hline
+		row & key-value\\ \hline
+		rowid & key\\ \hline
+	\end{tabular}
+	\end{minipage}
+	\begin{minipage}{.5\textwidth}\centering
 	\includegraphics[scale=0.6]{IMAGE4.jpg}
+	\end{minipage}
+
 \end{center}
+%Things not to remeber putting just for completation
+Some other examples are: Redis, Memcached, Riak, Hazelcast, Encache.
+
 Thanks to the Hash based index, the key-value systems can scale out in a very efficient way. 
-The Hash is a mathematical function that assign to a given key it's value, usually h(x) = value, usually it returns a pointer
-to where the data is stored not exactly the data itself, for example h(x) = (x modulo y) where y is the max length of hash table. 
+The Hash is a mathematical function that assign to a given key it's value, usually we have h(x) = value, usually it returns a pointer to where the data is stored not exactly the data itself, for example h(x) = (x modulo y) where y is the max length of hash table. 
 There might a problem with the conflicts but they can be managed. 
 Hashing also enables items in the DB to be retrieved quickly. 
 The hash table can be easily distributed in a network, it is managed in pile so we can have a key(saved in the pile) x saved in a server and it's succ(x) stored in a different server, thus scaling out really fast. 
@@ -319,24 +336,98 @@ The key value terminology is the following:
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value (k1,v1) basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 it simply finds the node with the key k1 and return it's value v1 from it.
 
 \section{Wide Column and BigTable}
-%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
-This models are an evolution, in a certain way, of the key-value models, when we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook(Cassandra) some think that Cassandra is still a key-value model and not a wide column.
+This two models are an evolution, in a certain way, of the key-value models, when we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
 
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
-
-We will consider the HBase BigTable Model :
-
-The data is organized in tables, each table(the tables are multiversioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having NULL value. 
+We will consider the \textbf{HBase BigTable} Model.
+The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having NULL value so we can have different rows with different sets of columns. 
 BigTable is characterized by the row key, column key, timestamp, the row has the keys, column contains the data and contents. 
-The column is divided in families. The timestamp support the multiversion of modification to check how the data changed over time and still be able to access the latest one without any confusion. 
-The data is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toByted(``Key'') we can use python to modify the columns.
+The column is divided in families. The timestamp support the multi-version of modification to check how the data changed over time and still be able to access the latest one without any confusion. We can represent it as follows:
 
-Best time to use Hbase is when one need to scale out, need random write and/or read, when we need to do thousand of operations per second on multiple TB of Data, when we need to know all the modification done on
-the data, when we need a well known and simple access. One can use a GraphDB with HBase see JanusGraph.
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{row key} & \textbf{column family 1} & \textbf{column family 2} \\
+		\hline
+		&
+		\begin{tabular}{c|c}
+			\textbf{column 1} & \textbf{column 2}
+		\end{tabular}
+		&
+		\begin{tabular}{p{1.8cm}|p{1.8cm}|p{1.8cm}}
+			\textbf{column 1} & \textbf{column 2} & \textbf{column 3}
+		\end{tabular}
+		\\
+		\hline
+		&
+		\begin{tabular}{c|c}
+		\textit{cell(data)} & \textit{cell(data)}
+		\end{tabular}
+		& 
+		\begin{tabular}{p{1.8cm}|p{1.8cm}|p{1.8cm}}
+		\textit{cell(data)}&\textit{cell(data)} &\textit{cell(data)}
+		\end{tabular}\\
+		\hline
+		&
+		\begin{tabular}{c|c}
+			\textit{cell(data)} & \textit{cell(data)}
+		\end{tabular}
+		& 
+		\begin{tabular}{p{1.8cm}|p{1.8cm}|p{1.8cm}}
+			\textit{cell(data)}&\textit{cell(data)} &\textit{cell(data)}
+		\end{tabular}\\
+		\hline
+	\end{tabular}\\
+	~\\
+	Each row can have different timestamp, so we can have more versions of this table.
+\end{center}
 
-Cassandra: It started as a support for the fb inbox search, it was open sourced in 2008 by fb and then it became a top-level project. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It use a C* language very similar to SQL language.
+The cells within The data is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The row key is an array of bytes and serves as a primary key for the table.
+Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
+%cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
+row key $|$ info:\{`height':`170cm', `state':`NY'\}  roles:\{`ASF':`Director', `Hadoop':`Founder'\}$|$\\
+The version number of each row is unique within the row key, by default it uses the system's timestamp but they can be user supplied.
 
-If we divide our db in n db,called the fragmentation of data, the bottom-lake phenomena arises in which the slowest machine becomes the bottom-lake and the max time for a query is dependent on that machine. 
+Best time to use HBase is when one need to scale out, need random write and/or read, when we need to do thousand of operations per second on multiple TB of Data, when we need to know all the modification done on
+the data, when we need a well known and simple access. One can combine a GraphDB with HBase, one example is JanusGraph.
+HBase does not support joins, but this can be done in application layer using Scan() and Get() operations of HBase.
+
+\textbf{Cassandra}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
+
+Cassandra is a column oriented NoSQL system. 
+The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
+The Column Families, can be seen as a collection of rows or better a collection of key-value pairs as rows. 
+A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp. So a table is a list of “nested key-value pairs”: (ROW x COLUMN key x COLUMN value) and this is inside a column family.
+The Key Space is only a logical grouping of columns families.
+
+\begin{center}
+	\includegraphics[scale=0.5]{IMAGE5.png}\\
+	An example of Cassandra data model.
+\end{center}
+
+While with RDBMS, we can have that JOIN of normalized tables can return almost anything, with C* the data model is designed for specific queries and the schema is adjusted as new queries are introduced. In C* there are no JOINS, relationship or foreign keys and the data required by multiple tables are denormalized across those tables.
+
+The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is:
+\begin{center}
+	\begin{tabular}{|p{3.6cm}|p{3.6cm}|p{3.3cm}|p{4cm}|}
+		\hline
+		&\textbf{Apache Cassandra} & \textbf{Google Big Table} & \textbf{Amazon DynamoDB}\\
+		\hline
+		\textit{Storage Type} & Column & Column & Key-Value\\
+		\hline
+		\textit{Best Use} & Write often\newline read less & Designed for\newline large scalability & Large database solution\\
+		\hline
+		\textit{Concurrency Control} & MVCC & Locks & ACID\\
+		\hline
+		\textit{Characteristics} & High Availability\newline Partition\newline Tolerance\newline Persistence & Consistency \newline High Availability\newline Partition\newline Tolerance \newline Persistence & Consistency \newline High Availability\\
+		\hline
+	\end{tabular}
+\end{center}
+
+%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
+\section{Data Distribution}
+If we divide our database into n databases, called the fragmentation of data, the bottom-lake phenomena arises in which the slowest machine becomes the bottom-lake and the max time for a query is dependent on that machine. 
 Another way is to replicate the data 2 on 2 such as if a machine is not accessible we can have that data from another machine. We can also combine the fragmentation and replication.
 The advantages of replication are:
 \begin{itemize}[noitemsep]
