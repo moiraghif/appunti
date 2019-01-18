@@ -427,6 +427,7 @@ The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is
 \end{center}
 
 \section{Data Distribution}
+\subsection{Fragmentation and Replication}
 A centralized DB system is a system where the database is located, stored and maintained in a single location. If the processor fail all the system fails.
 If we need data periodically in different location we can distribute it or replicate it. The distribution is to divide the data and have it stored in different places, it provides opportunities for parallel execution. On the other hand we can also replicate it or replicate part of data in different location improving also the availability.
 
@@ -462,14 +463,14 @@ While the disadvantages are:
 Now for simplicity imagine the database to be relational. 
 The fragmentation can be horizontal or vertical, but it must contain sufficient information to reconstruct the original "relation". In the horizontal each tuple of the data is assigned to one or more fragments while in the vertical the schema (in the case of relational) is split into several smaller schemas, and all of them must contain a common candidate key to ensure lossless join for example using a tuple-id attribute.
 The advantages are:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 	\item Horizontal:
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item Allows parallel processing on fragments.
 		\item Allows the data to be split so the tuples are located where they are more frequently accessed.
 	\end{itemize}
 	\item Vertical
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item Allows tuples to be split so that each part of tuples are stored where they are more accessed.
 		\item tuple-id allows efficient joining of vertical fragments.
 		\item Allows parallel processing on a relation.
@@ -511,10 +512,11 @@ There are 3 types of architecture:
 What to choose between Scalability or Availability? It depends on how much one wants to spend more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
 
 \textbf{Replication}:
+
 A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump).
 
 The replicas structures are:
-\begin{itemize}
+\begin{itemize}[noitemsep]
 	\item One2Many: One source and many targets.
 	\item Many2One: Many sources and only one target.
 	\item Peer2Peer: Data is replicated across multiple nodes that communicates with each other.
@@ -529,35 +531,93 @@ To create a replica we can:
 \end{itemize}
 
 
-%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
 %If you use Volume in project be attentive to the scalability!!!!!
-\textbf{MongoDB's Approach: Sharding}
+\subsection{MongoDB's Approach: Sharding}
 
-MongoDB uses Sharding : Every document has a key in mongodb so we define a shard key which defines the range of data. The key space is like points on a line and the range is a segment of that line.
-Example: Key is surname so we can decide all the surname staring from A to K save in first partition and
-the other in the second.
+MongoDB uses Sharding to split a large collection across several servers(called a cluster): Every document has a key in mongodb so we define a shard key which defines the range of data(chunk range). The key space is like points on a line and the range is a segment of that line.
+Example: Key is surname so we can decide all the surnames staring from A to K save in first partition and the others in the second.
+MongoDB does the sharding automatically once we tell it to distribute the data. 
+The Default maximum chunk size is 64Mb, as a chunks gets bigger, MongoDB will automatically split it into two smaller chunks and if the shards become unbalanced, some chunks will be migrated to other shards with less chunks correct the imbalance. 
+The goal of balancer is not only to keep the data evenly distributed but also to minimize the amount of data transferred. 
+The balancer is lazy so it won't activate itself until the data is very imbalanced, it does so to avoid moving data back and forth, if it balanced every tiny difference it would just waste resources.
 
-The shard is basically a server so we need to use mongos (s=server) to make a querry on a shard.
+When you first create a shard, MongoDB creates a single chunk with range $(-\infty, +\infty)$ where with $-(+)\infty$ we mean the smallest(largest) value MongoDB can represent. 
+From here if the chunk size is bigger that the chosen size it will split and every chunk range must be distinct and not overlapping and their union should cover all the initial range.
 
-What is a Shard exactly?
+The shard is basically a server so we need to use mongos (s=server) to make a query on a shard. mongos is the point interaction between users and the cluster, mongos lets you treat a cluster as a single server. 
+The queries are routed to the appropriate shard thanks to mongos. For the not targeted queries (with sorting) a request is sent to all shards and the queries are performed locally and then after the result has returned mongos merges the (sorted) result and returns results to client.
+Mongos doesn't actually store any data, the configuration of a cluster is held on a special mongods called config servers, they hold the definitive information about the clusters for everyone's access.
 
-It's a node of the cluster, it can be a single monogod or a replica set. 
-Mongodb also autometically replicates the data and in one shard I will have a primry chunk where I store the data I wanted and secondary chunks where mongo replicated other data as backup just in case, the secondary is a read only data so I cannot do update queries on it.
+The cluster consists basically of three types of processes:
+\begin{itemize}[noitemsep]
+	\item The shards: a node of the cluster, it can be either a single monogod or a replica set. 
+	MongoDB also automatically replicates the data and in one shard I will have a primary chunk where I store the data I wanted and secondary chunks where MongoDB replicated other data as backup just in case, the secondary is a read only data so I cannot do update queries on it.
+	\item Mongos processes: for routing requesting to the correct data and acting as a balancer. It contains no local data and we can have 1 or many of it. After it finishes balancing it must also update the Config Servers with the new positions and while one mongos is balancing the chunks it takes out a "balancer lock" so no other mongos will start the balancing. The lock is released only after the chunk has been copied and the old chunk is deleted from the initial shard.
+	\item Config servers: for keeping tracks of the cluster's state. It stores the cluster chunk ranges and locations.
+	We can have only 1 or 3.
+\end{itemize}
 
-How to configure a mongoserver?
+\begin{center}
+	\includegraphics[scale=0.50]{IMAGE6.png}
+\end{center}
 
-Mongod --configsvr
 
-We can have different mongos on same pc on different ports.
+Let's see the steps for the configuration:
 
-What happens to the query?
+\begin{enumerate}[noitemsep]
+	\item Start a config server, it start by default at port 27019:
 
-For the target querry mongo selects the shard containing the data and then it's simplest
+	mongod --configsvr
+	\item Start the mongos Router, we need to initialize it like this even if the cluster is already running:
+	
+	For 1 configuration server: 
+	mongos --configdb $<$hostname$>$:27019
+	
+	For 3 configuration servers:
+	mongos --configdb $<$host1$>$:$<$port1$>$,$<$host2$>$:$<$port2$>$,$<$host3$>$:$<$port3$>$
+	
+	We can have different mongos on same pc on different ports.
+	\item Start the shard database, it starts a mongod with the default shard port 27018
+	
+	mongod --shardsvr
+	
+	The shard is not yes connected to the rest of the cluster and it may have been already running in production.
+	\item Add the Shard:
+	
+	On mongos: 
+	sh.addShard('$<$host$>$:27018')
+	
+	To add a replica set: 
+	sh.addShard('$<$rsname$>$/$<$seedlist$>$')
+	\item Verify that the shard was added:
+	
+	db.runCommand(\{ listshards:1 \}) \newline
+	Obtaining as result: \newline
+	\{\newline
+	"shards": \newline
+	[\{ "\_id":"shard0000", "host":"$<$hostname$>$:27018"\}], \newline
+	"ok" : 1 \newline
+	\}
+\end{enumerate} 
+To enable sharding on a database simply use the command: sh.enableSharding("$<$dbname$>$") 
+\newline To start a collection with the given key:
+sh.shardCollection("$<$dbname$>.$people",\{"country" : 1\})
 
-For the Scatter gather query we run query on all shard the collect the data and ``join'' it.
+The properties of the Shard key are:
+\begin{itemize}[noitemsep]
+	\item Shard key is immutable
+	\item Shard key values are immutable
+	\item Shard key must be indexed
+	\item Shard key are limited to 512 bytes in size
+	\item Shard key are used to route queries: so choose a field commonly used in queries for the shard key
+	\item Only the shard key can be unique across shards, the `\_id' field is only unique within the individual shard
+\end{itemize}
 
-For the sorting we locally sort on all shards and the do a global sorting.
+%%%%%%%%%%%%%
+%%%%%Gibberish
+%%%%%%%%%%%
 
+\subsection{HBase}
 HBase each tool has a different terminology.
 
 Hbase components is a subset of table's row (horizonal range partiton), which is automatcally done.
