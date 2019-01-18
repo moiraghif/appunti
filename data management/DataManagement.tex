@@ -393,9 +393,40 @@ Best time to use HBase is when one need to scale out, need random write and/or r
 the data, when we need a well known and simple access. One can combine a GraphDB with HBase, one example is JanusGraph.
 HBase does not support joins, but this can be done in application layer using Scan() and Get() operations of HBase.
 
-%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
-\textbf{Cassandra}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
+\textbf{Cassandra}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
 
+Cassandra is a column oriented NoSQL system. 
+The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
+The Column Families, can be seen as a collection of rows or better a collection of key-value pairs as rows. 
+A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp.
+The Key Space is only a logical grouping of columns families.
+
+\begin{center}
+	\includegraphics[scale=0.5]{IMAGE5.png}\\
+	An example of Cassandra data model.
+\end{center}
+
+While with RDBMS, we can have that JOIN of normalized tables can return almost anything, with C* the data model is designed for specific queries and the schema is adjusted as new queries are introduced. In C* there are no JOINS, relationship or foreign keys and the data required by multiple tables are denormalized across those tables.
+
+The Comparision between Apache Cassandra, Google Big Table and Amazon DynamoDB is:
+\begin{center}
+	\begin{tabular}{|p{3.6cm}|p{3.6cm}|p{3.3cm}|p{4cm}|}
+		\hline
+		&\textbf{Apache Cassandra} & \textbf{Google Big Table} & \textbf{Amazon DynamoDB}\\
+		\hline
+		\textit{Storage Type} & Column & Column & Key-Value\\
+		\hline
+		\textit{Best Use} & Write often\newline read less & Designed for\newline large scalability & Large database solution\\
+		\hline
+		\textit{Concurrency Control} & MVCC & Locks & ACID\\
+		\hline
+		\textit{Characteristics} & High Availability\newline Partition\newline Tolerance\newline Persistence & Consistency \newline High Availability\newline Partition\newline Tolerance \newline Persistence & Consistency \newline High Availability\\
+		\hline
+	\end{tabular}
+\end{center}
+
+%THIS ONE IS STILL A GIBBERISH I WILL IMPOROVE IT.
+\section{Data Distribution}
 If we divide our database into n databases, called the fragmentation of data, the bottom-lake phenomena arises in which the slowest machine becomes the bottom-lake and the max time for a query is dependent on that machine. 
 Another way is to replicate the data 2 on 2 such as if a machine is not accessible we can have that data from another machine. We can also combine the fragmentation and replication.
 The advantages of replication are:
