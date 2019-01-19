@@ -617,31 +617,51 @@ The properties of the Shard key are:
 	\item Only the shard key can be unique across shards, the `\_id' field is only unique within the individual shard
 \end{itemize}
 
-%%%%%%%%%%%%%
-%%%%%Gibberish
-%%%%%%%%%%%
+\subsection{HBase\cite{guru99}}
+The four major components (nodes) of HBase are:
+\begin{enumerate}[noitemsep]
+	\item The HMaster (only one): It is the implementation of Master server in HBase architecture. It monitors and coordinates all slaves in the cluster. It must assign regions, detect failures and has admin privileges. 
+	\item The HRegionServer (many of them): It manages the data regions and serves client requests for reads and writes (using a log), this request is assigned to a specific region, where actural column family resides. However the client can contact directly the HRegionServer without having a permission of HMaster. HMaster is required only for operations related to metadata and schema changes. The Region servers run on Data Nodes present in the Hadoop cluster.\newline
+	The HRegions are the basic building elements of HBase cluster that consists of the distribution of tables, i.e., a subset of a table's rows, like horizontal range partitioning and it is done automatically.
+	\item The HBase client
+	\item Zookeeper: It is a centralized monitoring server which maintains configuration information and provides distributed synchronization between nodes.
+	HBase lives and depends on ZooKeeper, by default HBase manages the ZooKeeper instance (start and stop). 
+	HMaster and HRegionServers register themselves with ZooKeeper.
+	If the client wants to communicate with regions, the servers client has to approach ZooKeeper first.
+	During a failure of nodes ZooKeeper Quoram will trigger error messages, and it starts to repair the failed nodes.
+\end{enumerate}
 
-\subsection{HBase}
-HBase each tool has a different terminology.
+HBase's architecture is similar to MongoDB's and they share the same flaw: If the master is broken the client cannot obtain any data and we have an error.
 
-Hbase components is a subset of table's row (horizonal range partiton), which is automatcally done.
+\subsection{Cassandra}
+Cassandra on the other hand repairs the flaw of having a single master because there is no master and all the nodes are considered the same, it uses a peer-to-peer distributed system. 
+The Data is partitioned among all nodes in the cluster and a custom data replication to ensure fault tolerance and since all the nodes are all considered same we have Read/Write-anywhere design.
+Cassandra is based on Google BigTable and Amazon Dynamo so it inherits their properties.
 
-Hbase lives bcoz of ZooKeeper.
+In cassandra we can add or remove nodes with no downtime so we have a transparent elasticity and transparent scalability (performance grows linearly with the number of nodes) and due to it's P2P architecture we obtain also the High Availability. If a node were to fault we will have that the we could obtain the data from the replicas in the other nodes.
+The Nodes are logically structured in Ring Topology, the hashed value of key associated with data partition is used to assign it to a node in the ring. The hashing rounds off after a certain value to support the ring structure and the lightly loaded nodes moves position to alleviate the highly loaded nodes.
+Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we decide the N number of following nodes in which the replica will we saved.
 
-Hbase is similar to mongodb and have the same flaw : If the master is broken the client cannot obtain any data and we have an error.
+The data writing is separated in 3 stages : 
+\begin{enumerate}
+	\item the log file writing which is essential, even if the data writing fails it doesn't matter because we have the log file.
+	\item Once written in the commit log, data is written to the mem-table. Data written in the mem-table on each write request also writes in commit log separately. Mem-table is a temporary storage of data in the memory while commit log logs the transaction records for backup.
+	\newline The first place there the read operations take place is mem-table and several may exist at once (1 current and other waiting to be flushed). 
+	\item When mem-table is full, flush the data from the mem-table and store them disk in SSTables. The SSTables are immutable once written.
+\end{enumerate}
 
-Cassandra on the other hand repairs this flaw since there is no master and all the nodes are considered the same peer to peer.
+The consistency can based on majority: if a certain number,which we decide(it can also be one), of the nodes agree that a certain data was written or read it is assumed to be true. \newline
+or it can be based on quorum which states the $50\%\text{(of the replication factor)}+1$ nodes agree that something is written it's assumed true.
 
-In cassandra since I can add or remove nodes with no downtime we have a transparent elasticity and scalability and since it's P2P architecture we obtain also the High Availavility. 
-Also cassandra uses ZooKeeper to find the replicas in other databases, given a node we decide the N number of following nodes in which the replica will we saved.
+The commands for writing for write consistency one(quorum): \newline
+INSERT INTO table (column1, ...) VALUES (value1, ...) USING CONSISTENCY ONE (QUORUM)\newline
+If a node is offline, an online node makes a note to carry out the write once the node comes back online.
+For reading the data we have the following command:
+SELECT * FROM table USING CONSISTENCY ONE
 
-The data writing is separated in 3 stages : the first one is the log file writing which is essential, even if the data writing fails it doesn't matter bcoz we have the log file. 
-And the consistency is based
-on majority : if a certain number,which we decide, of the nodes agree that a certain data was written or read it is assumed to be true. 
-Or use quorum which states the 50\% +1 nodes agree that something is written it's assumed true.
+To delete the data is it easier to consider the data not available and mark it for deletion, it is called a tombstone(like how recycle bin works in OS), and actually delete on a major compaction or configurable timer.\newline
+Compaction runs periodically to merge multiple SSTables reclaiming space, creating new index, merging the keys, combining columns and discarding the tombstones.
 
-To delete the data is it easier to consider the data not available(like how recycle bin in OS), and follow it by compactation which reclaims the not available space.
-
-
+\pagebreak
 \printbibliography
 \end{document}
