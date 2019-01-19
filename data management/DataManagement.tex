@@ -53,9 +53,9 @@ Aspetti positivi :
 		\item
 		C : Consistency : I dati o il nuovo dato che viene aggiunto rispetta lo schema prestabilito. E se si viola la consistenza con un'operazione tutta l'operazione fallisce.
 		\item
-		I : Isolation : gestisce come l'integrità delle transazioni sono viste dall'utente. E garantisce che durante un'operazione (query) non vengano svolte altre operazioni. E che lo stato del database venga modifica solo prima della fine della query.
+		I : Isolation : gestisce come l'integrità delle transazioni sono viste dall'utente. Inoltre garantisce che durante un'operazione (query) non vengano svolte altre operazioni, e che lo stato del database venga modificato solo prima della fine della query.
 		\item
-		D : Durability : garantisce che una transazioni effettuata sopravvivrà per sempre. Anche se il sistema crasha dovuto grazie ai server di
+		D : Durability : garantisce che una transazione effettuata sopravvivrà per sempre, anche se il sistema crasha. Dovuto grazie ai server di
 		backup e log files.
 	\end{itemize}
 \end{enumerate}
@@ -100,10 +100,10 @@ Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
 \end{itemize}
 
 Per Scaling Up intendiamo potenziare le macchine, mentre per Scaling out intendiamo aggiungere macchine, per i RDBMS è più facile Scale up che Scale out. 
-Ulteriormente il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
+Il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
 Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il tempo di risposta scende asintoticamente.
 
-Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL), le proprietà di NoSQL sono:
+Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL), le proprietà dei NoSQL sono:
 
 \begin{enumerate}[noitemsep]
 	 
@@ -114,9 +114,9 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 		\item
 		A differenza dei modelli SQL nei quali bisogna prima definire il modello, qua nei NoSQL non esiste un modello rigido.
 		\item
-		Per aggiungere un nuovo attributo non vi è bisogno di cambiare il modello a differenza dei SQL
+		Per aggiungere un nuovo attributo non vi è bisogno di cambiare il modello a differenza dei SQL.
 		\item
-		I modelli NoSQL seguono l'assunzione del mondo aperto (ciò che non è vero è sconosciuto(ma non per forza falso)) mentre SQL segue l'assunzione del mondo chiuso (solo ciò che è noto come vero è vero)
+		I modelli NoSQL seguono l'assunzione del mondo aperto (ciò che non è vero è sconosciuto, ma non per forza falso) mentre SQL segue l'assunzione del mondo chiuso (solo ciò che è noto come vero è vero)
 	\end{itemize}
 
 	\def\labelenumi{\arabic{enumi}.}
@@ -124,10 +124,10 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 	\item
 	Segue il teorema CAP:
 	\begin{itemize}
-		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(Infatti può soddisfare solo 2 di esse):
+		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(infatti si possono soddisfare solo 2 di esse):
 		\begin{enumerate}		
 			\item
-			\textbf{(C)C}oerenza : Tutti i nodi vedano gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
+			\textbf{(C)C}oerenza : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
 			\item
 			\textbf{(A)}vailability(Disponibilità) : La garanzia che ogni richiesta ottenga una risposta su ciò che è fallito e ciò che ha avuto successo. Se è assente aspetterò per lunghi tempi senza ricevere una risposta.
 			\item
@@ -150,7 +150,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 		\item
 		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente, cioè i dati possono avere schemi diversi.
 		\item
-		Eventual consistency : I sistemi NoSQL richiedono che a un certo punto i dati convergeranno a uno stato consistente (non si fa garanzie sul quando), e quindi prima di allora ho una consistenza ritardata cioè prima del momenti dello stato consistente posso ricevere come risposta qualunque valore come risposta di una query.
+		Eventual consistency : I sistemi NoSQL richiedono che a un certo punto i dati convergeranno a uno stato consistente (non si fa garanzie sul quando), e quindi prima di allora ho una consistenza ritardata cioè prima del momento dello stato consistente posso ricevere come risposta qualunque valore come risposta di una query.
 	\end{itemize}
 \end{enumerate}
 
@@ -177,12 +177,12 @@ Esempi e tipologie di modelli NoSQL :
 	\item
 	Key Value (Dynamo, Voldemort, Rhino DHT) : Sono delle tabelle con	chiavi che si riferiscono/puntano a un certo dato, è molto simile a Document based. 
 	\item
-	Column family (Big Table, Cassandra) : In grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato ragruppato in collona.
+	Column family (Big Table, Cassandra) : In grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato ragruppato in colonna.
 	\item
 	Document based (CouchDB, MongoDB) : Di solito salvati con file JSON, salvati come una \textless{}chiave -- valore\textgreater{}. E' facile ricercare dati in questo formato. JSON è basato su due strutture :1) chiave -- valore per gli oggetti e 2) lista ordinata di elementi.
 	\item
 	Graph based (Neo4J, FlockDB) : Uso i vertici/nodi e archi per
-	rappresentare i dati e legami tra di loro. E' difficile fare scaling	con i grafi.
+	rappresentare i dati e legami tra di loro. E' difficile fare scaling	con i grafi per quanto riguarda l'immagazzinamento ma è molto rapido nelle query.
 \end{enumerate}
 
 Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
@@ -192,7 +192,7 @@ Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 
 
 
-\section{MongoDB\cite{MongoDB}}
+\section{Document Based\cite{MongoDB}}
 MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
 
 \begin{center}
@@ -223,7 +223,7 @@ We can use the same operator in different pipelines.
 
 Mongo for many reasons (mainly commercial) offers also a SQL interface, we need the connector BI (Business Intelligence) it generates the relational schema and use such schema to access the data.
 
-\section{GraphDB\cite{GraphDB}}
+\section{GraphDB\cite{Neo4J}}
 
 A graph is a collection of nodes and edges which represents their relations. 
 It has a lot of applications such as: social media, recommendations, Geo, Logistics network, financial transaction graphs (for fraud detection), master data management, Bioinformatics, authorization and access control.
