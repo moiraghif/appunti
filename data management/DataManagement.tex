@@ -7,6 +7,10 @@
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
 \usepackage{enumitem}
+\usepackage[backend=biber]{biblatex}
+
+\addbibresource{biblio.bib}
+
 
 \graphicspath{ {./img/} }
 
@@ -175,7 +179,7 @@ Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 
 
 
-\section{MongoDB}
+\section{MongoDB\cite{MongoDB}}
 MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
 
 \begin{center}
@@ -206,7 +210,7 @@ We can use the same operator in different pipelines.
 
 Mongo for many reasons (mainly commercial) offers also a SQL interface, we need the connector BI (Business Intelligence) it generates the relational schema and use such schema to access the data.
 
-\section{GraphDB}
+\section{GraphDB\cite{GraphDB}}
 
 A graph is a collection of nodes and edges which represents their relations. 
 It has a lot of applications such as: social media, recommendations, Geo, Logistics network, financial transaction graphs (for fraud detection), master data management, Bioinformatics, authorization and access control.
@@ -394,7 +398,7 @@ Best time to use HBase is when one need to scale out, need random write and/or r
 the data, when we need a well known and simple access. One can combine a GraphDB with HBase, one example is JanusGraph.
 HBase does not support joins, but this can be done in application layer using Scan() and Get() operations of HBase.
 
-\textbf{Cassandra}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
+\textbf{Cassandra\cite{Cassandra}}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
 
 Cassandra is a column oriented NoSQL system. 
 The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
@@ -532,7 +536,7 @@ To create a replica we can:
 
 
 %If you use Volume in project be attentive to the scalability!!!!!
-\subsection{MongoDB's Approach: Sharding}
+\subsection{MongoDB's Approach: Sharding\cite{ScalingMongoDB}}
 
 MongoDB uses Sharding to split a large collection across several servers(called a cluster): Every document has a key in mongodb so we define a shard key which defines the range of data(chunk range). The key space is like points on a line and the range is a segment of that line.
 Example: Key is surname so we can decide all the surnames staring from A to K save in first partition and the others in the second.
@@ -637,4 +641,7 @@ on majority : if a certain number,which we decide, of the nodes agree that a cer
 Or use quorum which states the 50\% +1 nodes agree that something is written it's assumed true.
 
 To delete the data is it easier to consider the data not available(like how recycle bin in OS), and follow it by compactation which reclaims the not available space.
+
+
+\printbibliography
 \end{document}
