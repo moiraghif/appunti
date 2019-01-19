@@ -4,4 +4,8 @@
 *.idx
 *.gz
 *.toc
-
+#Files generated from Biblatex so we exclude them
+*.bbl
+*.bcf
+*.blg
+*.run.xml
