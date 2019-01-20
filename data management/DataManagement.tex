@@ -536,7 +536,7 @@ What to choose between Scalability or Availability? It depends on how much one w
 
 \textbf{Replication}:
 
-A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump).
+A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump). About this we can define checkpoint as the moment when we store the set of running transactions in a given time point while a dump is full copy of the entire state of a DB in a stable memory, his execution is offline and summarizing it generates a backup. Only after the backup is completed the dump record of log is written.
 
 The replicas structures are:
 \begin{itemize}[noitemsep]
