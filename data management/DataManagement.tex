@@ -477,6 +477,7 @@ While the disadvantages are:
 	increased complexity of concurrency control e.g. two people book a ticket at the same time solution. We may have that distinct replicas may lead to inconsistent data unless some special concurrency mechanisms are implemented. A solution could be to choose one copy as the primary copy and apply concurrency control operation only on the primary copy.
 \end{itemize}
 
+As already mentioned we can combine data replication with data fragmentation. In particular data fragmentation consists in a division of relation r into fragments which contain sufficient information to reconstruct relation r.
 Now for simplicity imagine the database to be relational. 
 The fragmentation can be horizontal or vertical, but it must contain sufficient information to reconstruct the original "relation". In the horizontal each tuple of the data is assigned to one or more fragments while in the vertical the schema (in the case of relational) is split into several smaller schemas, and all of them must contain a common candidate key to ensure lossless join for example using a tuple-id attribute.
 The advantages are:
