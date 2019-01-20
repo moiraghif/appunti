@@ -496,7 +496,12 @@ The advantages are:
 \end{itemize}
 The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. In the centralized system the primary criterion for the cost is the number of disk accesses, in the distributed system we must take in account also the cost of data transmission over the network and the potential gain in performance from having parallel query execution.
 
-Data Transparency is very important it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system.
+Data Transparency is very important because it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system. We have to consider transparency issues in relation to: fragmentation, replication and location of our data.
+Considering the difference between the centralized and the distributed system from the point of view of costs we have that:
+\begin{itemize}[noitemsep]
+\item For centralized systems, the primary criterion for measuring the cost of a particular strategy is the number of disk accesses.
+\item In a distributed system, instead, other issues must be taken into account: in first place we have to consider the cost of a data transmission over the network and then also the potential gain in performance from having several sites process parts of the query in parallel.
+\end{itemize}
 
 Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
 The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
