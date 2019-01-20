@@ -36,7 +36,7 @@ Un data model è composto prima di tutto da un modello concettuale (teoria) e po
 \item Semplicità? Flessibilità? Standardizzazione?
 \end{itemize}
 Il data model più famoso  e conosciuto è il modello relazionale.
-\section{RELATIONAL MODEL}
+\section{Relational model}
 
 Aspetti positivi :
 
@@ -680,7 +680,13 @@ SELECT * FROM table USING CONSISTENCY ONE
 
 To delete the data is it easier to consider the data not available and mark it for deletion, it is called a tombstone(like how recycle bin works in OS), and actually delete on a major compaction or configurable timer.\newline
 Compaction runs periodically to merge multiple SSTables reclaiming space, creating new index, merging the keys, combining columns and discarding the tombstones.
-
+%Sezione in italiano ricavata dagli appunti dell'anno scorso.
+%Per ora non si sa se questa parte sarà richiesta all'esame.
+%Da integrare se disponete di appunti affidabil ricavati a lezione
+\section{Big Data Architecture}
+La prima definizione di "Big Data" viene data da Gartner nel 2012: “Big data is high volume, high velocity and/or high variety information assets”. Ad oggi sappiamo però che per definire i "Big Data" potremmo usare più di 3 V, aggiungendo anche variability e veridicity. Analizzare "Big Data" su un singolo server “big” è un processo lento, costoso e difficile da realizzare. La soluzione è effettuare un’analisi distribuita su hardware poco costosi tramite un sistema di calcolo parallelo, i cui vantaggi sono già stati esposti nella sezione dedicata all'architettura distribuita. I problemi principali della distribuzione dei dati sono la sincronizzazione, i cosiddetti “punti morti” (deadlock), la larghezza della banda, la coordinazione tra i nodi e i casi di fallimento (failure) del sistema. Questo genere di architettura ha comunque molti vantaggi, tra cui: scala linearmente (scale out), l’attività di calcolo è rivolta ai dati e non viceversa (cambio di paradigma), gestisce i casi di fallimento (failure) e lavora con hardware con potenza di calcolo “normale”.
+\subsection{HDFS}
+L’architettura HDFS (Hadoop Distributed File System) è un file system distribuito progettato per girare su hardware base (commodity hardware).
 \pagebreak
 \printbibliography
 \end{document}
