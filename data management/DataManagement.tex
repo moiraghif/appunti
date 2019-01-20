@@ -494,9 +494,10 @@ The advantages are:
 		\item Allows parallel processing on a relation.
 	\end{itemize}
 \end{itemize}
-The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. In the centralized system the primary criterion for the cost is the number of disk accesses, in the distributed system we must take in account also the cost of data transmission over the network and the potential gain in performance from having parallel query execution.
+The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. 
+Data Transparency is very important because it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system. 
+We have to consider transparency issues in relation to: fragmentation, replication and location of our data.
 
-Data Transparency is very important because it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system. We have to consider transparency issues in relation to: fragmentation, replication and location of our data.
 Considering the difference between the centralized and the distributed system from the point of view of costs we have that:
 \begin{itemize}[noitemsep]
 \item For centralized systems, the primary criterion for measuring the cost of a particular strategy is the number of disk accesses.
@@ -704,6 +705,21 @@ I client leggeranno il file dalla replica più vicina a loro (rack awareness). E
 
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
 \subsection{Map Reduce}
+Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in uno stile funzionale ed è eseguito in parallelo. “Mapred” risolve problemi legati a Map Reduce quali:
+\begin{itemize}[noitemsep]
+\item Come assegnare i 'lavori' ai singoli 'worker'
+\item Cosa succede se ci sono più 'lavori' che 'worker'
+\item Cosa succede se i 'worker' devono condividere risultati parziali
+\item Come aggregare i risultati parziali
+\item Come scoprire se tutti i 'worker' hanno finito il proprio task
+\item Cosa succede se un 'worker' muore
+\end{itemize}
+\begin{center}
+	\includegraphics[scale=1]{IMAGE8.png}\\
+	Map Reduce
+\end{center}
+La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map e di reduce. Tutte le altre attività le svolge il mapred.
+\subsection{Hadoop}
 \pagebreak
 \printbibliography
 \end{document}
