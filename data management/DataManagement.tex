@@ -63,7 +63,7 @@ Aspetti positivi :
 
 
 
-Il RDBMS esiste già da 35 anni quindi è ben sviluppata e molto conosciuto, molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Gli aspetti limitanti sono:
+Il RDBMS esiste già da 35 anni quindi è ben sviluppato e molto conosciuto, molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Gli aspetti limitanti sono:
 
 \begin{enumerate}[noitemsep]
 	 
@@ -108,7 +108,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 \begin{enumerate}[noitemsep]
 	 
 	\item
-	Non ha nessun schema o modello prefissato
+	Non hanno nessuno schema o modello prefissato
 	\begin{itemize}
 		
 		\item
@@ -127,7 +127,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(infatti si possono soddisfare solo 2 di esse):
 		\begin{enumerate}		
 			\item
-			\textbf{(C)C}oerenza : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
+			\textbf{(C)C}onsistency(Coerenza) : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
 			\item
 			\textbf{(A)}vailability(Disponibilità) : La garanzia che ogni richiesta ottenga una risposta su ciò che è fallito e ciò che ha avuto successo. Se è assente aspetterò per lunghi tempi senza ricevere una risposta.
 			\item
@@ -146,7 +146,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 	\begin{itemize}
 		
 		\item
-		Basic Availability : completare una richiesta anche se parzialmente consistente, ad esempio nel caso di fallimento. E' possibile fare ciò grazie al fatto che usa server sparsi ovunque con un grado di	replicazione del database e in caso di malfunzionamento del database richiesto non tutto il sistema cede la Disponibilità.
+		Basic Availability : completare una richiesta anche se parzialmente consistente, ad esempio nel caso di fallimento. E' possibile fare ciò grazie al fatto che usa server sparsi ovunque con un grado di	replicazione del database e in caso di malfunzionamento del database richiesto non tutto il sistema cede la disponibilità.
 		\item
 		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente, cioè i dati possono avere schemi diversi.
 		\item
@@ -213,7 +213,7 @@ In case of a massive data upload one might decide to do a few changes in the pro
 One must be attentive when doing so because any loss will not be registered and lost forever.
 
 For large data-sets it is useful to use some additional structures called indexes, they are similar to the book indexes and act as a faster way to retrieve information, they might require more time during the insertion but makes the queries faster later, one primary index (basic one) is always the defined for the id. How does it exactly works?
-Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result, The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
+Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result. The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
 Indexing avoid this problem (more problematic if the database is large), it is an ordered list that points it's content.
 Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. MongoDB gives, by default, a limit of 64 indexes!
 
@@ -221,12 +221,12 @@ The aggregation uses pipeline and options.
 The aggregation pipeline starts processing the documents of the collection and passes the result to the next pipeline in order to get result for example: \$match and \$group. 
 We can use the same operator in different pipelines.
 
-Mongo for many reasons (mainly commercial) offers also a SQL interface, we need the connector BI (Business Intelligence) it generates the relational schema and use such schema to access the data.
+Mongo for many reasons (mainly commercial) offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
 
 \section{GraphDB\cite{Neo4J}}
 
 A graph is a collection of nodes and edges which represents their relations. 
-It has a lot of applications such as: social media, recommendations, Geo, Logistics network, financial transaction graphs (for fraud detection), master data management, Bioinformatics, authorization and access control.
+It has a lot of applications such as: social media, recommendations, geo, logistics network, financial transaction graphs (for fraud detection), master data management, bioinformatics, authorization and access control.
 
 The labeled property graph model has the following characteristics:
 
@@ -244,15 +244,15 @@ The labeled property graph model has the following characteristics:
 	Relationships can contain properties like nodes.
 	\item
 	%magari migliorare questa parte
-	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones, this method is called generic relationship. Usually the generic one is preferred,  especially in cases where I need to find all the address of a client, all I need to do is find the ADDRESS relationship, in the fine-grained I need to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
+	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones. This method is called generic relationship. Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the ADDRESS relationship, in the fine-grained I need to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
 \end{itemize}
 
 A Graph Database (GD) can use either the native or non-native storage and processing engine.
 
-Native Graph Storage is the one optimized for the native graph management \& the non native graph storage stores the data in non graph based model but this model supports a graph query language, examples: Relational, Object oriented DB, Wide Column, in a relational for example in a join bomb we can use a graph to connect two tables. But the problem
+Native Graph Storage is the one optimized for the native graph management \& the non native graph storage stores the data in non graph based model but this model supports a graph query language, examples: Relational, Object oriented DB, Wide Column. In a relational for example in a join bomb we can use a graph to connect two tables. But the problem
 with the relational DBs and most of NoSQL DBs is that it lacks relationships.
-Moreover in SQL joining tables adds more complexity, and in case of sparse table with null-able column require special checking in the code, in the case of a market, just to see what a customer bought we need to do a lot of expensive joins or the customers that buy a specific product with other products for the recommendation systems. 
-For the NoSQL DBs whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model and is costly operation since it's doesn't use index free adjacency(the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
+Moreover in SQL joining tables adds more complexity, and in case of sparse table with null-able column require special checking in the code. In the case of a market, just to see what a customer bought, we need to do a lot of expensive joins on the customers that buy a specific product with other products for the recommendation systems. 
+For the NoSQL DBs whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model and is costly operation since it doesn't use index free adjacency(the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
 other interesting queries.
 
 In a native graph storage the attributes and nodes and the referenced nodes are stored together, to optimize the graph processing engine. 
@@ -268,7 +268,7 @@ The properties of the cypher language is :
 \begin{enumerate}[noitemsep]
 	 
 	\item
-	Pattern-matching Query language
+	Pattern-matching query language
 	\item
 	Humane language, easy to learn, read and understand
 	\item
@@ -290,7 +290,7 @@ Each of the VM is hosted on a server which are placed in a rack structure which 
 The initial stage of modeling is similar in any kind of DB, we seek to understand and agree on the entities in the domain and how to interrelate, usually done on whiteboard with a diagram which is a graph.
 Next stage we seek a E-R (Entity-Relationship) diagram, which is another graph. 
 After having a suitable logical model we map it into tables and relations. 
-We keep are data in a relational DB, with it's rigid schema.
+We keep our data in a relational DB, with it's rigid schema.
 But keeping the data normalized slows down the query time so we need to denormalize it, because the user's data model must suit the database engine not the user. 
 Denormalizing we involve duplicate data to gain query performance, denormalizing is not a trivial task and we accept that there may be substantial data redundancy. 
 The problems doesn't stop here, because once created if we need to modify it, which we will need to do in order to match the changes in the production environment, so we will need to do this work all again!
@@ -301,7 +301,7 @@ Another graph traversal language is Gremlin, part of the Apache TinkerPop framew
 
 \section{Key-Value Model}
 
-It's the most simple and flexible model of the NoSQL family, where every key is assigned to a value, it is possible to assign a type to a value.
+It's the most simple and flexible model of the NoSQL family, where every key is assigned to a value. It is possible to assign a type to a value.
 The values are not query-able, such as a BLOB, where a BLOB(Binary Large OBject) is a collection of binary data stored as a single entity in a DB, for example images, videos etc.:
 \begin{center}
 \includegraphics[scale=0.5]{IMAGE3.jpg}
@@ -354,7 +354,7 @@ The key value terminology is the following:
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value (k1,v1) basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 it simply finds the node with the key k1 and return it's value v1 from it.
 
 \section{Wide Column and BigTable}
-These two models are an evolution, in a certain way, of the key-value models, when we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
+These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
 
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
@@ -400,7 +400,7 @@ The column is divided in families. The timestamp support the multi-version of mo
 	Each row can have different timestamp, so we can have more versions of this table.
 \end{center}
 
-The cells within the data (also the key) is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The data within the cells (also the key) is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
 %cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
@@ -411,7 +411,7 @@ Best time to use HBase is when one need to scale out, need random write and/or r
 the data, when we need a well known and simple access. One can combine a GraphDB with HBase, one example is JanusGraph.
 HBase does not support joins, but this can be done in application layer using Scan() and Get() operations of HBase.
 
-\textbf{Cassandra\cite{Cassandra}}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
+\textbf{Cassandra\cite{Facebook}}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
 
 Cassandra is a column oriented NoSQL system. 
 The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
@@ -452,8 +452,8 @@ In a Homogeneous Distributed Database all sites have identical software and awar
 
 In a Heterogeneous Distributed Database different sites may use different schema and software which creates a major problem for query and transaction processing. The sites may not be aware of each other and may provide only limited facilities for cooperation in transaction processing.
 
-The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem or where to allocate fragments to nodes.
-We have that with replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
+The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem of where to allocate fragments to nodes.
+With replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
 
 Dividing/fragmenting our database into n databases, the bottom-lake phenomena arises, in which the slowest machine becomes the bottom-lake: the maximum time for a query is dependent on that machine.
 
@@ -507,7 +507,7 @@ Considering the difference between the centralized and the distributed system fr
 Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
 The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
 
-There are 3 types of architecture:
+There are 3 types of architecture in DDBMS:
 \begin{itemize}
 \item Shared Everything: Dominated the architecture market until 2000(approximately), we have one big complex costly data base, it shares everything and can be very slow. It is the centralized system.
 
@@ -533,11 +533,11 @@ There are 3 types of architecture:
 \end{center}
 
 
-What to choose between Scalability or Availability? It depends on how much one wants to spend more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
+What to choose between Scalability or Availability? It depends on how much one wants to spend: more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
 
 \textbf{Replication}:
 
-A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump). About this we can define checkpoint as the moment when we store the set of running transactions in a given time point while a dump is full copy of the entire state of a DB in a stable memory, his execution is offline and summarizing it generates a backup. Only after the backup is completed the dump record of log is written.
+A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump). About this we can define checkpoint as the moment when we store the set of running transactions in a given time point while a dump is full copy of the entire state of a DB in a stable memory, his execution is offline and, summarizing, it generates a backup. Only after the backup is completed, the dump record of log is written.
 
 The replicas structures are:
 \begin{itemize}[noitemsep]
