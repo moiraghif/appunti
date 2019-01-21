@@ -704,6 +704,52 @@ Map Reduce è un motore di computazione distribuito. Ogni programma è scritto i
 \end{center}
 La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map e di reduce. Tutte le altre attività le svolge il mapred.
 \subsection{Hadoop}
+Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, unisce il sistema MapReduce (parallel and distributed computation) e l’HDFS (hadoop storage and file system).
+\begin{center}
+\includegraphics[scale=0.70]{IMAGE9.png}\\
+Schema ecosistema Hadoop
+\end{center}
+Pig è uno scripting language che esegue l’analisi dei dati. Gli script in “pig latin” sono tradotti in lavori di MapRed. Hive è un’interfaccia simile a SQL per dati memorizzati in HDFS. I piani di esecuzione sono generati automaticamente da Hive. Hive rappresenta quindi un data warehousing basato su Hadoop. Questo applicativo è utilizzato per report giornalieri, misure di attività degli utenti, data e text mining, machine learning e per attività di business intelligence come pubblicità e individuazione degli spam. Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni “jobtracker” deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili “failure” e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
+\newline
+Vengono rilasciati inoltre altri applicativi quali Accumulo, Hbase e Spark. In Cloudera sono presenti anche Impala, Mahout, Sqoop e Flume. Inoltre, anche Hortonworks è basato sulla medesima architettura.
+\subsection{Data Lake}
+Il termine “data lake” è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile “consumazione” futura.\newline 
+I data lake invece sono una grossa mole di dati non strutturati e non puliti da cui ogni soggetto (autorizzato) può attingere, ma passando per un processo di analisi e di campionamento accurato. Per realizzare un approccio “bottom up” non c’è necessità di definire uno schema dei dati prima di caricarli, ma i dati devono essere modellati a seconda dei task. Nei sistemi EDW (Enterprise Data Warehouse) i task sono fortemente collegati con il sistema di modellazione dei dati.
+\begin{center}
+\includegraphics[scale=0.70]{IMAGE10.png}\\
+Schema riassuntivo Data Lake
+\end{center}
+Le componenti di un’architettura data lake sono le seguenti:
+\begin{itemize}[noitemsep]
+\item Storage, basata su un’architettura HDFS.
+\item Data Ingestion, ovvero l’acquisizione di dati da fonti esterne che avviene tramite sistemi come Sqoop (RDBMS), Flume (Web Servers), Kafka o Storm (Streaming Data).
+\item Data Processing, che si suddivide in tre fasi: data
+preparation, data analystics e result provisioning for consumption. Per effettuare tutte queste operazioni ci si serve di software quali MapReduce, Spark, Flink o Storm. Per eseguire molte attività di manipolazione viene spesso utilizzato NiFi, ovvero un tool workflow based che integra vari applicativi.
+\item Data Governance, che comprende Lineage, Integration, Authentication and Authorization, Search, Quality, Audit Logging, Metadata Management, Lifecycle Management e Security.
+\end{itemize}
+Per acquisire dati in real-time è necessario catturare ogni aspetto di tali dati e con il minimo ritardo possibile. Inoltre, talvolta è necessario sia immagazzinare questi dati in streaming che analizzarli all’istante. La principale limitazione dell’architettura Lambda è che per fare ciò, la logica architetturale va implementata due volte, spesso con tool diversi (Storm, Flink, Spark, …). L’architettura Kappa risolve questo problema.
+\section{Data quality and integration}
+Fasi molto importanti nell'analisi dei dati sono: la “verifica della qualità dei dati” (Data Understanding), di “pulizia” e di “integrazione” dei dati (Data Preparation).\newline Come primo aspetto, bisogna concentrarsi sui casi di “deduplication”; in altre parole bisogna chiedersi: ci sono record nella stessa tabella che si riferiscono allo stesso oggetto/persona della realtà? Si possono stabilire molteplici regole per decidere se due record si riferiscono allo stesso oggetto, sia sintattiche che semantiche. Una volta individuati due record “analoghi”, bisogna unirli (data fusion) in un solo record contenente le informazioni “corrette”. Una volta analizzato questo aspetto di “qualità” dei dati, immaginiamoci di dover integrare una tabella con un’altra e quindi di dover cercare i record delle due tabelle diverse che sono collegati tra loro. Questo processo si chiama “record linkage” e può essere svolto, ad esempio, individuando le chiavi delle due tabelle (una primaria e una esterna, ad esempio), e se queste corrispondono si procede con il “merge” dei due record.\newline Tuttavia, se la data quality non è delle migliori (a causa di input sbagliati o di standard non condivisi), di conseguenza anche la data integration sarà scarsa.\newline
+La data integration si articola in due fasi: \textbf{record linkage} (identificazione dei set di record che identificano lo stesso “oggetto reale”) e \textbf{data fusion} (scelta di un record unico rappresentativo del set precedente).
+\subsection{Record Linkage}
+Esistono vari sinonimi per questa fase: Object Identification, Deduplication (su un dataset), Object Matching e molti altri. L’output di un algoritmo di record linkage può essere: “matching tuples”, “not matching” o “don’t know” (o “possible matching").\newline
+Esistono più tecniche di record linkage:
+\begin{itemize}[noitemsep]
+\item Empirica, ovvero due tuple vengono unite se la loro distanza (in termini sintattici o anche altre forme di distanza) è piccola.
+\item Probabilistica, ovvero una generalizzazione sulla popolazione di regole estratte da un campione.
+\item Knowledge Based, ovvero decisioni prese seguendo regole prestabilite.
+\item Mixed, ovvero un misto tra il secondo e il terzo approccio.
+\end{itemize}
+Il record linkage può essere effettuato anche tra set di dati in formati diversi.
+%Da valutare se è il caso di aggiungere anche la parte dedicata all'approccio probabilistico.
+\subsection{Data Fusion}
+Durante questa fase si possono incontrare possibili conflitti.\newline 
+Esistono perciò delle strategie per gestire tali conflitti:
+\begin{itemize}[noitemsep]
+\item Conflict Ignoring, che ignora il problema lasciando la risoluzione all’utente.
+\item Conflict Avoiding, che gestisce il problema generalmente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte.
+\item Conflict Resolution, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
+\end{itemize}
 \pagebreak
 \printbibliography
 \end{document}
