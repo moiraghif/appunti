@@ -36,7 +36,7 @@ Un data model è composto prima di tutto da un modello concettuale (teoria) e po
 \item Semplicità? Flessibilità? Standardizzazione?
 \end{itemize}
 Il data model più famoso  e conosciuto è il modello relazionale.
-\section{Relational model}
+\subsection{Relational model}
 
 Aspetti positivi :
 
@@ -78,7 +78,7 @@ Il RDBMS esiste già da 35 anni quindi è ben sviluppato e molto conosciuto, mol
 		\item
 		Difficile modificare le tabelle.
 		\item
-		La performance,
+		La performance.
 	\end{itemize}
 \end{enumerate}
 Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
@@ -97,6 +97,7 @@ Per Scaling Up intendiamo potenziare le macchine, mentre per Scaling out intendi
 Il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
 Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il tempo di risposta scende asintoticamente.
 \newline
+\subsection{NoSQL}
 Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL), le proprietà dei NoSQL sono:
 
 \begin{enumerate}[noitemsep]
@@ -184,13 +185,12 @@ Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 
 
 
-\section{Document Based\cite{MongoDB}}
+\subsubsection{Document Based\cite{MongoDB}}
 MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
 
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
-
 In case of a massive data upload one might decide to do a few changes in the process to fasten  it up:
 
 \begin{itemize}[noitemsep]
@@ -214,7 +214,7 @@ We can use the same operator in different pipelines.
 \newline
 Mongo for many reasons (mainly commercial) offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
 
-\section{GraphDB\cite{Neo4J}}
+\subsubsection{GraphDB\cite{Neo4J}}
 
 A graph is a collection of nodes and edges which represents their relations. 
 It has a lot of applications such as: social media, recommendations, geo, logistics network, financial transaction graphs (for fraud detection), master data management, bioinformatics, authorization and access control.
@@ -288,7 +288,7 @@ It's better in there cases to directly use the graph DBs, it will avoid the data
 \newline
 Another graph traversal language is Gremlin, part of the Apache TinkerPop framework. In this domain specific language (DSL) expressions specify a concatenation of traversal steps, so you basically explain to gremlin step by step what to do.
 
-\section{Key-Value Model}
+\subsubsection{Key-Value Model}
 
 It's the most simple and flexible model of the NoSQL family, where every key is assigned to a value. It is possible to assign a type to a value.
 The values are not query-able, such as a BLOB, where a BLOB(Binary Large OBject) is a collection of binary data stored as a single entity in a DB, for example images, videos etc.:
@@ -341,7 +341,7 @@ The key value terminology is the following:
 \newline
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value (k1,v1) basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 it simply finds the node with the key k1 and return it's value v1 from it.
 
-\section{Wide Column and BigTable}
+\subsubsection{Wide Column and BigTable}
 These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
 \newline
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
@@ -398,6 +398,7 @@ Best time to use HBase is when one need to scale out, need random write and/or r
 the data, when we need a well known and simple access. One can combine a GraphDB with HBase, one example is JanusGraph.
 HBase does not support joins, but this can be done in application layer using Scan() and Get() operations of HBase.
 \newline
+\newline
 \textbf{Cassandra\cite{Facebook}}: It started as a support for the Facebook inbox search, it was open sourced in 2008 by Facebook and then it became a top-level project under Apache in 2010. The data model is the same as HBase, the only difference is the way it is stored (storage model) and the program algorithms. We can say it is a restricted BigTable, we can have only one column family. It uses a C* language very similar to SQL language.
 \newline
 Cassandra is a column oriented NoSQL system. 
@@ -410,7 +411,6 @@ The Key Space is only a logical grouping of columns families.
 	\includegraphics[scale=0.5]{IMAGE5.png}\\
 	An example of Cassandra data model.
 \end{center}
-
 While with RDBMS, we can have that JOIN of normalized tables can return almost anything, with C* the data model is designed for specific queries and the schema is adjusted as new queries are introduced. In C* there are no JOINS, relationship or foreign keys and the data required by multiple tables are denormalized across those tables.
 \newline
 The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is:
@@ -489,7 +489,6 @@ Considering the difference between the centralized and the distributed system fr
 \item For centralized systems, the primary criterion for measuring the cost of a particular strategy is the number of disk accesses.
 \item In a distributed system, instead, other issues must be taken into account: in first place we have to consider the cost of a data transmission over the network and then also the potential gain in performance from having several sites process parts of the query in parallel.
 \end{itemize}
-
 Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
 The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
 \newline
@@ -634,7 +633,6 @@ The four major components (nodes) of HBase are:
 	If the client wants to communicate with regions, the servers client has to approach ZooKeeper first.
 	During a failure of nodes ZooKeeper Quoram will trigger error messages, and it starts to repair the failed nodes.
 \end{enumerate}
-
 HBase's architecture is similar to MongoDB's and they share the same flaw: If the master is broken the client cannot obtain any data and we have an error (Single point of failure).
 
 \subsection{Cassandra}
@@ -653,7 +651,6 @@ The data writing is separated in 3 stages :
 	\newline The first place where the read operations take place is mem-table and several may exist at once (1 current and other waiting to be flushed). 
 	\item When mem-table is full, flush the data from the mem-table and store them disk in SSTables. The SSTables are immutable once written.
 \end{enumerate}
-
 The consistency can be based on majority: if a certain number,which we decide(it can also be one), of the nodes agree that a certain data was written or read it is assumed to be true; \newline
 or it can be based on quorum which states the $50\%\text{(of the replication factor)}+1$ nodes agree that something is written it's assumed true.
 \newline
@@ -685,8 +682,7 @@ La strategia di piazzamento dei blocchi del file tra i DataNodes è la seguente:
 \item Una terza replica sullo stesso rack remoto
 \item Delle repliche piazzate in modo randomico
 \end{itemize}
-I client leggeranno il file dalla replica più vicina a loro (rack awareness). Esiste poi un sistema per verificare la correttezza dei dati. Può succedere infatti che un blocco inviato dal DataNode arrivi corrotto. Il client software HDFS implementa un controllo checksum dei file. Quando un utente crea un file, genera anche un checksum per ogni blocco del file e memorizza questi checksum in un file nascosto separato nello stesso NameSpace HDFS. Quando un client richiede l’accesso al file, verifica che i dati ricevuti da ogni DataNode combacino con il checksum associato. Se così non è, il client deciderà di reperire quel determinano blocco da un altro DataNode che possiede una replica di tale blocco di dati. Il NameNode verifica inoltre che i DataNodes, i quali inviano continuamente “segnali di vita”, siano tutti funzionanti e gestisce gli eventuali malfunzionamenti. Tuttavia, il NameNode rappresenta un “single point of failure”. Per questo motivo i Transaction Log sono memorizzati in più directrories: nel file system locale e in uno remoto.
-
+I client leggeranno il file dalla replica più vicina a loro (rack awareness). Esiste poi un sistema per verificare la correttezza dei dati. Può succedere infatti che un blocco inviato dal DataNode arrivi corrotto. Il client software HDFS implementa un controllo checksum dei file. Quando un utente crea un file, genera anche un checksum per ogni blocco del file e memorizza questi checksum in un file nascosto separato nello stesso NameSpace HDFS. Quando un client richiede l’accesso al file, verifica che i dati ricevuti da ogni DataNode combacino con il checksum associato. Se così non è, il client deciderà di reperire quel determinano blocco da un altro DataNode che possiede una replica di tale blocco di dati. Il NameNode verifica inoltre che i DataNodes, i quali inviano continuamente “segnali di vita”, siano tutti funzionanti e gestisce gli eventuali malfunzionamenti. Tuttavia, il NameNode rappresenta un “single point of failure”. Per questo motivo i Transaction Log sono memorizzati in più directrories: nel file system locale e in uno remoto.\newline
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
 \subsection{Map Reduce}
 Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in uno stile funzionale ed è eseguito in parallelo. “Mapred” risolve problemi legati a Map Reduce quali:
