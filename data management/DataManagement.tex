@@ -1,13 +1,14 @@
 \documentclass[a4page, 11pt]{article}
 
 \usepackage{graphicx}
+\usepackage{hyperref} %clickable stuffs
 \usepackage{mathtools}
 \usepackage[margin=0.65in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
 \usepackage{enumitem}
-\usepackage[backend=biber]{biblatex}
+\usepackage[backend=biber]{biblatex} % pls uncomment me (Maurino's english style) but... what's the actual scope here?
 
 \addbibresource{biblio.bib}
 
@@ -21,6 +22,7 @@
 \begin{document}
 
 \maketitle
+%\tableofcontents %maybe would be nice to add?
 
 %%% SOLO QUESTO E' ITALIANO %%%
 \section{Data Modelling}
@@ -442,7 +444,7 @@ In a Heterogeneous Distributed Database different sites may use different schema
 The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem of where to allocate fragments to nodes.
 With replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
 \newline
-Dividing/fragmenting our database into n databases, the bottom-lake phenomena arises, in which the slowest machine becomes the bottom-lake: the maximum time for a query is dependent on that machine.
+Dividing/fragmenting our database into n databases, the bottle-neck phenomenon arises, in which the slowest machine dictates the worst performance for a query.
 \newline
 The advantages of replication are:
 \begin{itemize}[noitemsep]
@@ -674,7 +676,7 @@ L’architettura HDFS (Hadoop Distributed File System) è un file system distrib
 	HDFS Architecture
 \end{center}
 Sebbene ci siano molte similitudini con altri sistemi di file system distribuiti, le differenze sono comunque significative. In particolare, HDFS è fortemente tollerante agli errori
-ed è progettato per girare su macchine poco costose, inoltre fornisce un accesso ad alta velocità ai dati delle applicazioni ed è ideale per applicazioni con data set di grandi dimensioni. HDFS ha un’architettura master/slave. Un cluster HDFS consiste in un singolo NameNode e in un server master che gestisce il file system detto NameSpace e che regola gli accessi ai file da parte dei clients. Inoltre, sono presenti un certo numero di DataNodes, generalmente uno per ogni nodo nel cluster, che gestiscono lo storage collegato ai nodi su cui vengono eseguiti. Internamente, un file è splittato in uno o più blocchi (tipicamente di 128 MB ciascuno) e questi sono memorizzati in un set di DataNodes. Il NameNode esegue le operazioni del file system NameSpace, ovvero apertura, chiusura e “rename” dei file e delle directories. Inoltre, determina la mappatura dei blocchi nei DataNodes. I DataNodes sono responsabili invece delle richieste di operazioni di lettura e scrittura da parte del file system dei clients. I DataNodes permettono anche la creazione, l’eliminzazione e la replica dei blocchi sotto istruzioni del NameNode. I Meta-Data (lista dei file, lista dei blocchi, lista dei DataNodes, attributi del file, …) sono tutti memorizzati nella memoria principale. Esiste inoltre un Transaction Log che registra la creazione, l’eliminazione e qualunque altra operazione avvenga su un file.
+ed è progettato per girare su macchine poco costose, inoltre fornisce un accesso ad alta velocità ai dati delle applicazioni ed è ideale per applicazioni con data set di grandi dimensioni. HDFS ha un’architettura master/slave. Un cluster HDFS consiste in un singolo NameNode e in un server master che gestisce il file system detto NameSpace e che regola gli accessi ai file da parte dei clients (secondo modello di accesso $Write-once-Read-many$). Inoltre, sono presenti un certo numero di DataNodes, generalmente uno per ogni nodo nel cluster, che gestiscono lo storage collegato ai nodi su cui vengono eseguiti. Internamente, un file è splittato in uno o più blocchi (tipicamente di 128 MB ciascuno) e questi sono memorizzati in un set di DataNodes. Il NameNode esegue le operazioni del file system NameSpace, ovvero apertura, chiusura e “rename” dei file e delle directories. Inoltre, determina la mappatura dei blocchi nei DataNodes, e reindirizza le richieste di operazioni di lettura e scrittura da parte del file system dei clients ai DataNodes. I DataNodes permettono anche la creazione, l’eliminzazione e la replica dei blocchi sotto istruzioni del NameNode. I Meta-Data (lista dei file, lista dei blocchi, lista dei DataNodes, attributi del file, …) sono tutti memorizzati nella memoria principale. Esiste inoltre un Transaction Log che registra la creazione, l’eliminazione e qualunque altra operazione avvenga su un file.
 La strategia di piazzamento dei blocchi del file tra i DataNodes è la seguente:
 \begin{itemize}[noitemsep]
 \item Una replica sul nodo locale
@@ -684,8 +686,9 @@ La strategia di piazzamento dei blocchi del file tra i DataNodes è la seguente:
 \end{itemize}
 I client leggeranno il file dalla replica più vicina a loro (rack awareness). Esiste poi un sistema per verificare la correttezza dei dati. Può succedere infatti che un blocco inviato dal DataNode arrivi corrotto. Il client software HDFS implementa un controllo checksum dei file. Quando un utente crea un file, genera anche un checksum per ogni blocco del file e memorizza questi checksum in un file nascosto separato nello stesso NameSpace HDFS. Quando un client richiede l’accesso al file, verifica che i dati ricevuti da ogni DataNode combacino con il checksum associato. Se così non è, il client deciderà di reperire quel determinano blocco da un altro DataNode che possiede una replica di tale blocco di dati. Il NameNode verifica inoltre che i DataNodes, i quali inviano continuamente “segnali di vita”, siano tutti funzionanti e gestisce gli eventuali malfunzionamenti. Tuttavia, il NameNode rappresenta un “single point of failure”. Per questo motivo i Transaction Log sono memorizzati in più directrories: nel file system locale e in uno remoto.\newline
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
+
 \subsection{Map Reduce}
-Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in uno stile funzionale ed è eseguito in parallelo. “Mapred” risolve problemi legati a Map Reduce quali:
+Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. “Mapred” risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
 \begin{itemize}[noitemsep]
 \item Come assegnare i 'lavori' ai singoli 'worker'
 \item Cosa succede se ci sono più 'lavori' che 'worker'
@@ -698,35 +701,102 @@ Map Reduce è un motore di computazione distribuito. Ogni programma è scritto i
 	\includegraphics[scale=1]{IMAGE8.png}\\
 	Map Reduce
 \end{center}
-La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map e di reduce. Tutte le altre attività le svolge il mapred.
+La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map (\texttt{map (k, v) -> [(k’, v’)]}) e di reduce (\texttt{reduce (k’, [v’]) -> [(k’, v’)]}). Tutte le altre attività le svolge  $MapRed$.
 \subsection{Hadoop}
 Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, unisce il sistema MapReduce (parallel and distributed computation) e l’HDFS (hadoop storage and file system).
 \begin{center}
 \includegraphics[scale=0.70]{IMAGE9.png}\\
 Schema ecosistema Hadoop
 \end{center}
-Pig è uno scripting language che esegue l’analisi dei dati. Gli script in “pig latin” sono tradotti in lavori di MapRed. Hive è un’interfaccia simile a SQL per dati memorizzati in HDFS. I piani di esecuzione sono generati automaticamente da Hive. Hive rappresenta quindi un data warehousing basato su Hadoop. Questo applicativo è utilizzato per report giornalieri, misure di attività degli utenti, data e text mining, machine learning e per attività di business intelligence come pubblicità e individuazione degli spam. Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni “jobtracker” deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili “failure” e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
-\newline
+Pig è uno scripting language che esegue l’analisi dei dati. Gli script in “pig latin” sono tradotti in lavori di MapRed. 
+
+Hive è un’interfaccia simile a SQL per dati memorizzati in HDFS. I piani di esecuzione sono generati automaticamente da Hive. Hive rappresenta quindi un data warehousing basato su Hadoop. Questo applicativo è utilizzato per report giornalieri, misure di attività degli utenti, data e text mining, machine learning e per attività di business intelligence come pubblicità e individuazione degli spam.
+
+Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni “jobtracker” deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili “failure” e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
+
 Vengono rilasciati inoltre altri applicativi quali Accumulo, Hbase e Spark. In Cloudera sono presenti anche Impala, Mahout, Sqoop e Flume. Inoltre, anche Hortonworks è basato sulla medesima architettura.
 \subsection{Data Lake}
-Il termine “data lake” è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile “consumazione” futura.\newline 
-I data lake invece sono una grossa mole di dati non strutturati e non puliti da cui ogni soggetto (autorizzato) può attingere, ma passando per un processo di analisi e di campionamento accurato. Per realizzare un approccio “bottom up” non c’è necessità di definire uno schema dei dati prima di caricarli, ma i dati devono essere modellati a seconda dei task. Nei sistemi EDW (Enterprise Data Warehouse) i task sono fortemente collegati con il sistema di modellazione dei dati.
+Il termine “data lake” è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile “consumazione” futura.
+
+Un data lake invece è una struttura capace di contenere un enorme quantità di dati salvati in ogni formato, in maniera non costosa.
+\`E una soluzione infrastrutturale in cui lo schema e i requisiti dei dati non sono definiti in partenza, ma vengono delineati al momento dell'interrogazione ($query\ time$): si tratta dello $schema\ on\ read$, caratteristico di un approccio "bottom up", caratterizzato dall'osservazione "sperimentale" come motore di un processo induttivo. 
+Da questo "lago" ogni soggetto (autorizzato) può attingere, tipicamente passando per un processo di analisi e di campionamento accurato. 
+Può avere lo scopo di catturare tutti i dati forniti in fase di "ingestion", e di passare solo quelli ritenuti rilevanti ad una Enterprise Data Warehouse (EDW): può essere quindi una fonte di dati per questa EDW. In questo modo si risparmia risorse relative all'EDW, e permette un'esplorazione iniziale dei dati disponibili, senza modellazione da parte dell'EDW team ($quick\ user \ access$).
+Una delle caratteristiche salienti del Data Lake è inoltre la facile scalabilità. 
+
+%sorry for the language swapping, but it's somehow easier this way
+As reported in Fig.~\ref{data_lake_arch:fig}, components of a typical data lake architecture are\footnote{See also \url{http://www.oreilly.com/data/free/files/architecting-data-lakes.pdf}. Note a slightly different zone denomination, compared to Maurino's Slides.}:
+
+\begin{figure}
+\centering
+\includegraphics[width=120mm]{data_lake_arch.png}
+\caption{\label{data_lake_arch:fig} Typical data lake arch.
+}
+\end{figure}
+
+
+\begin{itemize}
+\item The data is first loaded into a \textbf{transient loading zone}, where basic data quality checks are performed using MapReduce or Spark by leveraging the Hadoop cluster. 
+\item Once the quality checks have been performed, the data is loaded into Hadoop in the \textbf{raw data zone}.
+
+\item An organization can, if desired, perform standard data cleansing and data validation methods and place the data in the \textbf{refined zone}. 
+
+\item From the trusted area, data moves into the \textbf{discovery sandbox}, for wrangling, discovery, and exploratory analysis by users and data scientists.
+
+\item Finally, the consumption \textbf{analytic zone} exists for business analysts, researchers, and data scientists to dip into the data lake to run reports, do “what if” analytics, and otherwise consume the data to come up with business insights for informed decision-making.
+
+\end{itemize}
+
 \begin{center}
 \includegraphics[scale=0.70]{IMAGE10.png}\\
 Schema riassuntivo Data Lake
 \end{center}
-Le componenti di un’architettura data lake sono le seguenti:
+
+Riassumento, keywords per i data lake sono:
+
 \begin{itemize}[noitemsep]
-\item Storage, basata su un’architettura HDFS.
 \item Data Ingestion, ovvero l’acquisizione di dati da fonti esterne che avviene tramite sistemi come Sqoop (RDBMS), Flume (Web Servers), Kafka o Storm (Streaming Data).
-\item Data Processing, che si suddivide in tre fasi: data
-preparation, data analystics e result provisioning for consumption. Per effettuare tutte queste operazioni ci si serve di software quali MapReduce, Spark, Flink o Storm. Per eseguire molte attività di manipolazione viene spesso utilizzato NiFi, ovvero un tool workflow based che integra vari applicativi.
+\item Storage, basata su un’architettura HDFS.
+\item Data Processing, che si suddivide in tre fasi: data preparation, data analystics e result provisioning for consumption. Per effettuare tutte queste operazioni ci si serve di software quali MapReduce, Spark, Flink o Storm. Per eseguire molte attività di manipolazione viene spesso utilizzato NiFi, ovvero un tool workflow based che integra vari applicativi.
 \item Data Governance, che comprende Lineage, Integration, Authentication and Authorization, Search, Quality, Audit Logging, Metadata Management, Lifecycle Management e Security.
 \end{itemize}
 Per acquisire dati in real-time è necessario catturare ogni aspetto di tali dati e con il minimo ritardo possibile. Inoltre, talvolta è necessario sia immagazzinare questi dati in streaming che analizzarli all’istante. La principale limitazione dell’architettura Lambda è che per fare ciò, la logica architetturale va implementata due volte, spesso con tool diversi (Storm, Flink, Spark, …). L’architettura Kappa risolve questo problema.
 \section{Data quality and integration}
 Fasi molto importanti nell'analisi dei dati sono: la “verifica della qualità dei dati” (Data Understanding), di “pulizia” e di “integrazione” dei dati (Data Preparation).\newline Come primo aspetto, bisogna concentrarsi sui casi di “deduplication”; in altre parole bisogna chiedersi: ci sono record nella stessa tabella che si riferiscono allo stesso oggetto/persona della realtà? Si possono stabilire molteplici regole per decidere se due record si riferiscono allo stesso oggetto, sia sintattiche che semantiche. Una volta individuati due record “analoghi”, bisogna unirli (data fusion) in un solo record contenente le informazioni “corrette”. Una volta analizzato questo aspetto di “qualità” dei dati, immaginiamoci di dover integrare una tabella con un’altra e quindi di dover cercare i record delle due tabelle diverse che sono collegati tra loro. Questo processo si chiama “record linkage” e può essere svolto, ad esempio, individuando le chiavi delle due tabelle (una primaria e una esterna, ad esempio), e se queste corrispondono si procede con il “merge” dei due record.\newline Tuttavia, se la data quality non è delle migliori (a causa di input sbagliati o di standard non condivisi), di conseguenza anche la data integration sarà scarsa.\newline
 La data integration si articola in due fasi: \textbf{record linkage} (identificazione dei set di record che identificano lo stesso “oggetto reale”) e \textbf{data fusion} (scelta di un record unico rappresentativo del set precedente).
+
+The complete methodology of schema integration is composed of three possible steps:
+\begin{itemize}
+
+\item Schema transformation (or Pre-integration)\\
+Input: n source schemas\\
+Output: n source schemas homogeneized\\
+Methods used: Model transformation + Reverse engineering
+\item Correspondences investigation\\
+Input: n source schemas\\
+Output: n source schemas + correspondences\\
+Method used: techniques to discover correspondences (identifying semantic relativism)
+\item Schemas integration and mapping generation\\
+Input: n source schemas + correspondences\\
+Output: integrated schema + mapping rules btw the integrated schema and input source schemas\\
+Method used: New classification of conflicts + Conflict resolution
+transformations: in particular, type of conflicts are
+\begin{itemize}[noitemsep]
+\item $Classification\ conflicts$: corresponding elements describe different sets of real world objects\\
+Resolution: Introduction of a Generalization/Specialization hierarchy.
+\item $Descriptive\ conflicts$: corresponding types have different properties, or corresponding properties are described in different ways.\\
+Custom Resolutions depending on the specific type of conflict. %useful, ikr
+\item $Structural\ Conflicts$: different schema element types, e.g.: class, attribute, relationship. \\
+Resolution: choose the less constraining structure.
+\item $Fragmentation\ Conflicts$: the same phenomenon of the real world is perceived as a single S1 object in one database and as several objects in the other\\
+Resolution: aggregation relationships.
+\item $Instance Level\ Conflicts$: same data in different sources have different
+values.
+Resolution: user defined $resolution\ function$ (taking two or more conflicting values of an attribute as input and outputs the result to the posed query). Common resolution functions are $MIN$ and $MAX$. For non numerical attributes a typical solution is $CONCAT$.
+\end{itemize}
+\end{itemize}
+
+
 \subsection{Record Linkage}
 Esistono vari sinonimi per questa fase: Object Identification, Deduplication (su un dataset), Object Matching e molti altri. L’output di un algoritmo di record linkage può essere: “matching tuples”, “not matching” o “don’t know” (o “possible matching").\newline
 Esistono più tecniche di record linkage:
@@ -742,10 +812,10 @@ Il record linkage può essere effettuato anche tra set di dati in formati divers
 Durante questa fase si possono incontrare possibili conflitti.\newline 
 Esistono perciò delle strategie per gestire tali conflitti:
 \begin{itemize}[noitemsep]
-\item Conflict Ignoring, che ignora il problema lasciando la risoluzione all’utente.
-\item Conflict Avoiding, che gestisce il problema generalmente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte.
-\item Conflict Resolution, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
+\item $Conflict\ Ignoring$, che ignora il problema lasciando la risoluzione all’utente ($Pass\ It\ on$).
+\item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
+\item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
 \pagebreak
-\printbibliography
+%\printbibliography
 \end{document}
