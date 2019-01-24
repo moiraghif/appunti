@@ -6,9 +6,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{enumitem}
+\usepackage{booktabs}
 
-%opening
-\title{}
+%`` for quoting
+
+\title{Foundations of Computer Science  - SQL}
 \author{}
 \date{}
 
@@ -16,10 +18,109 @@
 
 \maketitle
 
-\begin{abstract}
+\section{Introduction to Relational DataBases}
 
-\end{abstract}
+The relational DB are organized in tables that can be linked together. A table in the relational model represents a relation. For example in the following database each row describes a single book:
 
-\section{}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		
+		\textbf{ISBN} & \textbf{Title}\\ 
+		\hline
+		978-1-449-30321-1 & Scaling MongoDB\\ 
+		\hline
+		978-1-491-93200-1 & Graph Databases\\ 
+		\hline
+		978-1-449-39041-9 & Cassandra: The Definitive Guide\\ 
+		\hline
+		007-709500-6 & Database Systems\\
+		\hline
+		
+	\end{tabular}
+	\caption{Some sample books}
+\end{table}
+
+The data in a relational model is organized into columns and each entry(cell) contains a \textbf{SINGLE} piece of data, so the main problem of relational model is to handle data with multiple elements in a single column for example a book with two authors.
+
+The solution proposed by the relational model is to link two tables and to do so we need an identifier ID for each row.
+Here is an example of two linked tables.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		
+		\textbf{book\_id} & \textbf{ISBN} & \textbf{Title}\\ 
+		\hline
+		1 & 978-1-449-30321-1 & Scaling MongoDB\\ 
+		\hline
+		2 & 978-1-491-93200-1 & Graph Databases\\ 
+		\hline
+		3 & 978-1-449-39041-9 & Cassandra: The Definitive Guide\\ 
+		\hline
+		4 & 007-709500-6 & Database Systems\\
+		\hline
+		
+	\end{tabular}
+	\caption{Books Table with ID}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		
+		\textbf{author\_id} & \textbf{Name} & \textbf{Surname}\\ 
+		\hline
+		1 & Ian & Robinson\\
+		\hline
+		2 & Kristina & Chodorow\\ 
+		\hline
+		3 & Riccardo & Torlone\\
+		\hline
+		4 & Paolo & Atzeni\\
+		\hline
+		5 & Stefano & Ceri\\
+		\hline
+		6 & Stefano & Paraboschi\\
+		\hline
+		7 & Eben & Hewitt\\
+		\hline
+		
+	\end{tabular}
+	\caption{Authors Table with ID}
+\end{table}
+
+To connect these two tables we use a ``relation'' or ``join'' table. In the example the ``join'' table is the following:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		
+		\textbf{book\_id} & \textbf{author\_id} \\
+		\hline
+		2 & 1\\
+		\hline
+		3 & 7\\
+		\hline
+		1 & 2\\
+		\hline
+		4 & 4\\
+		\hline
+		4 & 5\\
+		\hline
+		4 & 6\\
+		\hline
+		4 & 3\\
+		\hline
+	\end{tabular}
+	\caption{BookAuthors Table}
+\end{table}
+
+Here we can see the need of using an ID to identify each row.
+
 
 \end{document}
