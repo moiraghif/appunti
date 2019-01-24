@@ -8,6 +8,30 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=SQL,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
 %`` for quoting
 
 \title{Foundations of Computer Science  - SQL}
@@ -157,8 +181,97 @@ If some information is missing or is not known SQL uses the NULL. To check if a 
 It's thanks to the schema and constraints that the databases understand the semantics of the data.
 
 \section{Constraints in SQL}
+A constraint is a relationship among data elements that the DBMS is required to enforce. The triggers are executed when a specified condition occurs, it's usually easier to implement than a constraint. 
+Kinds of Constraints are:
+\begin{itemize}
+	\item (Foreign) Keys
+	\item Value-Based constraint (constrain a certain value)
+	\item Tuple-Based constraint (relationship among components)
+	\item Assertion (any SQL boolean expression)
+\end{itemize}
 
+When creating a table we create a key using a constraint of UNIQUE or PRIMARY KEY. While expressing a Foreign Key we need to use the keyword REFERENCES after an attribute or as an element of the schema and the referenced attribute must be declared either as a PRIMARY KEY or UNIQUE. Here is an example:
+\begin{lstlisting}
+--For the single attribute key
+CREATE TABLE table_1(
+	attribute_1 CHAR(20) UNIQUE,
+	attribute_2 VARCHAR(20)
+);
 
+--For the multi-attribute key
+CREATE TABLE table_2(
+	attribute_1 CHAR(20),
+	attribute_2 VARCHAR(20),
+	attribute_3 REAL,
+	PRIMARY KEY (attribute_1,attribute_2)
+);
 
+--Foreign key reference example
+CREATE TABLE table_1(
+attribute_1 CHAR(20) UNIQUE,
+attribute_2 VARCHAR(20)
+);
+CREATE TABLE table_2(
+attribute_3 CHAR(20),
+attribute_4 VARCHAR(20) REFERENCES table_1(attribute_1),
+attribute_5 REAL,
+);
 
+--Foreign key as schema element
+CREATE TABLE table_1(
+attribute_1 CHAR(20) UNIQUE,
+attribute_2 VARCHAR(20)
+);
+CREATE TABLE table_2(
+attribute_3 CHAR(20),
+attribute_4 VARCHAR(20),
+attribute_5 REAL,
+FOREIGN KEY(attribute_4) REFERENCES table_1(attribute_1)
+);
+\end{lstlisting}
+
+Once we have a foreign key constraint there are two possible violations:
+\begin{enumerate}
+	\item Insert or update to table\_2 that introduces values not found in table\_1.
+	\item Delete or update to table\_1 causing some tuples of table\_2 to be disrupted.
+\end{enumerate}
+In case of 1. we reject such operation. In case 2. in case of deletion or update we can proceed in three different ways:
+\begin{enumerate}
+	\item Default: Reject the modification like in case of 1.
+	\item Cascade: Make the same changes in table\_2, in case of deletion (update) of a row of table\_1, delete (update) all the related tuples of table\_2.
+	\item Set NULL: Change the element to NULL.
+\end{enumerate}
+One of these policies need to be chosen. We choose them while declaring the Foreign key and are of form (after foreign key declaration): ON [UPDATE,DELETE] [SET NULL CASCADE], if not declared the default(reject) is used. Here is an example:
+\begin{lstlisting}
+CREATE TABLE table_1(
+attr_1 CHAR(20) UNIQUE,
+attr_2 VARCHAR(20)
+);
+CREATE TABLE table_2(
+attr_3 CHAR(20),
+attr_4 VARCHAR(20),
+attr_5 REAL,
+FOREIGN KEY(attr_4)
+	REFERENCES table_1(attr_1)
+	ON DELETE SET NULL
+	ON UPDATE CASCADE
+);
+\end{lstlisting}
+
+Some other constraint are Attribute-Based checks to constraint on the value of a particular attribute in this case add CHECK($<$condition$>$) to the declaration for the attribute. We might use the name of the attribute in the condition but any other relation or attribute name must be in a subquery.
+The checks are performed only when a value for that attribute is inserted or updated.
+It can be added as a relation-schema element(like for the foreign key).
+
+The last one is the Assertion, these are database-scheme elements and defined by: \newline CREATE ASSERTION $<$name$>$ CHECK ($<$condition$>$); the condition may refer to any relation or attribute in the database schema.
+For example if there are two table Bars and Drinkers we want to assert that there cannot be more bars than drinkers the code is:
+\begin{lstlisting}
+	CREATE ASSERTION FewBar CHECK (
+	(SELECT COUNT(*) FROM Bars) <=
+	(SELECT COUNT(*) FROM DRINKERS)
+	);
+\end{lstlisting}
+In principle, we must check the assertion after every modification to any relation of the database but a clever system can observe that only certain changes could cause a given assertion to be violated. 
+Problem is the DBMS often can't tell when they need to be checked. 
+The Triggers let the user decide when to check for any condition.
+An example is when using a foreign key constraint, instead of rejecting insertions with unknown elements, a trigger can add that new element to the original table with other attributes set as NULL.
 \end{document}
