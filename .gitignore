@@ -1,9 +1,11 @@
 #Files generated from the LaTeX file so we exclude them
-*.log
 *.aux
-*.idx
 *.gz
+*.idx
+*.log
+*.out
 *.toc
+
 #Files generated from Biblatex so we exclude them
 *.bbl
 *.bcf
