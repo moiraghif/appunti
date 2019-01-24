@@ -759,6 +759,39 @@ Per acquisire dati in real-time è necessario catturare ogni aspetto di tali dat
 \section{Data quality and integration}
 Fasi molto importanti nell'analisi dei dati sono: la “verifica della qualità dei dati” (Data Understanding), di “pulizia” e di “integrazione” dei dati (Data Preparation).\newline Come primo aspetto, bisogna concentrarsi sui casi di “deduplication”; in altre parole bisogna chiedersi: ci sono record nella stessa tabella che si riferiscono allo stesso oggetto/persona della realtà? Si possono stabilire molteplici regole per decidere se due record si riferiscono allo stesso oggetto, sia sintattiche che semantiche. Una volta individuati due record “analoghi”, bisogna unirli (data fusion) in un solo record contenente le informazioni “corrette”. Una volta analizzato questo aspetto di “qualità” dei dati, immaginiamoci di dover integrare una tabella con un’altra e quindi di dover cercare i record delle due tabelle diverse che sono collegati tra loro. Questo processo si chiama “record linkage” e può essere svolto, ad esempio, individuando le chiavi delle due tabelle (una primaria e una esterna, ad esempio), e se queste corrispondono si procede con il “merge” dei due record.\newline Tuttavia, se la data quality non è delle migliori (a causa di input sbagliati o di standard non condivisi), di conseguenza anche la data integration sarà scarsa.\newline
 La data integration si articola in due fasi: \textbf{record linkage} (identificazione dei set di record che identificano lo stesso “oggetto reale”) e \textbf{data fusion} (scelta di un record unico rappresentativo del set precedente).
+
+The complete methodology of schema integration is composed of three possible steps:
+\begin{itemize}
+
+\item Schema transformation (or Pre-integration)\\
+Input: n source schemas\\
+Output: n source schemas homogeneized\\
+Methods used: Model transformation + Reverse engineering
+\item Correspondences investigation\\
+Input: n source schemas\\
+Output: n source schemas + correspondences\\
+Method used: techniques to discover correspondences (identifying semantic relativism)
+\item Schemas integration and mapping generation\\
+Input: n source schemas + correspondences\\
+Output: integrated schema + mapping rules btw the integrated schema and input source schemas\\
+Method used: New classification of conflicts + Conflict resolution
+transformations: in particular, type of conflicts are
+\begin{itemize}[noitemsep]
+\item $Classification\ conflicts$: corresponding elements describe different sets of real world objects\\
+Resolution: Introduction of a Generalization/Specialization hierarchy.
+\item $Descriptive\ conflicts$: corresponding types have different properties, or corresponding properties are described in different ways.\\
+Custom Resolutions depending on the specific type of conflict. %useful, ikr
+\item $Structural\ Conflicts$: different schema element types, e.g.: class, attribute, relationship. \\
+Resolution: choose the less constraining structure.
+\item $Fragmentation\ Conflicts$: the same phenomenon of the real world is perceived as a single S1 object in one database and as several objects in the other\\
+Resolution: aggregation relationships.
+\item $Instance Level\ Conflicts$: same data in different sources have different
+values.
+Resolution: user defined $resolution\ function$ (taking two or more conflicting values of an attribute as input and outputs the result to the posed query). Common resolution functions are $MIN$ and $MAX$. For non numerical attributes a typical solution is $CONCAT$.
+\end{itemize}
+\end{itemize}
+
+
 \subsection{Record Linkage}
 Esistono vari sinonimi per questa fase: Object Identification, Deduplication (su un dataset), Object Matching e molti altri. L’output di un algoritmo di record linkage può essere: “matching tuples”, “not matching” o “don’t know” (o “possible matching").\newline
 Esistono più tecniche di record linkage:
@@ -774,9 +807,9 @@ Il record linkage può essere effettuato anche tra set di dati in formati divers
 Durante questa fase si possono incontrare possibili conflitti.\newline 
 Esistono perciò delle strategie per gestire tali conflitti:
 \begin{itemize}[noitemsep]
-\item Conflict Ignoring, che ignora il problema lasciando la risoluzione all’utente.
-\item Conflict Avoiding, che gestisce il problema generalmente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte.
-\item Conflict Resolution, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
+\item $Conflict\ Ignoring$, che ignora il problema lasciando la risoluzione all’utente ($Pass\ It\ on$).
+\item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
+\item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
 \pagebreak
 %\printbibliography
