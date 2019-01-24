@@ -9,8 +9,10 @@
 \usepackage[autostyle]{csquotes}
 \usepackage{enumitem}
 \usepackage[backend=biber]{biblatex} % pls uncomment me (Maurino's english style) but... what's the actual scope here?
+%It was to print the bibliography, just to be give credit to the author of the original content but I guess we could leave it in a separate file biblio and print it here
 
 \addbibresource{biblio.bib}
+%Aggiungere alla biblio anche gli autori degli appunti dell'anno scorso (se sapete i nomi)
 
 
 \graphicspath{ {./img/} }
@@ -18,13 +20,13 @@
 \title{Data Management}
 \author{}
 \date{}
-%NEED TO IMPROVE SECTION 6 DATA DISTRIBUTION
+
 \begin{document}
 
 \maketitle
 %\tableofcontents %maybe would be nice to add?
+%Some one commented it (MoMo) so I thought it was not necessary
 
-%%% SOLO QUESTO E' ITALIANO %%%
 \section{Data Modelling}
 Il data modelling è uno strumento per descrivere parte del mondo reale che ci permette di:
 \begin{itemize}[noitemsep]
@@ -236,7 +238,7 @@ The labeled property graph model has the following characteristics:
 	\item
 	Relationships can contain properties like nodes.
 	\item
-	%magari migliorare questa parte
+	%magari migliorare questa parte (Sicuramente fa pena nella lista)
 	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones. This method is called generic relationship. Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the ADDRESS relationship, in the fine-grained I need to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
 \end{itemize}
 A Graph Database (GD) can use either the native or non-native storage and processing engine.
@@ -664,8 +666,9 @@ SELECT * FROM table USING CONSISTENCY ONE
 \newline
 To delete the data is it easier to consider the data not available and mark it for deletion, it is called a tombstone(like how recycle bin works in OS), and actually delete on a major compaction or configurable timer.\newline
 Compaction runs periodically to merge multiple SSTables reclaiming space, creating new index, merging the keys, combining columns and discarding the tombstones.
-%Sezione in italiano ricavata dagli appunti dell'anno scorso.
-%Per ora non si sa se questa parte sarà richiesta all'esame.
+
+%Sezione in italiano ricavata dagli appunti dell'anno scorso. (Grande)
+%Per ora non si sa se questa parte sarà richiesta all'esame. Adesso sì
 %Da integrare se disponete di appunti affidabil ricavati a lezione
 \section{Big Data Architecture}
 La prima definizione di "Big Data" viene data da Gartner nel 2012: “Big data is high volume, high velocity and/or high variety information assets”. Ad oggi sappiamo però che per definire i "Big Data" potremmo usare più di 3 V, aggiungendo anche variability e veridicity. Analizzare "Big Data" su un singolo server “big” è un processo lento, costoso e difficile da realizzare. La soluzione è effettuare un’analisi distribuita su hardware poco costosi tramite un sistema di calcolo parallelo, i cui vantaggi sono già stati esposti nella sezione dedicata all'architettura distribuita. I problemi principali della distribuzione dei dati sono la sincronizzazione, i cosiddetti “punti morti” (deadlock), la larghezza della banda, la coordinazione tra i nodi e i casi di fallimento (failure) del sistema. Questo genere di architettura ha comunque molti vantaggi, tra cui: scala linearmente (scale out), l’attività di calcolo è rivolta ai dati e non viceversa (cambio di paradigma), gestisce i casi di fallimento (failure) e lavora con hardware con potenza di calcolo “normale”.
@@ -836,7 +839,6 @@ Esistono perciò delle strategie per gestire tali conflitti:
 \item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
 \pagebreak
-%\clearpage
 %è commentato per non stampare la biblio?
 %\printbibliography
 \printbibliography
