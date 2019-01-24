@@ -76,14 +76,9 @@ Il RDBMS esiste già da 35 anni quindi è ben sviluppato e molto conosciuto, mol
 	\item
 	non accetta i loop.
 	\item
-	Per i RDBMS :
-	\begin{itemize}
-		
-		\item
-		Difficile modificare le tabelle.
-		\item
-		La performance.
-	\end{itemize}
+	Difficile modificare le tabelle.
+	\item
+	La performance.
 \end{enumerate}
 Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
 \begin{itemize}[noitemsep]
@@ -97,12 +92,14 @@ Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
 	\item
 	La struttura dati scelta
 \end{itemize}
+
 Per Scaling Up intendiamo potenziare le macchine, mentre per Scaling out intendiamo aggiungere macchine, per i RDBMS è più facile Scale up che Scale out. 
 Il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
-Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il tempo di risposta scende asintoticamente.
+Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il guadagno complessivo sul tempo di risposta scende asintoticamente.
 \newline
 \subsection{NoSQL}
-Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL), le proprietà dei NoSQL sono:
+Di fronte a questi svantaggi sorge una nuova ``tecnologia'': i NoSQL(Not Only SQL).
+Le proprietà dei NoSQL sono:
 
 \begin{enumerate}[noitemsep]
 	 
@@ -111,7 +108,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 	\begin{itemize}
 		
 		\item
-		A differenza dei modelli SQL nei quali bisogna prima definire il modello, qua nei NoSQL non esiste un modello rigido.
+		A differenza dei modelli SQL nei quali bisogna prima definire il modello, nel caso NoSQL non esiste un modello rigido.
 		\item
 		Per aggiungere un nuovo attributo non vi è bisogno di cambiare il modello a differenza dei SQL.
 		\item
@@ -123,7 +120,7 @@ Di fronte a questi svantaggi sorge una nuova ``tecnologia'' i NoSQL(Not Only SQL
 	\item
 	Segue il teorema CAP:
 	\begin{itemize}
-		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie(infatti si possono soddisfare solo 2 di esse):
+		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie (infatti si possono soddisfare solo 2 di esse):
 		\begin{enumerate}		
 			\item
 			\textbf{(C)C}onsistency(Coerenza) : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
@@ -190,7 +187,7 @@ Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 
 
 \subsubsection{Document Based\cite{MongoDB}}
-MongoDB is as already mentioned a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
+MongoDB is -as already mentioned- a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
 
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
@@ -207,16 +204,20 @@ In case of a massive data upload one might decide to do a few changes in the pro
 \end{itemize}
 One must be attentive when doing so because any loss will not be registered and lost forever.
 \newline
-For large data-sets it is useful to use some additional structures called indexes, they are similar to the book indexes and act as a faster way to retrieve information, they might require more time during the insertion but makes the queries faster later, one primary index (basic one) is always the defined for the id. How does it exactly works?
+For large data-sets it is useful to use some additional structures called indexes: those are similar to the book indexes and act as a faster way to retrieve information.
+They might require more time during the insertion but makes the queries faster later. 
+One primary index (basic one) is always the defined for the id. 
+
+How does it exactly works?
 Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result. The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
-Indexing avoid this problem (more problematic if the database is large), it is an ordered list that points it's content.
+Indexing avoids this problem (more problematic if the database is large), providing an ordered list that points it's content.
 Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. MongoDB gives, by default, a limit of 64 indexes!
-\newline
+
 The aggregation uses pipeline and options. 
 The aggregation pipeline starts processing the documents of the collection and passes the result to the next pipeline in order to get result for example: \$match and \$group. 
 We can use the same operator in different pipelines.
-\newline
-Mongo for many reasons (mainly commercial) offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
+
+For many (mainly commercial) reasons, Mongo offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
 
 \subsubsection{GraphDB\cite{Neo4J}}
 
@@ -228,36 +229,46 @@ The labeled property graph model has the following characteristics:
 \begin{itemize}[noitemsep]
 	 
 	\item
-	It contains nodes and relationships;
+	It contains \textbf{nodes} and \textbf{relationships};
 	\item
-	Nodes contains properties (key : value pairs);
+	Nodes contains \textbf{properties} (key : value pairs);
 	\item
-	Nodes can be labeled with one or many labels;
+	Nodes can be labeled with one or many \textbf{labels};
 	\item
 	Relationships are named and directed, with a start and end node;
 	\item
-	Relationships can contain properties like nodes.
+	Like nodes, also Relationships can contain properties.
 	\item
 	%magari migliorare questa parte (Sicuramente fa pena nella lista)
-	The relationship can be fine-grained or generic: for example in case of Address we can choose distinct relationship like HOME\_ADDRESS or WORK\_ADDRESS or DELIVERY\_ADDRESS which is the fine-grained relationship or we could choose only address and specify in it which kind of address it is ADDRESS\{type : `home'\} or the other ones. This method is called generic relationship. Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the ADDRESS relationship, in the fine-grained I need to find one by one all kind of addresses, just	imagine if we had 100 types of addresses. On the other hand to find the DELIVERY\_ADDRESS all I need to do is find ADDRESS\{type:`delivery'\} 
+	The relationship can be \textbf{fine-grained} or \textbf{generic}: \\let's consider the $Address$ relationship case: we can distinct between:
+	\begin{itemize}
+		
+		 \item fine-grained relationship like \texttt{HOME$\_$ADDRESS} or \texttt{WORK$\_$ADDRESS} or \texttt{DELIVERY$\_$ADDRESS} 
+		 \item or we could choose only \texttt{ADDRESS} and specify which kind of address it is \texttt{ADDRESS\{type:`home'\}}. This method is called generic relationship. 
+	\end{itemize}		 
+	Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the \texttt{ADDRESS} relationship, whereas in the fine-grained case I would need to find one by one all kind of addresses (just	imagine if we had 100 types of addresses!). On the other hand to find the \texttt{DELIVERY$\_$ADDRESS} all I need to do is to identify the \texttt{ADDRESS\{type:`delivery'\}}. 
+
 \end{itemize}
 A Graph Database (GD) can use either the native or non-native storage and processing engine.
 \newline
-Native Graph Storage is the one optimized for the native graph management \& the non native graph storage stores the data in non graph based model but this model supports a graph query language, examples: Relational, Object oriented DB, Wide Column. In a relational for example in a join bomb we can use a graph to connect two tables. But the problem
-with the relational DBs and most of NoSQL DBs is that it lacks relationships.
-Moreover in SQL joining tables adds more complexity, and in case of sparse table with null-able column require special checking in the code. In the case of a market, just to see what a customer bought, we need to do a lot of expensive joins on the customers that buy a specific product with other products for the recommendation systems. 
-For the NoSQL DBs whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model and is costly operation since it doesn't use index free adjacency(the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
-other interesting queries.
-\newline
+Native Graph Storage is optimized for the native graph management, whereas the non native graph storage treats the data in non graph based model while still supporting a graph query language. Examples: Relational, Object oriented DB, Wide Column. 
+In a relational for example in a join bomb we can use a graph to connect two tables. 
+The problem with relational DBs and most of NoSQL DBs is the lack of relationships.
+Moreover in SQL joining tables adds more complexity, and especially in case of sparse table with null-able column the operation requires special checking in the code.
+In the case of a market, just to see what a customer bought, we need to do a lot of expensive joins on the customers that buy a specific product with other products for the recommendation systems. 
+For the NoSQL DBs, whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model. Indeed the aggregation is a costly operation since it doesn't exploit index free adjacency (the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
+other interesting queries. 
+
 In a native graph storage the attributes and nodes and the referenced nodes are stored together, to optimize the graph processing engine. 
-When we perform a query the graph model does not depend on the total number of nodes instead it remain nearly constant because it works locally to the portion of the graph which is connected to the base node, while the other SQL and NoSQL models will suffer in performance speed with the
-increase of data. Moreover we can add more data/nodes and relationship without disturbing the already existing model.
+Performing a query the graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the other SQL and NoSQL models will suffer in performance speed with the increase of data. 
+Moreover we can add more data/nodes and relationship without disturbing the already existing model.
 \newline
 The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB, this makes sure that the retrieval is faster but it comes at a cost: the efficiency of queries that do not use graph traversal, for example the writing time etc.
 \newline
-It's important to note that it's neither good nor bad to use native or non-native engine, simply one needs to choose one based on his/her needs, for example my DB is based on a non-graph backend (like MySQL) so it would be useful to use a non native graph storage.
+It's important to note that it's neither good nor bad to use native or non-native engine, simply one needs to make a choice based on his/her needs. % for example my DB is based on a non-graph backend (like MySQL) so it would be useful to use a non native graph storage. 
 \newline
-The properties of the cypher language is :
+Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
+The properties of the cypher language are:
 
 \begin{enumerate}[noitemsep]
 	 
@@ -276,19 +287,20 @@ The properties of the cypher language is :
 	\item
 	Update the Graph
 \end{enumerate}
-A real example is the following: We want to manage a server farm, we define a relational model for managing it. 
+\paragraph{A real example is the following}:\\ 
+We want to manage a server farm, we define a relational model for managing it. 
 We know that a user access to application which runs on a VM and each application uses a DB and a secondary DB. 
-Each of the VM is hosted on a server which are placed in a rack structure which is managed by a load balancer.
+Each of the VM is hosted on a server placed in a rack structure managed by a load balancer.
 \newline
 The initial stage of modeling is similar in any kind of DB, we seek to understand and agree on the entities in the domain and how to interrelate, usually done on whiteboard with a diagram which is a graph.
 Next stage we seek a E-R (Entity-Relationship) diagram, which is another graph. 
 After having a suitable logical model we map it into tables and relations. 
 We keep our data in a relational DB, with it's rigid schema.
 But keeping the data normalized slows down the query time so we need to denormalize it, because the user's data model must suit the database engine not the user. 
-Denormalizing we involve duplicate data to gain query performance, denormalizing is not a trivial task and we accept that there may be substantial data redundancy. 
-The problems doesn't stop here, because once created if we need to modify it, which we will need to do in order to match the changes in the production environment, so we will need to do this work all again!
+By denormalizing we involve duplicate data to gain query performance: denormalization is not a trivial task and we accept that there may be substantial data redundancy. 
+The problems do not stop here, because once the DB is created, if we need to modify it -this is typically going to happen in order to match the changes in the production environment- we will need to do the whole work again!
 \newline
-It's better in there cases to directly use the graph DBs, it will avoid the data redundancy and it can adapt really fast in case of a change in the DB.
+In these cases, It is better to directly use the graph DBs: it will avoid the data redundancy and it can adapt really fast in case of a change in the DB itself.
 \newline
 Another graph traversal language is Gremlin, part of the Apache TinkerPop framework. In this domain specific language (DSL) expressions specify a concatenation of traversal steps, so you basically explain to gremlin step by step what to do.
 
@@ -337,20 +349,20 @@ An example of key-value model is Riak and has the following terminology:
 Some other examples are: Redis, Memcached, Riak, Hazelcast, Encache.
 \newline
 Thanks to the Hash based index, the key-value systems can scale out in a very efficient way. 
-The Hash is a mathematical function that assign to a given key it's value, usually we have h(x) = value, usually it returns a pointer to where the data is stored not exactly the data itself, for example h(x) = (x modulo y) where y is the max length of hash table. 
+The Hash is a mathematical function that assign to a given key it's value, usually we have $h(x) = value$, usually it returns a pointer to where the data is stored not exactly the data itself, for example $h(x) = (x\ modulo\ y)$ where $y$ is the max length of hash table. 
 There might a problem with the conflicts but they can be managed. 
 Hashing also enables items in the DB to be retrieved quickly. 
-The hash table can be easily distributed in a network, it is managed in pile so we can have a key(saved in the pile) x saved in a server and it's succ(x) stored in a different server, thus scaling out really fast. 
-The key value terminology is the following:
+The hash table can be easily distributed in a network, it is managed in pile so we can have a key(saved in the pile) $x$ saved in a server and it's succ(x) stored in a different server, thus scaling out really fast. 
+%The key value terminology is the following:
 \newline
-In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value (k1,v1) basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 it simply finds the node with the key k1 and return it's value v1 from it.
+In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \texttt{(k1,v1)}: basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 the system simply finds the node with the key \texttt{k1} and return it's value \texttt{v1} from it.
 
 \subsubsection{Wide Column and BigTable}
-These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
+These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra), even though some consider Cassandra still  as a key-value model and not a wide column.
 \newline
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
-The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having NULL value so we can have different rows with different sets of columns. 
+The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having \texttt{NULL} value so we can have different rows with different sets of columns. 
 BigTable is characterized by the row key, column key, timestamp, the row has the keys, column contains the data and contents. 
 The column is divided in families. The timestamp support the multi-version of modification to check how the data changed over time and still be able to access the latest one without any confusion. We can represent it as follows:
 
@@ -391,7 +403,7 @@ The column is divided in families. The timestamp support the multi-version of mo
 	~\\
 	Each row can have different timestamp, so we can have more versions of this table.
 \end{center}
-The data within the cells (also the key) is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The data within the cells (also the key) has no type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
 %cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
@@ -838,8 +850,6 @@ Esistono perciò delle strategie per gestire tali conflitti:
 \item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
 \item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
-\pagebreak
-%è commentato per non stampare la biblio?
-%\printbibliography
+\clearpage
 \printbibliography
 \end{document}
