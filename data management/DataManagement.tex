@@ -7,6 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
+%\MakeOuterQuote{"} %almost there, maybe next time!
 \usepackage{enumitem}
 \usepackage[backend=biber]{biblatex} % pls uncomment me (Maurino's english style) but... what's the actual scope here?
 %It was to print the bibliography, just to be give credit to the author of the original content but I guess we could leave it in a separate file biblio and print it here
@@ -406,7 +407,8 @@ The column is divided in families. The timestamp support the multi-version of mo
 The data within the cells (also the key) has no type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
-%cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
+%cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo 
+%take a look here! https://mirror.hmc.edu/ctan/macros/latex/contrib/csquotes/csquotes.pdf
 row key $|$ info:\{`height':`170cm', `state':`NY'\}  roles:\{`ASF':`Director', `Hadoop':`Founder'\}$|$\\
 The version number of each row is unique within the row key, by default it uses the system's timestamp but they can be user supplied.
 \newline
