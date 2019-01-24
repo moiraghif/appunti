@@ -94,7 +94,7 @@ Here is an example of two linked tables.
 \end{table}
 
 To connect these two tables we use a ``relation'' or ``join'' table. In the example the ``join'' table is the following:
-
+\pagebreak
 \begin{table}[h]
 	\centering
 	\begin{tabular}{|l|l|}
@@ -118,9 +118,47 @@ To connect these two tables we use a ``relation'' or ``join'' table. In the exam
 		\hline
 	\end{tabular}
 	\caption{BookAuthors Table}
+	\label{table:join}
 \end{table}
 
-Here we can see the need of using an ID to identify each row.
+In the Table ~\ref{table:join} we can see the need of using an ID to identify each row, so it can be referenced uniquely. 
+In some cases we might not need a third table (join table): one of these cases is the ``One-to-Many" relationship. 
+The One-to-Many relationship also requires that rows in tables have unique IDs, but unlike the join table used in Many-to-Many relationship, the table with the many side of data has a column reserved for the IDs of the one side of data.
+
+The IDs used to uniquely identify the rows described in the tables are called ``Primary Keys''(PK). 
+If this primary key is used in another table it is called ``Foreign Key''(FK) and it is usually not unique in the new table. The purpose of the foreign key is to link the two tables in one-to-many relationship.
+
+Usually the primary key generation process is left to the RDBMS (it's safer this way), which automatically generates the key and usually it is an ordinary integer.
+For the join tables, the primary key is a combination of the foreign keys. A primary key comprised of more than one attribute is called a ``Composite Primary key''(CPK).
+
+\section{Introduction To SQL}
+SQL stands for Structured Query Language and it is a standard language for querying and manipulating data. It is a very high-level programming language and it is very well optimized.
+
+
+SQL is a:
+\begin{itemize}[noitemsep]
+	\item Data Definition Language (DDL):\newline
+	 It defines relation \textit{schema} and creates/alters/deletes tables and their attributes.
+	\item Data Manipulation Language (DML):\newline
+	It Inserts/deletes/modifies tuples in tables and queries one or more tables.
+\end{itemize}
+
+A \textbf{relation} (or \textbf{table}) in SQL is a multiset of tuples having the attributes specified by the schema. Where a \textbf{multiset} is an unordered list (so multiple duplicates instances are allowed) and an \textbf{attribute} is a typed data entry present in each tuples in the relation and it must have an atomic type in standard SQL. The atomic types are:
+\begin{itemize}
+	\item Characters: CHAR(20), VARCHAR(50)
+	\item Numbers: INT, BIGINT, SMALLINT, FLOAT
+	\item Others: MONEY, DATETIME, etc.
+\end{itemize}
+A \textbf{tuple (row)} is a single entry in the table having the attributes specified by the schema.
+
+The \textbf{schema} of a table is the table name, it's attributes and they types, a key is an attribute whose values are unique. A \textbf{key} is a minimal subset of attributes that acts as a unique identifier for tuples in a relation. A key is an implicit constraint on which tuples can be in the relation: so if two tuples agree on the same value of the key, then they must be the same tuples. 
+
+If some information is missing or is not known SQL uses the NULL. To check if a value is NULL we cannot say value=NULL since it's unknown we need to use ``IS NULL'' command of SQL. SQL offers the possibility to constrain a column to be NOT NULL or supports other constraints such as maximum number of values per attributes.
+It's thanks to the schema and constraints that the databases understand the semantics of the data.
+
+\section{Constraints in SQL}
+
+
 
 
 \end{document}
