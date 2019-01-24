@@ -453,49 +453,49 @@ The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is
 Un sistema di DB centralizzato è un sistema in cui il database è localizzato, memorizzato e mantenuto in un'unica posizione. Se il processore fallisce, allora tutto il sistema fallisce.
 Se abbiamo bisogno di avere dati periodicamente in luoghi differenti allora possiamo distribuirli o replicarli. La distribuzione quindi consiste nel dividere i dati e memorizzarli in posti diversi, provvedendo così ad avere possibilità di eseguire operazioni in parallelo. D'altra parte possiamo anche replicarli (interamente o solo una parte) in diversi luoghi, migliorando cosi la loro disponibilità (availability).
 \newline
-In a Homogeneous Distributed Database all sites have identical software and aware of each other and agree to cooperate in processing user requests. They surrender their autonomy to change the schema appearing to user as a single system.
+In un Database Distribuito Omogeneo tutti i siti hanno identico software e concordano tutti a collaborare per l'elaborazione delle richieste dell'utente. Si arrendono alla loro autonomia per cambiare lo schema che appare all'utente come un singolo sistema.
 \newline
-In a Heterogeneous Distributed Database different sites may use different schema and software which creates a major problem for query and transaction processing. The sites may not be aware of each other and may provide only limited facilities for cooperation in transaction processing.
+In un Database Distribuito Eterogeneo diversi siti possono usare differenti schemi e software, creando maggior problemi per query e transazioni. I siti possono non essere a conoscenza l'uno dell'altro e quindi potrebbero fornire solo strutture limitate per la cooperazione nell'elaborazione delle transazioni.
 \newline
-The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem of where to allocate fragments to nodes.
-With replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
+Le sfide per la progettazione di un Database Distribuito sono decidere cosa va, che dipende dal pattern di accesso ai dati, e dal problema di dove allocare i frammenti ai nodi.
+Con la replicazione il sistema mantiene multiple copie dei dati, memorizzate in diversi siti, per un veloce recupero e tolleranza degli errori con la frammentazione dei dati divisi in frammenti archiviati in siti diversi. Possiamo combinare entrambi, in modo che i dati siano partizionati in diversi frammenti, e che il sistema mantenga diverse repliche degli stessi.
 \newline
-Dividing/fragmenting our database into n databases, the bottle-neck phenomenon arises, in which the slowest machine dictates the worst performance for a query.
+Dividendo/frammentando il nostro database in n database, sorge il fenomeno "bottle-neck", dove la macchina più lenta detta la peggior performance per una query.
 \newline
-The advantages of replication are:
+I vantaggi di una replicazione sono:
 \begin{itemize}[noitemsep]
 	\item
-	Availability: Since the failure of a site does not result in unavailability of it's data since it's replicas exist elsewhere.
+	Availability: l'errore di un sito non determina l'indisponibilità dei dati, in quanto la sua replica esiste altrove.
 	\item
-	Parallelism: Queries may be processed by several nodes in parallel thus faster.
+	Parallelism: le query possono essere processate da diversi nodi parallelamente, rendendo tutto più veloce.
 	\item
-	Reduced data transfer: Since replicas of the data may exist in the node itself.
+	Reduced data transfer: poiché possono esistere repliche dei dati nel nodo stesso.
 \end{itemize}
 
-While the disadvantages are:
+Mentre gli svantaggi sono:
 
 \begin{itemize}[noitemsep]
 	 
 	\item
-	increased cost of updates: Since each replica must be updated.
+	Aumentati i costi per gli update: in quanto ogni replica deve essere aggiornata.
 	\item
-	increased complexity of concurrency control e.g. two people book a ticket at the same time solution. We may have that distinct replicas may lead to inconsistent data unless some special concurrency mechanisms are implemented. A solution could be to choose one copy as the primary copy and apply concurrency control operation only on the primary copy.
+	increased complexity of concurrency control e.g. due persone prendono lo stesso ticket nello stesso istante. Potremmo avere che repliche distinte possono portare a dati incoerenti a meno di qualche meccanismo di concurrency speciale venga implementato. Una soluzione potrebbe essere quella di scegliere una copia come copia primaria e applicare operazione di controllo della conucrrency solo sulla copia primaria.
 \end{itemize}
-As already mentioned we can combine data replication with data fragmentation. In particular data fragmentation consists in a division of relation r into fragments which contain sufficient information to reconstruct relation r.
-Now for simplicity imagine the database to be relational. 
-The fragmentation can be horizontal or vertical, but it must contain sufficient information to reconstruct the original "relation". In the horizontal each tuple of the data is assigned to one or more fragments while in the vertical the schema (in the case of relational) is split into several smaller schemas, and all of them must contain a common candidate key to ensure lossless join for example using a tuple-id attribute.\newline
-The advantages are:
+Come già accennato, possiamo combinare la replica dei dati con la frammentazione dei dati. In particolare la frammentazione dei dati consiste in una divisone di relazioni r in frammenti che contengono sufficienti informazioni per ricostruire la relazione r.
+Ora per semplicità, immaginiamo che sia un database relazionale. 
+La frammentazione può essere orizzontale o verticale, l'importante che contenga informazioni sufficienti per ricostruire la "relazione" originale . In quella orizzontale ogni tupla deve essere assegnata a uno o più frammenti mentre nella frammentazione verticale, lo schema è splittato in due diversi schemi più piccoli, dove entrambi devono contenere una chiave comune per assicurare un join senza perdite, per esempio utilizzando una tupla-ID come attributo.\newline
+I vantaggi sono:
 \begin{itemize}[noitemsep]
-	\item Horizontal:
+	\item Orizzontale:
 	\begin{itemize}[noitemsep]
-		\item Allows parallel processing on fragments.
-		\item Allows the data to be split so the tuples are located where they are more frequently accessed.
+		\item Permette processi paralleli sui frammenti.
+		\item Permette lo split dei dati in modo che le tuple siano poi allocate nei posti in cui avviene l'accesso più frequentemente.
 	\end{itemize}
-	\item Vertical
+	\item Verticale
 	\begin{itemize}[noitemsep]
-		\item Allows tuples to be split so that each part of tuples are stored where they are more accessed.
-		\item tuple-id allows efficient joining of vertical fragments.
-		\item Allows parallel processing on a relation.
+		\item Permette alle tuple di essere splittate in modo che ogni parte delle tuple sia archiviata nel luogo in cui avviene più spesso l'accesso.
+		\item tuple-id permette un efficiente join di frammenti verticali.
+		\item Permette processi paralleli su una relazione.
 	\end{itemize}
 \end{itemize}
 The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. 
