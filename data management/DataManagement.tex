@@ -498,25 +498,24 @@ I vantaggi sono:
 		\item Permette processi paralleli su una relazione.
 	\end{itemize}
 \end{itemize}
-The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. 
-Data Transparency is very important because it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system. 
-We have to consider transparency issues in relation to: fragmentation, replication and location of our data.
+Le due frammentazioni possono essere mixate insieme, e inoltre i frammenti possono essere successivamente frammentati fino ad una profondità arbitraria. 
+Data Transparency è veramente importante perché indica il grado per cui un utente non è consapevole di come i dati sono stati archiviati in un sistema distribuito. Dobbiamo considerare i problemi sulla transparency in relazione a: frammentazione, replicazione e location dei nostri dati.
 \newline
-Considering the difference between the centralized and the distributed system from the point of view of costs we have that:
+Considerando la differenza tra un sistema centralizzato e uno distribuito, dal punto di vista dei costi, abbiamo che:
 \begin{itemize}[noitemsep]
-\item For centralized systems, the primary criterion for measuring the cost of a particular strategy is the number of disk accesses.
-\item In a distributed system, instead, other issues must be taken into account: in first place we have to consider the cost of a data transmission over the network and then also the potential gain in performance from having several sites process parts of the query in parallel.
+\item Per un sistema centralizzato, il criterio principale per misurare il costo di una particolare strategia è il numero di accesso ai dischi.
+\item In un sistema distribuito dobbiamo invece considerare il costo per la trasmissione dei dai sulla rete  e anche il potenziale guadagno in performance che si ottiene con l'ausilio dei diversi siti che entrano nel processo svolgendo query parallele.
 \end{itemize}
-Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
-The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
+Ricapitolando abbiamo che i vantaggi dei DDBMSs sono: riflette la struttura organizzativa migliorando determinate caratteristiche tra cui l'abilità di condivisione, autonomia locale, la disponibilità, l'affidabilità e la performance, riducendo il costo dell'hardware grazie anche ad una crescita modulare .
+Gli svantaggi sono: architettura e progettazione più complessa e costosa; la sicurezza e l'integrità sono più difficilmente controllabili; c'è una mancanza di standard ed esperienza nel suo utilizzo.
 \newline
-There are 3 types of architecture in DDBMS:
+Ci sono 3 tipi di architetture nei DDBMS:
 \begin{itemize}
-\item Shared Everything: Dominated the architecture market until 2000(approximately), we have one big complex costly data base, it shares everything and can be very slow. It is the centralized system.
+\item Shared Everything: dominata dal mercato delle architetture fino al 2000(circa), abbiamo un grande e costoso database, che condivide ogni cosa, per cui molto lento; è il sistema centralizzato.
 
-\item Share Disk: We have data saved on different disks connected between them, no one uses it. The disks are all connected together and communicates to all the CPUs.
+\item Share Disk: abbiamo i dati salvati su diversi dischi connessi tra loro. I dischi sono tutti connessi insieme e comunicano con tutte le CPUs.
 
-\item Share Nothing: Every thing is separated every disk has it's own CPU and the disks does not communicate with other CPUs or disks, it is very easy to scale it out. Model adopted by NoSQL models. Only at the end the processors are connected together to combine the results from each of them. 
+\item Share Nothing: ogni cosa è separata, ogni disco ha la propria CPU e non comunica con le altre CPU o dischi; solo alla fine i processori vengono connessi insieme per combinare i risultati da ognuno di essi; Il modello è adottato dai modelli NoSQL; è molto facile lo scale out. 
 \end{itemize}
 
 \begin{center}
@@ -534,25 +533,27 @@ There are 3 types of architecture in DDBMS:
 		\hline
 	\end{tabular}
 \end{center}
-What to choose between Scalability or Availability? It depends on how much one wants to spend: more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
+Cosa scegliere tra Scalability o Availability? Dipende da quanto vogliamo spendere: più availability significa più denaro. Per esempio una disponibilità del 100\% significa nessun down del sistema; diminuendo la disponibilità e quindi aumentando i down, potremmo avere disponibilità 99\% con down compresi tra le 9 - 88 ore.
 \newline
 \textbf{Replication}:
 \newline
-A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump). About this we can define checkpoint as the moment when we store the set of running transactions in a given time point while a dump is full copy of the entire state of a DB in a stable memory, his execution is offline and, summarizing, it generates a backup. Only after the backup is completed, the dump record of log is written.
+Un log è un file sequenziale che è storato in una memoria stabile (che non dà mai errore; esso archivia tutte le attività realizzate dalle
+transazioni in ordine cronologico. Ci sono due tipi di record: transaction logs(operations) e system event (Checkpoint and Dump).
+Possiamo definire un checkpoint, quel momento in cui noi memorizziamo un set di transazioni in un dato tempo, mentre un dump è una copia piena dello stato di un DB in una memoria stabile; la sua esecuzione è offline, e genera un backup. Solo dopo che il backup è completo, che il dump recod viene scritto nel log.
 \newline
-The replicas structures are:
+Le strutture di replica sono:
 \begin{itemize}[noitemsep]
-	\item One2Many: One source and many targets.
-	\item Many2One: Many sources and only one target.
-	\item Peer2Peer: Data is replicated across multiple nodes that communicates with each other.
-	\item Bi-directional: Conceptually a Peer2Peer with only two Peers.
-	\item Multi-Tier Staging: The replication is divided in more stages.
+	\item One2Many: una sorgente e alcuni target.
+	\item Many2One: alcune sorgenti e un solo target.
+	\item Peer2Peer: i dati sono replicati attraverso molteplici nodi che comunicano l'uno con l'altro.
+	\item Bi-directional: concettualmente un Peer2Peer con solo due Peers.
+	\item Multi-Tier Staging: la replicazione è divisa in più stages.
 \end{itemize}
 
-To create a replica we can:
-\begin{itemize}[noitemsep]
-	\item take the data form master either the backup copy or the data itself	(if we can stop the activity of the server) and move it. (It could be useful if the data is not accessible from outside)
-	\item use log file : to maintain the replica the same as the source even during the transfer (near real time) using the Log to execute the same commands executed on the source.
+Per creare una replica possiamo:
+\begin{itemize}[noitemsep] %qua mi sfugge qualcosa (CONTROLLARE)
+	\item Prendere i dati dal master, sia il backup o i dati stessi (se vogliamo stoppare l'attività del server) e muoverli (potrebbe essere utile se i dati non sono accessibili dall'esterno).
+	\item use log file : per mantenere la replica uguale alla sorgente durante il trasferimento (quasi in tempo reale) si usa il Log per eseguire gli stessi comandi eseguiti sulla sorgente.
 \end{itemize}
 
 
