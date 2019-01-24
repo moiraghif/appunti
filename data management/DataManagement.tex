@@ -708,13 +708,32 @@ Hadoop è un framework che supporta applicazioni distribuite con elevato accesso
 \includegraphics[scale=0.70]{IMAGE9.png}\\
 Schema ecosistema Hadoop
 \end{center}
+Main features\footnote{From "Next Generation
+Databases", Guy Harrison.} %maybe add to bibtex if doesn't exist yet?
+\begin{itemize}
+
+ \item It is an economical scalable storage model. As data volumes increase, so does the cost of storing that data online.
+ Because Hadoop can run on commodity hardware that in turn utilizes commodity disks, the price point per terabyte is lower than that of almost any other technology.
+\item Massive scaleable IO capability. Because Hadoop uses a large number of
+commodity devices, the aggregate IO and network capacity is higher than that
+provided by dedicated storage arrays in which smaller numbers of larger disks are provided by even smaller numbers of processors.\footnote{Furthermore, adding new servers to Hadoop adds storage, IO, CPU, and network capacity all at once, whereas adding disks to a storage array might simply exacerbate a network or CPU bottleneck within the array.}
+\item Reliability: Data in Hadoop is stored redundantly in multiple servers and can be distributed across multiple computer racks. Failure of a server does not result in a loss of data; in fact, a Hadoop job will continue even if a server fails—the processing simply switches to another server.
+\item A scalable processing model: MapReduce.
+\item Schema on read: Data can be loaded into Hadoop without having to be converted
+to a highly structured normalized format. This makes it easy for Hadoop to quickly ingest data from various forms. The imposition of structure can be delayed until the data is accessed; this is sometimes referred to as schema on read, as opposed to the schema on write mode of relational data warehouses.
+\end{itemize}
+\subsubsection{The Hadoop Ecosystem}
+L'ecosistema di Hadoop include una famiglia di utiliy e applications sempre in espansione, costruita sopra o progettata per lavorare con il core di Hadoop (Yarn, HDFS).
+
 Pig è uno scripting language che esegue l’analisi dei dati. Gli script in “pig latin” sono tradotti in lavori di MapRed. 
 
 Hive è un’interfaccia simile a SQL per dati memorizzati in HDFS. I piani di esecuzione sono generati automaticamente da Hive. Hive rappresenta quindi un data warehousing basato su Hadoop. Questo applicativo è utilizzato per report giornalieri, misure di attività degli utenti, data e text mining, machine learning e per attività di business intelligence come pubblicità e individuazione degli spam.
 
 Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni “jobtracker” deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili “failure” e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
 
-Vengono rilasciati inoltre altri applicativi quali Accumulo, Hbase e Spark. In Cloudera sono presenti anche Impala, Mahout, Sqoop e Flume. Inoltre, anche Hortonworks è basato sulla medesima architettura.
+Vengono rilasciati inoltre altri applicativi quali Accumulo, Hbase e Spark \footnote{If we think about Hadoop as a disk-oriented framework for running MapReduce-style programs, Spark represents a memory-oriented framework for running similar workloads}, Kafka (distributed streaming messaging system), Oozie (workflow scheduler that allows complex workflows to be constructed from lower level jobs).
+In Cloudera sono presenti anche Impala, Mahout (machine-learning framework), Sqoop (utility per scambiare dati con relational databases, in import o export) e Flume (utility for loading file-based data (i.e. web server logs) into HDFS) 
+
 \subsection{Data Lake}
 Il termine “data lake” è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile “consumazione” futura.
 
@@ -816,6 +835,6 @@ Esistono perciò delle strategie per gestire tali conflitti:
 \item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
 \item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
-\pagebreak
-%\printbibliography
+\clearpage
+\printbibliography
 \end{document}
