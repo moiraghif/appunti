@@ -358,11 +358,11 @@ The hash table can be easily distributed in a network, it is managed in pile so 
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \texttt{(k1,v1)}: basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 the system simply finds the node with the key \texttt{k1} and return it's value \texttt{v1} from it.
 
 \subsubsection{Wide Column and BigTable}
-These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra) some think that Cassandra is still a key-value model and not a wide column.
+These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra), even though some consider Cassandra still  as a key-value model and not a wide column.
 \newline
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
-The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having NULL value so we can have different rows with different sets of columns. 
+The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having \texttt{NULL} value so we can have different rows with different sets of columns. 
 BigTable is characterized by the row key, column key, timestamp, the row has the keys, column contains the data and contents. 
 The column is divided in families. The timestamp support the multi-version of modification to check how the data changed over time and still be able to access the latest one without any confusion. We can represent it as follows:
 
@@ -403,7 +403,7 @@ The column is divided in families. The timestamp support the multi-version of mo
 	~\\
 	Each row can have different timestamp, so we can have more versions of this table.
 \end{center}
-The data within the cells (also the key) is without type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The data within the cells (also the key) has no type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
 %cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo
@@ -850,8 +850,6 @@ Esistono perciò delle strategie per gestire tali conflitti:
 \item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
 \item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
-\pagebreak
-%è commentato per non stampare la biblio?
-%\printbibliography
+\clearpage
 \printbibliography
 \end{document}
