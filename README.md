@@ -5,7 +5,7 @@ Scrivete in italiano comprensibile!
 Andate a capo dopo ogni frase, così è più facile modificare il testo
 con git.
 
-L'accesso è libero, ma pensate anche a contribuire e non solo a
+L'accesso è libero, ma pensate anche a contribuire e non solo ad
 appropriarvi di appunti altrui.
 
 
