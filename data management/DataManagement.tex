@@ -714,6 +714,11 @@ This architecture eliminates any single point of failure within the cluster.\foo
 
 One of the main reasons of gossip is related to node availability. Usually the only way to detect node failure is a system of heartbeats between nodes. However (in a distributed system) the heartbeats may be lost because of network issues rather than actual node failure. Cassandra failure detection is more probabilistic: nodes in the cluster become increasingly “worried” about other nodes, and if it seems likely that a node is down the operations will be redirected.
 
+Cassandra distribute data throughout the cluster by using \textbf{consistent hashing}. The rowkey (analogous to a primary key in an RDBMS) is hashed. Each node is allocated a range of hash values, and the node that has the specific range for a hashed key value takes responsibility for the initial placement of that data.
+We usually visualize the cluster as a ring: the circumference of the ring represents all the possible hash values, and the location of the node on the ring represents its area of responsibility. 
+When adding a new node, the system remaps all
+the hash ranges (exploiting a peculiar mechanism of Virtual node to optimize this operation)\footnote{More infos in the suggested course text-book}.
+
 %Sezione in italiano ricavata dagli appunti dell'anno scorso. (Grande)
 %Per ora non si sa se questa parte sarà richiesta all'esame. Adesso sì
 %Da integrare se disponete di appunti affidabil ricavati a lezione
