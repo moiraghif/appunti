@@ -341,7 +341,7 @@ For conditions on strings we have the following syntax: \% indicated any string,
 To count the number of rows use count(*) in the SELECT clause. To count the number of values not null in a specific column use count(column1,column2) in the SELECT clause. Some of the other operations that can be done in the SELECT clause are AVG, SUM, MIN, MAX.\newline
 This operations are heavily used together with GROUP BY. GROUP BY  is useful to aggregate the data, if we want to calculate the average income for each genre we do it as follows:
 \begin{lstlisting}
-	SELECT genre, avg(income)
+	SELECT genre, AVF(income)
 	FROM Authors
 	GROUP BY genre;
 \end{lstlisting}
@@ -434,6 +434,7 @@ We can give also the projected columns an alias, here is an example where we cou
 	WHERE Books.id = BooksAuthors.author_id
 	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
 \end{lstlisting}
+\pagebreak
 \subsection{SET operations}
 We can intersect two or more tables using the INTERSECT clause, it acts as the normal intersection between two sets where sets are are the rows. 
 It is rarely used because can be replaced with a more complex WHERE condition (for example using AND). 
@@ -491,6 +492,32 @@ One command of the set operation that is used in practice is the EXCEPT which is
 The code above will return us all the author with income$>$90000 and the last name not containing an o.
 
 \subsection{Nested Queries}
+We can replace some of the SET operation with nested queries:\newline
+To remove he intersect we can proceed as follows:
+\begin{lstlisting}
+SELECT last_name, first_name
+FROM Authors
+WHERE Income > 90000 AND last_name IN 
+	(SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%')
+\end{lstlisting}
 
-
+To remove the Except:
+\begin{lstlisting}
+SELECT last_name, first_name
+FROM Authors
+WHERE Income > 90000 AND last_name NOT IN 
+	(SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%')
+\end{lstlisting}
+There are also other uses of the nested queries for example finding the author with maximum income:
+\begin{lstlisting}
+	SELECT last_name, first_name
+	FROM Authors A1
+	WHERE A1.income >= ALL (SELECT A2.income
+										FROM Authors)
+\end{lstlisting}
+Another command that can be used after WHERE is the ANY instead of ALL in this case the result will be every row that satisfies the condition for at least one other row of the nested query, in case of all the result is the set of rows that satisfies the condition for all of the rows in the nested query.
 \end{document}
