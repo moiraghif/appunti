@@ -3,7 +3,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref} %clickable stuffs
 \usepackage{mathtools}
-\usepackage[margin=0.65in]{geometry}
+\usepackage[margin=1.3in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
@@ -50,7 +50,7 @@ Aspetti positivi:
 \item Schema rigido.
 \item Sfrutta le proprietà ACID :
   \begin{itemize}
-  \item Atomicity: l'operazione è \textit{atomica}, ovvero o avviene per intero (COMMIT) o restituisce un errore e il database ritorna alla forma iniziare (ROLLBACK); ad esempio se si aggiornano i dati o sono aggiornati tutti o non è aggiornato nessuno.
+  \item Atomicity: l'operazione è \textit{atomica}, ovvero o avviene per intero (\texttt{COMMIT}) o restituisce un errore e il database ritorna alla forma iniziare (\texttt{ROLLBACK}); ad esempio se si aggiornano i dati o sono aggiornati tutti o non è aggiornato nessuno.
   \item Consistency: i nuovi dati inseriti rispecchiano lo schema prestabilito (o l'operazione di inserimento fallisce);
   \item Isolation: le singole operazioni non influiscono sulle altre; per fare questo il database costruisce una coda di esecuzione dei processi, così lo stato del database non muta durante l'esecuzione di una singola richiesta;
   \item Durability: la persistenza del file è garantita (virtualmente a tempo indefinito) anche in caso di crash del sistema; per ottenere questo risultato sono utilizzati backup e log files.
@@ -123,91 +123,76 @@ I modelli NoSQL si dividono in macrocategorie:
 \item Graph based (Neo4J, FlockDB): sfrutta il concetto matematico di grafo per archiviare i dati come nodi ed esaltare i legami tra di essi costruendo archi; è difficile da scalare per quanto riguarda l'immagazzinamento (è difficile tagliare un grafo) ma è molto rapido nelle query.
 \end{enumerate}
 
-La ridondanza dei dati facilita le ricerche pur aumentando le dimensioni dei dati stessi: si sacrifica spazio di archiviazione a favore della velocità di esecuzione.
+% La ridondanza dei dati facilita le ricerche pur aumentando le dimensioni dei dati stessi: si sacrifica spazio di archiviazione a favore della velocità di esecuzione.
+La semplicità del modello permette di archiviare un maggior numero di dati:
 \begin{center}
 	\includegraphics[scale=0.4]{IMAGE1.jpg}
 \end{center}
 
 
-
-\subsubsection{Document Based\cite{MongoDB}}
-MongoDB è -come già affermato- un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono storati in formato BSON (Binary JSON) e l'accesso ai dati stessi è possibile grazie all'esistenza di indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere la funzione join. Le principali differenze sono le seguenti:
+\subsubsection{Document Based (MongoDB).}
+MongoDB è, come già affermato, un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono archiviati in formato BSON (Binary JSON) e letti tramite indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere operazioni di join. Le principali differenze sono le seguenti:
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
+
+% poco chiaro
 Nel caso in cui si verifichi un massiccio caricamento di dati, si potrebbe decidere di apportare alcune modifiche al processo per fissarlo:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
-	\item
-	Disabilitare la scrittura su un file di tipo log
+\item Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
+\item Disabilitare la scrittura su un file di tipo log
 \end{itemize}
-Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà persa per sempre.
+Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà definitiva.
 \newline
-Per grandi dataset risulta molto utile l'utilizzo di alcune strutture aggiuntive chiamate indici: simili agli indici dei libri, rappresentano un modo più veloce per recuperare informazioni.
-Potrebbe essere richiesto più tempo durante la fase di inserimento degli stessi indici, ma questi renderanno l'esecuzione delle query molto più rapida. 
-Un indice primario (basic one) è sempre quello definito per l'id. 
 
-Ma come funziona esattamente?
-Fondamentalmente, senza un indice, Mongo si comporterebbe come un semplice scansionatore di tabelle (esattamente come fa SQL). Dovrebbe di conseguenza cercare per tutto il ``libro'' al fine di trovare il risultato della query. L'analogia con il libro si esplicita al meglio nel seguente meccanismo: se non avessimo l'indice nei nostri libri, saremmo costretti a leggere il libro interamente fino a che non troviamo il paragrafo o il capitolo da cui siamo intenzionati a partire nella lettura. 
-L'indicizzazione evita proprio questo problema (che risulta ancora più complicato se il database è ampio), fornendo una lista ordinata che indica il contenuto.
-Dal momento che l'indicizzazione rallenta molto le modifiche, sarebbe necessario scegliere solamente una coppia di indici per ogni collection; la parte difficile è decidere quali. MongoDB dà, di default, un limite di 64 indici!
+Per dataset di grandi dimensioni risulta molto utile l'utilizzo di indici: simili agli indici dei libri (o delle tabelle SQL), rappresentano un modo più veloce per recuperare informazioni.
+L'uso di indici rallenta l'inserimento di nuovi dati (perché appunto devono essere indicizzati) ma velocizza notevolmente le ricerche. Il campo "\_id" è sempre indicizzato.
+Senza un indice, MongoDB analizza a tappeto tutti i documenti (esattamente come SQL). Metaforicamente dovrebbe leggere ogni volta tutto il libro perrecuperare l'informazione.
+L'indicizzazione evita proprio questo problema (che aumenta con le dimensioni della collection), organizzando il contenuto in una lista ordinata.
+Dato che l'indicizzazione rallenta le modifiche, è buona norma utilizzare solamente un paio di indici per ogni collection; il limite di MongoDB è di 64 indici.
 
+%poco chiaro
 L'aggregazione utilizza pipeline e opzioni.
 La pipeline di aggregazione avvia l'elaborazione dei documenti della raccolta (collection) e passa il risultato alla pipeline successiva per ottenere risultati, ad esempio: \ $ match e \ $ group.
 Possiamo utilizzare lo stesso operatore in diverse pipeline.
 
-Per molte ragioni (principalmente commerciali), Mongo offre anche un'interfaccia SQL; abbiamo bisogno del connettore BI (Business Intelligence): genera lo schema relazionale e usa tale schema per accedere ai dati.
+Per ragioni commerciali, MongoDB offre anche un'interfaccia SQL tramite il connettore BI (Business Intelligence): genera lo schema relazionale e lo usa per accedere ai dati.
 
-\subsubsection{GraphDB\cite{Neo4J}}
 
-Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni degli stessi nodi. 
-Ha un sacco di applicazioni, come: social media, raccomandazioni, geo, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, autorizzazione e controllo degli accessi.
-\newline
-Il modello a grafo di proprietà con etichette (labeled-property graph model) ha le seguenti caratteristiche:
-
+\subsubsection{GraphDB (Neo4J).}
+Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni tra gli stessi nodi.
+Ha un sacco di applicazioni, come: social media, raccomandazioni, luoghi geografici, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, sistemi di autorizzazione e controllo degli accessi. \newline
+Il modello a grafo con etichette (labeled-property graph model) ha le seguenti caratteristiche:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Contiene \textbf{nodi} e \textbf{relazioni};
-	\item
-	I nodi contiene \textbf{proprietà} (chiave : coppie di valori);
-	\item
-	I nodi possono essere etichettati con una o più \textbf{etichette};
-	\item
-	Le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
-	\item
-	Come i nodi, anche le relazioni possono avere delle proprietà.
-	\item
-	%magari migliorare questa parte (Sicuramente fa pena nella lista)
-	Le relazioni possono essere \textbf{fine-grained} or \textbf{generic}: \\Consideriamo il caso della relazione $Address$, si può fare distinzione tra:
-	\begin{itemize}
-		
-		 \item le relazioni fine-grained come \texttt{HOME$\_$ADDRESS} o \texttt{WORK$\_$ADDRESS} o \texttt{DELIVERY$\_$ADDRESS} 
-		 \item oppure potremmo scegliere solamente \texttt{ADDRESS} e specificare di quale tipo di indirizzo si tratta \texttt{ADDRESS\{type:`home'\}}. Questo metodo prende il nome di generic relationship. 
-	\end{itemize}		 
-	In genere si preferisce il generic, specialmente per quei casi in cui bisogna trovare tutti gli indirizzi di un cliente: tutto quello che basta fare è trovare la relazione \texttt{ADDRESS}, mentre nel caso del fine-grained sarebbe necessario trovare uno a uno tutti i tipi di indirizzi (immaginate di avere 100 tipi di indirizzo!). Con l'altro metodo (generic) per trovare il \texttt{DELIVERY$\_$ADDRESS} tutto ciò che bisogna fare è identificare \texttt{ADDRESS\{type:`delivery'\}}. 
-
+\item contiene \textbf{nodi} e \textbf{relazioni};
+\item i nodi contengono \textbf{proprietà} (coppie chiave-valore);
+\item i nodi possono essere etichettati con una o più \textbf{etichette};
+\item le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
+\item le relazioni, come i nodi, possono avere delle proprietà (e queste possono avere anche valori).
 \end{itemize}
-Un database a grafo (Graph Database, GD) può usare sia un motore di archiviazione nativo o non-nativo (native or non-native storage) che un motore di elaborazione (processing engine).
-\newline
-L'archiviazione a grafo di tipo nativo è ottimizzata per la gestione a grafo nativa, mentre l'archiviazione a grafo di tipo non nativo tratta i dati in un modello non basato su grafico pur continuando a supportare un linguaggio di query grafico. Esempi sono: Relational, Object oriented DB, Wide Column. 
-In un modello relazionale, per esempio, in una join bomb si può utilizzare un grafo per connettere due tabelle. 
-Il problema con i database relazionali e la maggior parte dei database NoSQL è la mancanza di relazioni.
-Inoltre in SQL le joining tables aggiungono un livello di complessità in più, e specialmente nel caso di tabelle scarse con colonne nulle l'operazione richiede un controllo speciale nel codice.
-Nel caso di un mercato, solo per vedere cosa ha comprato un cliente, dobbiamo fare un sacco di joins costose sul cliente che ha comprato uno specifico prodotto con altri prodotti per il sistema di raccomandazione. 
-For the NoSQL DBs, whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model. Indeed the aggregation is a costly operation since it doesn't exploit index free adjacency (the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
-other interesting queries. 
+% magari migliorare questa parte (Sicuramente fa pena nella lista)
+% l'ho tolta dall'elenco e rivista un po' :)
+Le proprietà delle relazioni possono essere assegnate con un criterio \textbf{fine-grained} o \textbf{generic}. Considerando il caso della relazione \texttt{ADDRESS}, si può fare distinzione tra:
+\begin{itemize}
+\item fine-grained: \texttt{HOME\_ADDRESS}, \texttt{WORK\_ADDRESS} o \texttt{DELIVERY\_ADDRESS} (sono tutte etichette diverse);
+\item generic: \texttt{ADDRESS:home}, \texttt{ADDRESS:work} o \texttt{ADDRESS:delivery} (l'etichetta è sempre \texttt{ADDRESS}, con un attributo che ne indica il tipo).
+\end{itemize}
+Generalmente è preferito il secondo metodo per la minore complessità nello scrivere query (come ad esempio elencare tutti gli indirizzi di una data persona).
 
-In a native graph storage the attributes and nodes and the referenced nodes are stored together, to optimize the graph processing engine. 
-Performing a query the graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the other SQL and NoSQL models will suffer in performance speed with the increase of data. 
-Moreover we can add more data/nodes and relationship without disturbing the already existing model.
-\newline
-The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB, this makes sure that the retrieval is faster but it comes at a cost: the efficiency of queries that do not use graph traversal, for example the writing time etc.
-\newline
-It's important to note that it's neither good nor bad to use native or non-native engine, simply one needs to make a choice based on his/her needs. % for example my DB is based on a non-graph backend (like MySQL) so it would be useful to use a non native graph storage. 
-\newline
+Un database a grafo può usare un motore di archiviazione nativamente a grafo o usare altri sistemi di archiviazione. Il primo ottimizza la gestione de grafi, mentre il secondo archivia i dati in formato tabellare o tramite documenti per poi interrogare il database come se fosse un grafo.
+Il metodo tabellare per esempio archivia le relazioni su una tabella relazionale che può essere interrogata tramite \textit{join bomb} (join con se stessa), tuttavia questo sistema degenera in fretta all'aumentare della distanza tra due nodi.
+
+Il database a grafo risolve quindi il problema dei database relazionali (e di molti altri database NoSQL) a gestire le relazioni interne ai dati.
+Infatti anche altri modelli NoSQL, indipendentemente dal modello in uso, soffrono perdite di prestazioni quando sono effettuate aggregazioni di dati (soprattutto non indicizzati) dal momento che i collegamenti non sono nativi nel modello e manca il concetto di prossimità.
+Si può tentare di risolvere il problema con dati annidati tra di loro ma la struttura del database risulterebbe eccessivamente complessa e non permetterebbe altre query.
+Il DBA in base ai suoi bisogni (integrazione con altre applicazioni) può benissimo decidere di usare un database a grafo con una gestione dei dati non nativa senza che questo impatti sulla qualità del prodotto finale.
+
+In a native graph storage the attributes, the nodes and the referenced nodes are stored together to optimize the graph processing engine. 
+Performing a query in a graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the Relational Model and other NoSQL models will suffer in performance speed with the increase of data (often in a way more than linear). 
+Moreover it is possible to add more nodes and relationship without disturbing the already existing model, even if datas do not share the same structure. \newline
+The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB; this makes sure that the retrieval is faster but it comes at a cost: the time efficiency of queries that do not use graph traversal, for example I/O operation, is increased. \newline
+
+% sono arrivato qui (@moiraghif)
 Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
 The properties of the cypher language are:
 
