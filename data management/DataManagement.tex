@@ -28,127 +28,74 @@
 %\tableofcontents %maybe would be nice to add?
 %Some one commented it (MoMo) so I thought it was not necessary
 
-\section{Data Modelling}
+\section{Data Modelling.}
 Il data modelling è uno strumento per descrivere parte del mondo reale che ci permette di:
 \begin{itemize}[noitemsep]
-\item Immagazzinare dati (write data)
-\item Interrogare i dati (read data)
+\item immagazzinare dati (write data);
+\item interrogare i dati (read data).
 \end{itemize}
-Un data model è composto prima di tutto da un modello concettuale (teoria) e poi da un linguaggio (anche grafico a volte) per descrivere e interrogare i dati. Un data model è sempre disponibile in un databasse management system che supporta la semantica del modello. Alcune delle caratteristiche più importanti di un data model sono:
+Un data model è composto da un modello concettuale (teoria) e da un linguaggio (anche grafico a volte) per descrivere e interrogare i dati. Un data model è sempre disponibile in un database management system (DBMS) che supporta la semantica del modello. Alcune delle caratteristiche più importanti di un data model sono:
 \begin{itemize}[noitemsep]
 \item Machine readability
 \item Expressive power
+  %
+  % poco chiaro
 \item Semplicità? Flessibilità? Standardizzazione?
 \end{itemize}
 Il data model più famoso  e conosciuto è il modello relazionale.
-\subsection{Relational model}
 
-Aspetti positivi :
-
+\subsection{Relational model.}
+Aspetti positivi:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Molto rigido come regole.
-	\item
-	Il RDBMS sfrutta le proprietà ACID :
-	\begin{itemize}
-		
-		\item
-		A : Atomicity : serve affinché l'operazione o avviene su tutti i dati o non avviene, ad esempio se vi è un aggiornamento nei dati questo aiuta affinché i dati non vengano aggiornati solo parzialmente.
-		\item
-		C : Consistency : I dati o il nuovo dato che viene aggiunto rispetta lo schema prestabilito. E se si viola la consistenza con un'operazione tutta l'operazione fallisce.
-		\item
-		I : Isolation : gestisce come l'integrità delle transazioni sono viste dall'utente. Inoltre garantisce che durante un'operazione (query) non vengano svolte altre operazioni, e che lo stato del database venga modificato solo prima della fine della query.
-		\item
-		D : Durability : garantisce che una transazione effettuata sopravvivrà per sempre, anche se il sistema crasha. Dovuto grazie ai server di
-		backup e log files.
-	\end{itemize}
+\item Schema rigido.
+\item Sfrutta le proprietà ACID :
+  \begin{itemize}
+  \item Atomicity: l'operazione è \textit{atomica}, ovvero o avviene per intero (COMMIT) o restituisce un errore e il database ritorna alla forma iniziare (ROLLBACK); ad esempio se si aggiornano i dati o sono aggiornati tutti o non è aggiornato nessuno.
+  \item Consistency: i nuovi dati inseriti rispecchiano lo schema prestabilito (o l'operazione di inserimento fallisce);
+  \item Isolation: le singole operazioni non influiscono sulle altre; per fare questo il database costruisce una coda di esecuzione dei processi, così lo stato del database non muta durante l'esecuzione di una singola richiesta;
+  \item Durability: la persistenza del file è garantita (virtualmente a tempo indefinito) anche in caso di crash del sistema; per ottenere questo risultato sono utilizzati backup e log files.
+  \end{itemize}
 \end{enumerate}
-Il RDBMS esiste già da 35 anni quindi è ben sviluppato e molto conosciuto, molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Gli aspetti limitanti sono:
-
+Il modello relazionale esiste da ormai 35 anni, è ben sviluppato e molto conosciuto: molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Tuttavia presenta numerosi svantaggi:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	un attributo può avere solo un valore.
-	\item
-	non è compatibile con molti linguaggi moderni.
-	\item
-	molto rigido come linguaggio
-	\item
-	non accetta i loop.
-	\item
-	Difficile modificare le tabelle.
-	\item
-	La performance.
+\item un attributo può avere solo un valore;
+\item non è compatibile con i moderni linguaggi di programmazione ad oggetti;
+\item il linguaggio è molto rigido;
+\item non permette loop nei dati;
+\item la modifica di tabelle esistenti è difficile e dispendiosa;
+\item è poco prestante in alcuni contesti.
 \end{enumerate}
 Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Numero delle righe
-	\item
-	Tipo di operazione
-	\item
-	Algoritmo scelto
-	\item
-	La struttura dati scelta
+\item numero delle righe;
+\item tipo di operazione;
+\item algoritmo scelto;
+\item struttura dei dati.
 \end{itemize}
 
-Per Scaling Up intendiamo potenziare le macchine, mentre per Scaling out intendiamo aggiungere macchine, per i RDBMS è più facile Scale up che Scale out. 
-Il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
-Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il guadagno complessivo sul tempo di risposta scende asintoticamente.
+Per \textit{Scaling Up} si intende potenziare la singola macchina, mentre per \textit{Scaling out} si intende aggiungere macchine in una rete di calcolatori; quest ultimo è molto difficile da effettuare su un database di tipo relazionale.
+Il costo è un altro dei problemi: l'acquisto di macchine di una certa potenza è molto alto e non garantisce un aumento lineare delle prestazioni, che anzi scendono asintoticamente.
 \newline
-\subsection{NoSQL}
-Di fronte a questi svantaggi sorge una nuova "tecnologia": i NoSQL(Not Only SQL).
-Le proprietà dei NoSQL sono:
 
+\subsection{NoSQL.}
+Per risolvere i problemi dei database relazionali, nasce un movimento informatico chiamato NoSQL (\textit{Not Only SQL}) che non rifiuta il modello ma propone approcci alternativi. I database di tipo NoSQL, pur essendo molto diversi tra di loro, hanno caratteristiche comuni:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Non hanno nessuno schema o modello prefissato
-	\begin{itemize}
-		
-		\item
-		A differenza dei modelli SQL nei quali bisogna prima definire il modello, nel caso NoSQL non esiste un modello rigido.
-		\item
-		Per aggiungere un nuovo attributo non vi è bisogno di cambiare il modello a differenza dei SQL.
-		\item
-		I modelli NoSQL seguono l'assunzione del mondo aperto (ciò che non è vero è sconosciuto, ma non per forza falso) mentre SQL segue l'assunzione del mondo chiuso (solo ciò che è noto come vero è vero)
-	\end{itemize}
-
-	\def\labelenumi{\arabic{enumi}.}
-	 
-	\item
-	Segue il teorema CAP:
-	\begin{itemize}
-		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie (infatti si possono soddisfare solo 2 di esse):
-		\begin{enumerate}		
-			\item
-			\textbf{(C)}onsistency(Coerenza) : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
-			\item
-			\textbf{(A)}vailability(Disponibilità) : La garanzia che ogni richiesta ottenga una risposta su ciò che è fallito e ciò che ha avuto successo. Se è assente aspetterò per lunghi tempi senza ricevere una risposta.
-			\item
-			\textbf{(P)}artition Tolerance(Tolleranza sulle partizioni) : Il sistema funziona anche dopo aver perso un numero arbitrario di pezzi del sistema.
-		\end{enumerate}
-		\item
-		I sistemi RDBMS sono dei software CA, ed è possibile creare dei modelli RDBMS basati sul CAP
-		\item
-		I sistemi NoSQL sono dei sistemi solitamente CP o AP.
-		\item
-		Uno preferisce la disponibilità sulla coerenza, perché è meglio vedere un vecchio dato non coerente che vedere un errore di fallimento di caricamento dei dati.
-	\end{itemize}
-
-	\item
-	Segue Principio BASE:
-	\begin{itemize}
-		
-		\item
-		Basic Availability : completare una richiesta anche se parzialmente consistente, ad esempio nel caso di fallimento. E' possibile fare ciò grazie al fatto che usa server sparsi ovunque con un grado di	replicazione del database e in caso di malfunzionamento del database richiesto non tutto il sistema cede la disponibilità.
-		\item
-		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente, cioè i dati possono avere schemi diversi.
-		\item
-		Eventual consistency : I sistemi NoSQL richiedono che a un certo punto i dati convergeranno a uno stato consistente (non si fa garanzie sul quando), e quindi prima di allora ho una consistenza ritardata cioè prima del momento dello stato consistente posso ricevere come risposta qualunque valore come risposta di una query.
-	\end{itemize}
+\item non hanno nessuno schema o modello prestabilito: la costruzione di un modello rigido per la registrazione dei dati è considerata una limitazione da superare, pertanto per aggiungere un nuovo attributo non è necessario modificare l'intero modello;
+\item seguono l'assunzione del mondo aperto: ciò che non è vero è sconosciuto, ma non per forza falso, mentre SQL segue l'assunzione del mondo chiuso (è vero solo ciò che è noto lo sia).
+\item seguono il teorema CAP: è impossibile per un sistema informatico distribuito (cioè un sistema interconnesso la cui comunicazione avviene solo attraverso messaggi) fornire simultaneamente tutte e tre le proprietà (si possono soddisfare solamente 2):
+  \begin{enumerate}
+  \item \textbf{(C)}onsistency (Coerenza): tutti i nodi vedono gli stessi dati allo stesso istante; se è assente allora una soluzione è mostrare il dato precedente alla modifica e non quello più recente.
+  \item \textbf{(A)}vailability (Disponibilità): il ricevere una risposta in un tempo determinato per ogni richiesta (fallita o meno); se assente non si riceve risposta in caso di fallimento della richiesta;
+  \item \textbf{(P)}artition Tolerance (Tolleranza al partizionamento): il sistema funziona anche con dati frammentanti su una rete di calcolatori;
+  \end{enumerate}
+  Il modello relazionale ha le proprietà CA, mentre i NoSQL generalmente sono CP o AP.
+  Si può preferire la disponibilità alla coerenza quando è preferibile ottenere dati non aggiornati piuttosto che messaggi di errore.
+\item seguono il principio BASE (ovviamente, il contrario di ACID):
+  \begin{itemize}
+  \item Basic Availability: la consistenza può anche non essere garantita interamente, mostrando solamente una parte dei dati realmente disponibili (è il tipico caso di crash di un nodo che quindi non può trasmettere i dati al resto della rete);
+  \item Soft State: i dati possono avere schemi diversi (a differenza del modello relazionale);
+  \item Eventual Consistency: i sistemi NoSQL richiedono che, ad un certo punto, i dati convergano a uno stato consistente senza specificare quando; prima del raggiungimento della consistenza si possono avere valori non veritieri.
+  \end{itemize}
 \end{enumerate}
 
 
@@ -158,29 +105,25 @@ Le proprietà dei NoSQL sono:
 \hline
 ACID & BASE \\
 \hline
-• Forte Coerenza & • Coerenza debole\\
-• Poca disponibilità & • Disponibilità è la cosa principale\\
+• Forte Coerenza & • Coerenza debole \\
+• Poca disponibilità & • Disponibilità come priorità \\
 • Pessimo "Multitasking" & \quad e sacrifica per questo (CAP)\\
-• Complesso & • Veloce e Semplice\\
+• Rigido & • Veloce e Semplice \\
 \hline
-
 \end{tabular}
 \end{center}
-Esempi e tipologie di modelli NoSQL :
 
+I modelli NoSQL si dividono in macrocategorie:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Key Value (Dynamo, Voldemort, Rhino DHT) : Sono delle tabelle con	chiavi che si riferiscono/puntano a un certo dato, è molto simile a Document based. 
-	\item
-	Column family (Big Table, Cassandra) : In grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato ragruppato in colonna.
-	\item
-	Document based (CouchDB, MongoDB) : Di solito salvati con file JSON, salvati come una \textless{}chiave -- valore\textgreater{}. E' facile ricercare dati in questo formato. JSON è basato su due strutture :1) chiave -- valore per gli oggetti e 2) lista ordinata di elementi.
-	\item
-	Graph based (Neo4J, FlockDB) : Uso i vertici/nodi e archi per
-	rappresentare i dati e legami tra di loro. E' difficile fare scaling	con i grafi per quanto riguarda l'immagazzinamento ma è molto rapido nelle query.
+\item Key Value (Dynamo, Voldemort, Rhino DHT): sono delle tabelle con chiavi che si riferiscono (o puntano) a un certo dato, è molto simile ai Document based.
+  %
+  % poco chiaro :/
+\item Column family (Big Table, Cassandra): in grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato raggruppato in colonna.
+\item Document based (CouchDB, MongoDB): di solito salvati con file JSON, contenente un insieme ordinato di coppie \textless{}chiave -- valore\textgreater{}; è facile ricercare dati in questo formato;
+\item Graph based (Neo4J, FlockDB): sfrutta il concetto matematico di grafo per archiviare i dati come nodi ed esaltare i legami tra di essi costruendo archi; è difficile da scalare per quanto riguarda l'immagazzinamento (è difficile tagliare un grafo) ma è molto rapido nelle query.
 \end{enumerate}
-Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
+
+La ridondanza dei dati facilita le ricerche pur aumentando le dimensioni dei dati stessi: si sacrifica spazio di archiviazione a favore della velocità di esecuzione.
 \begin{center}
 	\includegraphics[scale=0.4]{IMAGE1.jpg}
 \end{center}
