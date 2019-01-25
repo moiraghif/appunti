@@ -7,7 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
-%\MakeOuterQuote{"} %almost there, maybe next time!
+\MakeOuterQuote{"} %almost there, i removed `` everywhere to make it work better! D.
 \usepackage{enumitem}
 \usepackage[backend=biber]{biblatex} % pls uncomment me (Maurino's english style) but... what's the actual scope here?
 %It was to print the bibliography, just to be give credit to the author of the original content but I guess we could leave it in a separate file biblio and print it here
@@ -99,7 +99,7 @@ Il costo è un altro dei problemi, installare il software richiede un costo molt
 Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il guadagno complessivo sul tempo di risposta scende asintoticamente.
 \newline
 \subsection{NoSQL}
-Di fronte a questi svantaggi sorge una nuova ``tecnologia'': i NoSQL(Not Only SQL).
+Di fronte a questi svantaggi sorge una nuova "tecnologia": i NoSQL(Not Only SQL).
 Le proprietà dei NoSQL sono:
 
 \begin{enumerate}[noitemsep]
@@ -160,7 +160,7 @@ ACID & BASE \\
 \hline
 • Forte Coerenza & • Coerenza debole\\
 • Poca disponibilità & • Disponibilità è la cosa principale\\
-• Pessimo “Multitasking” & \quad e sacrifica per questo (CAP)\\
+• Pessimo "Multitasking" & \quad e sacrifica per questo (CAP)\\
 • Complesso & • Veloce e Semplice\\
 \hline
 
@@ -182,81 +182,78 @@ Esempi e tipologie di modelli NoSQL :
 \end{enumerate}
 Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 \begin{center}
-	\includegraphics[scale=0.5]{IMAGE1.jpg}
+	\includegraphics[scale=0.4]{IMAGE1.jpg}
 \end{center}
 
 
 
 \subsubsection{Document Based\cite{MongoDB}}
-MongoDB is -as already mentioned- a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
-
+MongoDB è -come già affermato- un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono storati in formato BSON (Binary JSON) e l'accesso ai dati stessi è possibile grazie all'esistenza di indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere la funzione join. Le principali differenze sono le seguenti:
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
-In case of a massive data upload one might decide to do a few changes in the process to fasten  it up:
-
+Nel caso in cui si verifichi un massiccio caricamento di dati, si potrebbe decidere di apportare alcune modifiche al processo per fissarlo:
 \begin{itemize}[noitemsep]
 	 
 	\item
-	Disable the acknowledgment(ack) of the data, which is a signal passed between communicating processes, computers or devices, to signify acknowledgment or receipt of message, as part of a communications
-	protocol.
+	Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
 	\item
-	Disable the writing on a log file
+	Disabilitare la scrittura su un file di tipo log
 \end{itemize}
-One must be attentive when doing so because any loss will not be registered and lost forever.
+Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà persa per sempre.
 \newline
-For large data-sets it is useful to use some additional structures called indexes: those are similar to the book indexes and act as a faster way to retrieve information.
-They might require more time during the insertion but makes the queries faster later. 
-One primary index (basic one) is always the defined for the id. 
+Per grandi dataset risulta molto utile l'utilizzo di alcune strutture aggiuntive chiamate indici: simili agli indici dei libri, rappresentano un modo più veloce per recuperare informazioni.
+Potrebbe essere richiesto più tempo durante la fase di inserimento degli stessi indici, ma questi renderanno l'esecuzione delle query molto più rapida. 
+Un indice primario (basic one) è sempre quello definito per l'id. 
 
-How does it exactly works?
-Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result. The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
-Indexing avoids this problem (more problematic if the database is large), providing an ordered list that points it's content.
-Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. MongoDB gives, by default, a limit of 64 indexes!
+Ma come funziona esattamente?
+Fondamentalmente, senza un indice, Mongo si comporterebbe come un semplice scansionatore di tabelle (esattamente come fa SQL). Dovrebbe di conseguenza cercare per tutto il ``libro'' al fine di trovare il risultato della query. L'analogia con il libro si esplicita al meglio nel seguente meccanismo: se non avessimo l'indice nei nostri libri, saremmo costretti a leggere il libro interamente fino a che non troviamo il paragrafo o il capitolo da cui siamo intenzionati a partire nella lettura. 
+L'indicizzazione evita proprio questo problema (che risulta ancora più complicato se il database è ampio), fornendo una lista ordinata che indica il contenuto.
+Dal momento che l'indicizzazione rallenta molto le modifiche, sarebbe necessario scegliere solamente una coppia di indici per ogni collection; la parte difficile è decidere quali. MongoDB dà, di default, un limite di 64 indici!
 
-The aggregation uses pipeline and options. 
-The aggregation pipeline starts processing the documents of the collection and passes the result to the next pipeline in order to get result for example: \$match and \$group. 
-We can use the same operator in different pipelines.
+L'aggregazione utilizza pipeline e opzioni.
+La pipeline di aggregazione avvia l'elaborazione dei documenti della raccolta (collection) e passa il risultato alla pipeline successiva per ottenere risultati, ad esempio: \ $ match e \ $ group.
+Possiamo utilizzare lo stesso operatore in diverse pipeline.
 
-For many (mainly commercial) reasons, Mongo offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
+Per molte ragioni (principalmente commerciali), Mongo offre anche un'interfaccia SQL; abbiamo bisogno del connettore BI (Business Intelligence): genera lo schema relazionale e usa tale schema per accedere ai dati.
 
 \subsubsection{GraphDB\cite{Neo4J}}
 
-A graph is a collection of nodes and edges which represents their relations. 
-It has a lot of applications such as: social media, recommendations, geo, logistics network, financial transaction graphs (for fraud detection), master data management, bioinformatics, authorization and access control.
+Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni degli stessi nodi. 
+Ha un sacco di applicazioni, come: social media, raccomandazioni, geo, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, autorizzazione e controllo degli accessi.
 \newline
-The labeled property graph model has the following characteristics:
+Il modello a grafo di proprietà con etichette (labeled-property graph model) ha le seguenti caratteristiche:
 
 \begin{itemize}[noitemsep]
 	 
 	\item
-	It contains \textbf{nodes} and \textbf{relationships};
+	Contiene \textbf{nodi} e \textbf{relazioni};
 	\item
-	Nodes contains \textbf{properties} (key : value pairs);
+	I nodi contiene \textbf{proprietà} (chiave : coppie di valori);
 	\item
-	Nodes can be labeled with one or many \textbf{labels};
+	I nodi possono essere etichettati con una o più \textbf{etichette};
 	\item
-	Relationships are named and directed, with a start and end node;
+	Le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
 	\item
-	Like nodes, also Relationships can contain properties.
+	Come i nodi, anche le relazioni possono avere delle proprietà.
 	\item
 	%magari migliorare questa parte (Sicuramente fa pena nella lista)
-	The relationship can be \textbf{fine-grained} or \textbf{generic}: \\let's consider the $Address$ relationship case: we can distinct between:
+	Le relazioni possono essere \textbf{fine-grained} or \textbf{generic}: \\Consideriamo il caso della relazione $Address$, si può fare distinzione tra:
 	\begin{itemize}
 		
-		 \item fine-grained relationship like \texttt{HOME$\_$ADDRESS} or \texttt{WORK$\_$ADDRESS} or \texttt{DELIVERY$\_$ADDRESS} 
-		 \item or we could choose only \texttt{ADDRESS} and specify which kind of address it is \texttt{ADDRESS\{type:`home'\}}. This method is called generic relationship. 
+		 \item le relazioni fine-grained come \texttt{HOME$\_$ADDRESS} o \texttt{WORK$\_$ADDRESS} o \texttt{DELIVERY$\_$ADDRESS} 
+		 \item oppure potremmo scegliere solamente \texttt{ADDRESS} e specificare di quale tipo di indirizzo si tratta \texttt{ADDRESS\{type:`home'\}}. Questo metodo prende il nome di generic relationship. 
 	\end{itemize}		 
-	Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the \texttt{ADDRESS} relationship, whereas in the fine-grained case I would need to find one by one all kind of addresses (just	imagine if we had 100 types of addresses!). On the other hand to find the \texttt{DELIVERY$\_$ADDRESS} all I need to do is to identify the \texttt{ADDRESS\{type:`delivery'\}}. 
+	In genere si preferisce il generic, specialmente per quei casi in cui bisogna trovare tutti gli indirizzi di un cliente: tutto quello che basta fare è trovare la relazione \texttt{ADDRESS}, mentre nel caso del fine-grained sarebbe necessario trovare uno a uno tutti i tipi di indirizzi (immaginate di avere 100 tipi di indirizzo!). Con l'altro metodo (generic) per trovare il \texttt{DELIVERY$\_$ADDRESS} tutto ciò che bisogna fare è identificare \texttt{ADDRESS\{type:`delivery'\}}. 
 
 \end{itemize}
-A Graph Database (GD) can use either the native or non-native storage and processing engine.
+Un database a grafo (Graph Database, GD) può usare sia un motore di archiviazione nativo o non-nativo (native or non-native storage) che un motore di elaborazione (processing engine).
 \newline
-Native Graph Storage is optimized for the native graph management, whereas the non native graph storage treats the data in non graph based model while still supporting a graph query language. Examples: Relational, Object oriented DB, Wide Column. 
-In a relational for example in a join bomb we can use a graph to connect two tables. 
-The problem with relational DBs and most of NoSQL DBs is the lack of relationships.
-Moreover in SQL joining tables adds more complexity, and especially in case of sparse table with null-able column the operation requires special checking in the code.
-In the case of a market, just to see what a customer bought, we need to do a lot of expensive joins on the customers that buy a specific product with other products for the recommendation systems. 
+L'archiviazione a grafo di tipo nativo è ottimizzata per la gestione a grafo nativa, mentre l'archiviazione a grafo di tipo non nativo tratta i dati in un modello non basato su grafico pur continuando a supportare un linguaggio di query grafico. Esempi sono: Relational, Object oriented DB, Wide Column. 
+In un modello relazionale, per esempio, in una join bomb si può utilizzare un grafo per connettere due tabelle. 
+Il problema con i database relazionali e la maggior parte dei database NoSQL è la mancanza di relazioni.
+Inoltre in SQL le joining tables aggiungono un livello di complessità in più, e specialmente nel caso di tabelle scarse con colonne nulle l'operazione richiede un controllo speciale nel codice.
+Nel caso di un mercato, solo per vedere cosa ha comprato un cliente, dobbiamo fare un sacco di joins costose sul cliente che ha comprato uno specifico prodotto con altri prodotti per il sistema di raccomandazione. 
 For the NoSQL DBs, whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model. Indeed the aggregation is a costly operation since it doesn't exploit index free adjacency (the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
 other interesting queries. 
 
@@ -354,13 +351,18 @@ The Hash is a mathematical function that assign to a given key it's value, usual
 There might a problem with the conflicts but they can be managed. 
 Hashing also enables items in the DB to be retrieved quickly. 
 The hash table can be easily distributed in a network, it is managed in pile so we can have a key(saved in the pile) $x$ saved in a server and it's succ(x) stored in a different server, thus scaling out really fast. 
+One reason to use hashing is so that we are able to
+evenly distribute the data across a certain number of slots. If we want to hash any number into 10 buckets, we can use modulo 10; then key 27 would map to bucket 7, key 32 would map to bucket 2, key 25 to bucket 5, and so on.
 %The key value terminology is the following:
 \newline
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \texttt{(k1,v1)}: basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 the system simply finds the node with the key \texttt{k1} and return it's value \texttt{v1} from it.
 
 \subsubsection{Wide Column and BigTable}
+\paragraph{Intro to Columnar Storage:}%The idea that it might be better to store data in columnar format dates back to the 1970s, although commercial columnar databases did not appear until the mid-1990s. %maybe skippable
+The essence of the columnar concept is that data for columns is grouped together on disk. In a columnar database, values for a specific column become co-located in the same disk blocks, while in the row-oriented model, all columns for each row are co-located. Indeed, one of the advantages to the columnar architecture is that queries seeking to aggregate the values of specific columns are optimized, because all of the values to be aggregated exist within the same disk blocks. The exact IO and CPU optimizations delivered by a column architecture vary depending on workload,indexing, and schema design. In general, queries that work across multiple rows are significantly accelerated in a columnar database.\\
+
 These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra), even though some consider Cassandra still  as a key-value model and not a wide column.
-\newline
+
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
 The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having \texttt{NULL} value so we can have different rows with different sets of columns. 
@@ -404,7 +406,7 @@ The column is divided in families. The timestamp support the multi-version of mo
 	~\\
 	Each row can have different timestamp, so we can have more versions of this table.
 \end{center}
-The data within the cells (also the key) has no type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes(``Key''), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
+The data within the cells (also the key) has no type since it is saved in bytes. The columns are dynamic. So to get a data given a key we need to transform our data in Bytes with a comand .toBytes("Key"), we can also use python to modify the columns via APIs. This model can be useful for *-To-Many mappings.
 The row key is an array of bytes and serves as a primary key for the table.
 Each Column Family has a name and contains one or more related columns, the columns can belong to one column family only and is included inside the row with familyName:columnName followed the value, for example we have: \\ 
 %cavolo che sbatti i quote i LaTeX, se trovate un modo carino ditemelo 
@@ -422,7 +424,7 @@ HBase does not support joins, but this can be done in application layer using Sc
 Cassandra is a column oriented NoSQL system. 
 The KeySpace is the outermost container, it's basic attributes are the Replication Factor (how many copies of the data we need), Replication Strategy and the Column Families.
 The Column Families, can be seen as a collection of rows or better a collection of key-value pairs as rows. 
-A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp. So a table is a list of “nested key-value pairs”: (ROW x COLUMN key x COLUMN value) and this is inside a column family.
+A row is a collection of columns labeled with a name, the value of a row is itself a sequence of key-value pairs where the keys are the column's name and we need at least one column in a row. The columns have the key(name), the value and the timestamp. So a table is a list of "nested key-value pairs": (ROW x COLUMN key x COLUMN value) and this is inside a column family.
 The Key Space is only a logical grouping of columns families.
 
 \begin{center}
@@ -450,73 +452,72 @@ The Comparison between Apache Cassandra, Google Big Table and Amazon DynamoDB is
 
 \section{Data Distribution}
 \subsection{Fragmentation and Replication}
-A centralized DB system is a system where the database is located, stored and maintained in a single location. If the processor fail all the system fails.
-If we need data periodically in different location we can distribute it or replicate it. The distribution is to divide the data and have it stored in different places, it provides opportunities for parallel execution. On the other hand we can also replicate it or replicate part of data in different location improving also the availability.
+Un sistema di DB centralizzato è un sistema in cui il database è localizzato, memorizzato e mantenuto in un'unica posizione. Se il processore fallisce, allora tutto il sistema fallisce.
+Se abbiamo bisogno di avere dati periodicamente in luoghi differenti allora possiamo distribuirli o replicarli. La distribuzione quindi consiste nel dividere i dati e memorizzarli in posti diversi, provvedendo così ad avere possibilità di eseguire operazioni in parallelo. D'altra parte possiamo anche replicarli (interamente o solo una parte) in diversi luoghi, migliorando cosi la loro disponibilità (availability).
 \newline
-In a Homogeneous Distributed Database all sites have identical software and aware of each other and agree to cooperate in processing user requests. They surrender their autonomy to change the schema appearing to user as a single system.
+In un Database Distribuito Omogeneo tutti i siti hanno identico software e concordano tutti a collaborare per l'elaborazione delle richieste dell'utente. Si arrendono alla loro autonomia per cambiare lo schema che appare all'utente come un singolo sistema.
 \newline
-In a Heterogeneous Distributed Database different sites may use different schema and software which creates a major problem for query and transaction processing. The sites may not be aware of each other and may provide only limited facilities for cooperation in transaction processing.
+In un Database Distribuito Eterogeneo diversi siti possono usare differenti schemi e software, creando maggior problemi per query e transazioni. I siti possono non essere a conoscenza l'uno dell'altro e quindi potrebbero fornire solo strutture limitate per la cooperazione nell'elaborazione delle transazioni.
 \newline
-The challenges of a distributed database design is deciding what goes, which depends on the data access pattern, and the problem of where to allocate fragments to nodes.
-With replication we have that system maintains multiple copies of data, stored in different sites, for faster retrieval and fault tolerance and with the fragmentation the data is divided into several fragments stored in different sites. We can combine both of them so the data is partitioned into several fragments and the system maintains several identical replicas of such fragment.
+Le sfide per la progettazione di un Database Distribuito sono decidere cosa va, che dipende dal pattern di accesso ai dati, e dal problema di dove allocare i frammenti ai nodi.
+Con la replicazione il sistema mantiene multiple copie dei dati, memorizzate in diversi siti, per un veloce recupero e tolleranza degli errori con la frammentazione dei dati divisi in frammenti archiviati in siti diversi. Possiamo combinare entrambi, in modo che i dati siano partizionati in diversi frammenti, e che il sistema mantenga diverse repliche degli stessi.
 \newline
-Dividing/fragmenting our database into n databases, the bottle-neck phenomenon arises, in which the slowest machine dictates the worst performance for a query.
+Dividendo/frammentando il nostro database in n database, sorge il fenomeno "bottle-neck", dove la macchina più lenta detta la peggior performance per una query.
 \newline
-The advantages of replication are:
+I vantaggi di una replicazione sono:
 \begin{itemize}[noitemsep]
 	\item
-	Availability: Since the failure of a site does not result in unavailability of it's data since it's replicas exist elsewhere.
+	Availability: l'errore di un sito non determina l'indisponibilità dei dati, in quanto la sua replica esiste altrove.
 	\item
-	Parallelism: Queries may be processed by several nodes in parallel thus faster.
+	Parallelism: le query possono essere processate da diversi nodi parallelamente, rendendo tutto più veloce.
 	\item
-	Reduced data transfer: Since replicas of the data may exist in the node itself.
+	Reduced data transfer: poiché possono esistere repliche dei dati nel nodo stesso.
 \end{itemize}
 
-While the disadvantages are:
+Mentre gli svantaggi sono:
 
 \begin{itemize}[noitemsep]
 	 
 	\item
-	increased cost of updates: Since each replica must be updated.
+	Aumentati i costi per gli update: in quanto ogni replica deve essere aggiornata.
 	\item
-	increased complexity of concurrency control e.g. two people book a ticket at the same time solution. We may have that distinct replicas may lead to inconsistent data unless some special concurrency mechanisms are implemented. A solution could be to choose one copy as the primary copy and apply concurrency control operation only on the primary copy.
+	increased complexity of concurrency control e.g. due persone prendono lo stesso ticket nello stesso istante. Potremmo avere che repliche distinte possono portare a dati incoerenti a meno di qualche meccanismo di concurrency speciale venga implementato. Una soluzione potrebbe essere quella di scegliere una copia come copia primaria e applicare operazione di controllo della conucrrency solo sulla copia primaria.
 \end{itemize}
-As already mentioned we can combine data replication with data fragmentation. In particular data fragmentation consists in a division of relation r into fragments which contain sufficient information to reconstruct relation r.
-Now for simplicity imagine the database to be relational. 
-The fragmentation can be horizontal or vertical, but it must contain sufficient information to reconstruct the original "relation". In the horizontal each tuple of the data is assigned to one or more fragments while in the vertical the schema (in the case of relational) is split into several smaller schemas, and all of them must contain a common candidate key to ensure lossless join for example using a tuple-id attribute.\newline
-The advantages are:
+Come già accennato, possiamo combinare la replica dei dati con la frammentazione dei dati. In particolare la frammentazione dei dati consiste in una divisone di relazioni r in frammenti che contengono sufficienti informazioni per ricostruire la relazione r.
+Ora per semplicità, immaginiamo che sia un database relazionale. 
+La frammentazione può essere orizzontale o verticale, l'importante che contenga informazioni sufficienti per ricostruire la "relazione" originale . In quella orizzontale ogni tupla deve essere assegnata a uno o più frammenti mentre nella frammentazione verticale, lo schema è splittato in due diversi schemi più piccoli, dove entrambi devono contenere una chiave comune per assicurare un join senza perdite, per esempio utilizzando una tupla-ID come attributo.\newline
+I vantaggi sono:
 \begin{itemize}[noitemsep]
-	\item Horizontal:
+	\item Orizzontale:
 	\begin{itemize}[noitemsep]
-		\item Allows parallel processing on fragments.
-		\item Allows the data to be split so the tuples are located where they are more frequently accessed.
+		\item Permette processi paralleli sui frammenti.
+		\item Permette lo split dei dati in modo che le tuple siano poi allocate nei posti in cui avviene l'accesso più frequentemente.
 	\end{itemize}
-	\item Vertical
+	\item Verticale
 	\begin{itemize}[noitemsep]
-		\item Allows tuples to be split so that each part of tuples are stored where they are more accessed.
-		\item tuple-id allows efficient joining of vertical fragments.
-		\item Allows parallel processing on a relation.
+		\item Permette alle tuple di essere splittate in modo che ogni parte delle tuple sia archiviata nel luogo in cui avviene più spesso l'accesso.
+		\item tuple-id permette un efficiente join di frammenti verticali.
+		\item Permette processi paralleli su una relazione.
 	\end{itemize}
 \end{itemize}
-The two fragmentation can be mixed together and the fragments may be successively fragmented to an arbitrary depth. 
-Data Transparency is very important because it indicates the degree to which the users are not aware on the way the data is stored in a  distributed system. 
-We have to consider transparency issues in relation to: fragmentation, replication and location of our data.
+Le due frammentazioni possono essere mixate insieme, e inoltre i frammenti possono essere successivamente frammentati fino ad una profondità arbitraria. 
+Data Transparency è veramente importante perché indica il grado per cui un utente non è consapevole di come i dati sono stati archiviati in un sistema distribuito. Dobbiamo considerare i problemi sulla transparency in relazione a: frammentazione, replicazione e location dei nostri dati.
 \newline
-Considering the difference between the centralized and the distributed system from the point of view of costs we have that:
+Considerando la differenza tra un sistema centralizzato e uno distribuito, dal punto di vista dei costi, abbiamo che:
 \begin{itemize}[noitemsep]
-\item For centralized systems, the primary criterion for measuring the cost of a particular strategy is the number of disk accesses.
-\item In a distributed system, instead, other issues must be taken into account: in first place we have to consider the cost of a data transmission over the network and then also the potential gain in performance from having several sites process parts of the query in parallel.
+\item Per un sistema centralizzato, il criterio principale per misurare il costo di una particolare strategia è il numero di accesso ai dischi.
+\item In un sistema distribuito dobbiamo invece considerare il costo per la trasmissione dei dai sulla rete  e anche il potenziale guadagno in performance che si ottiene con l'ausilio dei diversi siti che entrano nel processo svolgendo query parallele.
 \end{itemize}
-Summarizing we have that the advantages of DDBMSs are: It reflects the organizational structure, improves share-ability and local autonomy, improves availability, reliability and performance, reduces the hardware cost and have a modular growth.
-The disadvantages are: Architecture and database design is more complex, cost, Security, Integrity control is more difficult, there is a lack of standards and experience.
+Ricapitolando abbiamo che i vantaggi dei DDBMSs sono: riflette la struttura organizzativa migliorando determinate caratteristiche tra cui l'abilità di condivisione, autonomia locale, la disponibilità, l'affidabilità e la performance, riducendo il costo dell'hardware grazie anche ad una crescita modulare .
+Gli svantaggi sono: architettura e progettazione più complessa e costosa; la sicurezza e l'integrità sono più difficilmente controllabili; c'è una mancanza di standard ed esperienza nel suo utilizzo.
 \newline
-There are 3 types of architecture in DDBMS:
+Ci sono 3 tipi di architetture nei DDBMS:
 \begin{itemize}
-\item Shared Everything: Dominated the architecture market until 2000(approximately), we have one big complex costly data base, it shares everything and can be very slow. It is the centralized system.
+\item Shared Everything: dominata dal mercato delle architetture fino al 2000(circa), abbiamo un grande e costoso database, che condivide ogni cosa, per cui molto lento; è il sistema centralizzato.
 
-\item Share Disk: We have data saved on different disks connected between them, no one uses it. The disks are all connected together and communicates to all the CPUs.
+\item Share Disk: abbiamo i dati salvati su diversi dischi connessi tra loro. I dischi sono tutti connessi insieme e comunicano con tutte le CPUs.
 
-\item Share Nothing: Every thing is separated every disk has it's own CPU and the disks does not communicate with other CPUs or disks, it is very easy to scale it out. Model adopted by NoSQL models. Only at the end the processors are connected together to combine the results from each of them. 
+\item Share Nothing: ogni cosa è separata, ogni disco ha la propria CPU e non comunica con le altre CPU o dischi; solo alla fine i processori vengono connessi insieme per combinare i risultati da ognuno di essi; Il modello è adottato dai modelli NoSQL; è molto facile lo scale out. 
 \end{itemize}
 
 \begin{center}
@@ -534,56 +535,58 @@ There are 3 types of architecture in DDBMS:
 		\hline
 	\end{tabular}
 \end{center}
-What to choose between Scalability or Availability? It depends on how much one wants to spend: more availability means more money. For example a 100\% availability mean no downtime, decreasing the availability increases the downtime we can have, a 99\% availability means a downtime of 9 - 88 hours.
+Cosa scegliere tra Scalability o Availability? Dipende da quanto vogliamo spendere: più availability significa più denaro. Per esempio una disponibilità del 100\% significa nessun down del sistema; diminuendo la disponibilità e quindi aumentando i down, potremmo avere disponibilità 99\% con down compresi tra le 9 - 88 ore.
 \newline
 \textbf{Replication}:
 \newline
-A log is a sequential file that is stored in a stable(never failing) memory, it stores all activities realized by all transaction in a chronological order. The two types of records are the transaction logs (operations) and the system events (Checkpoint \& Dump). About this we can define checkpoint as the moment when we store the set of running transactions in a given time point while a dump is full copy of the entire state of a DB in a stable memory, his execution is offline and, summarizing, it generates a backup. Only after the backup is completed, the dump record of log is written.
+Un log è un file sequenziale che è storato in una memoria stabile (che non dà mai errore; esso archivia tutte le attività realizzate dalle
+transazioni in ordine cronologico. Ci sono due tipi di record: transaction logs(operations) e system event (Checkpoint and Dump).
+Possiamo definire un checkpoint, quel momento in cui noi memorizziamo un set di transazioni in un dato tempo, mentre un dump è una copia piena dello stato di un DB in una memoria stabile; la sua esecuzione è offline, e genera un backup. Solo dopo che il backup è completo, che il dump recod viene scritto nel log.
 \newline
-The replicas structures are:
+Le strutture di replica sono:
 \begin{itemize}[noitemsep]
-	\item One2Many: One source and many targets.
-	\item Many2One: Many sources and only one target.
-	\item Peer2Peer: Data is replicated across multiple nodes that communicates with each other.
-	\item Bi-directional: Conceptually a Peer2Peer with only two Peers.
-	\item Multi-Tier Staging: The replication is divided in more stages.
+	\item One2Many: una sorgente e alcuni target.
+	\item Many2One: alcune sorgenti e un solo target.
+	\item Peer2Peer: i dati sono replicati attraverso molteplici nodi che comunicano l'uno con l'altro.
+	\item Bi-directional: concettualmente un Peer2Peer con solo due Peers.
+	\item Multi-Tier Staging: la replicazione è divisa in più stages.
 \end{itemize}
 
-To create a replica we can:
-\begin{itemize}[noitemsep]
-	\item take the data form master either the backup copy or the data itself	(if we can stop the activity of the server) and move it. (It could be useful if the data is not accessible from outside)
-	\item use log file : to maintain the replica the same as the source even during the transfer (near real time) using the Log to execute the same commands executed on the source.
+Per creare una replica possiamo:
+\begin{itemize}[noitemsep] %qua mi sfugge qualcosa (CONTROLLARE)
+	\item Prendere i dati dal master, sia il backup o i dati stessi (se vogliamo stoppare l'attività del server) e muoverli (potrebbe essere utile se i dati non sono accessibili dall'esterno).
+	\item use log file : per mantenere la replica uguale alla sorgente durante il trasferimento (quasi in tempo reale) si usa il Log per eseguire gli stessi comandi eseguiti sulla sorgente.
 \end{itemize}
 
 
 %If you use Volume in project be attentive to the scalability!!!!!
 \subsection{MongoDB's Approach: Sharding\cite{ScalingMongoDB}}
 
-MongoDB uses Sharding to split a large collection across several servers(called a cluster): Every document has a key in mongodb so we define a shard key which defines the range of data(chunk range). The key space is like points on a line and the range is a segment of that line.
-Example: Key is surname so we can decide all the surnames staring from A to K save in first partition and the others in the second.
-MongoDB does the sharding automatically once we tell it to distribute the data. 
-The Default maximum chunk size is 64Mb, as a chunks gets bigger, MongoDB will automatically split it into two smaller chunks and if the shards become unbalanced, some chunks will be migrated to other shards with less chunks correcting the imbalance. 
-The goal of balancer is not only to keep the data evenly distributed but also to minimize the amount of data transferred. 
-The balancer is lazy so it won't activate itself until the data is very imbalanced, it does so to avoid moving data back and forth, if it balanced every tiny difference it would just waste resources.
+MongoDB usa lo Sharding per splittare una grande collezione in diversi server (chiamati cluster); ogni documento ha una chiave in mongodb, noi definiamo una chiave che definisce il range dei dati (chunk range).
+Gli spazi nella chiave sono come punti su una linea, mentre il range è il segmento di quella linea.
+Esempio: la chiave è il cognome, quindi decidiamo che tutti i cognomi che iniziano tra A e K vengano salvati in una partizione mentre gli altri in una seconda.
+MongoDB non fa lo shard automaticamente una volta che abbiamo deciso di distribuire i dati. 
+Di default la massima dimensione del chunk è di 64Mb; se tende ad aumentare la dimensione del chunk, MongoDB automaticamente lo splitterà in due più piccoli chunk, e se gli shard diventano sbilanciati, allora alcuni chunk migreranno ad altri shard cercando di correggere questo sbilanciamento. 
+L'obiettivo del bilanciamento non è solo quello di mantenere ugualmente distribuiti i dati, ma è anche quello di minimizzare l'ammontare dei dati trasferiti. 
+Il bilanciamento è piuttosto pigro, quindi non si attiva fino a quando i dati non sono molto squilibrati; lo fa per cercare di
+evitare lo spostamento di dati avanti e indietro, nel caso in cui dovesse bilanciare ogni minima differenza (si sprecherebbero troppe risorse)
 \newline
-When you first create a shard, MongoDB creates a single chunk with range $(-\infty, +\infty)$ where with $-(+)\infty$ we mean the smallest(largest) value MongoDB can represent. 
-From here if the chunk size is bigger that the chosen size it will split and every chunk range must be distinct and not overlapping and their union should cover all the initial range.
+Quando crei uno shard, MongoDB crea un singolo chunk con range $(-\infty, +\infty)$ dove con $-(+)\infty$ intendiamo il più piccolo/massimo valore che MongoDB può rappresentare. 
+Da qui, se la dimensione del chunk è più grande di quella scelta, allora verrà splittata; ogni chunk range dovrà essere distinto e non sovrapposto, e inoltre la loro unione dovrà coprire il range iniziale.
 \newline
-The shard is basically a server so we need to use mongos (s=server) to make a query on a shard. Mongos is the point interaction between users and the cluster, mongos lets you treat a cluster as a single server. 
-The queries are routed to the appropriate shard thanks to mongos. For the not targeted queries (with sorting) a request is sent to all shards and the queries are performed locally and then after the result has returned mongos merges the (sorted) result and returns results to client.
-Mongos doesn't actually store any data, the configuration of a cluster is held on a special mongods called config servers, they hold the definitive information about the clusters for everyone's access.
+Lo shard è in pratica un server, quindi bisogna usare mongos (s=server) per fare una query. Mongos è il punto di interazione tra l'utente e il cluster, che ti permette di trattare un cluster come un singolo server.
+Le query vengono instradate verso l'apposito shard grazie a mongos. Per le query senza target (es: with sorting) una richiesta è mandata a tutte le shard, e le query sono elaborate localmente; dopo che il risultato è ritornato, mongos mergia il risultato sorted e manda al client il risultato finale.
+Mongos attualmente non archivia alcun dato; la configurazione di un cluster è mantenuta in uno speciale mongods, chiamato config server, che tiene le informazioni circa gli accessi di chiunque a quel cluster.
 \newline
-The cluster consists basically of three types of processes:
+Il cluster consiste in tre tipi di processi:
 \begin{itemize}[noitemsep]
-	\item The shards: a node of the cluster, it can be either a single mongod or a replica set. 
-	MongoDB also automatically replicates the data and in one shard I will have a primary chunk where I store the data I wanted and secondary chunks where MongoDB replicated other data as backup just in case, the secondary is a read only data so I cannot do update queries on it.
-	\item Mongos processes: for routing requesting to the correct data and acting as a balancer. It contains no local data and we can have 1 or many of it. After it finishes balancing it must also update the Config Servers with the new positions and while one mongos is balancing the chunks it takes out a "balancer lock" so no other mongos will start the balancing. The lock is released only after the chunk has been copied and the old chunk is deleted from the initial shard.
-	\item Config servers: for keeping tracks of the cluster's state. It stores the cluster chunk ranges and locations.
-	We can have only 1 or 3.
+	\item The shards: un nodo del cluster, può essere sia un singolo mongod che un set replica. MongoDB in automatico replica i dati in una shard dove avremo il chunk primario (con i dati storati che volevamo), e un chunk secondario dove vengono reolicati i dati come backup (è solo in lettura, non si possono fare query).
+	\item Mongos processes: serve per guidare le richieste verso la posizione dei dati, e agisce come bilanciamento dei chunks. Non contiene dati locali. Possono esserci uno o più processi. Dopo che il bilanciamento è finito, il processo aggiorna anche il Config Servers con la nuova posizione e intanto il mongos che sta bilanciando i chunks, tira fuori un "balancer-lock", in modo che nessun altro mongos incomincerà il bilanciamento, che era già ultimato. Il lock è rilasciato solo dopo che il chunk è stato copiato, e il vecchio chunk cancellato dallo shard iniziale.
+	\item Config servers: per mantenere traccia dello stato dei cluster. Archivia il chunk range e la posizione dei cluster. Si possono avere solo 1 o 3.
 \end{itemize}
 
 \begin{center}
-	\includegraphics[scale=0.50]{IMAGE6.png}
+	\includegraphics[scale=0.40]{IMAGE6.png}
 \end{center}
 
 
@@ -628,18 +631,34 @@ To enable sharding on a database simply use the command: sh.enableSharding("$<$d
 \newline To start a collection with the given key:
 sh.shardCollection("$<$dbname$>.$people",\{"country" : 1\})
 \newline
-The properties of the Shard key are:
+Le proprietà di una Shard Key sono:
 \begin{itemize}[noitemsep]
-	\item Shard key is immutable
-	\item Shard key values are immutable
-	\item Shard key must be indexed
-	\item Shard key are limited to 512 bytes in size
-	\item Shard key are used to route queries: so choose a field commonly used in queries for the shard key
-	\item Only the shard key can be unique across shards, the `\_id' field is only unique within the individual shard
+	\item Shard key è immutabile
+	\item Shard key values sono immutabili
+	\item Shard key deve essere indicizzato
+	\item Shard key sono limitati a dimensioni massime di 512 bytes
+	\item Shard key sono usate per guidare le query: scegliendo un campo comunemente usato in query
+	\item Solo la shard key può essere unica tra le shards (the `\_id' field is only unique within the individual shard)
 \end{itemize}
 
 \subsection{HBase}
-The four major components (nodes) of HBase are:
+We can consider HBase tables as potentially massive tabular datasets that are implemented on disk by a variable number of HDFS files called Hfiles.
+All rows in an HBase table are identified by a unique row key. A table of nontrivial size will be split into
+multiple horizontal partitions called \textbf{regions}. Each region consists of a contiguous, sorted range of key values (reminding of the MongoDB range-based sharding scheme).
+
+Read or write access to a region is controlled by a \textbf{RegionServer}. There will usually be more than one region in each RegionServer. As regions grow, they split into multiple regions based on configurable policies (may also be split manually).
+
+Each HBase installation will include a Hadoop \textbf{Zookeeper service} that is implemented across multiple nodes.
+Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras?
+
+The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the
+balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to
+determine the location of the HBase catalog tables, which can be then be interrogated to determine the
+location of the appropriate RegionServer. The client will then request to read or modify a key value from
+the appropriate RegionServer. The RegionServer reads or writes to the appropriate disk files, which are
+located on HDFS. %taken almost literally from the suggested course book "Next Generation DB"
+
+Summing up, the four major components (nodes) of HBase are:
 \begin{enumerate}[noitemsep]
 	\item The HMaster (only one): It is the implementation of Master server in HBase architecture. It monitors and coordinates all slaves in the cluster. It must assign regions, detect failures and has admin privileges. 
 	\item The HRegionServer (many of them): It manages the data regions and serves client requests for reads and writes (using a log), this request is assigned to a specific region, where actual column family resides. However the client can contact directly the HRegionServer without having a permission of HMaster. HMaster is required only for operations related to metadata and schema changes. The Region servers run on Data Nodes present in the Hadoop cluster.\newline
@@ -654,15 +673,23 @@ The four major components (nodes) of HBase are:
 HBase's architecture is similar to MongoDB's and they share the same flaw: If the master is broken the client cannot obtain any data and we have an error (Single point of failure).
 
 \subsection{Cassandra}
-Cassandra on the other hand repairs the flaw of having a single master because there is no master and all the nodes are considered the same, it uses a peer-to-peer distributed system. 
+In Cassandra there are no specialized master nodes. Every node is equal and every node is capable of performing any of the activities required for cluster operation. \footnote{Nodes in Cassandra do, however, have short-term specialized responsibilities. For instance, when a client performs an operation, a node will be allocated as the coordinator for that operation. When a new member is added to the cluster, a node will be nominated as the seed node from which the new node will seek information. However, these short-term responsibilities can be performed by any node in the cluster.}
+It uses a peer-to-peer distributed system. 
 The Data is partitioned among all nodes in the cluster and a custom data replication to ensure fault tolerance and since all the nodes are all considered same we have Read/Write-anywhere design.
 Cassandra is based on Google BigTable and Amazon Dynamo so it inherits their properties.
 \newline
 In Cassandra we can add or remove nodes with no downtime so we have a transparent elasticity and transparent scalability (performance grows linearly with the number of nodes) and due to it's P2P architecture we obtain also the High Availability. If a node were to fault we will have that we could obtain the data from the replicas in the other nodes.
 The Nodes are logically structured in Ring Topology, the hashed value of key associated with data partition is used to assign it to a node in the ring. The hashing rounds off after a certain value to support the ring structure and the lightly loaded nodes moves position to alleviate the highly loaded nodes.
 Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we decide the N number of following nodes in which the replica will be saved.
-\newline
-The data writing is separated in 3 stages : 
+%%%
+
+
+\begin{figure}
+\centering
+\includegraphics[width=100 mm]{cassandrawrite.png}
+\caption{\label{cassandrawrite:fig} Data writing procedure in Cassandra.}
+\end{figure}
+As illustrated in Fig.~\ref{cassandrawrite:fig}, The data writing is separated in 3 stages : 
 \begin{enumerate}
 	\item The log file writing, which is essential: even if the data writing fails it doesn't matter because we have the log file.
 	\item Once written in the commit log, data is written to the mem-table. Data written in the mem-table on each write request also writes in commit log separately. Mem-table is a temporary storage of data in the memory while commit log logs the transaction records for backup.
@@ -681,11 +708,22 @@ SELECT * FROM table USING CONSISTENCY ONE
 To delete the data is it easier to consider the data not available and mark it for deletion, it is called a tombstone(like how recycle bin works in OS), and actually delete on a major compaction or configurable timer.\newline
 Compaction runs periodically to merge multiple SSTables reclaiming space, creating new index, merging the keys, combining columns and discarding the tombstones.
 
+One of the advantages of a master node is that it can maintain a canonical version of cluster
+configuration and state. In the absence of a master node keeping a canonical version of cluster configuration, Cassandra requires that all members of the cluster be kept up to date with the current state of cluster configuration and status. This is achieved by use of the \textbf{gossip protocol}. Every second each member of the cluster will transmit information about its state and the state of any other nodes it is aware of to up to three other nodes in the cluster. One nodes gossip about other nodes as well as about their own state.
+This architecture eliminates any single point of failure within the cluster.\footnote{Although distributed databases with master nodes have strategies to allow for rapid failover, the crash of a master node usually creates a temporary reduction in availability, such as momentarily falling back to read-only mode.}
+
+One of the main reasons of gossip is related to node availability. Usually the only way to detect node failure is a system of heartbeats between nodes. However (in a distributed system) the heartbeats may be lost because of network issues rather than actual node failure. Cassandra failure detection is more probabilistic: nodes in the cluster become increasingly "worried" about other nodes, and if it seems likely that a node is down the operations will be redirected.
+
+Cassandra distribute data throughout the cluster by using \textbf{consistent hashing}. The rowkey (analogous to a primary key in an RDBMS) is hashed. Each node is allocated a range of hash values, and the node that has the specific range for a hashed key value takes responsibility for the initial placement of that data.
+We usually visualize the cluster as a ring: the circumference of the ring represents all the possible hash values, and the location of the node on the ring represents its area of responsibility. 
+When adding a new node, the system remaps all
+the hash ranges (exploiting a peculiar mechanism of Virtual node to optimize this operation)\footnote{More infos in the suggested course text-book}.
+
 %Sezione in italiano ricavata dagli appunti dell'anno scorso. (Grande)
 %Per ora non si sa se questa parte sarà richiesta all'esame. Adesso sì
 %Da integrare se disponete di appunti affidabil ricavati a lezione
 \section{Big Data Architecture}
-La prima definizione di "Big Data" viene data da Gartner nel 2012: “Big data is high volume, high velocity and/or high variety information assets”. Ad oggi sappiamo però che per definire i "Big Data" potremmo usare più di 3 V, aggiungendo anche variability e veridicity. Analizzare "Big Data" su un singolo server “big” è un processo lento, costoso e difficile da realizzare. La soluzione è effettuare un’analisi distribuita su hardware poco costosi tramite un sistema di calcolo parallelo, i cui vantaggi sono già stati esposti nella sezione dedicata all'architettura distribuita. I problemi principali della distribuzione dei dati sono la sincronizzazione, i cosiddetti “punti morti” (deadlock), la larghezza della banda, la coordinazione tra i nodi e i casi di fallimento (failure) del sistema. Questo genere di architettura ha comunque molti vantaggi, tra cui: scala linearmente (scale out), l’attività di calcolo è rivolta ai dati e non viceversa (cambio di paradigma), gestisce i casi di fallimento (failure) e lavora con hardware con potenza di calcolo “normale”.
+La prima definizione di "Big Data" viene data da Gartner nel 2012: "Big data is high volume, high velocity and/or high variety information assets". Ad oggi sappiamo però che per definire i "Big Data" potremmo usare più di 3 V, aggiungendo anche variability e veridicity. Analizzare "Big Data" su un singolo server "big" è un processo lento, costoso e difficile da realizzare. La soluzione è effettuare un’analisi distribuita su hardware poco costosi tramite un sistema di calcolo parallelo, i cui vantaggi sono già stati esposti nella sezione dedicata all'architettura distribuita. I problemi principali della distribuzione dei dati sono la sincronizzazione, i cosiddetti "punti morti" (deadlock), la larghezza della banda, la coordinazione tra i nodi e i casi di fallimento (failure) del sistema. Questo genere di architettura ha comunque molti vantaggi, tra cui: scala linearmente (scale out), l’attività di calcolo è rivolta ai dati e non viceversa (cambio di paradigma), gestisce i casi di fallimento (failure) e lavora con hardware con potenza di calcolo "normale".
 \subsection{HDFS}
 L’architettura HDFS (Hadoop Distributed File System) è un file system distribuito progettato per girare su hardware base (commodity hardware).
 \begin{center}
@@ -693,7 +731,7 @@ L’architettura HDFS (Hadoop Distributed File System) è un file system distrib
 	HDFS Architecture
 \end{center}
 Sebbene ci siano molte similitudini con altri sistemi di file system distribuiti, le differenze sono comunque significative. In particolare, HDFS è fortemente tollerante agli errori
-ed è progettato per girare su macchine poco costose, inoltre fornisce un accesso ad alta velocità ai dati delle applicazioni ed è ideale per applicazioni con data set di grandi dimensioni. HDFS ha un’architettura master/slave. Un cluster HDFS consiste in un singolo NameNode e in un server master che gestisce il file system detto NameSpace e che regola gli accessi ai file da parte dei clients (secondo modello di accesso $Write-once-Read-many$). Inoltre, sono presenti un certo numero di DataNodes, generalmente uno per ogni nodo nel cluster, che gestiscono lo storage collegato ai nodi su cui vengono eseguiti. Internamente, un file è splittato in uno o più blocchi (tipicamente di 128 MB ciascuno) e questi sono memorizzati in un set di DataNodes. Il NameNode esegue le operazioni del file system NameSpace, ovvero apertura, chiusura e “rename” dei file e delle directories. Inoltre, determina la mappatura dei blocchi nei DataNodes, e reindirizza le richieste di operazioni di lettura e scrittura da parte del file system dei clients ai DataNodes. I DataNodes permettono anche la creazione, l’eliminzazione e la replica dei blocchi sotto istruzioni del NameNode. I Meta-Data (lista dei file, lista dei blocchi, lista dei DataNodes, attributi del file, …) sono tutti memorizzati nella memoria principale. Esiste inoltre un Transaction Log che registra la creazione, l’eliminazione e qualunque altra operazione avvenga su un file.
+ed è progettato per girare su macchine poco costose, inoltre fornisce un accesso ad alta velocità ai dati delle applicazioni ed è ideale per applicazioni con data set di grandi dimensioni. HDFS ha un’architettura master/slave. Un cluster HDFS consiste in un singolo NameNode e in un server master che gestisce il file system detto NameSpace e che regola gli accessi ai file da parte dei clients (secondo modello di accesso $Write-once-Read-many$). Inoltre, sono presenti un certo numero di DataNodes, generalmente uno per ogni nodo nel cluster, che gestiscono lo storage collegato ai nodi su cui vengono eseguiti. Internamente, un file è splittato in uno o più blocchi (tipicamente di 128 MB ciascuno) e questi sono memorizzati in un set di DataNodes. Il NameNode esegue le operazioni del file system NameSpace, ovvero apertura, chiusura e "rename" dei file e delle directories. Inoltre, determina la mappatura dei blocchi nei DataNodes, e reindirizza le richieste di operazioni di lettura e scrittura da parte del file system dei clients ai DataNodes. I DataNodes permettono anche la creazione, l’eliminzazione e la replica dei blocchi sotto istruzioni del NameNode. I Meta-Data (lista dei file, lista dei blocchi, lista dei DataNodes, attributi del file, …) sono tutti memorizzati nella memoria principale. Esiste inoltre un Transaction Log che registra la creazione, l’eliminazione e qualunque altra operazione avvenga su un file.
 La strategia di piazzamento dei blocchi del file tra i DataNodes è la seguente:
 \begin{itemize}[noitemsep]
 \item Una replica sul nodo locale
@@ -701,11 +739,11 @@ La strategia di piazzamento dei blocchi del file tra i DataNodes è la seguente:
 \item Una terza replica sullo stesso rack remoto
 \item Delle repliche piazzate in modo randomico
 \end{itemize}
-I client leggeranno il file dalla replica più vicina a loro (rack awareness). Esiste poi un sistema per verificare la correttezza dei dati. Può succedere infatti che un blocco inviato dal DataNode arrivi corrotto. Il client software HDFS implementa un controllo checksum dei file. Quando un utente crea un file, genera anche un checksum per ogni blocco del file e memorizza questi checksum in un file nascosto separato nello stesso NameSpace HDFS. Quando un client richiede l’accesso al file, verifica che i dati ricevuti da ogni DataNode combacino con il checksum associato. Se così non è, il client deciderà di reperire quel determinano blocco da un altro DataNode che possiede una replica di tale blocco di dati. Il NameNode verifica inoltre che i DataNodes, i quali inviano continuamente “segnali di vita”, siano tutti funzionanti e gestisce gli eventuali malfunzionamenti. Tuttavia, il NameNode rappresenta un “single point of failure”. Per questo motivo i Transaction Log sono memorizzati in più directrories: nel file system locale e in uno remoto.\newline
+I client leggeranno il file dalla replica più vicina a loro (rack awareness). Esiste poi un sistema per verificare la correttezza dei dati. Può succedere infatti che un blocco inviato dal DataNode arrivi corrotto. Il client software HDFS implementa un controllo checksum dei file. Quando un utente crea un file, genera anche un checksum per ogni blocco del file e memorizza questi checksum in un file nascosto separato nello stesso NameSpace HDFS. Quando un client richiede l’accesso al file, verifica che i dati ricevuti da ogni DataNode combacino con il checksum associato. Se così non è, il client deciderà di reperire quel determinano blocco da un altro DataNode che possiede una replica di tale blocco di dati. Il NameNode verifica inoltre che i DataNodes, i quali inviano continuamente "segnali di vita", siano tutti funzionanti e gestisce gli eventuali malfunzionamenti. Tuttavia, il NameNode rappresenta un "single point of failure". Per questo motivo i Transaction Log sono memorizzati in più directrories: nel file system locale e in uno remoto.\newline
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
 
 \subsection{Map Reduce}
-Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. “Mapred” risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
+Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. "Mapred" risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
 \begin{itemize}[noitemsep]
 \item Come assegnare i 'lavori' ai singoli 'worker'
 \item Cosa succede se ci sono più 'lavori' che 'worker'
@@ -742,24 +780,23 @@ to a highly structured normalized format. This makes it easy for Hadoop to quick
 \subsubsection{The Hadoop Ecosystem}
 L'ecosistema di Hadoop include una famiglia di utiliy e applications sempre in espansione, costruita sopra o progettata per lavorare con il core di Hadoop (Yarn, HDFS).
 
-Pig è uno scripting language che esegue l’analisi dei dati. Gli script in “pig latin” sono tradotti in lavori di MapRed. 
+Pig è uno scripting language che esegue l’analisi dei dati. Gli script in "pig latin" sono tradotti in lavori di MapRed. 
 
 Hive è un’interfaccia simile a SQL per dati memorizzati in HDFS. I piani di esecuzione sono generati automaticamente da Hive. Hive rappresenta quindi un data warehousing basato su Hadoop. Questo applicativo è utilizzato per report giornalieri, misure di attività degli utenti, data e text mining, machine learning e per attività di business intelligence come pubblicità e individuazione degli spam.
 
-Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni “jobtracker” deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili “failure” e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
+Tuttavia, il sistema di MapRed ha dei limiti: è difficile da comprendere, i task non sono riutilizzabili, è incline agli errori e per analisi complesse richiede molti lavori di MapReduce. In Hadoop 1.0 dunque, ogni "jobtracker" deve gestire molti compiti: gestire le risorse computazionali, scandire i task dello stesso lavoro, monitorare la fase di esecuzione, gestire i possibili "failure" e molto altro ancora. La soluzione a questo problema è stata splittare la fase di gestione in gestione dei cluster e gestione dei singoli lavori. Questo sistema è stato messo in pratica da YARN (Yet Another Resource Negotiator) in cui è presente un ResourceManage globale e un ApplicationMaster per ogni applicazione.
 
 Vengono rilasciati inoltre altri applicativi quali Accumulo, Hbase e Spark \footnote{If we think about Hadoop as a disk-oriented framework for running MapReduce-style programs, Spark represents a memory-oriented framework for running similar workloads}, Kafka (distributed streaming messaging system), Oozie (workflow scheduler that allows complex workflows to be constructed from lower level jobs).
 In Cloudera sono presenti anche Impala, Mahout (machine-learning framework), Sqoop (utility per scambiare dati con relational databases, in import o export) e Flume (utility for loading file-based data (i.e. web server logs) into HDFS) 
 
 \subsection{Data Lake}
-Il termine “data lake” è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile “consumazione” futura.
+Il termine "data lake" è stato coniato nel 2010 da James Dixon, il quale ha distinto due approcci di gestione dei dati: Hadoop e i data warehouses. Quest’ultimo (anche detto data mart) consiste nel memorizzare i dati in modo pulito e strutturato per una facile "consumazione" futura.
 
 Un data lake invece è una struttura capace di contenere un enorme quantità di dati salvati in ogni formato, in maniera non costosa.
 \`E una soluzione infrastrutturale in cui lo schema e i requisiti dei dati non sono definiti in partenza, ma vengono delineati al momento dell'interrogazione ($query\ time$): si tratta dello $schema\ on\ read$, caratteristico di un approccio "bottom up", caratterizzato dall'osservazione "sperimentale" come motore di un processo induttivo. 
 Da questo "lago" ogni soggetto (autorizzato) può attingere, tipicamente passando per un processo di analisi e di campionamento accurato. 
 Può avere lo scopo di catturare tutti i dati forniti in fase di "ingestion", e di passare solo quelli ritenuti rilevanti ad una Enterprise Data Warehouse (EDW): può essere quindi una fonte di dati per questa EDW. In questo modo si risparmia risorse relative all'EDW, e permette un'esplorazione iniziale dei dati disponibili, senza modellazione da parte dell'EDW team ($quick\ user \ access$).
 Una delle caratteristiche salienti del Data Lake è inoltre la facile scalabilità. 
-
 %sorry for the language swapping, but it's somehow easier this way
 As reported in Fig.~\ref{data_lake_arch:fig}, components of a typical data lake architecture are\footnote{See also \url{http://www.oreilly.com/data/free/files/architecting-data-lakes.pdf}. Note a slightly different zone denomination, compared to Maurino's Slides.}:
 
@@ -779,7 +816,7 @@ As reported in Fig.~\ref{data_lake_arch:fig}, components of a typical data lake 
 
 \item From the trusted area, data moves into the \textbf{discovery sandbox}, for wrangling, discovery, and exploratory analysis by users and data scientists.
 
-\item Finally, the consumption \textbf{analytic zone} exists for business analysts, researchers, and data scientists to dip into the data lake to run reports, do “what if” analytics, and otherwise consume the data to come up with business insights for informed decision-making.
+\item Finally, the consumption \textbf{analytic zone} exists for business analysts, researchers, and data scientists to dip into the data lake to run reports, do "what if" analytics, and otherwise consume the data to come up with business insights for informed decision-making.
 
 \end{itemize}
 
@@ -798,8 +835,8 @@ Riassumento, keywords per i data lake sono:
 \end{itemize}
 Per acquisire dati in real-time è necessario catturare ogni aspetto di tali dati e con il minimo ritardo possibile. Inoltre, talvolta è necessario sia immagazzinare questi dati in streaming che analizzarli all’istante. La principale limitazione dell’architettura Lambda è che per fare ciò, la logica architetturale va implementata due volte, spesso con tool diversi (Storm, Flink, Spark, …). L’architettura Kappa risolve questo problema.
 \section{Data quality and integration}
-Fasi molto importanti nell'analisi dei dati sono: la “verifica della qualità dei dati” (Data Understanding), di “pulizia” e di “integrazione” dei dati (Data Preparation).\newline Come primo aspetto, bisogna concentrarsi sui casi di “deduplication”; in altre parole bisogna chiedersi: ci sono record nella stessa tabella che si riferiscono allo stesso oggetto/persona della realtà? Si possono stabilire molteplici regole per decidere se due record si riferiscono allo stesso oggetto, sia sintattiche che semantiche. Una volta individuati due record “analoghi”, bisogna unirli (data fusion) in un solo record contenente le informazioni “corrette”. Una volta analizzato questo aspetto di “qualità” dei dati, immaginiamoci di dover integrare una tabella con un’altra e quindi di dover cercare i record delle due tabelle diverse che sono collegati tra loro. Questo processo si chiama “record linkage” e può essere svolto, ad esempio, individuando le chiavi delle due tabelle (una primaria e una esterna, ad esempio), e se queste corrispondono si procede con il “merge” dei due record.\newline Tuttavia, se la data quality non è delle migliori (a causa di input sbagliati o di standard non condivisi), di conseguenza anche la data integration sarà scarsa.\newline
-La data integration si articola in due fasi: \textbf{record linkage} (identificazione dei set di record che identificano lo stesso “oggetto reale”) e \textbf{data fusion} (scelta di un record unico rappresentativo del set precedente).
+Fasi molto importanti nell'analisi dei dati sono: la "verifica della qualità dei dati" (Data Understanding), di "pulizia" e di "integrazione" dei dati (Data Preparation).\newline Come primo aspetto, bisogna concentrarsi sui casi di "deduplication"; in altre parole bisogna chiedersi: ci sono record nella stessa tabella che si riferiscono allo stesso oggetto/persona della realtà? Si possono stabilire molteplici regole per decidere se due record si riferiscono allo stesso oggetto, sia sintattiche che semantiche. Una volta individuati due record "analoghi", bisogna unirli (data fusion) in un solo record contenente le informazioni "corrette". Una volta analizzato questo aspetto di "qualità" dei dati, immaginiamoci di dover integrare una tabella con un’altra e quindi di dover cercare i record delle due tabelle diverse che sono collegati tra loro. Questo processo si chiama "record linkage" e può essere svolto, ad esempio, individuando le chiavi delle due tabelle (una primaria e una esterna, ad esempio), e se queste corrispondono si procede con il "merge" dei due record.\newline Tuttavia, se la data quality non è delle migliori (a causa di input sbagliati o di standard non condivisi), di conseguenza anche la data integration sarà scarsa.\newline
+La data integration si articola in due fasi: \textbf{record linkage} (identificazione dei set di record che identificano lo stesso "oggetto reale") e \textbf{data fusion} (scelta di un record unico rappresentativo del set precedente).
 
 The complete methodology of schema integration is composed of three possible steps:
 \begin{itemize}
@@ -834,7 +871,7 @@ Resolution: user defined $resolution\ function$ (taking two or more conflicting 
 
 
 \subsection{Record Linkage}
-Esistono vari sinonimi per questa fase: Object Identification, Deduplication (su un dataset), Object Matching e molti altri. L’output di un algoritmo di record linkage può essere: “matching tuples”, “not matching” o “don’t know” (o “possible matching").\newline
+Esistono vari sinonimi per questa fase: Object Identification, Deduplication (su un dataset), Object Matching e molti altri. L’output di un algoritmo di record linkage può essere: "matching tuples", "not matching" o "don’t know" (o "possible matching").\newline
 Esistono più tecniche di record linkage:
 \begin{itemize}[noitemsep]
 \item Empirica, ovvero due tuple vengono unite se la loro distanza (in termini sintattici o anche altre forme di distanza) è piccola.
@@ -849,8 +886,8 @@ Durante questa fase si possono incontrare possibili conflitti.\newline
 Esistono perciò delle strategie per gestire tali conflitti:
 \begin{itemize}[noitemsep]
 \item $Conflict\ Ignoring$, che ignora il problema lasciando la risoluzione all’utente ($Pass\ It\ on$).
-\item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come “la più affidabile” e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
-\item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in “deciding” (quando viene scelto un valore tra quelli esistenti) e “mediating” (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
+\item $Conflict\ Avoiding$, applica una decisione unica per $tutti$ i dati in conflitto, tipicamente scegliendo una delle fonti come "la più affidabile" e creando il record rappresentativo da quella fonte ($Trust\ Your\ Friends$ strategy).
+\item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in "deciding" (quando viene scelto un valore tra quelli esistenti) e "mediating" (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
 \clearpage
 \printbibliography
