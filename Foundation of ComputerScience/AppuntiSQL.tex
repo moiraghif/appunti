@@ -412,10 +412,11 @@ FROM Books b, Authors a, BooksAuthors ba
 WHERE b.id = ba.book_id AND
 	ba.author_id = a.id AND	
 	last_name LIKE '_____' AND
-	isbn LIKE "%5"
+	isbn LIKE '%5'
 \end{lstlisting}
 The Join semantics between two Tables T1 and T2 is a cross product between T1 and T2, then it selects the rows satisfying the WHERE clause and then it projects on the columns in the SELECT clause.\newline
-Assume that a author has written no books, when we do join between Authors and BooksAuthors that author will not appear. If we want him to appear we need to use LEFT JOIN with Authors on the LEFT, here is an example of the outer join(which is a union and the inner join is a intersection):
+Assume that a author has written no books, when we do join between Authors and BooksAuthors that author will not appear. 
+If we want him to appear we need to use LEFT JOIN with Authors on the LEFT, here is an example of the outer join(which is a union and the inner join is a intersection):
 \begin{lstlisting}
 	SELECT Authors.id, last_name, first_name, Books.id, ISBN
 	FROM Books, Authors LEFT JOIN BooksAuthors
@@ -433,8 +434,63 @@ We can give also the projected columns an alias, here is an example where we cou
 	WHERE Books.id = BooksAuthors.author_id
 	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
 \end{lstlisting}
-
 \subsection{SET operations}
+We can intersect two or more tables using the INTERSECT clause, it acts as the normal intersection between two sets where sets are are the rows. 
+It is rarely used because can be replaced with a more complex WHERE condition (for example using AND). 
+Here is an example to find Authors with Income$>$90000 and with the last name containing an o:
+\begin{lstlisting}
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000
+	INTERSECT 
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%' 
+	
+	--Equivalent "complex" WHERE AND condition
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000 AND last_name LIKE '%o%'
+\end{lstlisting}
+We can also do the UNION between two sets, also this one is rarely used because it can be replaced by a more complex WHERE condition if no duplicates are there. To do union with duplicates UNION ALL can be used. 
+Here is an example to find authors with income$>$90000 or name containing an o:
+\begin{lstlisting}
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000
+	UNION 
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%' 
+	
+	--If no duplicates equivalent is the WHERE - OR
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000 OR last_name LIKE '%o%'
+	
+	--Union with duplicates
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000
+	UNION ALL --Here is the difference
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%' 
+\end{lstlisting}
+
+One command of the set operation that is used in practice is the EXCEPT which is a difference between two sets, is can be replaced with a much more complex nested query.
+\begin{lstlisting}
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE Income > 90000
+	EXCEPT 
+	SELECT last_name, first_name
+	FROM Authors
+	WHERE last_name LIKE '%o%' 
+\end{lstlisting}
+The code above will return us all the author with income$>$90000 and the last name not containing an o.
+
+\subsection{Nested Queries}
 
 
 \end{document}
