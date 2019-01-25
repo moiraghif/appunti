@@ -354,6 +354,8 @@ The Hash is a mathematical function that assign to a given key it's value, usual
 There might a problem with the conflicts but they can be managed. 
 Hashing also enables items in the DB to be retrieved quickly. 
 The hash table can be easily distributed in a network, it is managed in pile so we can have a key(saved in the pile) $x$ saved in a server and it's succ(x) stored in a different server, thus scaling out really fast. 
+One reason to use hashing is so that we are able to
+evenly distribute the data across a certain number of slots. If we want to hash any number into 10 buckets, we can use modulo 10; then key 27 would map to bucket 7, key 32 would map to bucket 2, key 25 to bucket 5, and so on.
 %The key value terminology is the following:
 \newline
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \texttt{(k1,v1)}: basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 the system simply finds the node with the key \texttt{k1} and return it's value \texttt{v1} from it.
