@@ -363,7 +363,7 @@ In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \text
 The essence of the columnar concept is that data for columns is grouped together on disk. In a columnar database, values for a specific column become co-located in the same disk blocks, while in the row-oriented model, all columns for each row are co-located. Indeed, one of the advantages to the columnar architecture is that queries seeking to aggregate the values of specific columns are optimized, because all of the values to be aggregated exist within the same disk blocks. The exact IO and CPU optimizations delivered by a column architecture vary depending on workload,indexing, and schema design. In general, queries that work across multiple rows are significantly accelerated in a columnar database.\\
 
 These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra), even though some consider Cassandra still  as a key-value model and not a wide column.
-\newline
+
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
 We will consider the \textbf{HBase BigTable} Model.
 The data is organized in tables, each table(the tables are multi-versioned) is composed by the column-families that include columns, the cells within a column family are sorted physically and are usually very sparse with most of the cell having \texttt{NULL} value so we can have different rows with different sets of columns. 
@@ -642,7 +642,23 @@ The properties of the Shard key are:
 \end{itemize}
 
 \subsection{HBase}
-The four major components (nodes) of HBase are:
+We can consider HBase tables as potentially massive tabular datasets that are implemented on disk by a variable number of HDFS files called Hfiles.
+All rows in an HBase table are identified by a unique row key. A table of nontrivial size will be split into
+multiple horizontal partitions called \textbf{regions}. Each region consists of a contiguous, sorted range of key values (reminding of the MongoDB range-based sharding scheme).
+
+Read or write access to a region is controlled by a \textbf{RegionServer}. There will usually be more than one region in each RegionServer. As regions grow, they split into multiple regions based on configurable policies (may also be split manually).
+
+Each HBase installation will include a Hadoop \textbf{Zookeeper service} that is implemented across multiple nodes.
+Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras?
+
+The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the
+balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to
+determine the location of the HBase catalog tables, which can be then be interrogated to determine the
+location of the appropriate RegionServer. The client will then request to read or modify a key value from
+the appropriate RegionServer. The RegionServer reads or writes to the appropriate disk files, which are
+located on HDFS. %taken almost literally from the suggested course book "Next Generation DB"
+
+Summing up, the four major components (nodes) of HBase are:
 \begin{enumerate}[noitemsep]
 	\item The HMaster (only one): It is the implementation of Master server in HBase architecture. It monitors and coordinates all slaves in the cluster. It must assign regions, detect failures and has admin privileges. 
 	\item The HRegionServer (many of them): It manages the data regions and serves client requests for reads and writes (using a log), this request is assigned to a specific region, where actual column family resides. However the client can contact directly the HRegionServer without having a permission of HMaster. HMaster is required only for operations related to metadata and schema changes. The Region servers run on Data Nodes present in the Hadoop cluster.\newline
@@ -657,7 +673,8 @@ The four major components (nodes) of HBase are:
 HBase's architecture is similar to MongoDB's and they share the same flaw: If the master is broken the client cannot obtain any data and we have an error (Single point of failure).
 
 \subsection{Cassandra}
-Cassandra on the other hand repairs the flaw of having a single master because there is no master and all the nodes are considered the same, it uses a peer-to-peer distributed system. 
+In Cassandra there are no specialized master nodes. Every node is equal and every node is capable of performing any of the activities required for cluster operation. \footnote{Nodes in Cassandra do, however, have short-term specialized responsibilities. For instance, when a client performs an operation, a node will be allocated as the coordinator for that operation. When a new member is added to the cluster, a node will be nominated as the seed node from which the new node will seek information. However, these short-term responsibilities can be performed by any node in the cluster.}
+It uses a peer-to-peer distributed system. 
 The Data is partitioned among all nodes in the cluster and a custom data replication to ensure fault tolerance and since all the nodes are all considered same we have Read/Write-anywhere design.
 Cassandra is based on Google BigTable and Amazon Dynamo so it inherits their properties.
 \newline
