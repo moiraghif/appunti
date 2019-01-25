@@ -182,81 +182,78 @@ Esempi e tipologie di modelli NoSQL :
 \end{enumerate}
 Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
 \begin{center}
-	\includegraphics[scale=0.5]{IMAGE1.jpg}
+	\includegraphics[scale=0.4]{IMAGE1.jpg}
 \end{center}
 
 
 
 \subsubsection{Document Based\cite{MongoDB}}
-MongoDB is -as already mentioned- a document based management system, with the data stored in Bson (Binary Json), and the access to data is possible thanks to indexes. Compared to the SQL DBs, Mongo doesn't have the join feature. The name changes are:
-
+MongoDB è -come già affermato- un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono storati in formato BSON (Binary JSON) e l'accesso ai dati stessi è possibile grazie all'esistenza di indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere la funzione join. Le principali differenze sono le seguenti:
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
-In case of a massive data upload one might decide to do a few changes in the process to fasten  it up:
-
+Nel caso in cui si verifichi un massiccio caricamento di dati, si potrebbe decidere di apportare alcune modifiche al processo per fissarlo:
 \begin{itemize}[noitemsep]
 	 
 	\item
-	Disable the acknowledgment(ack) of the data, which is a signal passed between communicating processes, computers or devices, to signify acknowledgment or receipt of message, as part of a communications
-	protocol.
+	Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
 	\item
-	Disable the writing on a log file
+	Disabilitare la scrittura su un file di tipo log
 \end{itemize}
-One must be attentive when doing so because any loss will not be registered and lost forever.
+Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà persa per sempre.
 \newline
-For large data-sets it is useful to use some additional structures called indexes: those are similar to the book indexes and act as a faster way to retrieve information.
-They might require more time during the insertion but makes the queries faster later. 
-One primary index (basic one) is always the defined for the id. 
+Per grandi dataset risulta molto utile l'utilizzo di alcune strutture aggiuntive chiamate indici: simili agli indici dei libri, rappresentano un modo più veloce per recuperare informazioni.
+Potrebbe essere richiesto più tempo durante la fase di inserimento degli stessi indici, ma questi renderanno l'esecuzione delle query molto più rapida. 
+Un indice primario (basic one) è sempre quello definito per l'id. 
 
-How does it exactly works?
-Basically without an index Mongo will perform a simple table scan (like SQL) in which it has to look through all the ``book'' to find a query result. The analogy with the book is if we don't have the index for our books we will have to read it whole until finding the point where we wanted to be. 
-Indexing avoids this problem (more problematic if the database is large), providing an ordered list that points it's content.
-Since indexing slows down the modifications one must choose just a couple of indexes for any given collection, the tricky part is to decide which one. MongoDB gives, by default, a limit of 64 indexes!
+Ma come funziona esattamente?
+Fondamentalmente, senza un indice, Mongo si comporterebbe come un semplice scansionatore di tabelle (esattamente come fa SQL). Dovrebbe di conseguenza cercare per tutto il ``libro'' al fine di trovare il risultato della query. L'analogia con il libro si esplicita al meglio nel seguente meccanismo: se non avessimo l'indice nei nostri libri, saremmo costretti a leggere il libro interamente fino a che non troviamo il paragrafo o il capitolo da cui siamo intenzionati a partire nella lettura. 
+L'indicizzazione evita proprio questo problema (che risulta ancora più complicato se il database è ampio), fornendo una lista ordinata che indica il contenuto.
+Dal momento che l'indicizzazione rallenta molto le modifiche, sarebbe necessario scegliere solamente una coppia di indici per ogni collection; la parte difficile è decidere quali. MongoDB dà, di default, un limite di 64 indici!
 
-The aggregation uses pipeline and options. 
-The aggregation pipeline starts processing the documents of the collection and passes the result to the next pipeline in order to get result for example: \$match and \$group. 
-We can use the same operator in different pipelines.
+L'aggregazione utilizza pipeline e opzioni.
+La pipeline di aggregazione avvia l'elaborazione dei documenti della raccolta (collection) e passa il risultato alla pipeline successiva per ottenere risultati, ad esempio: \ $ match e \ $ group.
+Possiamo utilizzare lo stesso operatore in diverse pipeline.
 
-For many (mainly commercial) reasons, Mongo offers also a SQL interface; we need the connector BI (Business Intelligence): it generates the relational schema and use such schema to access the data.
+Per molte ragioni (principalmente commerciali), Mongo offre anche un'interfaccia SQL; abbiamo bisogno del connettore BI (Business Intelligence): genera lo schema relazionale e usa tale schema per accedere ai dati.
 
 \subsubsection{GraphDB\cite{Neo4J}}
 
-A graph is a collection of nodes and edges which represents their relations. 
-It has a lot of applications such as: social media, recommendations, geo, logistics network, financial transaction graphs (for fraud detection), master data management, bioinformatics, authorization and access control.
+Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni degli stessi nodi. 
+Ha un sacco di applicazioni, come: social media, raccomandazioni, geo, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, autorizzazione e controllo degli accessi.
 \newline
-The labeled property graph model has the following characteristics:
+Il modello a grafo di proprietà con etichette (labeled-property graph model) ha le seguenti caratteristiche:
 
 \begin{itemize}[noitemsep]
 	 
 	\item
-	It contains \textbf{nodes} and \textbf{relationships};
+	Contiene \textbf{nodi} e \textbf{relazioni};
 	\item
-	Nodes contains \textbf{properties} (key : value pairs);
+	I nodi contiene \textbf{proprietà} (chiave : coppie di valori);
 	\item
-	Nodes can be labeled with one or many \textbf{labels};
+	I nodi possono essere etichettati con una o più \textbf{etichette};
 	\item
-	Relationships are named and directed, with a start and end node;
+	Le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
 	\item
-	Like nodes, also Relationships can contain properties.
+	Come i nodi, anche le relazioni possono avere delle proprietà.
 	\item
 	%magari migliorare questa parte (Sicuramente fa pena nella lista)
-	The relationship can be \textbf{fine-grained} or \textbf{generic}: \\let's consider the $Address$ relationship case: we can distinct between:
+	Le relazioni possono essere \textbf{fine-grained} or \textbf{generic}: \\Consideriamo il caso della relazione $Address$, si può fare distinzione tra:
 	\begin{itemize}
 		
-		 \item fine-grained relationship like \texttt{HOME$\_$ADDRESS} or \texttt{WORK$\_$ADDRESS} or \texttt{DELIVERY$\_$ADDRESS} 
-		 \item or we could choose only \texttt{ADDRESS} and specify which kind of address it is \texttt{ADDRESS\{type:`home'\}}. This method is called generic relationship. 
+		 \item le relazioni fine-grained come \texttt{HOME$\_$ADDRESS} o \texttt{WORK$\_$ADDRESS} o \texttt{DELIVERY$\_$ADDRESS} 
+		 \item oppure potremmo scegliere solamente \texttt{ADDRESS} e specificare di quale tipo di indirizzo si tratta \texttt{ADDRESS\{type:`home'\}}. Questo metodo prende il nome di generic relationship. 
 	\end{itemize}		 
-	Usually the generic one is preferred,  especially in cases where I need to find all the address of a client: all I need to do is find the \texttt{ADDRESS} relationship, whereas in the fine-grained case I would need to find one by one all kind of addresses (just	imagine if we had 100 types of addresses!). On the other hand to find the \texttt{DELIVERY$\_$ADDRESS} all I need to do is to identify the \texttt{ADDRESS\{type:`delivery'\}}. 
+	In genere si preferisce il generic, specialmente per quei casi in cui bisogna trovare tutti gli indirizzi di un cliente: tutto quello che basta fare è trovare la relazione \texttt{ADDRESS}, mentre nel caso del fine-grained sarebbe necessario trovare uno a uno tutti i tipi di indirizzi (immaginate di avere 100 tipi di indirizzo!). Con l'altro metodo (generic) per trovare il \texttt{DELIVERY$\_$ADDRESS} tutto ciò che bisogna fare è identificare \texttt{ADDRESS\{type:`delivery'\}}. 
 
 \end{itemize}
-A Graph Database (GD) can use either the native or non-native storage and processing engine.
+Un database a grafo (Graph Database, GD) può usare sia un motore di archiviazione nativo o non-nativo (native or non-native storage) che un motore di elaborazione (processing engine).
 \newline
-Native Graph Storage is optimized for the native graph management, whereas the non native graph storage treats the data in non graph based model while still supporting a graph query language. Examples: Relational, Object oriented DB, Wide Column. 
-In a relational for example in a join bomb we can use a graph to connect two tables. 
-The problem with relational DBs and most of NoSQL DBs is the lack of relationships.
-Moreover in SQL joining tables adds more complexity, and especially in case of sparse table with null-able column the operation requires special checking in the code.
-In the case of a market, just to see what a customer bought, we need to do a lot of expensive joins on the customers that buy a specific product with other products for the recommendation systems. 
+L'archiviazione a grafo di tipo nativo è ottimizzata per la gestione a grafo nativa, mentre l'archiviazione a grafo di tipo non nativo tratta i dati in un modello non basato su grafico pur continuando a supportare un linguaggio di query grafico. Esempi sono: Relational, Object oriented DB, Wide Column. 
+In un modello relazionale, per esempio, in una join bomb si può utilizzare un grafo per connettere due tabelle. 
+Il problema con i database relazionali e la maggior parte dei database NoSQL è la mancanza di relazioni.
+Inoltre in SQL le joining tables aggiungono un livello di complessità in più, e specialmente nel caso di tabelle scarse con colonne nulle l'operazione richiede un controllo speciale nel codice.
+Nel caso di un mercato, solo per vedere cosa ha comprato un cliente, dobbiamo fare un sacco di joins costose sul cliente che ha comprato uno specifico prodotto con altri prodotti per il sistema di raccomandazione. 
 For the NoSQL DBs, whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model. Indeed the aggregation is a costly operation since it doesn't exploit index free adjacency (the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
 other interesting queries. 
 
