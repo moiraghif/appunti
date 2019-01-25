@@ -359,6 +359,9 @@ The hash table can be easily distributed in a network, it is managed in pile so 
 In a DHT(Distributed Hash Table) it is pretty simple to insert a key-value \texttt{(k1,v1)}: basically take the key as input and route messages to the node holding that key and store the value there, and to retrieve the value of k1 the system simply finds the node with the key \texttt{k1} and return it's value \texttt{v1} from it.
 
 \subsubsection{Wide Column and BigTable}
+\paragraph{Intro to Columnar Storage:}%The idea that it might be better to store data in columnar format dates back to the 1970s, although commercial columnar databases did not appear until the mid-1990s. %maybe skippable
+The essence of the columnar concept is that data for columns is grouped together on disk. In a columnar database, values for a specific column become co-located in the same disk blocks, while in the row-oriented model, all columns for each row are co-located. Indeed, one of the advantages to the columnar architecture is that queries seeking to aggregate the values of specific columns are optimized, because all of the values to be aggregated exist within the same disk blocks. The exact IO and CPU optimizations delivered by a column architecture vary depending on workload,indexing, and schema design. In general, queries that work across multiple rows are significantly accelerated in a columnar database.\\
+
 These two models are an evolution, in a certain way, of the key-value models. When we start giving a structure to the value it becomes more complicated so we use wide column(Big Table): The first model was introduced by Google(HBase) and later on by Facebook (Cassandra), even though some consider Cassandra still  as a key-value model and not a wide column.
 \newline
 BigTable is a multidimensional map, which can be accessed by row key, column key and a timestamp. It is sorted, persistent and sparse.
@@ -661,8 +664,13 @@ Cassandra is based on Google BigTable and Amazon Dynamo so it inherits their pro
 In Cassandra we can add or remove nodes with no downtime so we have a transparent elasticity and transparent scalability (performance grows linearly with the number of nodes) and due to it's P2P architecture we obtain also the High Availability. If a node were to fault we will have that we could obtain the data from the replicas in the other nodes.
 The Nodes are logically structured in Ring Topology, the hashed value of key associated with data partition is used to assign it to a node in the ring. The hashing rounds off after a certain value to support the ring structure and the lightly loaded nodes moves position to alleviate the highly loaded nodes.
 Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we decide the N number of following nodes in which the replica will be saved.
-\newline
-The data writing is separated in 3 stages : 
+
+\begin{figure}
+\centering
+\includegraphics[width=100 mm]{cassandrawrite.png}
+\caption{\label{cassandrawrite:fig} Data writing procedure in Cassandra.}
+\end{figure}
+As illustrated in Fig.~\ref{cassandrawrite:fig}, The data writing is separated in 3 stages : 
 \begin{enumerate}
 	\item The log file writing, which is essential: even if the data writing fails it doesn't matter because we have the log file.
 	\item Once written in the commit log, data is written to the mem-table. Data written in the mem-table on each write request also writes in commit log separately. Mem-table is a temporary storage of data in the memory while commit log logs the transaction records for backup.
