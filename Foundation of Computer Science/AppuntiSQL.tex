@@ -44,9 +44,9 @@
 
 \maketitle
 
-\section{Introduction to Relational DataBases}
-
-The relational DBs are organized in tables that can be linked together. A table in the relational model represents a relation. For example in the following database each row describes a single book:
+\section{Relational Databases}
+\subsection{Introduction}
+The relational DBs are organized in tables that can be linked together. A table in the relational model represents, itself, a relation. For example in the following database each row describes a single book:
 
 \begin{table}[h]
 	\centering
@@ -158,11 +158,11 @@ The purpose of the foreign key is to link the two tables in one-to-many relation
 Usually the primary key generation process is left to the RDBMS (it's safer this way), which automatically generates the key and usually it is an ordinary integer.
 For the join tables, the primary key is a combination of the foreign keys. A primary key comprised of more than one attribute is called a ``Composite Primary key''(CPK).
 %Tutta questa parte non è da studiare, solo il materiale proveniente dalla colonna Material dell'e-learning.
-\section{Normal Forms}
+\subsection{Normal Forms}
 The First Normal Form (1NF) says that the types must be atomic (the table must be flat) so we cannot have a cell with multiple data(multi-list) in it. 
 This causes some anomalies such as: 
 \begin{itemize}[noitemsep]
-	\item Redundancy: Same data is repeated multiple times. For example, in a university timetable(we will use this example for the whole list), if every course is in only one room we have two attributes one with the Course and one with the Room, which is redundant.
+	\item Redundancy: Same data is repeated multiple times. For example, in a university timetable(we will use this example for the whole list), if every course is in only one room we have two attributes: one with the Course and one with the Room, which is redundant.
 	\item Update anomaly: when we update a value of a cell. For example if we update room name in a cell we don't automatically have an update on all the cell containing that room or the course.
 	\item Delete anomaly: if all the data using a specific information is dropped we lose that specific information too. For example if everyone in drops a class we lose what room the class is in.
 	\item Insert anomaly: we can't use a specific information without some other data using it. Example is similar to delete anomaly: we cannot reserve a room for a course without having students.
@@ -175,17 +175,18 @@ In normal words whenever two tuples agree on A they agree on B.
 A functional dependency is a form of constraint.\newline
 Note: It is easy to disprove a functional dependency, you need only a instance violating it, but to prove it we need to check every valid instance.
 
-We define the \textbf{superkey} as a set of attribute $A_1,\hdots, A_n$ such as for any other attribute $B$ in the relation R, we have $\{A_1,\hdots,A_n\} \rightarrow B$. 
-A \textbf{key} is a minimal superkey i.e. no subset of a key is a superkey.
+We define the \textbf{superkey} as a set of attribute $A_1,\hdots, A_n$ such as for any other attribute $B$ in the relation R, we have $\{A_1,\hdots,A_n\} \rightarrow B$. In other words a super key is a set of one or more attributes (columns), which can uniquely identify a row in a table.
+A \textbf{key} is a minimal superkey (only one attribute) i.e. no subset of a key is a superkey.
 
-The idea to have a normalized database is to search for ``bad'' FDs, if there are any then decompose the table into sub-tables (linked usually) until no more bad FDs, when done the database schema is normalized. 
+The idea to have a normalized database is to search for ``bad'' FDs: if there are any, then decompose the table into sub-tables (linked usually) until no more bad FDs. When done the database schema is normalized. 
 The normal form are distinct from each other depending on what they define as ``bad'' FDs.
 
 For the Boyce-Codd Normal Form (BCNF) defines $X \rightarrow A$ as a ``good'' FD if X is a (super)key and ``bad'' otherwise. 
 BCNF is a simple condition for removing anomalies from the relations: A relation R is in BCNF if $\{A_1,\hdots,A_n\} \rightarrow B$ is a non-trivial FD in R then $\{A_1,\hdots,A_n\}$ is a superkey for R.\newline
 The problem with BCNF is that to enforce a FD, we must reconstruct original relation on each insert. It's solution is usually a tradeoff between redundancy/data anomalies and FD preservation.
 
-\section{Introduction To SQL}
+\section{SQL}
+\subsection{Introduction}
 SQL stands for Structured Query Language and it is a standard language for querying and manipulating data. It is a very high-level programming language and it is very well optimized.
 
 
@@ -197,7 +198,7 @@ SQL is a:
 	It Inserts/deletes/modifies tuples in tables and queries one or more tables.
 \end{itemize}
 
-A \textbf{relation} (or \textbf{table}) in SQL is a multiset of tuples having the attributes specified by the schema. Where a \textbf{multiset} is an unordered list (so multiple duplicates instances are allowed) and an \textbf{attribute} is a typed data entry present in each tuples in the relation and it must have an atomic type in standard SQL. The atomic types are:
+A \textbf{relation} (or \textbf{table}) in SQL is a multiset of tuples having the attributes specified by the schema.As \textbf{multiset} we mean that is an unordered list (so multiple duplicates instances are allowed) and an \textbf{attribute} is a typed data entry present in each tuples in the relation. An attribute must have an atomic type in standard SQL. The atomic types are:
 \begin{itemize}[noitemsep]
 	\item Characters: CHAR(20), VARCHAR(50)
 	\item Numbers: INT, BIGINT, SMALLINT, FLOAT
@@ -205,14 +206,16 @@ A \textbf{relation} (or \textbf{table}) in SQL is a multiset of tuples having th
 \end{itemize}
 A \textbf{tuple (row)} is a single entry in the table having the attributes specified by the schema.
 
-The \textbf{schema} of a table is the table name, it's attributes and they types, a key is an attribute whose values are unique. A \textbf{key} is a minimal subset of attributes that acts as a unique identifier for tuples in a relation. A key is an implicit constraint on which tuples can be in the relation: so if two tuples agree on the same value of the key, then they must be the same tuples. 
+The \textbf{schema} of a table is the table name, it's attributes and they types, a key is an attribute whose values are unique. A \textbf{key} is a minimal subset of attributes that acts as a unique identifier for tuples in a relation. 
 
-If some information is missing or is not known SQL uses the NULL. To check if a value is NULL we cannot say value=NULL since it's unknown we need to use ``IS NULL'' command of SQL. SQL offers the possibility to constrain a column to be NOT NULL or supports other constraints such as maximum number of values per attributes.
+A key is an implicit constraint on which tuples can be in the relation: so if two tuples agree on the same value of the key, then they must be the same tuples. 
+
+If some information is missing or is not known SQL uses the NULL value. To check if a value is NULL we cannot say value=NULL since it's unknown. We need to use ``IS NULL'' command of SQL. SQL offers the possibility to constrain a column to be NOT NULL or supports other constraints such as maximum number of values per attributes.
 It's thanks to the schema and constraints that the databases understand the semantics of the data.
 
-\section{Constraints in SQL}
+\subsection{Constraints in SQL}
 A constraint is a relationship among data elements that the DBMS is required to enforce. The triggers are executed when a specified condition occurs, it's usually easier to implement than a constraint. 
-Kinds of Constraints are:
+Kinds of constraints are:
 \begin{itemize}[noitemsep]
 	\item (Foreign) Keys
 	\item Value-Based constraint (constrain a certain value)
@@ -262,8 +265,8 @@ FOREIGN KEY(attribute_4) REFERENCES table_1(attribute_1)
 
 Once we have a foreign key constraint there are two possible violations:
 \begin{enumerate}[noitemsep]
-	\item Insert or update to table\_2 that introduces values not found in table\_1.
-	\item Delete or update to table\_1 causing some tuples of table\_2 to be disrupted.
+	\item Insert or update to table\_2, that introduces values not found in table\_1.
+	\item Delete or update to table\_1, causing some tuples of table\_2 to be disrupted.
 \end{enumerate}
 In case of 1. we reject such operation. In case 2. in case of deletion or update we can proceed in three different ways:
 \begin{enumerate}[noitemsep]
@@ -288,12 +291,12 @@ FOREIGN KEY(attr_4)
 );
 \end{lstlisting}
 
-Some other constraint are Attribute-Based checks to constraint on the value of a particular attribute in this case add CHECK($<$condition$>$) to the declaration for the attribute. We might use the name of the attribute in the condition but any other relation or attribute name must be in a subquery.
+Some other constraint are Attribute-Based checks to constraint on the value of a particular attribute. In this case add CHECK($<$condition$>$) to the declaration for the attribute. We might use the name of the attribute in the condition but any other relation or attribute name must be in a subquery.
 The checks are performed only when a value for that attribute is inserted or updated.
 It can be added as a relation-schema element(like for the foreign key).
 
 The last one is the Assertion, these are database-scheme elements and defined by: \newline CREATE ASSERTION $<$name$>$ CHECK ($<$condition$>$); the condition may refer to any relation or attribute in the database schema.
-For example if there are two table Bars and Drinkers we want to assert that there cannot be more bars than drinkers the code is:
+For example, if there are two tables, Bars and Drinkers and we want to assert that there cannot be more bars than drinkers, the code is:
 \begin{lstlisting}
 	CREATE ASSERTION FewBar CHECK (
 	(SELECT COUNT(*) FROM Bars) <=
@@ -305,9 +308,9 @@ Problem is the DBMS often can't tell when they need to be checked.
 The Triggers let the user decide when to check for any condition.
 An example is when using a foreign key constraint, instead of rejecting insertions with unknown elements, a trigger can add that new element to the original table with other attributes set as NULL.
 
-\section{SQL Data Manipulation Operations}
+\subsection{SQL Data Manipulation Operations}
 
-\subsection{Basic Commands for a single table}
+\subsubsection{Basic Commands for a single table}
 To project a table we use SELECT FROM:
 
 \begin{lstlisting}
@@ -316,7 +319,7 @@ To project a table we use SELECT FROM:
 	WHERE [optional]<conditions>
 \end{lstlisting}
 
-If after SELECT in the attributes we use * we select all of the attributes. Note that the commands are case insensitive but the values are case sensitive and when using condition on strings in where use single quotes $'$value$'$ and not the double ones.\newline
+If after SELECT in the attributes we use * we select all of the attributes. Note that the commands are case insensitive but the values are case sensitive and when using condition on strings we have to use single quotes $'$value$'$ and not the double ones.\newline
 Assume having a table of authors named Authors with the following schema:
 \begin{table}[h]
 	\centering
@@ -327,8 +330,8 @@ Assume having a table of authors named Authors with the following schema:
 \end{table}
 
 
-For the duplicated values we can use DISTINCT after select and in there WHERE we can have more than one conditions using AND or OR.\newline
-For conditions on strings we have the following syntax: \% indicated any string, \_(underscore) indicated any character and when using them we need to use LIKE and to order them be use ORDER BY (DESC) $<$attribute$>$, DESC for descending order by default is ascending, here is an example using all the points:
+For the duplicated values we can use DISTINCT after SELECT and in there WHERE we can have more than one conditions using AND or OR.\newline
+For conditions on strings we have the following syntax: \% means "any string", \_(underscore) means "any character" and when using them we need to use LIKE in WHERE clause. To order them we have to use ORDER BY (DESC) $<$attribute$>$, DESC for descending order by default is ascending, here is an example using all the points:
 \pagebreak
 \begin{lstlisting}
 	--Distinct Genres of Authors whose name start with S and the third letter is a
@@ -341,14 +344,14 @@ For conditions on strings we have the following syntax: \% indicated any string,
 To count the number of rows use count(*) in the SELECT clause. To count the number of values not null in a specific column use count(column1,column2) in the SELECT clause. Some of the other operations that can be done in the SELECT clause are AVG, SUM, MIN, MAX.\newline
 This operations are heavily used together with GROUP BY. GROUP BY  is useful to aggregate the data, if we want to calculate the average income for each genre we do it as follows:
 \begin{lstlisting}
-	SELECT genre, AVF(income)
+	SELECT genre, AVG(income)
 	FROM Authors
 	GROUP BY genre;
 \end{lstlisting}
-Attention we can have in SELECT only the attributes present in GROUP BY or other attributes with some aggregate operation only never by themselves. All the operation mentioned were considered in the case of one table.
+Attention: we can have in SELECT only the attributes present in GROUP BY or other attributes with some aggregate operation only, never by themselves. All the operation mentioned were considered in the case of one table.
 
-\subsection{JOIN}
-Now let's focus our attention to the case of two tables. Assume having the Authors table, Books Table, a BookAuthors join table and a Editions Table with the following schema:
+\subsubsection{Basic Commands on two (or more) tables [JOIN/WHERE]}
+Now let's focus our attention to the case of two tables. Assume having the Authors table, Books table, a BooksAuthors join table and an Editions table with the following schema:
 \begin{table}[h]
 	\centering
 	\begin{tabular}{c c c c c c}
@@ -362,7 +365,7 @@ Now let's focus our attention to the case of two tables. Assume having the Autho
 	id & title & ISBN\\
 	INT & CHAR & BIGINT
 	\end{tabular}
-\caption*{\textbf{Book Table}}
+\caption*{\textbf{Books Table}}
 ~\\
 	\centering
 	\begin{tabular}{c c}
@@ -378,7 +381,9 @@ Now let's focus our attention to the case of two tables. Assume having the Autho
 \caption*{\textbf{Editions Table}}
 \end{table}
 
-We can use the foreign key to connect two tables either in FROM using a JOIN or in WHERE here are two methods:
+We can use the foreign key to connect two tables either in FROM using a JOIN or in WHERE.
+
+Here are these two methods:
 
 \begin{lstlisting}
 	--WHERE version to find author of book_id = 1
@@ -405,9 +410,9 @@ WHERE Books.id = BooksAuthors.book_id AND
 	isbn LIKE "%5"
 \end{lstlisting}
 
-Sometimes it become where complex to write down the table name every time so we can give the aliases for example we call Books - b, Authors - a and BooksAuthors - ba and use the same query as before but easier to write down:
+Sometimes it become more complex to write down the table name every time so we can give the aliases. For example we call Books - b, Authors - a and BooksAuthors - ba and use the same query as before but easier to write down:
 \begin{lstlisting}
-SELECT Books.id, ISBN, Authors.id, last_name, first_name
+SELECT b.id, ISBN, a.id, last_name, first_name
 FROM Books b, Authors a, BooksAuthors ba
 WHERE b.id = ba.book_id AND
 	ba.author_id = a.id AND	
@@ -435,8 +440,8 @@ We can give also the projected columns an alias, here is an example where we cou
 	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
 \end{lstlisting}
 \pagebreak
-\subsection{SET operations}
-We can intersect two or more tables using the INTERSECT clause, it acts as the normal intersection between two sets where sets are are the rows. 
+\subsection{SET Operations}
+We can intersect two or more tables using the INTERSECT clause, it acts as the normal intersection between two sets where sets are the rows. 
 It is rarely used because can be replaced with a more complex WHERE condition (for example using AND). 
 Here is an example to find Authors with Income$>$90000 and with the last name containing an o:
 \begin{lstlisting}
@@ -479,7 +484,7 @@ Here is an example to find authors with income$>$90000 or name containing an o:
 	WHERE last_name LIKE '%o%' 
 \end{lstlisting}
 
-One command of the set operation that is used in practice is the EXCEPT which is a difference between two sets, is can be replaced with a much more complex nested query.
+One command of the set operation that is used in practice is the EXCEPT which is a difference between two sets, it can be replaced with a much more complex nested query.
 \begin{lstlisting}
 	SELECT last_name, first_name
 	FROM Authors
@@ -492,8 +497,8 @@ One command of the set operation that is used in practice is the EXCEPT which is
 The code above will return us all the author with income$>$90000 and the last name not containing an o.
 
 \subsection{Nested Queries}
-We can replace some of the SET operation with nested queries:\newline
-To remove he intersect we can proceed as follows:
+We can replace some of the SET operations with nested queries:\newline
+To remove the intersect we can proceed as follows:
 \begin{lstlisting}
 SELECT last_name, first_name
 FROM Authors
@@ -519,5 +524,5 @@ There are also other uses of the nested queries for example finding the author w
 	WHERE A1.income >= ALL (SELECT A2.income
 										FROM Authors)
 \end{lstlisting}
-Another command that can be used after WHERE is the ANY instead of ALL in this case the result will be every row that satisfies the condition for at least one other row of the nested query, in case of all the result is the set of rows that satisfies the condition for all of the rows in the nested query.
+Another command that can be used after WHERE is the ANY instead of ALL. In this case the result will be every row that satisfies the condition for at least one other row of the nested query, in case of all the result is the set of rows that satisfies the condition for all of the rows in the nested query. In SQLite the command ALL is replaced by MAX.
 \end{document}
