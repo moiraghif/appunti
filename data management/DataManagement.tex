@@ -681,6 +681,8 @@ Cassandra is based on Google BigTable and Amazon Dynamo so it inherits their pro
 In Cassandra we can add or remove nodes with no downtime so we have a transparent elasticity and transparent scalability (performance grows linearly with the number of nodes) and due to it's P2P architecture we obtain also the High Availability. If a node were to fault we will have that we could obtain the data from the replicas in the other nodes.
 The Nodes are logically structured in Ring Topology, the hashed value of key associated with data partition is used to assign it to a node in the ring. The hashing rounds off after a certain value to support the ring structure and the lightly loaded nodes moves position to alleviate the highly loaded nodes.
 Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we decide the N number of following nodes in which the replica will be saved.
+%%%
+
 
 \begin{figure}
 \centering
@@ -705,6 +707,12 @@ SELECT * FROM table USING CONSISTENCY ONE
 \newline
 To delete the data is it easier to consider the data not available and mark it for deletion, it is called a tombstone(like how recycle bin works in OS), and actually delete on a major compaction or configurable timer.\newline
 Compaction runs periodically to merge multiple SSTables reclaiming space, creating new index, merging the keys, combining columns and discarding the tombstones.
+
+One of the advantages of a master node is that it can maintain a canonical version of cluster
+configuration and state. In the absence of a master node keeping a canonical version of cluster configuration, Cassandra requires that all members of the cluster be kept up to date with the current state of cluster configuration and status. This is achieved by use of the \textbf{gossip protocol}. Every second each member of the cluster will transmit information about its state and the state of any other nodes it is aware of to up to three other nodes in the cluster. One nodes gossip about other nodes as well as about their own state.
+This architecture eliminates any single point of failure within the cluster.\footnote{Although distributed databases with master nodes have strategies to allow for rapid failover, the crash of a master node usually creates a temporary reduction in availability, such as momentarily falling back to read-only mode.}
+
+One of the main reasons of gossip is related to node availability. Usually the only way to detect node failure is a system of heartbeats between nodes. However (in a distributed system) the heartbeats may be lost because of network issues rather than actual node failure. Cassandra failure detection is more probabilistic: nodes in the cluster become increasingly “worried” about other nodes, and if it seems likely that a node is down the operations will be redirected.
 
 %Sezione in italiano ricavata dagli appunti dell'anno scorso. (Grande)
 %Per ora non si sa se questa parte sarà richiesta all'esame. Adesso sì
