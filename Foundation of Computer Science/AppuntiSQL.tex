@@ -46,7 +46,7 @@
 
 \section{Introduction to Relational DataBases}
 
-The relational DB are organized in tables that can be linked together. A table in the relational model represents a relation. For example in the following database each row describes a single book:
+The relational DBs are organized in tables that can be linked together. A table in the relational model represents a relation. For example in the following database each row describes a single book:
 
 \begin{table}[h]
 	\centering
@@ -68,7 +68,7 @@ The relational DB are organized in tables that can be linked together. A table i
 	\caption{Some sample books}
 \end{table}
 
-The data in a relational model is organized into columns and each entry(cell) contains a \textbf{SINGLE} piece of data, so the main problem of relational model is to handle data with multiple elements in a single column for example a book with two authors.
+The data in a relational model are organized into columns and each entry(cell) contains a \textbf{SINGLE} piece of data, so the main problem of relational model is to handle data with multiple elements in a single column for example a book with two authors.
 
 The solution proposed by the relational model is to link two tables and to do so we need an identifier ID for each row.
 Here is an example of two linked tables.
@@ -147,7 +147,7 @@ To connect these two tables we use a ``relation'' or ``join'' table. In the exam
 	\label{table:join}
 \end{table}
 
-In the Table ~\ref{table:join} we can see the need of using an ID to identify each row, so it can be referenced uniquely. 
+In the Table ~\ref{table:join} we can see the need of using an ID (named Foreign Key) to identify each row, so it can be referenced uniquely. 
 In some cases we might not need a third table (join table): one of these cases is the ``One-to-Many" relationship. 
 The One-to-Many relationship also requires that rows in tables have unique IDs, but unlike the join table used in Many-to-Many relationship, the table with the many side of data has a column reserved for the IDs of the one side of data.
 
@@ -157,15 +157,15 @@ The purpose of the foreign key is to link the two tables in one-to-many relation
 
 Usually the primary key generation process is left to the RDBMS (it's safer this way), which automatically generates the key and usually it is an ordinary integer.
 For the join tables, the primary key is a combination of the foreign keys. A primary key comprised of more than one attribute is called a ``Composite Primary key''(CPK).
-
+%Tutta questa parte non è da studiare, solo il materiale proveniente dalla colonna Material dell'e-learning.
 \section{Normal Forms}
-The First Normal Form (1NF) says that the types must be atomic so we cannot have a cell with multiple data(multi-list) in it. 
+The First Normal Form (1NF) says that the types must be atomic (the table must be flat) so we cannot have a cell with multiple data(multi-list) in it. 
 This causes some anomalies such as: 
 \begin{itemize}[noitemsep]
-	\item redundancy: Same data is repeated multiple times. For example, in a university timetable(we will use this example for the whole list), if every course is in only one room we have two attributes one with the Course and one with the Room, which is redundant.
-	\item update anomaly: when we update a value of a cell. For example if we update room name in a cell we don't automatically have an update on all the cell containing that room or the course.
-	\item delete anomaly: if all the data using a specific information is dropped we lose that specific information too. For example if everyone in drops a class we lose what room the class is in.
-	\item insert anomaly: we can't use a specific information without some other data using it. Example is similar to delete anomaly: we cannot reserve a room for a course without having students.
+	\item Redundancy: Same data is repeated multiple times. For example, in a university timetable(we will use this example for the whole list), if every course is in only one room we have two attributes one with the Course and one with the Room, which is redundant.
+	\item Update anomaly: when we update a value of a cell. For example if we update room name in a cell we don't automatically have an update on all the cell containing that room or the course.
+	\item Delete anomaly: if all the data using a specific information is dropped we lose that specific information too. For example if everyone in drops a class we lose what room the class is in.
+	\item Insert anomaly: we can't use a specific information without some other data using it. Example is similar to delete anomaly: we cannot reserve a room for a course without having students.
 \end{itemize}
 To overcome these anomalies other Normal Forms have been created. To introduce them first we need to introduce a Functional dependency (FD). \newline
 \textbf{Def:} Let $A,B$ be sets of attributes, we write $A \rightarrow B$ or say A functionally determines B if, for any tuple $t_1$ and $t_2$:
@@ -219,7 +219,7 @@ Kinds of Constraints are:
 	\item Tuple-Based constraint (relationship among components)
 	\item Assertion (any SQL boolean expression)
 \end{itemize}
-
+%Anche qui, dobbiamo sapere cosa sono i vincoli, ma non così approfonditamente. Just to say it!Poi sempre meglio sapere qualcosa in più che qualcosa in meno.
 When creating a table we create a key using a constraint of UNIQUE or PRIMARY KEY. While expressing a Foreign Key we need to use the keyword REFERENCES after an attribute or as an element of the schema and the referenced attribute must be declared either as a PRIMARY KEY or UNIQUE. Here is an example:
 \begin{lstlisting}
 --For the single attribute key
