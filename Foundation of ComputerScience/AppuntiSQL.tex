@@ -8,6 +8,7 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{mathtools}
+\usepackage{caption}
 
 \usepackage{listings}
 \usepackage{color}
@@ -305,5 +306,135 @@ The Triggers let the user decide when to check for any condition.
 An example is when using a foreign key constraint, instead of rejecting insertions with unknown elements, a trigger can add that new element to the original table with other attributes set as NULL.
 
 \section{SQL Data Manipulation Operations}
+
+\subsection{Basic Commands for a single table}
+To project a table we use SELECT FROM:
+
+\begin{lstlisting}
+	SELECT <attributes>
+	FROM <on or more relations>
+	WHERE [optional]<conditions>
+\end{lstlisting}
+
+If after SELECT in the attributes we use * we select all of the attributes. Note that the commands are case insensitive but the values are case sensitive and when using condition on strings in where use single quotes $'$value$'$ and not the double ones.\newline
+Assume having a table of authors named Authors with the following schema:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c c c c c c}
+		id & last\_name & first\_name & DoB & income & genre\\
+		INT & CHAR & CHAR & DATETIME & REAL & CHAR\\
+	\end{tabular}
+\end{table}
+
+
+For the duplicated values we can use DISTINCT after select and in there WHERE we can have more than one conditions using AND or OR.\newline
+For conditions on strings we have the following syntax: \% indicated any string, \_(underscore) indicated any character and when using them we need to use LIKE and to order them be use ORDER BY (DESC) $<$attribute$>$, DESC for descending order by default is ascending, here is an example using all the points:
+\pagebreak
+\begin{lstlisting}
+	--Distinct Genres of Authors whose name start with S and the third letter is a
+	SELECT DISTINCT genre
+	FROM Authors
+	WHERE first_name LIKE 'S_a%'
+	ORDER BY DESC genre;
+\end{lstlisting}
+
+To count the number of rows use count(*) in the SELECT clause. To count the number of values not null in a specific column use count(column1,column2) in the SELECT clause. Some of the other operations that can be done in the SELECT clause are AVG, SUM, MIN, MAX.\newline
+This operations are heavily used together with GROUP BY. GROUP BY  is useful to aggregate the data, if we want to calculate the average income for each genre we do it as follows:
+\begin{lstlisting}
+	SELECT genre, avg(income)
+	FROM Authors
+	GROUP BY genre;
+\end{lstlisting}
+Attention we can have in SELECT only the attributes present in GROUP BY or other attributes with some aggregate operation only never by themselves. All the operation mentioned were considered in the case of one table.
+
+\subsection{JOIN}
+Now let's focus our attention to the case of two tables. Assume having the Authors table, Books Table, a BookAuthors join table and a Editions Table with the following schema:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{c c c c c c}
+	id & last\_name & first\_name & DoB & income & genre\\
+	INT & CHAR & CHAR & DATETIME & REAL & CHAR
+	\end{tabular}
+\caption*{\textbf{Authors Table}}
+~\\
+	\centering
+	\begin{tabular}{c c c}
+	id & title & ISBN\\
+	INT & CHAR & BIGINT
+	\end{tabular}
+\caption*{\textbf{Book Table}}
+~\\
+	\centering
+	\begin{tabular}{c c}
+	book\_id & author\_id\\
+	INT & INT
+	\end{tabular}
+\caption*{\textbf{BooksAuthors Table}}
+~\\
+	\begin{tabular}{c c c c}
+	edition\_id & book\_id & date\_of\_publication & edition\_number\\
+	INT & INT & INT & INT
+\end{tabular}
+\caption*{\textbf{Editions Table}}
+\end{table}
+
+We can use the foreign key to connect two tables either in FROM using a JOIN or in WHERE here are two methods:
+
+\begin{lstlisting}
+	--WHERE version to find author of book_id = 1
+	SELECT first_name, last_name
+	FROM Authors, BooksAuthors
+	WHERE BooksAuthors.author_id = Authors.id
+		AND book_id = 1;
+	-- JOIN version to find author of book_id = 1
+	SELECT first_name, last_name
+	FROM Authors JOIN BookAuthors
+		ON BooksAuthors.author_id = Authors.id
+	WHERE book_id = 1;
+	--JOIN version is preferred when only 2 tables are involved
+\end{lstlisting}
+
+Some result of the JOIN might be duplicated if the foreign key is present in the table more than 1 times, it might be useful to use DISTINCT in this case.
+Here is an example to find who has written a book whose ISBN ends with 5 and has last name with exactly 5 characters, here we need to use 3 table so we will use the WHERE version of linking tables:
+\begin{lstlisting}
+SELECT Books.id, ISBN, Authors.id, last_name, first_name
+FROM Books, Authors, BooksAuthors
+WHERE Books.id = BooksAuthors.book_id AND
+	BooksAuthors.author_id = Authors.id AND
+	last_name LIKE '_____' AND
+	isbn LIKE "%5"
+\end{lstlisting}
+
+Sometimes it become where complex to write down the table name every time so we can give the aliases for example we call Books - b, Authors - a and BooksAuthors - ba and use the same query as before but easier to write down:
+\begin{lstlisting}
+SELECT Books.id, ISBN, Authors.id, last_name, first_name
+FROM Books b, Authors a, BooksAuthors ba
+WHERE b.id = ba.book_id AND
+	ba.author_id = a.id AND	
+	last_name LIKE '_____' AND
+	isbn LIKE "%5"
+\end{lstlisting}
+The Join semantics between two Tables T1 and T2 is a cross product between T1 and T2, then it selects the rows satisfying the WHERE clause and then it projects on the columns in the SELECT clause.\newline
+Assume that a author has written no books, when we do join between Authors and BooksAuthors that author will not appear. If we want him to appear we need to use LEFT JOIN with Authors on the LEFT, here is an example of the outer join(which is a union and the inner join is a intersection):
+\begin{lstlisting}
+	SELECT Authors.id, last_name, first_name, Books.id, ISBN
+	FROM Books, Authors LEFT JOIN BooksAuthors
+		ON Authors.id = BooksAuthors.author_id
+	WHERE Books.id = BooksAuthors.book_id
+	--Now in the result we will se also the authors with Books.id and ISBN value as NULL (no books were written)
+\end{lstlisting}
+
+We can give also the projected columns an alias, here is an example where we count the number of books written by an author, using an outer join to have also the authors with 0 books:
+\begin{lstlisting}
+	SELECT Authors.id, last_name, first_name ,
+		count(Books.id) as number --Here is how to rename a column
+	FROM Books, Authors LEFT JOIN BooksAuthors
+		On Authors.id = BooksAuthors.author_id
+	WHERE Books.id = BooksAuthors.author_id
+	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
+\end{lstlisting}
+
+\subsection{SET operations}
+
 
 \end{document}
