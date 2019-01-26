@@ -186,32 +186,48 @@ Il database a grafo risolve quindi il problema dei database relazionali (e di mo
 Infatti anche altri modelli NoSQL, indipendentemente dal modello in uso, soffrono perdite di prestazioni quando sono effettuate aggregazioni di dati (soprattutto non indicizzati) dal momento che i collegamenti non sono nativi nel modello e manca il concetto di prossimità.
 Si può tentare di risolvere il problema con dati annidati tra di loro ma la struttura del database risulterebbe eccessivamente complessa e non permetterebbe altre query.
 Il DBA in base ai suoi bisogni (integrazione con altre applicazioni) può benissimo decidere di usare un database a grafo con una gestione dei dati non nativa senza che questo impatti sulla qualità del prodotto finale.
-
-In a native graph storage the attributes, the nodes and the referenced nodes are stored together to optimize the graph processing engine. 
-Performing a query in a graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the Relational Model and other NoSQL models will suffer in performance speed with the increase of data (often in a way more than linear). 
-Moreover it is possible to add more nodes and relationship without disturbing the already existing model, even if datas do not share the same structure. \newline
-The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB; this makes sure that the retrieval is faster but it comes at a cost: the time efficiency of queries that do not use graph traversal, for example I/O operation, is increased. \newline
-
 % sono arrivato qui (@moiraghif)
-Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
-The properties of the cypher language are:
+%ti ho spostato io (@pkasela) dietro di un paragrafo che non sono sicuro della traduzione.
+In un archivio nativo a grafo gli attributi, i nodi e i nodi referenziati sono memorizzati insieme per ottimizzare l'engine di processamento a grafo.
+%In a native graph storage the attributes, the nodes and the referenced nodes are stored together to optimize the graph processing engine.
+Per eseguire una query nel modello a grafo, il tempo di risposta non tipende strettamente dal numero totale di nodi (che rimane più o meno costante) perché la query viene processata nella porzione locale del grafo connessa al nodo base, mentre nei modelli relazionali e altri modelli NoSQL peggiorano le prestazioni al aumentare dei dati (spesso in una maniera lineare).
+%Performing a query in a graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the Relational Model and other NoSQL models will suffer in performance speed with the increase of data (often in a way more than linear). 
+Inoltre è possibile aggiungere altri nodi e relazioni senza disturbare il modello già esistente anche nel caso i dati non abbiano la stessa struttura.
+%Moreover it is possible to add more nodes and relationship without disturbing the already existing model, even if datas do not share the same structure. 
+\newline
+%come si traduce processing engine in Italiano?
+Il processing engine usa "index-free adjacency" cioé i nodi connessi sono collegati fisicamente tra di loro, ciò velocizza il loro recupero da una query, ma questa velocità ha un prezzo: l'efficacia dei query che non sfruttano le proprietà del grafo viene peggiorata, ad esempio nel caso delle operazioni di I/O.   
+%The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB; this makes sure that the retrieval is faster but it comes at a cost: the time efficiency of queries that do not use graph traversal, for example I/O operation, is increased. \newline
+
+Neo4j implementa un linguaggio Cypher di query di tipo dichiartivo. Cypher permette i query al grafo usando sitassi simile a quella di SQL o SPARQL, ma comunque ottimizato per i grafi.\\
+%Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
+Le proprietà del linguaggio cypher sono:
+%The properties of the cypher language are:
 
 \begin{enumerate}[noitemsep]
 	 
 	\item
-	Pattern-matching query language
+	Linguaggio di tipo Patter-matching
+	%Pattern-matching query language
 	\item
-	Humane language, easy to learn, read and understand
+	Linguaggio di facile da imparare, leggere e capire.
+	%Humane language, easy to learn, read and understand
 	\item
-	Expressive yet compact
+	Espressivo ma comunque compatto
+	%Expressive yet compact
 	\item
-	Declarative : Say what you want, not how
+	Dichiarativo: Bisogna dichiarare ciò che si vuole non come farlo
+	%Declarative : Say what you want, not how
 	\item
-	Borrows from well known query languages especially SQL, yet clearly it's different enough to see that it deals with graphs and not SQL	DBs.
+	Influenzato e simile ad altri linguaggi sopratutto SQL, ma rimane comunque distinto abbastanza da capire che il modello utilizzato è a grafo e non SQL.
+	%Borrows from well known query languages especially SQL, yet clearly it's different enough to see that it deals with graphs and not SQL	DBs.
 	\item
-	Aggregation, Ordering, Limit
+	Aggregazione, Ordinamento e Limiti
+	%Limiti??
+	%Aggregation, Ordering, Limit
 	\item
-	Update the Graph
+	Aggiornare il grafo
+	%Update the Graph
 \end{enumerate}
 \paragraph{A real example is the following}:\\ 
 We want to manage a server farm, we define a relational model for managing it. 
