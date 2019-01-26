@@ -577,14 +577,10 @@ multiple horizontal partitions called \textbf{regions}. Each region consists of 
 Read or write access to a region is controlled by a \textbf{RegionServer}. There will usually be more than one region in each RegionServer. As regions grow, they split into multiple regions based on configurable policies (may also be split manually).
 
 Each HBase installation will include a Hadoop \textbf{Zookeeper service} that is implemented across multiple nodes.
-Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras?
+Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras? Yes but just to tell something more on how it works.
 
-The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the
-balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to
-determine the location of the HBase catalog tables, which can be then be interrogated to determine the
-location of the appropriate RegionServer. The client will then request to read or modify a key value from
-the appropriate RegionServer. The RegionServer reads or writes to the appropriate disk files, which are
-located on HDFS. %taken almost literally from the suggested course book "Next Generation DB"
+The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to determine the location of the HBase catalog tables, which can be then be interrogated to determine the location of the appropriate RegionServer. The client will then request to read or modify a key value from the appropriate RegionServer. 
+The RegionServer reads or writes to the appropriate disk files, which are located on HDFS. %taken almost literally from the suggested course book "Next Generation DB". If something is well written it's the best thing to do.
 
 Summing up, the four major components (nodes) of HBase are:
 \begin{enumerate}[noitemsep]
@@ -612,7 +608,7 @@ Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we de
 %%%
 
 
-\begin{figure}
+\begin{figure}[h] %otherwise it is in the HBase section
 \centering
 \includegraphics[width=100 mm]{cassandrawrite.png}
 \caption{\label{cassandrawrite:fig} Data writing procedure in Cassandra.}
