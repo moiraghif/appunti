@@ -33,6 +33,9 @@
 	breakatwhitespace=true,
 	tabsize=3
 }
+\lstset{emph={REFERENCES,REAL},
+	emphstyle={\color{blue}}%
+}%
 
 %`` for quoting
 
@@ -315,7 +318,7 @@ To project a table we use SELECT FROM:
 
 \begin{lstlisting}
 	SELECT <attributes>
-	FROM <on or more relations>
+	FROM <one or more relations>
 	WHERE [optional]<conditions>
 \end{lstlisting}
 
@@ -331,8 +334,8 @@ Assume having a table of authors named Authors with the following schema:
 
 
 For the duplicated values we can use DISTINCT after SELECT and in there WHERE we can have more than one conditions using AND or OR.\newline
-For conditions on strings we have the following syntax: \% means "any string", \_(underscore) means "any character" and when using them we need to use LIKE in WHERE clause. To order them we have to use ORDER BY (DESC) $<$attribute$>$, DESC for descending order by default is ascending, here is an example using all the points:
-\pagebreak
+For conditions on strings we have the following syntax: \% means ``any string'', \_(underscore) means ``any character'' and when using them we need to use LIKE in WHERE clause. To order them we have to use ORDER BY (DESC) $<$attribute$>$, DESC for descending order by default is ascending, here is an example using all the points:
+
 \begin{lstlisting}
 	--Distinct Genres of Authors whose name start with S and the third letter is a
 	SELECT DISTINCT genre
