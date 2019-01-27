@@ -683,7 +683,7 @@ I client leggeranno il file dalla replica più vicina a loro (rack awareness). E
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
 
 \subsection{Map Reduce}
-Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. "Mapred" risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
+Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. Prende spunto dalle funzioni "Mapcar" e "Reduce" del LISP,che applicano rispettivamente un'operazione su tutti gli elementi di un insieme e ne combinano i valori restituendone il risultato. "Mapred" risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
 \begin{itemize}[noitemsep]
 \item Come assegnare i 'lavori' ai singoli 'worker'
 \item Cosa succede se ci sono più 'lavori' che 'worker'
@@ -696,7 +696,9 @@ Map Reduce è un motore di computazione distribuito. Ogni programma è scritto i
 	\includegraphics[scale=1]{IMAGE8.png}\\
 	Map Reduce
 \end{center}
-La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map (\texttt{map (k, v) -> [(k’, v’)]}) e di reduce (\texttt{reduce (k’, [v’]) -> [(k’, v’)]}). Tutte le altre attività le svolge  $MapRed$.
+L'architettura è di tipo master-slave. Il nodo master ha il compito di gestire la coda dei job,suddividere i work nei vari blocchi e notificarne il termine/fallimento. I nodi slave gestiscono i singoli job,inviando al nodo master informazioni sullo svolgimento.
+Ogni job è caratterizzato dalle operazioni di map e di reduce.
+La fase di Map esegue lo stesso codice su un grande ammontare di record,i dati di input vengono trasformati in coppie chiave-valore e "filtrati" in un altro insieme di coppie chiave-valore. Questo secondo insieme viene restituito al framework, che esegue delle operazioni di shuffle & sort,raggruppando gli elementi con la stessa chiave. La fase di Reduce aggrega i risultati intermedi (combinando gli elementi con la stessa chiave) e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map (\texttt{map (k, v) -> [(k’, v’)]}) e di reduce (\texttt{reduce (k’, [v’]) -> [(k’, v’)]}). Tutte le altre attività le svolge  $MapRed$.
 \subsection{Hadoop}
 Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, unisce il sistema MapReduce (parallel and distributed computation) e l’HDFS (hadoop storage and file system).
 \begin{center}
