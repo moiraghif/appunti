@@ -755,8 +755,8 @@ As reported in Fig.~\ref{data_lake_arch:fig}, components of a typical data lake 
 
 
 \begin{itemize}
-\item The data is first loaded into a \textbf{transient loading zone}, where basic data quality checks are performed using MapReduce or Spark by leveraging the Hadoop cluster. 
-\item Once the quality checks have been performed, the data is loaded into Hadoop in the \textbf{raw data zone}.
+\item The data is first loaded into a \textbf{transient loading zone}, where basic data quality checks are performed (for example using MapReduce or Spark by leveraging the Hadoop cluster). 
+\item Once the quality checks have been performed, the data is loaded (for example into Hadoop) in the \textbf{raw data zone}.
 
 \item An organization can, if desired, perform standard data cleansing and data validation methods and place the data in the \textbf{refined zone}. 
 
