@@ -81,7 +81,7 @@ Inoltre il modello relazionale rende difficile scalare l'hardware: è stato pens
 Per risolvere i problemi dei database relazionali, nasce un movimento informatico chiamato NoSQL (\textit{Not Only SQL}) che non rifiuta il modello ma propone approcci alternativi: i database NoSQL non hanno un modello prestabilito rendendo facile archiviare dati non strutturati e permettendo di aggiungere attributi senza modificare l'intero modello.
 Mentre il modello relazionale si basa sull'assunzione del \textit{mondo chiuso}\footnote{\url{https://it.wikipedia.org/wiki/Ipotesi_del_mondo_chiuso}} (se il valore di verità non è noto, si considera la proposizione falsa), i modelli NoSQL adottano il modello del \textit{mondo aperto}\footnote{\url{https://it.wikipedia.org/wiki/Ipotesi_del_mondo_aperto}} secondo il quale non si può stabilire il valore di verità di cosa non è noto.
 
-È possibile \textit{scalare} (\textit{scaling}) un DBMS potenziando l'hardware su cui è ospitato. Si distingue lo \textit{Scaling Up}, il potenziare la singola macchina, dallo \textit{Scaling out}, aggiungere macchine in una rete di calcolatori; quest ultimo caso è molto difficile da effettuare su un database di tipo relazionale. Il costo è un altro dei problemi: l'acquisto di macchine di una certa potenza è molto alto e non garantisce un aumento lineare delle prestazioni, che anzi scendono asintoticamente.
+È possibile \textit{scalare} (\textit{scaling}) un DBMS potenziando l'hardware su cui è ospitato. Si distingue lo scalare verticalmente (\textit{Scaling Up}), il potenziare la singola macchina, dallo scalare orizzontalmente (\textit{Scaling out}), aggiungere macchine in una rete di calcolatori; quest ultimo caso è molto difficile da effettuare su un database di tipo relazionale. Il costo è un altro dei problemi: l'acquisto di macchine di una certa potenza è molto alto e non garantisce un aumento lineare delle prestazioni, che anzi scendono asintoticamente.
 
 Opponendosi alla rigidità del modello relazionale, le proprietà dei database NoSQL non potevano che essere riassunte dall'acronimo BASE:
 \begin{itemize}
@@ -101,7 +101,7 @@ Rigido & Flessibile \\
 \end{tabular}
 \end{center}
 
-I modelli NoSQL si dividono in quattro macrocategorie\cite{NoSQLDB, GraphDB}:
+I modelli NoSQL si dividono in quattro macro categorie\cite{NoSQLDB, GraphDB}:
 \begin{enumerate}[noitemsep]
 \item Document based (CouchDB, MongoDB): di solito salvati con file JSON, contenente un insieme ordinato di coppie \textless{}chiave - valore\textgreater{}; è facile ricercare dati in questo formato;
 \item Graph based (Neo4J, FlockDB): sfrutta il concetto matematico di grafo per archiviare i dati come nodi ed esaltare i legami tra di essi costruendo archi; è difficile da scalare per quanto riguarda l'immagazzinamento (è difficile tagliare un grafo) ma è molto rapido nelle query.
@@ -118,12 +118,12 @@ La semplicità del modello permette di archiviare un maggior numero di dati:
 
 
 \subsubsection{Document Based: MongoDB\cite{MongoDB, ScalingMongoDB}.}
-MongoDB è, come già affermato, un sistema di gestione basato sui documenti (\textit{Document Based Management System}), in cui i dati sono archiviati in formato BSON (Binary JSON) e letti tramite indici. Mongo DB non prevedere operazioni di join. Cambiano i nomi delle entità rispetto al modello relazionale:
+MongoDB è, come già affermato, un sistema di gestione basato sui documenti (\textit{Document Based Management System}), in cui i dati sono archiviati in formato BSON (Binary JSON) e letti tramite indici. MongoDB non prevedere operazioni di join. Cambiano i nomi delle entità rispetto al modello relazionale:
 \begin{center}
   \includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
 
-Lavorando su una rete di calcolatori, MongoDB può impiegare un tempo considerevole a importare documenti da un database presistente; nel caso in cui si si voglia velocizzare il processo, si potrebbe decidere di apportare alcune modifiche:
+Lavorando su una rete di calcolatori, MongoDB può impiegare un tempo considerevole a importare documenti da un database preesistente; nel caso in cui si si voglia velocizzare il processo, si potrebbe decidere di apportare alcune modifiche:
 \begin{itemize}[noitemsep]
 \item disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione;
 \item disabilitare la scrittura su un file di tipo log che ha funzione di backup.
@@ -179,16 +179,53 @@ Il database a grafo risolve quindi il problema dei database relazionali (e di mo
 Infatti anche altri modelli NoSQL, indipendentemente dal modello adottato, soffrono perdite di prestazioni quando sono effettuate aggregazioni (soprattutto non indicizzati) dal momento che i collegamenti non sono nativi e manca il concetto di prossimità, presente invece nel grafo.
 Si può tentare di risolvere il problema con dati annidati tra di loro ma la struttura del database risulterebbe eccessivamente complessa e non permetterebbe altre query.
 Il DBA in base ai suoi bisogni (integrazione con altre applicazioni) può benissimo decidere di usare un database a grafo con una gestione dei dati non nativa senza che questo impatti sulla qualità del prodotto finale.
-In un archivio nativo a grafo gli attributi, i nodi e i nodi referenziati sono memorizzati insieme per ottimizzare l'engine di processamento a grafo.
+In un archivio nativo a grafo gli attributi, i nodi e i nodi referenziati sono memorizzati insieme per ottimizzare l'engine l'elaborazione a grafo.
 
-Per eseguire una query nel modello a grafo, il tempo di risposta non tipende strettamente dal numero totale di nodi (che rimane più o meno costante) perché la query viene processata nella porzione locale del grafo connessa al nodo base, mentre nei modelli relazionali e altri modelli NoSQL le prestazioni calano al aumentare dei dati (spesso in una maniera lineare).
+Per eseguire una query nel modello a grafo, il tempo di risposta non dipende strettamente dal numero totale di nodi (che rimane più o meno costante) perché la query viene processata nella porzione locale del grafo connessa al nodo base, mentre nei modelli relazionali e altri modelli NoSQL le prestazioni calano al aumentare dei dati (spesso in una maniera lineare).
 Inoltre è possibile aggiungere altri nodi e relazioni senza disturbare il modello già esistente anche nel caso in cui i dati non abbiano la stessa struttura.
-Il processing engine usa \textit{``index-free adjacency''} cioé i nodi connessi sono collegati fisicamente tra di loro, ciò velocizza il loro recupero da una query, ma questa velocità ha un prezzo: l'efficacia delle query che non sfruttano le proprietà del grafo viene peggiorata, ad esempio nel caso delle operazioni di R/W.   
+Il processing engine usa \textit{``index-free adjacency''} cioè i nodi connessi sono collegati fisicamente tra di loro, ciò velocizza il loro recupero da una query, ma questa velocità ha un prezzo: l'efficacia delle query che non sfruttano le proprietà del grafo viene peggiorata, ad esempio nel caso delle operazioni di R/W.   
 
-Neo4j implementa un linguaggio Cypher, di tipo dichiartivo, che permette query al grafo usando una sitassi simile a SQL o SPARQL, ma comunque ottimizata per i grafi.
+Neo4j implementa un linguaggio Cypher, di tipo dichiarativo, che permette query al grafo usando una sintassi simile a SQL o SPARQL, ma comunque ottimizzata per i grafi.
 Cypher è facile da leggere e capire ed espressivo, pur rimanendo compatto.
 Il linguaggio astrae il concetto di grafo permettendo all'autore di una query di indicare solamente cosa desidera tralasciando come. \newline
 Neo4J utilizza in parallelo il linguaggio Gremlin, parte del framework Apache TinkerPop, che invece permette di esplicitare le modalità con cui deve essere svolta una richiesta al database.
+
+
+\subsubsection{Key-Value.}
+Considerato il modello più semplice e flessibile, associa ad una stringa (la \textit{chiave}) una sequenza di dati binari (BLOB, \textit{Binary Large OBject}) come possono essere immagini, video o altri tipi di dato:
+\begin{center}
+  \includegraphics[scale=0.5]{IMAGE3.jpg}
+\end{center}
+Le uniche operazioni lecite del modello sono;
+\begin{itemize}
+\item aggiunta di una nuova coppia \textless{}chiave - valore\textgreater{};
+\item rimozione di una coppia \textless{}chiave - valore\textgreater{};
+\item modifica di un valore (data la chiave);
+\item ricerca di un valore (data la chiave).
+\end{itemize}
+Data la natura \textit{opaca} dei dati, non è possibile cercare la chiave dato il valore.
+
+Esempi noti di Database key-value sono DynamoDB, sviluppato e usato da Amazon per registrare i sistemi di pagamento dei clienti, e Riak, che usa la seguente terminologia:
+\begin{center}
+  \begin{minipage}[b]{0.4\textwidth}
+    \begin{tabular}{|l|l|}
+      \hline
+      \textbf{SQL} & \textbf{Riak}\\ \hline
+      database & cluster \\ \hline
+      table & bucket \\ \hline
+      row & key-value\\ \hline
+      rowid & key\\ \hline
+    \end{tabular}
+  \end{minipage}
+  \begin{minipage}{.5\textwidth}\centering
+    \includegraphics[scale=0.6]{IMAGE4.jpg}
+  \end{minipage}
+\end{center}
+
+Grazie all'indicizzazione ad \textit{hash}, questo modello riesce a scalare orizzontalmente in modo molto efficiente.
+L'hash è una funzione matematica che assegna un valore ad una chiave: $h(x) = v$; nel caso specifico, generalmente il valore della funzione indica dove il dato si trova (non il dato stesso). I valori hash possono essere facilmente distribuiti su una rete di calcolatori di dimensione arbitraria: per esempio, considerando la funzione $h(x) = x \% k$ (dove $\%$ è la funzione resto della divisione intera e $k$ il numero di nodi della rete), si può stabilire in quale nodo indirizzare la coppia in base al risultato.
+Per recuperare il dato, basta dunque interrogare il nodo in cui è presente la chiave e attendere che questo invii il valore.
+
 
 \newpage
 \printbibliography[title={Letture di approfondimento}]
