@@ -457,6 +457,29 @@ Una \textit{shard key} deve essere presente in tutti i documenti della collezion
 Inoltre deve avere valori diversi tra di loro (non si possono dividere valori tutti uguali) e deve facilitare le ricerche: è opportuno usare un attributo usato frequentemente nelle query).
 Possono nascere problemi con valori del campo \verb|id| modificati in quanto possono essere unici solamente all'interno del proprio \textit{shard} e dunque possono ripetersi in \textit{shard} diversi (tenendo il valore di default è altamente improbabile che accada).
 
+\section{HBase.}
+HBase è concepibile come un database tabulare composto da numerosi \textit{HFiles} archiviati su diversi \textit{HDFS}.
+Essendo un database Column Oriented, tutte le righe sono contrassegnate da una chiave univoca.
+Una tabella può essere così spartita in porzioni orizzontali chiamate \textit{regioni}: ogni regione comprende un intervallo di valori assunti dalla chiave (similmente al sistema adottato da MongoDB).
+L'accesso alla lettura e alla scrittura delle regioni sono controllate da un \textit{RegionServer}; solitamente un \textit{RegionServer} contiene più regioni; all'aumentare delle dimensioni di una regione, questa è divisa in base ad regole preimpostate (o eventualmente manualmente).
+
+HBase è compreso nel pacchetto Hadoop, insieme con ZooKeeper: quest ultimo permette la gestione dei vari nodi all'interno del cluster provvedendo in automatico a riconoscere e sostituire nodi offline.
+Un client, per effettuare una query, riceve da ZooKeeper l'indirizzo del \textit{RegionServer} interessato, con cui è poi stabilita la connessione.
+
+Il bilanciamento del carico tra i vari nodi è controllato da un \textit{Master}: quando un \textit{RegionServer} è aggiunto o rimosso dalla rete, è il nodo Master a ricollocare i dati nel modo appropriato.
+L'intervento del Master è necessario solamente per operazioni riguardanti i meta-dati e cambiamenti nello schema dei dati.
+
+Ricapitolando, HBase è composto da:
+\begin{itemize}
+\item un HMaster: coordina gli \textit{slaves} nel cluster e controlla il loro stato;
+\item i RegionServer: contengono i dati e rispondono alle richieste dell'utente (sfruttando dei log);
+\item ZooKeeper: provvede alla sincronizzazione tra i nodi e alle comunicazioni tra di essi.
+\end{itemize}
+
+Si ha comunque la possibilità di ottenere SPOF in caso di problemi nel nodo Master\footnote{Esistono dei sistemi per lavorare con più nodi Master, non contemplati ai fini dell'esame.}.
+
+\section{Cassandra.}
+
 \newpage
 \printbibliography[title={Letture di approfondimento}]
 \end{document}
