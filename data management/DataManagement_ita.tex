@@ -276,15 +276,6 @@ Si può rappresentare la struttura nel seguente modo:
                        \begin{tabular}{p{1.8cm}|p{1.8cm}|p{1.8cm}}
                          \textit{cell} & \textit{cell} & \textit{cell}
                        \end{tabular} \\
-    % \hline
-                     &
-                       \begin{tabular}{l|l}
-                         \textit{cell} & \textit{cell}
-                       \end{tabular}
-                     &
-                       \begin{tabular}{p{1.8cm}|p{1.8cm}|p{1.8cm}}
-                         \textit{cell} & \textit{cell} & \textit{cell}
-                       \end{tabular} \\
     \hline
   \end{tabular} \\
   ~\\
@@ -401,6 +392,70 @@ Per creare una replica bisogna avere accesso alla porzione di dati da replicare:
 Per sincronizzare le repliche durante l'operazione di trasferimento, si usano dei \textit{log file}: sequenze di attivitià realizzate, in ordine cronologico, che possono tenere conto delle transazioni (\textit{operations}) o di eventi di sistema (\textit{checkpoint} e \textit{dump}).
 Si definisce \textit{checkpoint} un insieme di transazioni svolte in un determinato intervallo di tempo, mentre un \textit{dump} è una copia dello stato del Database in un dato istante temporale.
 
+\subsection{MongoDB: Shading\cite{ScalingMongoDB}.}
+MongoDB divide una collezione in diversi server (chiamati \textit{shards}, che nel complesso formano un \textit{cluster}) secondo il valore assunto da una chiave presente in ogni documento, raggruppando così i dati in \textit{chunks}.
+Inizialmente la collezione è composta da un solo \textit{chunk} con valori limite $(-\infty, +\infty)$; ma, impostando la chiave, è effettuata in automatico una divisione in modo tale che ogni \textit{chunk} abbia un valore massimo di 200MB (sempre che sia possibile effettuare divisioni così precise), e che questi siano disgiunti ed esaustivi.
+I \textit{chunks} sono così distribuiti tra i vari \textit{shards} grazie ad un \textit{balancer}, che però tenta di ridurne gli spostamenti: per evitare la saturazione della rete, un \textit{chunk} è spostato da un nodo ad un altro solamente se c'è una differenza di almeno 9 \textit{chunks} tra i due nodi.
+Così si tenta di equiparare il carico di lavoro tra i vari \textit{shards} della rete, senza però sprecare risorse.
+
+Il software incaricato di compiere queste operazioni è mongos, che mette in contatto i vari demoni mongod: è il punto di contatto tra il singolo nodo e il cluster, che permette la gestione dell'intera rete alla pari di una singola istanza.
+Altro compito di mongos è di instradare le query verso i nodi corretti, o di unire i risultati se la richiesta è fatta all'intera rete.
+Mongos non si occupa di archiviare la configurazione del cluster: a questo compito provvede il demone mongods (il \textit{config server}), che conserva un log degli accessi alla rete.
+
+Nel cluster sono quindi presenti tre tipi di processo:
+\begin{itemize}
+\item Mongod (i \textit{shards}): i nodo del cluster, repliche o meno;
+\item Mongos: per incanalare le richieste allo \textit{shard} corretto;
+\item Mongods: (config server): tiene traccia dello stato del cluster, se ne possono avere solamente 1 o 3.
+\end{itemize}
+
+\begin{center}
+  \includegraphics[scale=0.40]{IMAGE6.png}
+\end{center}
+
+Per la configurazione si effettuano i seguenti step.
+\begin{verbatim}
+// inizializzazione di mongod su ogni server
+localhost$ ssh server.ip
+server% mongod
+server% exit
+
+// connessione al server remoto
+localhost$ mongo server.ip/admin
+MongoDB shell
+connecting to: admin
+> // inclusione nel cluster
+> db.runCommand({
+    "addShard" : "server_con_dati.ip:27018",
+    "name" : "nome_identificativo"
+});
+{ "shardAdded" : "nome_identificativo", "ok" : 1 }
+> // per aggiungere una replica
+> db.runCommand({
+    "addShard" : "server/server_da_replicare.ip:27018"
+    "name" : "nome_identificativo"
+});
+{ "shardAdded" : "nome_identificativo", "ok" : 1 }
+> // ora la rete è creata, si devono impostare i dati
+> // selezione del database
+> db.adminCommand({
+    "enableSharding" : "database_condiviso"
+});
+{ "ok" : 1}
+> // selezione delle collection e delle chiavi
+> db.adminCommand({
+    "shardCollection" : "collection_condivisa",
+    "key" : {
+        "chiave_1" : 1,
+        "chiave_2" : 1 //...
+    }
+});
+{ "collectionSharded" : "collection_condivisa", "ok" : 1 }
+\end{verbatim}
+
+Una \textit{shard key} deve essere presente in tutti i documenti della collezione, non deve essere mutabile e viene automaticamente indicizzata da MongoDB.
+Inoltre deve avere valori diversi tra di loro (non si possono dividere valori tutti uguali) e deve facilitare le ricerche: è opportuno usare un attributo usato frequentemente nelle query).
+Possono nascere problemi con valori del campo \verb|id| modificati in quanto possono essere unici solamente all'interno del proprio \textit{shard} e dunque possono ripetersi in \textit{shard} diversi (tenendo il valore di default è altamente improbabile che accada).
 
 \newpage
 \printbibliography[title={Letture di approfondimento}]
