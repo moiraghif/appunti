@@ -301,7 +301,7 @@ Il numero di versione per ogni riga è univoco per ogni row-key: generalmente è
 
 \subsubsection*{Cassandra.}
 Nato come supporto per la ricerca nell'inbox di Facebook, fu reso open source nel 2008 e in seguito è diventato un top-level project sotto Apache nel 2010.
-Il modello è identico a quello di BigTable e HBase con alcune differenze per gli algoritmi utilizzati e il modo in cui i dati sono distribuiti.
+Il modello è identico a quello di BigTable e HBase: ne eredita le caratteristiche fondamentali a parte per alcune differenze per gli algoritmi utilizzati e il modo in cui i dati sono distribuiti.
 Usa un linguaggio chiamato CQL (Cassandra Query Language) simile a SQL.
 
 Il \textit{Keyspace}, che sarebbe l'equivalente del database in un RDBMS, possiede nativamente un fattore di replicazione e un algoritmo di replicazione, ma rimane solamente un raggruppamento di column families.
@@ -476,9 +476,50 @@ Ricapitolando, HBase è composto da:
 \item ZooKeeper: provvede alla sincronizzazione tra i nodi e alle comunicazioni tra di essi.
 \end{itemize}
 
-Si ha comunque la possibilità di ottenere SPOF in caso di problemi nel nodo Master\footnote{Esistono dei sistemi per lavorare con più nodi Master, non contemplati ai fini dell'esame.}.
+Si ha comunque la possibilità di ottenere SPOF in caso di problemi nel nodo Master\footnote{Esistono sistemi per lavorare con più nodi Master, non contemplati ai fini dell'esame.}.
 
 \section{Cassandra.}
+In Cassandra normalmente non esiste una gerarchia tra i nodi: ogni nodo è uguale agli altri (tranne che per i dati contenuti) ed è in grado di compiere le stesse operazioni.
+In circostanze particolari (collegamenti con client o simili) un nodo assume determinati compiti diventando \textit{coordinatore} per quella singola operazione; altra particolarità si ha all'inserimento di un nuovo nodo nella rete: è nominato un \textit{seed node} con cui il nuovo arrivato scambia informazioni.
+
+Dato questo appiattimento, il sistema di scambio delle informazioni si basa sul modello \textit{p2p} (\textit{Peer To Peer}), dove i dati sono partizionati e replicati tra tutti i nodi per proteggere da fallimenti delle singole macchine, e in questo modo le prestazioni aumentano linearmente con il numero di nodi nella rete.
+È possibile aggiungere o rimuovere nodi all'interno della rete senza scollegare le macchine: si hanno un'elasticità e una scalabilità trasparenti all'utente.
+I nodi sono disposti ad anello grazie ad un hash del valore assunto dalla variabile di partizionamento: è assegnata ad ogni nodi una porzione (\textit{token}), che può essere nel tempo riallocata per far sì che il carico sia equiparato tra i nodi.
+Per individuare i nodi contenenti repliche di un dato, è utilizzato ZooKeeper.
+
+La scrittura di un dato in Cassandra avviene in tre fasi:
+\begin{enumerate}
+\item il nuovo dato è scritto su un file (\textit{commit log}) nel nodo competente (per assicurare consistenza anche in caso di fallimento nell'operazione di scrittura);
+\item il dato è quindi scritto su una \textit{mem-table} (tenuta in RAM per velocizzare le operazioni di lettura);
+\item solo quando la mem-table è piena, il dato è scritto su disco in una \textit{SSTable}, non più modificabile.
+\end{enumerate}
+  
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=100 mm]{cassandrawrite.png}
+\end{figure}
+
+La consistenza dei dati è data in base al principio di maggioranza: se un certo numero di nodi, anche solo uno, concordano sulla lettura o scrittura di un dato, allora questo è dato per vero; approccio alternativo è basato sul quorum: il numero di nodi richiesto è pari al $50\% + 1$ delle repliche.
+Se un nodo non è disponibile, un altro si occupa di annotare l'operazione per comunicarla in seguito.
+Il sistema è selezionato in fase di inserimento del dato o di lettura:
+\begin{verbatim}
+INSERT INTO table (column1, column2, column3...)
+           VALUES (value1,  value2,  value3...)
+            USING CONSISTENCY ONE (QUORUM);
+
+SELECT *
+  FROM table
+ USING CONSISTENCY ONE;
+\end{verbatim}
+
+Non avendo un nodo \textit{master}, non sono conservate copie canoniche dei dati e delle impostazioni nel cluster: tutti i nodi di Cassandra si aggiornano grazie al \textit{Gossip Protocol}.
+Ogni secondo infatti, ogni nodo del cluster trasmette informazioni agli altri riguardanti il proprio stato e lo stato di altri nodi (per un massimo di tre) su cui ha informazioni.
+In un DDBMS, un nodo può risultare offline anche se in realtà si verifica solamente un sovraccarico nella rete; per evitare di marcare come non disponibile un nodo dunque, si usa un approccio probabilistico: i nodi nel cluster si \textit{preoccupano} maggiormente degli altri nodi per reindirizzare le operazioni solamente quando è data per certa la non disponibilità.
+
+A intervalli periodici, Cassandra esegue un'operazione di \textit{compattamento} dei dati per unire SSTables che necessitano di maggiore spazio, aggiornare gli indici, riunire le chiavi di riga, combinare colonne ed eliminare i dati superflui.
+I dati in Cassandra non sono realmente eliminati: sono annotati come non disponibili e pronti all'eliminazione (si assegna cioè una \textit{tombstone}), alla pari dei \textit{filesystem} dei sistemi operativi.
+I dati sono realmente eliminati solamente al raggiungimento di un evento (compattamento o allo scadere di un timer).
+
 
 \newpage
 \printbibliography[title={Letture di approfondimento}]
