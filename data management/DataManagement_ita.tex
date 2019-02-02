@@ -521,6 +521,93 @@ I dati in Cassandra non sono realmente eliminati: sono annotati come non disponi
 I dati sono realmente eliminati solamente al raggiungimento di un evento (compattamento o allo scadere di un timer).
 
 
+\part{Big Data}
+La prima definizione di \textit{Big Data} fu data da Gartner nel 2012: \cite{Big data is high volume, high velocity and/or high variety information assets}; oggi però per definire i "Big Data" si possono usare più di 3 V: si aggiungono \textit{variability} e \textit{veridicity}.
+Analizzare i Big Data su un singolo server è un processo lento, costoso e difficile da realizzare: la soluzione è effettuare un’analisi distribuita su hardware poco costosi tramite un sistema di calcolo parallelo\footnote{I vantaggi sono già stati esposti nella sezione dedicata all'architettura distribuita}.
+I problemi principali della distribuzione dei dati sono la sincronizzazione e la coordinazione tra i nodi, la larghezza della banda, i punti morti (\textit{deadlock}) e i fallimenti nel sistema (\textit{failure}).
+Tuttavia la parallelizzazione è necessaria perché scala linearmente (\textit{scale out}) col numero di nodi, può operare con macchine poco costose (\textit{commodity hardware}), e permette di rivolgere l'attività di calcolo direttamente al dato.
+
+
+\section{Hadoop.}
+Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, combina HDFS e MapReduce.
+\begin{center}
+  \includegraphics[scale=0.70]{IMAGE9.png}
+\end{center}
+È un sistema economico e facilmente scalabile per archiviare e interrogare dati: girando su macchine comuni, aggiungendo nodi si ha un aumento sia dello spazio di archiviazione disponibile sia della potenza di calcolo.
+Hadoop è progettato per compensare fallimenti all'interno della rete: è facile che un computer comune abbia problemi con carichi di lavoro particolarmente pesanti, dunque Hadoop devia in automatico la richiesta a un altra macchina senza interrompere il lavoro.
+I dati che Hadoop gestisce non devono essere per forza strutturati: sono archiviati in formato grezzo e si strutturano solamente in fase di lettura (\textit{schema on read}), rendendo più facile l'opearzione di scrittura.
+
+Hadoop è circondato da una famiglia di programmi correlati in forte espansione, costruita sopra o progettata per lavorare assieme.
+Tra i progetti più famosi si ricorda Pig, un linguaggio di scripting che esegue l'analisi dei dati; gli script scritti in \textit{pig latin} sono tradotti in lavori MapReduce.
+
+Hive è un'interfaccia simile a SQL per interrogare i dati memorizzati: i piani di esecuzione sono generati automaticamente.
+È spesso usato per report giornalieri, misurare le attività degli utenti o eseguire data e text mining, machine learning o attività di business intelligence.
+
+\subsection{HDFS (Hadoop File System).}
+Progettato per Hadoop su modello del Google File System (GFS) di BigTable, HDFS è un filesystem virtuale operante su una rete di calcolatori con hardware non specifico.
+\begin{center}
+  \includegraphics[scale=0.70]{IMAGE7.png}
+\end{center}
+
+HDFS è stato progettato per garantire un'alta tolleranza agli errori e fornire comunque accesso ad alta velocità ai dati delle applicazioni: è ottimizzato per conservare grandi quantità di dati e leggerli ad alta velocità (\textit{write once, read many}).
+Il nodi del filesystem sono disposti in modo gerarchico, con un \textit{NameNode} che contiene il \textit{NameSpace} (l'indicizzazione dei file) e più \textit{DataNodes} (generalmente uno per ogni nodo del cluster) che gestiscono i dati.
+I dati sono distribuiti in pacchetti (una virtualizzazione dei blocchi degli Hard Disk tradizionali) di dimensioni di 128MB.
+
+Compito fondamentale del \textit{NameNode} è di verificare lo stato degli altri nodi e gestire eventuali fallimenti nella rete; tuttavia essendoci un solo \textit{NameNode}, una sua indisponibilità rappresenta un SPOF: per evitare la perdita di dati, è archiviata una copia della struttura del filesystem (e di tutti gli altri documenti) su un'altra directory (ovvero un altro nodo).
+Il \textit{NameNode} registra anche i meta-data (lista dei file, dei \textit{DataNodes}, attributi...) e le operazioni eseguite sui file grazie ad un transaction log.
+Le operazioni di file e directory (apertura, chiusura e spostamento) sono eseguite sul \textit{NameSpace}, che reindirizza le operazioni di lettura e scrittura al \textit{DataNode} di competenza.
+I \textit{DataNodes} permettono anche la creazione, eliminazione e replica di blocchi sotto richiesta del \textit{NameNode}.
+La strategia più diffusa di replica dei dati è collocare le repliche:
+\begin{itemize}
+\item una sul nodo locale;
+\item una su un \textit{rack} (collezione di nodi) remoto;
+\item una su una replica nello stesso \textit{rack};
+\item altre eventuali in modo casuale.
+\end{itemize}
+Un client che si collega al filesystem legge il file dal luogo più vicino (\textit{rack awareness}).
+
+Per evitare che il dato rimanga corrotto durante la trasmissione, il client genera un checksum del file per confrontarlo con una copia archiviata col dato in fase di scrittura (e salvato come file nascosto).
+Se i due checksum non combaciano, il dato è reperito da un'altra replica.
+
+I tipi di dato supportato sono:
+\begin{itemize}
+\item testo semplice;
+\item csv;
+\item json;
+\item Sequence File;
+\item coppie \textless{}chiave - valore\textgreater{} (anche binarie);
+\item avro*;
+\item orc (\textit{Optimized Row Columnar});
+\end{itemize}
+
+
+\subsection{Map Reduce.}
+Map Reduce (o Mapred) è un motore di computazione distribuito, in cui ogni programma è scritto in stile funzionale ed è eseguito in parallelo.
+Prende spunto dalle funzioni \verb|(mapcar)| e \verb|(reduce)| del LISP, che applicano rispettivamente un'operazione su tutti gli elementi di un insieme e ne combinano i valori restituendone il risultato.
+Mapred risolve problemi legati alla gestione dei processi di BigData (ad esempio \textit{distributed pattern-based searching} o \textit{distributed sorting}) quali:
+\begin{itemize}
+\item come assegnare i \textit{task} ai singoli \textit{worker};
+\item cosa succede se ci sono più \textit{task} che \textit{workers};
+\item cosa succede se i \textit{workers} devono condividere risultati parziali;
+\item come aggregare i risultati parziali;
+\item come scoprire se tutti i \textit{workers} hanno finito il proprio \textit{task};
+\item cosa succede se un \textit{worker} muore.
+\end{itemize}
+\begin{center}
+  \includegraphics[scale=1]{IMAGE8.png}
+\end{center}
+
+L'architettura è di tipo \textit{master-slave}: il nodo master ha il compito di gestire la coda dei \textit{task}, suddividerli nei vari blocchi e notificarne il termine (o fallimento).
+I nodi slave gestiscono i singoli \textit{task}, inviando al nodo master informazioni sullo svolgimento.
+
+La fase di \textit{Map} esegue lo stesso codice su un grande ammontare di \textit{record}, trasformandoli in coppie chiave-valore che subiscono un'operazione di \textit{shuffle \& sort}, in cui sono raggruppati gli elementi con la stessa chiave.
+Quindi si passa alla fase di \textit{Reduce} che aggrega i risultati intermedi e genera l'output.
+Il programmatore deve solamente scrivere i programmi di map $map (k, v) \rightarrow [(k', v')]$ e di reduce $reduce (k', [v']) \rightarrow [(k', v')]$, mentre il software si occupa del resto.
+
+Il sistema MapReduce tuttavia risulta difficile da comprendere e richiede la scrittura di due programmi per ogni richiesta; inoltre è molto facile che si sollevino errori durante l'esecuzione di richieste molto complesse, a causa della quantità di istanze necessarie allo svolgimento.
+Inizialmente ogni \textit{jobtracker} doveva gestire le proprie risorse computazionali, i \textit{task} del lavoro, monitorare la fase di esecuzione, gestire i fallimenti e controllare altre variabili: è stato introdotto YARN (\textit{Yet Another Resource Negotiator}) per fungere da \textit{Resource Manager} globale e \textit{Application Master} per ogni applicazione.
+
+
 \newpage
 \printbibliography[title={Letture di approfondimento}]
 \end{document}
