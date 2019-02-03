@@ -25,8 +25,8 @@
 \begin{document}
 \maketitle
 
-\tableofcontents
-\newpage
+%\tableofcontents
+%\newpage
 
 \part{Modelli di dati}
 Il \textit{data modelling} è uno strumento per descrivere parte del mondo reale, permettendo di immagazzinare dati in un database ed effettuare interrogazioni sfruttando un linguaggio creato ad hoc.
@@ -318,11 +318,8 @@ Non permettendo operazioni di join o chiavi esterne, il modello prevede l'uso di
     & \textbf{Cassandra} & \textbf{Big Table} & \textbf{DynamoDB} \\
     \hline
     \textit{Tipologia:} & Column & Column & Key-Value \\
-    % \hline
     \textit{Progettato per:} & Write often, read less & Large scalability & Large database \\
-    % \hline
     \textit{Gestione parallela:} & MVCC & Locks & ACID \\
-    % \hline
     \textit{Consistency:} & & Sì & Sì \\
     \textit{Hight Availability:} & Sì & Sì & Sì \\
     \textit{Partition Tolerance:} & Sì & Sì & \\
@@ -493,11 +490,9 @@ La scrittura di un dato in Cassandra avviene in tre fasi:
 \item il dato è quindi scritto su una \textit{mem-table} (tenuta in RAM per velocizzare le operazioni di lettura);
 \item solo quando la mem-table è piena, il dato è scritto su disco in una \textit{SSTable}, non più modificabile.
 \end{enumerate}
-  
-\begin{figure}[h]
-  \centering
+\begin{center}
   \includegraphics[width=100 mm]{cassandrawrite.png}
-\end{figure}
+\end{center}
 
 La consistenza dei dati è data in base al principio di maggioranza: se un certo numero di nodi, anche solo uno, concordano sulla lettura o scrittura di un dato, allora questo è dato per vero; approccio alternativo è basato sul quorum: il numero di nodi richiesto è pari al $50\% + 1$ delle repliche.
 Se un nodo non è disponibile, un altro si occupa di annotare l'operazione per comunicarla in seguito.
@@ -528,7 +523,27 @@ I problemi principali della distribuzione dei dati sono la sincronizzazione e la
 Tuttavia la parallelizzazione è necessaria perché scala linearmente (\textit{scale out}) col numero di nodi, può operare con macchine poco costose (\textit{commodity hardware}), e permette di rivolgere l'attività di calcolo direttamente al dato.
 
 
-\section{Hadoop.}
+\section{\textit{Data Lake}.}
+L'espressione \textit{data lake} è stata coniata nel 2010 da James Dixon, per distinguere i due approcci di gestione dei dati: questo infatti è caratterizzato dallo \textit{schema on read} al contrario dello \textit{schema on write} dei \textit{data warehouse} (o \textit{data mart}).
+Il secondo approccio infatti struttura i dati prima della loro scrittura per facilitare consumazioni future; mentre il primo è in grado di contenere enormi quantità di dati in formati diversi ed elaborarli velocemente (grazie alla facile scalabilità) con costi comunque contenuti.
+Da un \textit{data lake} un soggetto autorizzato può attingere passando per un processo di analisi e di campionamento accurato.
+
+Un \textit{data lake} può anche fornire dati per un \textit{enterprise data warehouse}: infatti può facilmente gestire dati in tempo reale in fase di \textit{ingestion} per filtrare solamente le osservazioni interessanti.
+Questo sistema permette di alleggerire il carico di lavoro del \textit{data warehouse} e di permettere esplorazioni iniziali dei dati disponibili da parte del team (\textit{quick user access}.
+\begin{center}
+  \includegraphics[width=120mm]{data_lake_arch.png}
+\end{center}
+
+In un \textit{data lake}, i dati sono prima caricati in una \textit{transient loading zone} dove sono sottoposti ad analisi sulla qualità; se questa analisi è positiva, sono inviati poi alla \textit{raw data zone}.
+Da qui è possibile poi ripulire i dati tramite tecniche di \textit{data cleaning and validation} per inviarli poi alla \textit{refined zone}.
+
+Per l'esplorazione di dati, questi sono campionati e inviati ad una \textit{discovery zone} e infine, per la loro consumazione, ad una \textit{analytic zone}.
+\begin{center}
+  \includegraphics[scale=0.70]{IMAGE10.png}
+\end{center}
+
+
+\subsection{Hadoop.}
 Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, combina HDFS e MapReduce.
 \begin{center}
   \includegraphics[scale=0.70]{IMAGE9.png}
@@ -543,7 +558,7 @@ Tra i progetti più famosi si ricorda Pig, un linguaggio di scripting che esegue
 Hive è un'interfaccia simile a SQL per interrogare i dati memorizzati: i piani di esecuzione sono generati automaticamente.
 È spesso usato per report giornalieri, misurare le attività degli utenti o eseguire data e text mining, machine learning o attività di business intelligence.
 
-\subsection{HDFS (Hadoop File System).}
+\subsubsection{HDFS (Hadoop File System).}
 Progettato per Hadoop su modello del Google File System (GFS) di BigTable, HDFS è un filesystem virtuale operante su una rete di calcolatori con hardware non specifico.
 \begin{center}
   \includegraphics[scale=0.70]{IMAGE7.png}
@@ -581,9 +596,9 @@ I tipi di dato supportato sono:
 \end{itemize}
 
 
-\subsection{Map Reduce.}
+\subsubsection{Map Reduce.}
 Map Reduce (o Mapred) è un motore di computazione distribuito, in cui ogni programma è scritto in stile funzionale ed è eseguito in parallelo.
-Prende spunto dalle funzioni \verb|(mapcar)| e \verb|(reduce)| del LISP, che applicano rispettivamente un'operazione su tutti gli elementi di un insieme e ne combinano i valori restituendone il risultato.
+Prende spunto dalle funzioni \verb|(map)| e \verb|(reduce)| del LISP, che applicano rispettivamente un'operazione su tutti gli elementi di un insieme e ne combinano i valori restituendone il risultato.
 Mapred risolve problemi legati alla gestione dei processi di BigData (ad esempio \textit{distributed pattern-based searching} o \textit{distributed sorting}) quali:
 \begin{itemize}
 \item come assegnare i \textit{task} ai singoli \textit{worker};
@@ -608,6 +623,44 @@ Il sistema MapReduce tuttavia risulta difficile da comprendere e richiede la scr
 Inizialmente ogni \textit{jobtracker} doveva gestire le proprie risorse computazionali, i \textit{task} del lavoro, monitorare la fase di esecuzione, gestire i fallimenti e controllare altre variabili: è stato introdotto YARN (\textit{Yet Another Resource Negotiator}) per fungere da \textit{Resource Manager} globale e \textit{Application Master} per ogni applicazione.
 
 
-\newpage
-\printbibliography[title={Letture di approfondimento}]
+\section{Qualità dei dati e integrazione.}
+Fasi molto importanti nell'analisi dei dati sono la verifica della qualità dei dati (\textit{Data Understanding}), la loro pulizia e integrazione (\textit{Data Preparation}).
+Normalizzati i dati, bisogna individuare i casi di \textit{deduplication}, ovvero osservazioni riferite al medesimo fenomeno registrate più volte; per fare ciò si deve stabilire una regola sintattica o semantica.
+Individuati due record ridondanti, bisogna unirli (\textit{data fusion}).
+
+Come seconda cosa, si uniscono diverse fonti di dati (\textit{record linkage}), individuando chiavi comuni o direttamente con un'operazione di merge.
+La qualità del risultato è fortemente influenzata dalla qualità dei dati uniti.
+Si possono incontrare dei conflitti durante il processo; i conflitti si dividono in categorie:
+\begin{itemize}
+\item \textit{classification conflicts}: elementi corrispondenti si riferiscono a fenomeni diversi (si deve introdurre una nuova gerarchia);
+\item \textit{descriptive conflicts}: caratteri diversi hanno proprietà diverse o sono descritti diversamente;
+\item \textit{structural conflicts}: sono usati diversi schemi;
+\item \textit{fragmentation conflicts}: un fenomeno è descritto come un singolo oggetto in un dataset e come più oggetti in un secondo (si devono de-normalizzare);
+\item \textit{istance level conflicts}: gli stessi dati hanno valori diversi nei database.
+\end{itemize}
+
+\subsection{\textit{Record Linkage}.}
+Questa procedura, conosciuta anche come \textit{Object Identification}, \textit{Deduplication} (se operante su un unico dataset) o \textit{Object Matching}, raggruppa tramite un algoritmo le osservazioni corrispondenti al medesimo fenomeno prelevandole da più dataset (anche di diverso formato).
+L'output generalmente non è binario, in quanto è riconosciuta anche l'eventualità che la risposta non sia certa.
+Esistono più tecniche di \textit{record linkage}:
+\begin{itemize}
+\item empirico: si calcola un indice di distanza (in termini sintattici) tra due tuple e si uniscono se non supera una certa soglia;
+\item probabilistico: si generalizza sulla popolazione per mezzo di regole estratte da un campione;
+\item \textit{knowledge based}: si usano regole note;
+\item sistema misto tra il secondo e il terzo approccio.
+\end{itemize}
+
+
+\subsection{\textit{Data Fusion}.}
+Fase critica per la presenza di errori, può seguire più approcci:
+\begin{itemize}
+\item \textit{Conflict Ignoring}: passa oltre (\textit{pass it on}) lasciando la risoluzione all'utente;
+\item \textit{Conflict Avoiding}: applica un sistema unico per tutti i conflitti, generalmente riconoscendo una fonte come la più affidabile (\textit{Trust Your Friends});
+  \item \textit{Conflict Resolution}: verifica dati e metadati prima di compiere qualsiasi azione, selezionando tramite \textit{deciding} (se selezionato un valore tra quelli disponibili) o \textit{mediating} (se è calcolato a partire da quelli disponibili).
+\end{itemize}
+
+
+
+%\newpage
+%\printbibliography[title={Letture di approfondimento}]
 \end{document}
