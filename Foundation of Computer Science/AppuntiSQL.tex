@@ -490,7 +490,7 @@ We can also rename the projected columns using aliases. An example where we coun
 	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
 \end{lstlisting}
 %till here, @D.
-\subsection{SET Operations}
+\subsubsection{SET Operations}
 The intersection of two or more tables can be obtained by using the INTERSECT clause: it acts as the regular (mathematical) intersection between two sets (where sets correspond to the rows). 
 It is rarely used, since it is often replaced by a more complex \texttt{WHERE} condition (for example using \texttt{AND}). 
 An example on how to find \texttt{Authors} with \texttt{Income$>$90000} and with the last name containing an "\texttt{o}":
@@ -547,7 +547,7 @@ One practically and commonly used command relative to the set operations is the 
 %The code above will return us all the author with income$>$90000 and the last name not containing an o. 
 The code above will return all the author with \texttt{Income$>$90000} and the last name not containing a "\texttt{o}".
 
-\subsection{Nested Queries}
+\subsubsection{Nested Queries}
 As aforementioned, we can replace some of the SET operations with nested queries.
 
 To replace \texttt{INTERSECT} we can proceed as follows:
