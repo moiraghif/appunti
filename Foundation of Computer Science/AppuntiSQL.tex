@@ -310,7 +310,7 @@ In principle, we must check the assertion after every modification to any relati
 Problem is the DBMS often can't tell when they need to be checked. 
 The Triggers let the user decide when to check for any condition.
 An example is when using a foreign key constraint, instead of rejecting insertions with unknown elements, a trigger can add that new element to the original table with other attributes set as NULL.
-
+\pagebreak
 \subsection{SQL Data Manipulation Operations}
 
 \subsubsection{Basic Commands for a single table}
@@ -442,8 +442,7 @@ We can give also the projected columns an alias, here is an example where we cou
 	WHERE Books.id = BooksAuthors.author_id
 	GROUP BY Author.id, last_name, first_name; --Here we need all the columns written in the SELECT
 \end{lstlisting}
-\pagebreak
-\subsection{SET Operations}
+\subsubsection{SET Operations}
 We can intersect two or more tables using the INTERSECT clause, it acts as the normal intersection between two sets where sets are the rows. 
 It is rarely used because can be replaced with a more complex WHERE condition (for example using AND). 
 Here is an example to find Authors with Income$>$90000 and with the last name containing an o:
@@ -499,7 +498,7 @@ One command of the set operation that is used in practice is the EXCEPT which is
 \end{lstlisting}
 The code above will return us all the author with income$>$90000 and the last name not containing an o.
 
-\subsection{Nested Queries}
+\subsubsection{Nested Queries}
 We can replace some of the SET operations with nested queries:\newline
 To remove the intersect we can proceed as follows:
 \begin{lstlisting}
