@@ -1,0 +1,104 @@
+\documentclass[11pt, twocolumn]{article}
+
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+
+\title{\textbf{Statistical Modeling}}
+\author{}
+\date{}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Lo scopo del corso è riuscire a muoversi con dimestichezza all'interno di un dataset: è privilegiata la teoria perché indipendente dalla piattaforma; inoltre sono presentati numerosi esercizi svolti e database di esempio.
+  Durante il corso si generalizza il modello lineare classico andando oltre alle sue premesse, arrivando al modello lineare multi-livello (che costruisce una gerarchia nei dati).
+
+  L'esame è composto da una parte teorica di due domande (da un database di 15 note) e un esercizio da eseguire in R o SAS.
+  Le slide sono sufficienti alla preparazione dell'esame, ma in più è offerta una dispensa ufficiale.
+\end{abstract}
+
+\newpage
+\part{Premesse all'analisi}
+Il modello stabilisce cosa fare coi dati: la finalità del modello stabilisce l'interpretazione da dare al risultato e i dati da raccogliere.
+I test sul modello devono essere fatti su un campione \textit{significativo}: i risultati potrebbero non essere veritieri.
+Il campione è necessario anche coi \textit{Big Data}, dato che aumentano l'eterogeneità dei dati.
+
+Nella prima parte della costruzione del modello, lo statistico deve collaborare con l'esperto di dominio per individuare il fine del modello e i caratteri da osservare.
+In un secondo momento si procede con un'analisi descrittiva (o esplorativa) del dataset (tramite grafici come istogrammi o boxplot, oppure calcolando valori indice).
+Si individuano dunque gli \textit{outliers} (ovvero i valori anomali), da eliminare prima dell'analisi vera e propria.
+
+Si analizza poi la matrice di correlazione $R$, per eliminare casi di \textit{multicollinearità} (ovvero i casi in cui la correlazione $\varrho \to 1$).
+
+Si deve sciogliere il conflitto tra adattamento dei dati e parsimonia in modo tale da rendere comprensibile il modello ma garantendo una certa qualità nell'adattamento.
+
+Il modello reale tiene conto dunque dell'errore, che tiene conto di cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
+Il modello statistico ha come scopo la comprensione e la minimizzazione dell'errore.
+Non si arriva a formulare regole di causa-effetto ma solamente a relazioni empiriche.
+
+Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri.
+Dunque si calcolano i valori stimati sui valori noti ($\hat{y_i}$) e si calcola l'errore con la formula $\epsilon_i = y_i - \hat{y_i}$.
+Al variare del campione, i valori dei parametri cambiano: è così possibile costruire una distribuzione (col metodo Montecarlo).
+L'errore dunque non è deterministico ma stocastico (cioè casuale), dato che varia in base al campione selezionato.
+
+\newpage
+\part{Modello lineare classico}
+Il modello lineare classico ha delle premesse molto rigide a causa della sua natura.
+Si tratta perlopiù di \textit{ipotesi semplificatrici} che saranno rimosse con modelli più avanzati (tranne per le ultime due).
+
+\subsection*{Linearità.}
+Le variabili e i parametri del modello sono lineari:
+\begin{equation*}
+  E(y | X) = Xb
+\end{equation*}
+
+\subsection*{Sfericità degli errori.}
+Gli errori sono omoschedastici (cioè la varianza è costante) e non correlati:
+\begin{align*}
+  E(\epsilon) &= E(y - Xb) \\
+              &= E(Xb - Xb) = 0
+\end{align*}
+e quindi:
+\begin{align*}
+  &var(\epsilon) = E(\epsilon^2) = \sigma^2 \\
+  &cov(\epsilon_i, \epsilon_j) = E(\epsilon_i\epsilon_j) = 0)
+\end{align*}
+Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione influenza le altre), come nella finanza, nelle serie temporali o nelle coordinate spaziali.
+
+\subsection*{Non omoschedasticità.}
+È una mera convenzione: si presume che la matrice del disegno $X$ sia fissa e nota; questa astrazione garantisce una semplificazione del problema.
+Le componenti non stocastiche sono riassunte dalla componente erratica.
+
+\subsection*{Non sistematicità degli errori.}
+Gli errori $\epsilon$ hanno media nulla:
+\begin{equation*}
+  E(\epsilon) = 0
+\end{equation*}
+
+\subsection*{Non numerosità.}
+Il numero di osservazioni è sempre maggiore del numero di caratteri osservati: $n \geq p + 1$.
+Se questa proprietà non è soddisfatta, la matrice del disegno non è invertibile e dunque non è possibile la costruzione di alcun modello.
+
+
+\section{Stima dei parametri.}
+Per stumare i parametri, la formula è:
+\begin{equation*}
+  b = HX = (X'X)^{-1}X
+\end{equation*}
+
+Si dice che uno stimatore è \textit{corretto} se il valore medio della sua distribuzione è pari a quello della popolazione ($E(\theta) = E(x)$).
+Invece per \textit{consistenza} si intende che con una popolazione infinita il valore stimato sia quello della popolazione.
+
+Tra due (o più) stimatori è preferibile lo stimatore più \textit{efficiente}, ovvero con una varianza minore nella sua distribuzione.
+Generalmente uno stimatore segue una distribuzione normale: si effettua un test per verificare la significatività del parametro:
+\begin{align*}
+  &P[-Z_{\frac{\alpha}{2}} < \frac{\beta_j}{\frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}} < +Z_{\frac{\alpha}{2}}] = \\
+  &= P[-Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}} < \beta_j < Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}] = 1 - \alpha
+\end{align*}
+
+
+\end{document}
