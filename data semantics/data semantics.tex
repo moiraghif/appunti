@@ -1,0 +1,55 @@
+\documentclass[11pt, twocolumn]{article}
+
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+
+% lunedì        10:30-12:30 U14/T024 (U14/1)
+% mercoledì     10:30-13:30 U14/T024 (U14/1)
+
+
+% Semantic Web, tra Tecnologie e Open Data, Di Noia, De Virgilio, Di Sciascio, Donin, Apogeo, 2013
+% Linked Data
+
+\title{\textbf{Data Semantics}}
+\author{}
+\date{}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  \textit{Data Semantcs} si occupa di comprendere il significato dei dati, nella pratica della scrittura del programma.
+  È necessario prestare attenzione al significato dei dati nell'integrazione di più dataset; inoltre la semantica del dato è necessaria per la condivisione di dataset (cioè renderli fruibili da chi non ha prodotto il dataset).
+  Altro problema centrale è la capacità di usare dati non strutturati, in modo tale da facilitare query.
+  
+  Scopo del corso è strutturare dei modelli per la semantica dei dati in modo tale da facilitarne l'uso; inoltre si stabiliscono strategie per attribuire semantica ai dati.
+  Bisogna inoltre capire il ruolo della semantica nell'integrazione dei dati.
+  Il corso tratta della semantica dei dati nei \textit{big data}, dell'estrazione dello \textit{knowledge graphs} (ovvero le relazioni tra gli elementi di un database, \textit{data linkage}) o la costruzione di sistemi di raccomandazione.
+  Inoltre saranno analizzate alcune tecniche di \textit{natural language processing} e la costruzione di rappresentazioni a partire dai dati.
+
+  Le esercitazioni si occuperanno di interrogare \textit{knowledge graphs}, modellare e costruire grafi di conoscenza e integrare fonti di dati.
+
+  L'esame orale sarà accompagnato da un progetto software (effettuato in gruppo di, circa, 3 persone), di cui sarà fatta una presentazione orale; in alternativa al progetto è possibile scrivere un articolo di approfondimento su una tematica.
+  La preparazione sarà ``ragionevolmente'' dettagliata su tutti gli argomenti, e sarà approfondito l'argomento del progetto.
+\end{abstract}
+
+
+\newpage
+% titolo provvisorio
+\part{Grafi di conoscenza}
+% non mi sembra molto coeso il discorso: correggere
+La costruzione di grafi di conoscenza è spesso effettauta a mano da una moltitudine di utenti.
+Il modello \textit{Semantic Web} ha costruito linguaggi e strumenti, approvati dal W3C, per definire, interrogare e fare inferenza su grafi di conoscenza.
+Nel mondo reale tuttavia non sono usati questi linguaggi.
+
+Internet produce enormi quantità di dati diversi tra di loro, usati spesso per altri fini: la semantica dei dati si occupa di integrare grandi quantità (\textit{data volume}) da diverse fonti di dati (\textit{data variety}).
+Questo permette la costruzione di intelligenze artificiali, ovvero di programmi che eseguono task tipicamente umani con risultati simili.
+
+I dati possono essere \textit{strutturati} (tabelle ordinate), \textit{semi-strutturati} (tabelle annidate) o \textit{non strutturati} (testi).
+
+È impossibile effettaure a mano certi compiti particolarmente ardui, come l'integrazione di serie temporali con altri documenti riguardanti lo stesso tema, soprattutto con una scarsa conoscenza del dominio.
+\end{document}
