@@ -93,10 +93,10 @@ Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione inf
 Le componenti non stocastiche sono riassunte dalla componente erratica.
 
 \subsection*{Non stocasticità delle variabili esplicative}
-I valori delle $x_j$ variabili esplicative non sono soggetti a fluttuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\epsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\epsilon$.
+I valori delle $x_j$ variabili esplicative non sono soggetti a fluttuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\varepsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\varepsilon$.
 
 \subsection*{Normalità degli errori.}
-Il soddisfacimento dell'ipotesi che $\epsilon_i \sim N(0,\sigma^2)$ ovvero che la distribuzione dell’errore campionario sia normale provoca anche la normalità nella distribuzione di $y$ e di $\hat{\beta}$.
+Il soddisfacimento dell'ipotesi che $\varepsilon_i \sim N(0,\sigma^2)$ ovvero che la distribuzione dell’errore campionario sia normale provoca anche la normalità nella distribuzione di $y$ e di $\hat{\beta}$.
 Questo permette la formulazione di test e la costruzione di intervalli di confidenza.
 
 
@@ -129,7 +129,26 @@ Generalmente uno stimatore segue una distribuzione normale, supponiamo $\beta_j 
 \end{align*}
 Solitamente nel modello lineare l'ipotesi nulla ($H_0$) è l'ipotesi che il parametro sia nullo $\beta_j \sim N(0,\sigma^2)$.
 
-I test statistici per la significatività sono generalmente $F$ e $T$ (il primo è il quadrato del secondo).
+I test statistici per la significatività sono generalmente $F$ e $T$ (il primo è il quadrato del secondo) quando la varianza della popolazione $\sigma^2$ è ignota; nel caso invece di $\sigma^2$ nota allora è possibile sfruttare il test $Z$.
+
+La distribuzione $T$ di Student è anche esplicitabile come:
+
+\begin{align*}
+\frac{Z}{\chi^2 * gdl}
+\end{align*}
+
+mentre la $F$ di Snedecor è riassumibile come:
+
+\begin{align*}
+\frac{\frac{SSE}{k}}{\frac{SSR}{n-k-1}}
+\end{align*}
+
+Nello specifico questa formula è sintetizzabile come il rapporto tra due distribuzioni $\chi^2$ ed i rispettivi gradi di libertà.
+
+Oltre al test d'ipotesi per verificare la significatività dei parametri è possibile anche calcolare l'intervallo di confidenza di un parametro così da misurarne il possibile impatto.
+\newline
+\newline
+La stima dei \textit{minimi quadrati ordinari (OLS)} e la \textit{stima di massima verosimiglianza} sono equivalenti poichè ricavano gli stessi valori per i parametri sfruttando due meccanismi differenti. Mentre la prima trova il valore dei parametri che minimizza la varianza, la seconda calcola i parametri che massimizzano la probabilità di osservare i valori da noi osservati. 
 
 \section{Variabili nominali.}
 Il sistema più diffuso per la gestione di variabili nominali è convertirle in \textit{dummys}: una serie di variabili fittizie con valore $0$ o $1$ in base al valore assunto dalla variabile.
@@ -144,7 +163,8 @@ Si possono però eliminare tutte le ipotesi classiche (a eccezione delle ultime 
 
 \section{Residui eteroschedastici.}
 La varianza dell'errore spesso dipende dalle variabili indipendenti: la distribuzione dell'errore è diversa per ogni osservazione.
-Continuano a valere correttezza e linearità:
+Continuano a valere correttezza, linearità e consistenza:
+
 \begin{align*}
   E(\hat{B}) &= E(Hy) \\
              &= H E(y) \\
@@ -152,10 +172,26 @@ Continuano a valere correttezza e linearità:
              &= H X E(b) + E(e) \\
              &= (X'X)^{-1}X'X E(b) + 0 = b
 \end{align*}
+
 La varianza tuttavia è maggiore:
+
 \begin{align*}
   Var(\hat{B}) &= E((Hy - b)(Hy - b)') \\
                &= E((H(Xb + e) - b)(H(Xb + e) - b)') \\
 \end{align*}
 
+Ciò che non vale più, quindi, è l'efficienza: per questo motivo lo stimatore non è più considerabile BLUE. Questo avrà una conseguenza anche sui test d'ipotesi, per cui la regione di rifiuto diventerà molto più ampia, e per la stima degli intervalli di confidenza, che saranno più stretti e meno affidabili.
+
+\subsection*{Come individuare l'eteroschedasticità.}
+La violazione dell'ipotesi di eteroschedasticità è rilevabile attraverso due modalità: una di ispezione grafica ed una orientata verso dei test su misura.
+Per quanto riguarda l'ispezione grafica, preferibile come primo approccio, è necessario ricorrere a visualizzazioni quale lo \textbf{Scatterplot}: con quest'ultimo è possibile mettere a confronto diverse coppie di elementi sugli assi, tutte egualmente valide.
+\newline
+Tra queste coppie abbiamo:
+\begin{itemize}
+\item $Y$ vs $X$
+\item \textit{Residui stimati} vs $Y$\textit{predetta}
+\item \textit{Residui al quadrato} vs \textit{Regressori}
+\item \textit{Valori osservati} vs \textit{Valori predetti}
+\item \textit{Residui} vs \textit{Regressori}
+\end{itemize}
 \end{document}
