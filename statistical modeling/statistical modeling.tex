@@ -36,7 +36,7 @@ Si analizza poi la matrice di correlazione $R$, per eliminare casi di \textit{mu
 
 Si deve sciogliere il conflitto tra adattamento dei dati e parsimonia in modo tale da rendere comprensibile il modello ma garantendo una certa qualità nell'adattamento.
 
-Il modello reale tiene conto dunque dell'errore, che tiene conto di cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
+Il modello reale tiene conto dunque dell'errore, che considera cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
 Il modello statistico ha come scopo la comprensione e la minimizzazione dell'errore.
 Non si arriva a formulare regole di causa-effetto ma solamente a relazioni empiriche.
 
@@ -56,6 +56,19 @@ Le variabili e i parametri del modello sono lineari:
   E(y | X) = Xb
 \end{equation*}
 
+\subsection*{Non sistematicità degli errori.}
+Affinchè il modello sia imparziale, il valore medio del termine di errore deve essere uguale a zero. Quindi gli errori $\epsilon$ hanno media nulla.
+\newline
+Formalmente:
+\begin{align*}
+E(\epsilon_i = 0)
+E(\epsilon | X) = 0
+\end{align*}
+ne consegue che:
+\begin{align*}
+E(y | X) = Xb
+\end{align*}
+
 \subsection*{Sfericità degli errori.}
 Gli errori sono omoschedastici (cioè la varianza è costante) e non correlati:
 \begin{align*}
@@ -73,25 +86,29 @@ Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione inf
 È una mera convenzione: si presume che la matrice del disegno $X$ sia fissa e nota; questa astrazione garantisce una semplificazione del problema.
 Le componenti non stocastiche sono riassunte dalla componente erratica.
 
-\subsection*{Non sistematicità degli errori.}
-Gli errori $\epsilon$ hanno media nulla:
-\begin{equation*}
-  E(\epsilon) = 0
-\end{equation*}
+\subsection*{Non stocasticità delle variabili esplicative}
+I valori delle $x_j$ variabili esplicative non sono soggetti a fluattuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\epsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\epsilon$.
 
-\subsection*{Non numerosità.}
+\subsection*{Non collinearità.}
+Le variabili della matrice $X$ sono linearmente indipendenti. $X$ ha rango uguale al numero delle variabili, costante inclusa. Da ciò deriva che $X'X$ non è singolare: in caso contrario $X'X$ non è invertibile ed il modello non risolvibile.
+
+\subsection*{Numerosità della popolazione.}
 Il numero di osservazioni è sempre maggiore del numero di caratteri osservati: $n \geq p + 1$.
 Se questa proprietà non è soddisfatta, la matrice del disegno non è invertibile e dunque non è possibile la costruzione di alcun modello.
 
+\subsection*{Normalità degli errori.}
+Il soddisfacimento dell'ipotesi che $\epsilon_i \sim N(0,\sigma^2)$ ovvero che la distribuzione dell’errore campionario sia normale provoca anche la normalità nella distribuzione di $y$ e di $\hat{\beta}$.
 
 \section{Stima dei parametri.}
-Per stumare i parametri, la formula è:
+Per stimare i parametri, la formula è:
 \begin{equation*}
   b = HX = (X'X)^{-1}X
 \end{equation*}
 
 Si dice che uno stimatore è \textit{corretto} se il valore medio della sua distribuzione è pari a quello della popolazione ($E(\theta) = E(x)$).
 Invece per \textit{consistenza} si intende che con una popolazione infinita il valore stimato sia quello della popolazione.
+In sostanza:
+$$\lim_{n\to\infty} Var(\hat{\beta}) = 0$$
 
 Tra due (o più) stimatori è preferibile lo stimatore più \textit{efficiente}, ovvero con una varianza minore nella sua distribuzione.
 Generalmente uno stimatore segue una distribuzione normale: si effettua un test per verificare la significatività del parametro:
