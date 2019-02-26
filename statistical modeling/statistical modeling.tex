@@ -42,12 +42,13 @@ Il modello reale tiene conto dunque dell'errore, che considera cosa non è conos
 Il modello statistico ha come scopo la comprensione e la minimizzazione dell'errore.
 Non si arriva a formulare regole di causa-effetto ma solamente a relazioni empiriche.
 
-Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri nel vettore $\textbf{b}$.
+Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri nel vettore $b$.
 Dunque si calcolano i valori stimati sui valori noti ($\hat{y_i}$) e si calcola l'errore con la formula $\varepsilon_i = y_i - \hat{y_i}$.
 Al variare del campione nella popolazione, i valori dei parametri cambiano: è così possibile costruire una distribuzione (col metodo Montecarlo) di tali parametri.
 L'errore dunque non è deterministico ma stocastico (cioè casuale), dato che varia in base al campione selezionato.
 
-Il criterio scelto per ricercare $\textbf{b}$ è il criterio dei minimi quadrati ordinari che rende minima la norma del vettore di scarti $\varepsilon$
+Il criterio scelto per ricercare $b$ è il criterio dei minimi quadrati ordinari che rende minima la norma del vettore di scarti $\varepsilon$.
+
 
 \newpage
 \part{Modello lineare classico}
@@ -69,8 +70,8 @@ Il vettore casuale ha valore atteso nullo (altrimenti il nostro modello non è i
 % $E(\varepsilon|X)=0$
 e quindi segue che:
 \begin{align*}
-  E(y | X) &= E(Xb + \varepsilon) = \\
-           &= Xb + E(\varepsilon) = \\
+  E(y | X) &= E(Xb + \varepsilon) \\
+           &= Xb + E(\varepsilon) \\
            &= Xb + 0 = Xb
 \end{align*}
 
@@ -92,7 +93,7 @@ Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione inf
 Le componenti non stocastiche sono riassunte dalla componente erratica.
 
 \subsection*{Non stocasticità delle variabili esplicative}
-I valori delle $x_j$ variabili esplicative non sono soggetti a fluattuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\epsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\epsilon$.
+I valori delle $x_j$ variabili esplicative non sono soggetti a fluttuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\epsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\epsilon$.
 
 \subsection*{Normalità degli errori.}
 Il soddisfacimento dell'ipotesi che $\epsilon_i \sim N(0,\sigma^2)$ ovvero che la distribuzione dell’errore campionario sia normale provoca anche la normalità nella distribuzione di $y$ e di $\hat{\beta}$.
@@ -108,23 +109,53 @@ Se questa proprietà non è soddisfatta, la matrice del disegno non è invertibi
 
 
 \section{Stima dei parametri.}
-Per stimare i parametri, la formula è:
+Per stimare i parametri, la formula matriciale è:
 \begin{equation*}
-  b = HX = (X'X)^{-1}X
+  b = Hy = (X'X)^{-1}X' y
 \end{equation*}
 
 Si dice che uno stimatore è \textit{corretto} se il valore medio della sua distribuzione è pari a quello della popolazione ($E(\theta) = E(x)$).
 Invece per \textit{consistenza} si intende che con una popolazione infinita il valore stimato sia quello della popolazione.
 In sostanza:
-$$\lim_{n\to\infty} Var(\hat{\theta}) = 0$$
+\begin{equation*}
+  \lim_{n\to\infty} Var(\hat{\theta}) = 0
+\end{equation*}
 
 Tra due (o più) stimatori è preferibile lo stimatore più \textit{efficiente}, ovvero con una varianza minore nella sua distribuzione.
 Generalmente uno stimatore segue una distribuzione normale, supponiamo $\beta_j \sim N(\mu,\sigma^2)$ (ha una distribuzione normale), si effettua un test (con probabilità dell'errore di primo grado $\alpha$ arbitrario) per verificare la significatività di un parametro $\beta_j$ con varianza $\sigma$ nota:
 \begin{align*}
-  &P[-Z_{\frac{\alpha}{2}} < \frac{\beta_j}{\frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}} < +Z_{\frac{\alpha}{2}}] = \\
+  &P[-Z_{\frac{\alpha}{2}} < \frac{\beta_j}{\frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}} < +Z_{\frac{\alpha}{2}}] \\
   &= P[-Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}} < \beta_j < Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}] = 1 - \alpha
 \end{align*}
 Solitamente nel modello lineare l'ipotesi nulla ($H_0$) è l'ipotesi che il parametro sia nullo $\beta_j \sim N(0,\sigma^2)$.
 
 I test statistici per la significatività sono generalmente $F$ e $T$ (il primo è il quadrato del secondo).
+
+\section{Variabili nominali.}
+Il sistema più diffuso per la gestione di variabili nominali è convertirle in \textit{dummys}: una serie di variabili fittizie con valore $0$ o $1$ in base al valore assunto dalla variabile.
+In questo modo è possibile interpretare facilmente il risultato ottenuto.
+Il numero di variabili dummy generate da un carattere qualitativo è pari a $v - 1$ (dove $v$ è il numero di possibili valori), per evitare multicollinearità; una variabile non è mai inserita.
+
+
+\newpage
+\part{Violazione delle ipotesi classiche}
+Dato che ``tutti i modelli sono falsi'', le ipotesi classiche non sono scorrette, tuttavia semplificano in modo eccessivo: in circostanze reali è difficile trovare fenomeni che le soddisfino tutte.
+Si possono però eliminare tutte le ipotesi classiche (a eccezione delle ultime due elencate precedentemente) in modo tale da ottenere un modello più veritiero.
+
+\section{Residui eteroschedastici.}
+La varianza dell'errore spesso dipende dalle variabili indipendenti: la distribuzione dell'errore è diversa per ogni osservazione.
+Continuano a valere correttezza e linearità:
+\begin{align*}
+  E(\hat{B}) &= E(Hy) \\
+             &= H E(y) \\
+             &= H E(Xb + e) \\
+             &= H X E(b) + E(e) \\
+             &= (X'X)^{-1}X'X E(b) + 0 = b
+\end{align*}
+La varianza tuttavia è maggiore:
+\begin{align*}
+  Var(\hat{B}) &= E((Hy - b)(Hy - b)') \\
+               &= E((H(Xb + e) - b)(H(Xb + e) - b)') \\
+\end{align*}
+
 \end{document}
