@@ -32,18 +32,23 @@ Nella prima parte della costruzione del modello, lo statistico deve collaborare 
 In un secondo momento si procede con un'analisi descrittiva (o esplorativa) del dataset (tramite grafici come istogrammi o boxplot, oppure calcolando valori indice).
 Si individuano dunque gli \textit{outliers} (ovvero i valori anomali), da eliminare prima dell'analisi vera e propria.
 
+
 Si analizza poi la matrice di correlazione $R$, per eliminare casi di \textit{multicollinearità} (ovvero i casi in cui la correlazione $\varrho \to 1$).
 
 Si deve sciogliere il conflitto tra adattamento dei dati e parsimonia in modo tale da rendere comprensibile il modello ma garantendo una certa qualità nell'adattamento.
 
-Il modello reale tiene conto dunque dell'errore, che tiene conto di cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
+In termini matriciali per la regressione multipla abbiamo:
+$$\textbf{y} = X \textbf{b} + \varepsilon$$
+dove il modello reale tiene conto dell'errore indicato con $\varepsilon$, che tiene conto di cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
 Il modello statistico ha come scopo la comprensione e la minimizzazione dell'errore.
 Non si arriva a formulare regole di causa-effetto ma solamente a relazioni empiriche.
 
-Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri.
-Dunque si calcolano i valori stimati sui valori noti ($\hat{y_i}$) e si calcola l'errore con la formula $\epsilon_i = y_i - \hat{y_i}$.
-Al variare del campione, i valori dei parametri cambiano: è così possibile costruire una distribuzione (col metodo Montecarlo).
+Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri nel vettore $\textbf{b}$.
+Dunque si calcolano i valori stimati sui valori noti ($\hat{y_i}$) e si calcola l'errore con la formula $\varepsilon_i = y_i - \hat{y_i}$.
+Al variare del campione nella popolazione, i valori dei parametri cambiano: è così possibile costruire una distribuzione (col metodo Montecarlo) di tali parametri.
 L'errore dunque non è deterministico ma stocastico (cioè casuale), dato che varia in base al campione selezionato.
+
+Il criterio scelto per ricercare $\textbf{b}$ è il criterio dei minimi quadrati ordinari che rende minima la norma del vettore di scarti $\varepsilon$
 
 \newpage
 \part{Modello lineare classico}
@@ -51,41 +56,49 @@ Il modello lineare classico ha delle premesse molto rigide a causa della sua nat
 Si tratta perlopiù di \textit{ipotesi semplificatrici} che saranno rimosse con modelli più avanzati (tranne per le ultime due).
 
 \subsection*{Linearità.}
-Le variabili e i parametri del modello sono lineari:
+Le variabili e i parametri del modello sono lineari.
+
+\subsection*{Non sistematicità degli errori}
+Il vettore casuale ha valore atteso nullo (altrimenti il nostro modello è inadeguato):
+\begin{equation*}
+  E(\varepsilon_i)=0, i=1,\hdots,n 
+\end{equation*}
+$$E(\varepsilon|X)=0$$
+e quindi segue
 \begin{equation*}
   E(y | X) = Xb
+\end{equation*}
+\begin{equation*}
+E(y) = E(xb+\varepsilon) = E(Xb)+E(\varepsilon) = Xb
 \end{equation*}
 
 \subsection*{Sfericità degli errori.}
 Gli errori sono omoschedastici (cioè la varianza è costante) e non correlati:
 \begin{align*}
-  E(\epsilon) &= E(y - Xb) \\
+  E(\varepsilon) &= E(y - Xb) \\
               &= E(Xb - Xb) = 0
 \end{align*}
 e quindi:
 \begin{align*}
-  &var(\epsilon) = E(\epsilon^2) = \sigma^2 \\
-  &cov(\epsilon_i, \epsilon_j) = E(\epsilon_i\epsilon_j) = 0)
+  &var(\varepsilon_i) = E(\varepsilon_i^2) = \sigma_i^2 \\
+  &cov(\varepsilon_i, \varepsilon_j) = E(\varepsilon_i\varepsilon_j) = 0)
 \end{align*}
 Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione influenza le altre), come nella finanza, nelle serie temporali o nelle coordinate spaziali.
 
 \subsection*{Non omoschedasticità.}
-È una mera convenzione: si presume che la matrice del disegno $X$ sia fissa e nota; questa astrazione garantisce una semplificazione del problema.
+È una mera convenzione: si presume che la matrice del disegno $X$ sia fissa e nota di dimensione (n,p+1) ; questa astrazione garantisce una semplificazione del problema.
 Le componenti non stocastiche sono riassunte dalla componente erratica.
 
-\subsection*{Non sistematicità degli errori.}
-Gli errori $\epsilon$ hanno media nulla:
-\begin{equation*}
-  E(\epsilon) = 0
-\end{equation*}
-
 \subsection*{Non numerosità.}
-Il numero di osservazioni è sempre maggiore del numero di caratteri osservati: $n \geq p + 1$.
-Se questa proprietà non è soddisfatta, la matrice del disegno non è invertibile e dunque non è possibile la costruzione di alcun modello.
+Il numero di osservazioni è sempre maggiore del numero di caratteri osservati: $n > p + 1$.
+Se questa proprietà non è soddisfatta, la matrice del disegno $(X'X)$ non è invertibile e dunque non è possibile la costruzione di alcun modello. Ciò presuppone inoltre che la matrice X abbia rango massimo $p + 1$ (visto che $n > p + 1$) che può non succedere nel caso di matrici con colonne alta mente correlate $(|\varrho| \to 1)$.
+\subsection*{Normalità degli errori}
+Questa non appartiene in senso proprio alle ipotesi ma permette agli stimatori di costruire test e intervalli di confidenza:
+$$\varepsilon_i \sim N(0,\sigma^2)$$
 
 
 \section{Stima dei parametri.}
-Per stumare i parametri, la formula è:
+Per stimare i parametri, la formula è:
 \begin{equation*}
   b = HX = (X'X)^{-1}X
 \end{equation*}
@@ -94,11 +107,11 @@ Si dice che uno stimatore è \textit{corretto} se il valore medio della sua dist
 Invece per \textit{consistenza} si intende che con una popolazione infinita il valore stimato sia quello della popolazione.
 
 Tra due (o più) stimatori è preferibile lo stimatore più \textit{efficiente}, ovvero con una varianza minore nella sua distribuzione.
-Generalmente uno stimatore segue una distribuzione normale: si effettua un test per verificare la significatività del parametro:
+Generalmente uno stimatore segue una distribuzione normale, supponiamo $\beta_j \sim N(\mu,\sigma^2)$(ha una distribuzione normale), si effettua un test per verificare la significatività del parametro(con varianza nota):
 \begin{align*}
   &P[-Z_{\frac{\alpha}{2}} < \frac{\beta_j}{\frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}} < +Z_{\frac{\alpha}{2}}] = \\
   &= P[-Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}} < \beta_j < Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}] = 1 - \alpha
 \end{align*}
-
+Solitamente nel modello lineare l'ipotesi nulla è l'ipotesi che il parametro sia nullo $(\beta_j \sim N(0,\sigma^2))$.
 
 \end{document}
