@@ -1,4 +1,4 @@
-\documentclass[11pt, twocolumn]{article}
+\documentclass[11pt]{article}
 
 \usepackage[italian]{babel}
 \usepackage{amsmath}
@@ -6,9 +6,12 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \counterwithin*{section}{part}
+\usepackage{enumitem}
+\usepackage[autostyle]{csquotes}
+\usepackage{array}
 
 % poco chiaro, non è vero ma ci sono stati casini sulla scelta delle lezioni ->
-% lezione anche di mercoledì (a partire dalla terza settimana)
+% lezione di mercoledì (a partire dalla terza settimana)
 %
 % email: (@unimib.it o @jakala.com)
 % nico.didomenica@unimib.it
@@ -26,15 +29,119 @@
 \begin{abstract}
   Per i frequentanti l'esame consisterà in un progetto che farà media con lo scritto, con possibilità di orale integrativo.
   Il progetto (fatto in gruppi di tre persone) per Data Science sarà un progetto in R di elaborazione dei dati con relativa presentazione.
-  Altrimenti l'esame consiste in una presentazione frontend e backend di un'app (pre-esistente) proposta da un cliente.
-
+  Altrimenti per le altre facoltà l'esame consiste in una presentazione frontend e backend di un'app (pre-esistente) proposta da un cliente.
+  Per il corso di DataScience inoltre vi saranno delle lezioni di tutorato su R.
+  
   Per i non frequentanti l'esame consiste in uno scritto (composto da 10 domande aperte) e un orale.
   L'esame comunque verte solamente sulle slide.
 \end{abstract}
 
+\section{Lezione 1 - Attilio - 01 marzo}
 % @momolo {{{
 % mi spiace ragazzi, vado a fare foundation of probability...
 % se volete continuare la dispensa avete tutta la mia stima :)
 % }}}
+\section{01 marzo}
+Diverse definizioni di marketing:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Consiste nell'individuazione e nel soddisfacimento dei bisogni umani e sociali. 
+	Il marketing è sopratutto una prospettiva. 
+	Questa è una definizione più filosofica.
+	
+	\item (AMA - American Marketing Association): Il maketing è l'insieme di attività, istituzioni (qua c'è anche un elemento personale nel senso ci sono delle persone che fanno marketing) e processi volti alla creazione, comunicazione e scambio di offerte (se c'è un bisogno che non è ancora espresso, bisogna anche pensare ai prodotti non esistenti quindi creazione, una volta creato è importante anche comunicarlo e scambiarlo) che hanno valore per acquirenti, clienti, partner e la società in generale (questa cosa tocca a un bel po' di persone). 
+	E' una Definizione più tecnica rispetto alla prima.
+	
+	\item L'insieme dei processi, coerenti e coordinati, finalizzato a produrre scambi e relazioni, fra individui e organizzazioni, con una finalità sempre duplice: 
+	\begin{itemize}[noitemsep]
+		\item creare valore economico e sociale per l'offerta;
+		\item trasferire valore funzionale, simbolico, emozionale o esperienziale per la domanda.
+	\end{itemize} 
+	Qui si accenna il tema della funzione sociale. 
+	Si vogliono soddisfare dei beni non sempre tangibili, quindi oltre il mangiare e/o bere.
+	
+	\item Una visione sociale: Il marketing è il processo sociale mediante il quale individui e gruppi ottengono ciò di cui hanno bisogno e ciò che desiderano tramite la creazione dell'offerta e il libero scambio di prodotti e servizi di valore.
+\end{enumerate}
+
+~\\
+Un'affermazione di Drucker che spiega molto bene il marketing: 
+\enquote{Si può sempre presumere che vi sarà sempre necessità di vendere.
+	Ma lo scopo del marketing è  quello di rendere superflua la vendita. 
+	Lo scopo è conoscere e comprendere il cliente al punto che il prodotto o servizio sia tanto adatto alle sue esigenze da vendersi da solo.
+	Teoricamente il risultato del marketing è un cliente pronto ad effettuare l'acquisto. 
+	Allora non rimane che rendere disponibile il prodotto o servizio.}
+\newline
+Qua si osserva che l'operazioni di vendita è separato dal marketing. L'obbiettivo che conoscere le persone che hanno determinati bisogni e trovare il modo di soddisfarli. Ad esempio vendere ghiaccio agli Eschimese non è marketing ma solo uno bravo a vendere.
+
+\noindent
+Due prospettive complementari del marketing:\\
+
+\begin{center}
+	\begin{tabular}{c | c}
+		Analisi di marketing & Marketing management \\
+		\hline
+		\begin{tabular}{l}
+			\\
+			BtoC (Business to Consumer) \\
+			BtoB (Business to Business) \\
+			CtoC (Consumer to Consumer)\\
+			BtoG (Business to Government)\\
+		\end{tabular}
+		
+		&
+		
+		\multicolumn{1}{m{9cm}}{~\newline Ovvero l'arte e la scienza della scelta dei mercati obiettivo, nonché dell'acquisizione, del mantenimento e della crescita della clientela tramite la creazione, la distribuzione e la comunicazione di un valore superiore}
+	\end{tabular}
+\end{center}
+
+\noindent
+I campi d'azione del marketing sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Beni
+	\item Servizi
+	\item Eventi
+	\item Esperienze: ad esempio Eataly
+	\item Persone: uno che tifa una squadra come Inter(preferenze personali)
+	\item Luoghi: Turista
+	\item Diritti di proprietà: Disney lascia usare il topolino sulla maglietta di altri
+	\item Organizzazioni
+	\item Informazioni: Tante aziende fanno marketing su quanto sono brave a raccogliere e gestire e sfruttare le informazioni
+	\item Idee: ha a fare con la comunicazioni sociale
+\end{itemize}
+~\\
+Gli attori del marketing sono :
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Marketing manager che è responsabile della gestione della domanda;
+	\item Il cliente potenziale che ormai ha sempre meno ruolo passivo che rende il marketing un po' più complesso per le aziende.
+\end{itemize}
+~\\
+Gli stati della domanda sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Domanda negativa: Una cosa che non ti piace e che non vuoi proprio vedere, ad esempio l'olio di palma;
+	\item Domanda inesistente: è una domanda non esistente perché non interessa a nessuno;
+	\item Domanda latente: è un domanda esistente ma non c'è nessuno che la produce. E' il paradiso per un marketing manager. Ad esempio, il primo Mac contro quello di IBM (grande ingombrante) oppure gli smartphone con le loro fotocamere.
+	\item Domanda declinante;
+	\item Domanda irregolare;
+	\item Domanda piena;
+	\item Domanda eccessiva;
+	\item Domanda nociva: Sigarette
+\end{itemize}
+\noindent
+La domanda serve per definire il mercato e senza questo non c'è il marketing.
+Secondo gli economisti è un insieme di acquirenti e venditori che effettuano transazioni su un prodotto o un insieme di prodotti.
+Tradizionalmente era il luogo fisico dello scambio dei beni e servizi. 
+Oggi è molto più de-localizzato ad esempio Amazon.
+Secondo i marketing manager il mercato è un gruppo di clienti diversi in base ai loro bisogni, prodotti, geografia e demografia. I venditori si raggruppano in settori. 
+~\\
+
+\noindent Un semplice sistema di marketing è:
+\begin{verbatim}
+                     ----->[Comunicazioni]---->-->
+                    |                            |
+                 Settori   ---[Beni/Servizi]--> Mercato
+                (insieme di                    (insieme di
+                venditori)  <----[Denaro]-----  aquirenti)
+                    |                            |
+                    <--<----[Informazioni]<------
+\end{verbatim}
 
 \end{document}
