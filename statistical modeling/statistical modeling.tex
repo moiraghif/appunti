@@ -239,5 +239,44 @@ Per quanto riguarda l'ipotesi di \textit{sfericità degli errori} oltre all'\tex
 \begin{align*}
 Cov(\varepsilon_i;\varepsilon_j)\not = 0\\
 y_i = x_i b + \varepsilon_i^\sharp
-\end{align*} 
+\end{align*}
+Questo tipo di situazione si verifica spesso in caso di serie storiche o spaziali.
+L'autocorrelazione può essere \textit{positiva} se i residui risultano essere consecutivamente dello stesso segno, oppure \textit{negativa} se i residui consecutivi risultassero di segno diverso.
+Per quanto riguarda le proprietà dello stimatore anche nel caso di residui correlati $\varepsilon_i^\sharp$  abbiamo \textit{correttezza} e \textit{consistenza} ma non vi è \textit{efficienza}, poichè la matrice non è più scomponibile. Questo provoca a cascata come effetto che la \textit{t di Student} non sia più affidabile, perchè basata proprio sull'ipotesi di incorrelazione dei residui ($S^2$ sottostima pesantemente $\sigma^2$). Conseguenza naturale di ciò è che la regione di rifiuto risulta più ampia e gli intervalli di confidenza più stretti.
+\subsection*{Come individuare la correlazione nei residui.}
+Anche in questo caso l'individuazione avviene sia per via \textit{grafica} che attraverso dei \textit{test}.
+Per quanto riguarda l'individuazione \textit{grafica} per mezzo di \textbf{scatterplot}:
+\begin{itemize}
+\item $Y$ vs \textit{Regressori}
+\item \textit{Residui} vs \textit{Regressori}
+\item \textit{Residui} vs \textit{Residui ritardati}
+\item \textit{Correlogramma}
+\end{itemize}
+Nello specifico per quanto riguarda il \textit{correlogramma} questo si basa sulla rappresentazione di residui con lag temporale (o spaziale) e ci permette di scomporre i \textit{gradi di correlazione} così da poterli visualizzare entro \textit{bande di confidenza}.
+
+Per quanto riguarda i test invece il più utilizzato è il cosiddetto \textbf{Test di Durbin-Watson}. Questo test parte dall'ipotesi
+\begin{align*}
+H_0 : \rho = Corr [\varepsilon_i^\sharp;\varepsilon_j^\sharp] = 0
+\end{align*}
+Per questo motivo il test è costruito come
+\begin{align*}
+DW = \frac{\sum_i(\varepsilon_i^\sharp - \varepsilon_{i-1}^\sharp)^2}{\sum_i\varepsilon_i^2}
+\end{align*}
+che ammettendo omoschedasticità e quindi avendo
+\begin{align*}
+E(\varepsilon_i^\sharp) = 0 \\
+E(\varepsilon_i^{\sharp2}) = Var(\varepsilon_i^\sharp)
+\end{align*}
+è ricondotta alla forma
+\begin{align*}
+DW = \frac{(2\sigma^2 - 2\rho\sigma^2)^2}{\sigma^2} = 2(1-\rho)
+\end{align*}
+in questo modo avremo che
+\begin{align*}
+DW = 2 \quad incorrelazione \quad  \rho = 0\\
+DW = 0 \quad correlazione \  positiva \quad \rho = 1\\
+DW = 4 \quad correlazione \  negativa \quad \rho = -1
+\end{align*}
+\subsection*{Modello GLS per soluzioni con errori correlati.}
+Per la costruzione del \textbf{ modello GLS} esistono due approcci possibili.
 \end{document}
