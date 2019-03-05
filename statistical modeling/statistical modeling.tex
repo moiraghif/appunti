@@ -194,4 +194,50 @@ Tra queste coppie abbiamo:
 \item \textit{Valori osservati} vs \textit{Valori predetti}
 \item \textit{Residui} vs \textit{Regressori}
 \end{itemize}
+Per quanto riguarda invece i test di misura, il primo utile allo scopo è il \textbf{Test di White}. Questo test si basa sull'ipotesi $H_0$ che vi sia effettivamente \textit{omoschedasticità} tra i residui e che quindi:
+\begin{align*}
+Var(e|X) = \sigma^2I_n
+\end{align*}
+Il meccanismo del test è piuttosto semplice:
+\begin{itemize}
+\item Prima di tutto si procede a regredire $Y$ rispetto alle variabili esplicative $X_j$ e a ricavare l'errore $\varepsilon_i$.
+\item Successivamente si procede a regredire $\varepsilon_i$ rispetto alle variabili esplicative $x_j$ e al loro quadrato $x_j^2$, oltre che alle loro interazioni.
+\item Si determina il coefficiente di determinazione $R^2$ della regressione e si procede alla costruzione del valore
+\begin{align*}
+LM = nR^2 \\
+LM \sim \chi^2
+\end{align*}
+con $n$ numero di regressori.
+\item Se $LM$ cade all'interno della regione di rifiuto allora vorrà dire che $\varepsilon_i^2$ varia al variare delle $x_j$ e sarà quindi da confermare la presenza di \textit{eteroschedasticità}.
+\end{itemize}
+Molto simile al Test di White è il \textbf{Test di Breusch-Pagan} che invece di regredire su $\varepsilon_i^2$ effettua la regressione su
+\begin{align*}
+S^2 = \frac{\sum_{i} \varepsilon_i^2}{n}
+\end{align*}
+Questo meccanismo punta quasi a normalizzare i residui $\varepsilon_i^2$ per cui se $S^2$ ed $\varepsilon^2$ divergono significa che c'è \textit{eteroschedasticità}.
+\subsection*{Modello WLS per soluzioni con errori eteroschedastici.}
+Una volta appurata la presenza di residui eteroschedastici ed incorrelati $Cov(\varepsilon_i^*;\varepsilon_j^*) = 0$ è necessario costruire un modello per correggere questa violazione dell'ipotesi di \textit{sfericità degli errori}. Prima di tutto dal classico modello OLS 
+\begin{align*}
+y = Xb + \varepsilon^*
+\end{align*}
+ricaviamo la varianza campionaria dei residui $S^2_i = h_i$ e poi procediamo a dividere ogni componente per $\sqrt{h_i}$
+\begin{align*}
+y^* = \frac{y}{\sqrt{h_i}}\\
+X^* = \frac{X}{\sqrt{h_i}}\\
+\varepsilon = \frac{\varepsilon^*}{\sqrt{h_i}}
+\end{align*}
+ottenendo infine un modello trasformato con
+\begin{align*}
+Var(\varepsilon) = \frac{h_i}{h_i} = 1
+\end{align*}
+Per questa ragione il modello è chiamato \textbf{WLS} ovvero \textbf{Weighted Least Squares} ed è definito nella sua forma funzionale come:
+\begin{align*}
+y^* = X^*b + \varepsilon
+\end{align*}
+\section{Residui correlati.}
+Per quanto riguarda l'ipotesi di \textit{sfericità degli errori} oltre all'\textit{omoschedasticità} abbiamo anche l'assunzione di \textit{incorrelazione} dei $\varepsilon_i$. In caso quindi di residui \textbf{correlati} abbiamo che:
+\begin{align*}
+Cov(\varepsilon_i;\varepsilon_j)\not = 0\\
+y_i = x_i b + \varepsilon_i^\sharp
+\end{align*} 
 \end{document}
