@@ -279,4 +279,52 @@ DW = 4 \quad correlazione \  negativa \quad \rho = -1
 \end{align*}
 \subsection*{Modello GLS per soluzioni con errori correlati.}
 Per la costruzione del \textbf{ modello GLS} esistono due approcci possibili.
+
+Un primo approccio è basato sulla stima di $\rho$ regredendo $\varepsilon_i^\sharp$ in funzione delle variabili esplicative $x_j$. Una volta ricavato $\rho$ sarà allora possibile utilizzarlo per moltiplicare ogni componente dell'equazione ritardata nella forma che segue
+\begin{align*}
+\rho y_{i-1} = \rho\beta_0 + \rho\beta_1 x_{i-1} + \rho\varepsilon_{i-1}^\sharp
+\end{align*}
+e successivamente procedendo ad effettuare
+\begin{align*}
+y_i - \rho y_{i-1} = \beta_0(1-\rho) + \beta_1(x_i-\rho x_{i-1}) + w_i
+\end{align*}
+\begin{align*}
+con \  w_i = \varepsilon_i^\sharp - \rho\varepsilon_{i-1}^\sharp
+\end{align*} 
+ottenendo
+\begin{align*}
+y_i^\sharp = \beta_0^\sharp + \beta_1^\sharp + w_i
+\end{align*}
+ovvero un'equazione OLS di tipo classico con errori incorrelati dato che
+\begin{align*}
+Cov(w_i;w_{i-1}) = 0
+\end{align*}
+
+Il secondo approccio è invece quello del \textit{modello autoregressivo}, incorporato nel software \textit{SAS}.
+Questo approccio in sintesi incorpora automaticamente un modello autoregressivo (\textit{AR1}) per la componente d'errore.
+\begin{align*}
+y_t = \beta_0 + \beta_1 x_i + \varepsilon_t^\sharp \\
+y_i = \beta_0 + \beta_1 x_i + AR1_i + \varepsilon_i^\sharp \\ 
+= \beta_0 + \beta_1 x_i + v_{i(1)}
+\end{align*}
+con
+\begin{align*}
+v_{i(1)} = AR1_i + \varepsilon_i^\sharp
+\end{align*}
+in modo che
+\begin{align*}
+E(v_{i(1)},v_{i-1(1)}) = 0
+\end{align*}
+\section{Stimatori dei minimi quadrati generalizzati GLS}
+Quando gli errori non rispettano l'ipotesi di sfericità in quanto sia eteroschedastici che correlati tra loro allora la matrice di varianze e covarianze dei residui appare come
+\[
+\Sigma_\varepsilon = 
+\begin{bmatrix}
+\sigma_1^2 & \rho_{12} & \rho_{1p} \\
+\rho_{12} & \sigma_2^2 & \rho_{2p} \\
+\hdotsfor{3} \\
+\rho_{1p} & \rho_{2p} & \sigma_p^2
+\end{bmatrix}
+\]
+In questo caso si utilizzano gli stimatori dei minimi quadrati generalizzati (GLS) interpretabili analogamente al modello classico in quanto trattasi di stimatori OLS basati su \textit{variabili trasformate}.
 \end{document}
