@@ -3,6 +3,8 @@
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
 \usepackage[margin=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \counterwithin*{section}{part}
@@ -121,13 +123,121 @@ Le triple sono strutturate con un soggetto, un predicato e un oggetto.
 Il soggetto è composto da un URI o da un \textit{black node} (ovvero costanti), il predicato da un URI, un \textit{black node} o da un letterale, a cui può essere attribuito un tipo (stringhe, stringhe, date o booleani) per permettere operazioni.
 I \textit{black node} sono nodi anonimi per consentire una buona costruzione del grafo.
 
-
+\subsection{Pubblicazione.}
 I \textit{linked data} riassumono delle pratiche per pubblicare e unire dati provenienti dal web:
 \begin{itemize}
   \item usare URI come nomi delle cose;
   \item usare indirizzi HTTP come URI;
-  \item usare informazioni utili su un URI cercato;
+  \item inserire informazioni utili su un URI;
   \item includere link ad altri URI.
 \end{itemize}
+Sono solamente una serie di principi, non rendono i dati \textit{open} (\textit{Linked Open Data}). \newline
 
+Altro approccio per pubblicare i dati sul web è usare l'\textit{annotazione semantica}: si inseriscono annotazioni di una pagina web che specifichino il significato del contenuto o altri meta-dati.
+La sintassi è simile a XML: RDF in precedenza usava il formato XML, non Turtle, ma è stato abbandonato per la sua struttura ad albero in favore di una struttura a grafo.
+Con l'aggiunta di contenuti strutturati si permette l'elaborazione da parte di agenti intelligenti.
+L'approccio è tornato in auge grazie ai \textit{crawler} dei motori di ricerca, che annotano le pagine in base al loro significato semantico\footnote{\url{https://webdatacommons.org} è un archivio di crawl trovati sul web.}.
+
+Non tutti i formati sono compatibili con RDF (Microdata e hCard non lo sono) mentre altri sì (RDFa, JSON-LD); nonostante questo non ci sono differenze significative tra i vari formati (il modello è il medesimo).
+
+hCard e vCard sono basati su HTML, ponendo delle convenzioni su come gestire le informazioni. \newline
+I microdati usano tag speciali introdotti in HTML5 per definire \textit{itemscope}, \textit{itemtype} e \textit{itempropriety}: si definisce (\textit{itemscope}) un oggetto di un certo tipo (\textit{itemtype}) con determinate proprietà (\textit{itemprop}), che in RDF si inseriscono tramite \textit{black node}.
+I microdati sono parti di codice integrate dentro al testo, visualizzabili solamente nel codice sorgente.
+Si usano dei tipi definiti da vocabolari\footnote{\url{https://schema.org/} è un dizionario che definisce in modo non eccessivamente prescrittivo oggetti e proprietà.}, utilizzabili anche in RDF, adottati come standard. \newline
+RDFa specifica all'inizio il vocabolario adottato, mentre il codice rimane scritto in HTML. \newline
+JSON-LD (JSON \textit{Linked Data}) integra un file \verb|.json| (in un tag \verb|<script>|) in una pagina HTML per attribuire significati semantici.
+Non si ha bisogno di un parser apposito, e le triple sono facilmente ricostruibili a partire dalla pagina web.
+I motori di ricerca, processando in modo automatico, mostrano il contenuto in base al significato semantico.
+
+\section{SPARQL.}
+Introdotto come linguaggio per interrogare \textit{linked data}, è un linguaggio simile a SQL caratterizzato (dalla versione 1.1) da quattro elementi:
+\begin{itemize}
+  \item SPARQL Query;
+  \item SPARQL Algebra;
+  \item SPARQL Update;
+  \item SPARQL Protocol.
+\end{itemize}
+Permette di interrogare (query), modificare (update) e integrare (federated) database composti da triple.
+Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più elementi di una tripla con una variabile.
+
+\begin{verbatim}
+dbpedia:The_Beatles foaf:name
+                  "The Beatles" .
+
+dbpedia:The_Beatles foad:name ?album .
+?album mo:track ?track .
+?album ?p ?o .
+\end{verbatim}
+% musicbrainz.org
+
+Si possono così costruire query strutturate grazie al concetto di \textit{pattern match}: si definisce un sotto-grafo in cui fare interrogazioni più sofisticate.
+
+\begin{verbatim}
+// prologo: si definiscono le fonti
+PREFIX dbpedia:
+          <http://dbpedia.org/resource/>
+PREFIX foaf:<http://xmlns.com/foaf/0.1/>
+...
+
+// query di tipo SELECT
+// ASK | SELECT | DESCRIBE | CONSTRUCT
+SELECT ?album
+FROM <http://musicbrainz.org/20130302/>
+WHERE {
+  // il cuore della query:
+  // il titolo di tutte le tracce degli
+  // album dei Beatles
+  dbpedia:The_Beatles foaf:made ?album .
+  ?album a mo:Record ; dc:title ?title
+}
+ORDER BY ?title
+\end{verbatim}
+
+\verb|ASK| ritorna \verb|true|/\verb|false| se esiste una soluzione alla query:
+\begin{verbatim}
+ASK WHERE {
+  dbpedia:The_Beatles mo:member
+      dbpedia:Paul_McCartney .
+}
+
+=> true
+\end{verbatim}
+
+\verb|SELECT| ritorna una lista di elementi che hanno corrispondenza nel grafo:
+\begin{verbatim}
+SELECT ?album_name ?track_title
+       ?date       ?album       .
+WHERE {
+  // tutti gli album dei Beatles
+  dbpedia:The_Beatles foaf:name
+                         ?album .
+  ?album dc:title ?album ;
+         mo:track ?track .
+  // tutte le tracce degli album
+  ?track dc:title ?track_title ;
+         mo:duration ?duration ;
+  // filtra per durata
+  FILTER (?duration > 300000 &&
+          ?duration < 400000)
+}
+\end{verbatim}
+
+\verb|CONSTRUCT| è simile a \verb|SELECT| ma ritorna un grafo e non una lista:
+\begin{verbatim}
+CONSTRUCT {
+  // riscrive con nuova terminologia
+  ?album dc:creator
+              dbpedia:The_Beatles
+} WHERE {
+  // esegue la query
+  dbpedia:The_Beatles foaf:made
+                         ?album .
+  ?album mo:track ?track .
+}
+\end{verbatim}
+
+Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query.
+
+I dataset sono integrati grazie a predicati (\verb|same|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
+SPARQL 1.1 permette di integrare un sistema di ragionamento automatico per l'uguaglianza delle entità (introduce il concetto di \textit{entailment}).
 \end{document}
