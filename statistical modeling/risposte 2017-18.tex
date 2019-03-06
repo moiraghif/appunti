@@ -88,7 +88,7 @@ Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il GLS.
 \section{Metodo di stima WLS; per soluzioni correlate, GLS }
 
 \begin{itshape}
-Errori eteroschedastici e incorrelati: stimatore wls
+Errori eteroschedastici e incorrelati: stimatore WLS
 \end{itshape}
 \newline
 Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi uno delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori weighted least squares che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di h(i) (corrisponde alla varianza di $\varepsilon$*). Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo y*su X*B riportando così la varianza degli errori costante.
