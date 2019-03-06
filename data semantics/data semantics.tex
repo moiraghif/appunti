@@ -1,10 +1,11 @@
-\documentclass[11pt, twocolumn]{article}
+\documentclass[11pt]{article}
 
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{multicol}
 \usepackage[margin=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \counterwithin*{section}{part}
@@ -19,7 +20,6 @@
 \title{\textbf{Data Semantics}}
 \author{}
 \date{}
-
 
 \begin{document}
 \maketitle
@@ -43,6 +43,7 @@
 \newpage
 % titolo provvisorio
 \part{Grafi di conoscenza}
+\begin{multicols}{2}
 % non mi sembra molto coeso il discorso: correggere
 Il termine è coniato da Google per indicare uno strumento usato dal suo motore di ricerca.
 Il grafo permette di essere processato facilmente da una macchina e allo stesso tempo permette un livello di astrazione soddisfacente; si possono anche effettuare query come in un database a grafo.
@@ -240,4 +241,155 @@ Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit
 
 I dataset sono integrati grazie a predicati (\verb|same|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
 SPARQL 1.1 permette di integrare un sistema di ragionamento automatico per l'uguaglianza delle entità (introduce il concetto di \textit{entailment}).
+
+\newpage
+\end{multicols}
+\part{Esercitazioni.}
+
+\section{SPARQL.}
+Si interroga \url{https://dbpedia.org} per ottenere una lista di vulcani:
+\begin{verbatim}
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT distinct ?v
+  FROM <http://dbpedia.org>
+ WHERE {
+         ?v rdf:type dbo:Volcano .
+       }
+ LIMIT 100
+\end{verbatim}
+I prefissi si aggiungono inserendo l'url tra simboli \verb|<| e \verb|>|.
+\verb|rdf:type| può essere sostituito da una \verb|a|:
+\begin{verbatim}
+?v a dbo:Volcano .
+\end{verbatim}
+
+Una query SPARQL è strutturata specificando:
+\begin{itemize}
+  \item prefissi
+  \item tipo di query
+  \item (fonte)
+  \item (filtri)
+  \item eventuali altre clausole
+\end{itemize}
+Le specifiche SPARQL possono essere ottenute all'indirizzo \url{https://www.w3.org/TR/rdf-sparql-query/}
+
+\subsection*{Esercizio 1.}
+Si tenta di trovare il numero di dipendenti Google dalla pagina \url{http://dbpedia.org/page/Google}:
+\begin{verbatim}
+PREFIX res: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?num
+  FROM <http://dbpedia.org>
+ WHERE {
+         res:Google dbo:numberOfEmployees ?num .
+       }
+
+# o più semplicemente:
+SELECT ?num
+  FROM <http://dbpedia.org>
+ WHERE {
+         dbr:Google dbo:numberOfEmployees ?num .
+       }
+\end{verbatim}
+
+\subsection*{Esercizio 2.}
+Si cerca di ottenere una lista di trombettisti leader di band:
+\begin{verbatim}
+SELECT ?person
+ WHERE {
+       # soggetto   proprietà       oggetto
+         ?person    dbo:instrument  dbr:Trumpet .
+         ?person    dbo:occupation  dbr:Bandleader .
+       }
+\end{verbatim}
+
+\subsection*{Esercizio 3.}
+Si cercano i Paesi con più di due grotte:
+\begin{verbatim}
+  SELECT ?country
+   WHERE {
+           ?cave     rdf:type      dbo:Cave .
+           ?cave     dbo:location  ?country .
+           ?country  rdf:type      dbo:Country .
+         }
+GROUP BY ?country
+  HAVING (COUNT(?cave) > 2)
+\end{verbatim}
+
+\subsection*{Esercizio 4.}
+Si vogliono trovare tutti i software sviluppati da società californiane.
+\begin{verbatim}
+SELECT DISTINCT ?software
+ WHERE {
+         ?company rdf:type dbo:Organisation .
+         {           # dbpedia validata
+           ?software dbo:developer ?company .
+         } UNION {   # dbpedia da validare
+           ?software dbp:developer ?company .
+         }
+         ?software rdf:type dbo:Software .
+         ?company dbo:foundationPlace dbr:California .
+       }
+\end{verbatim}
+
+\subsection*{Esercizio 5.}
+Verificare se Natalie Portman è nata negli Stati Uniti:
+\begin{verbatim}
+  ASK
+WHERE {
+        dbr:Natalie_POrtman dbo:birthPlace ?city .
+        ?city dbo:Country dbr:United_States .
+      }
+\end{verbatim}
+
+\subsection*{Esercizio 6.}
+Verificare se Roma è la capitale d'Italia:
+\begin{verbatim}
+  ASK 
+WHERE {
+        dbr:Italy dbo:capital dbr:Rome .
+      }
+\end{verbatim}
+
+\subsection*{Esercizio 7.}
+Verificare se è disponibile la data di nascita di Elizabeth Taylor.
+\begin{verbatim}
+  ASK
+WHERE {
+        dbr:Elizabeth_Taylor dbo:birthDate ?_ .
+      }
+\end{verbatim}
+
+\subsection*{Esercizio 8.}
+Verificare se Milano è in Germania.
+\begin{verbatim}
+  ASK
+WHERE {
+        dbr:Germany dbo:city dbr:Miland .
+      }
+\end{verbatim}
+
+\subsection*{Esercizio 9.}
+Verificare se Michelle Obama è sposata con Barack Obama.
+\begin{verbatim}
+  ASK
+WHERE {
+        dbr:Michelle_Obama dbo:spouse dbr:Barack_Obama .
+      }
+\end{verbatim}
+
+\subsection*{Esercizio 10.}
+Si cercano i giocatori di Football americano che pesano più di 100kg.
+\begin{verbatim}
+CONSTRUCT {
+            ?x rdf:type dbo:AmericanFootballPlayer .
+          }
+    WHERE {
+            ?x dbo:weight ?kg .
+            FILTER(?kg > 1000000000)
+          }
+\end{verbatim}
 \end{document}
