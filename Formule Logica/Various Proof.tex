@@ -73,7 +73,67 @@
 	}
 	$$
 	\pagebreak
+	\item 50 a. $\n(A\ifof \n A)$
+	$$
+	\infer[^{i\n (1)}]{\n(A\ifof \n A)}{
+	  \infer[^{i \bot}]{\bot}{
+	    \infer[^{i\n (2)}]{\n A}{
+	    	\infer[^{i \bot}]{\bot}{
+	    	  \infer[^{e \imp}]{\n A, A}{
+	    	  	\infer[^{e \land}]{A \imp \n A}
+	    	  		{\infer[^{(1)}]{(A \imp \n A) \land (A \gets \n A)}{}}{}
+	    	  		&
+	    	  		\infer[^{(2)}]{A}{}
+    		  }
+	    	}
+    	}
+	    &
+	    \infer[^{e \imp}]{A}{
+	    \infer[^{i\n (2)}]{\n A}{
+	    	\infer[^{i \bot}]{\bot}{
+	    		\infer[^{e \imp}]{\n A, A}{
+	    			\infer[^{e \land}]{A \imp \n A}
+	    			{\infer[^{(1)}]{(A \imp \n A) \land (A \gets \n A)}{}}{}
+	    			&
+	    			\infer[^{(2)}]{A}{}
+	    		}
+	    	}
+	    }
+	    &
+	    \infer[^{(1)}]{\n A \imp A}{}
+        }	
+	  }
+	}
+	$$
+	
 	\item 63. De Morgan: $\n(A\lor B) \ifof \n A \land \n B$
+	
+	$\gets$
+	$$
+	\infer[^{i \imp (1)}]{(\n A  \land \n B) \imp \n (A \lor B)}{
+	  \infer[^{i \n (2)}]{\n (A \lor B)}{
+	    \infer[^{e \lor (3)(4)}]{\bot}{
+	    \infer[^{(2)}]{A\lor B}{}
+	    &
+	    \infer[^{i \bot}]{\bot}{
+	      \infer[^{e \land}]{\neg A}{\infer[^{(1)}]{\neg A \land \n B}{}}
+	      &
+	      \infer[^{(3)}]{A}{}	
+	    }
+    	&
+    	\infer[^{i \bot}]{\bot}{
+    		\infer[^{e \land}]{\neg B}{\infer[^{(1)}]{\neg A \land \n B}{}}
+    		&
+    		\infer[^{(4)}]{B}{}	
+    	}	
+	    }	
+	  }
+	}
+	$$
+	$\imp$
+	$$
+	
+	$$
 \end{enumerate}
 
 \end{document}
