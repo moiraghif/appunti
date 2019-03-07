@@ -24,67 +24,61 @@ Se ciò non accade gli errori si dicono eteroschedastici; questo incide sulle pr
 Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
 Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono. 
 Per individuare questa caratteristica che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici).
-\newline
+
 Per quanto riguarda i grafici:
 
 \begin{enumerate}[noitemsep]
-\item Grafico a scatter plot dei valori osservati della variabile target (y) contro i regressori di X. Ovviamente bisognerà effettuare uno scatterplot per ogni variabile X.q;
-\item Scatter plot dei valori predetti (ŷ) contro i residui stimati;
+\item Grafico a scatter plot dei valori osservati della variabile target $(y)$ contro i regressori di $X$. Ovviamente bisognerà effettuare uno scatterplot per ogni variabile $X_i$;
+\item Scatter plot dei valori predetti ($\hat{y}$) contro i residui stimati;
 \item Scatter plot dei residui al quadrato contro i predetti;
-\item Scatter plot dei valori osservati (y) contro quelli predetti (ŷ);
-\item Scatter plot dei residui contro i regressori di X. Ovviamente bisognerà effettuare un grafico per ogni regressore.
+\item Scatter plot dei valori osservati ($y$) contro quelli predetti ($\hat{y}$);
+\item Scatter plot dei residui contro i regressori di $X$. Ovviamente bisognerà effettuare un grafico per ogni regressore.
 \end{enumerate}
 Possiamo ricorrere anche ad alcuni test (metodo analitico):
 \begin{itemize}
-\item Test di White
-Questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come H0: Var($\varepsilon_i$) = ($\sigma^2$) e l’ipotesi alternativa come H1: Var($\varepsilon_i$) = ($\sigma^2_i$).
-Il test sfrutta la regressione OLS del quadrato dei residui $\varepsilon_i$ sui regressori al quadrato e con le interazioni.
-Attraverso $R^{2}$ di tale regressione si calcola la statistica LM=n$R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori. L’ipotesi nulla verrà rigettata se LM risulta maggiore del valore soglia della distribuzione $\chi^{2}$ (p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
+\item Test di White: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H0: Var(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H1: Var(\varepsilon_i ) = ( \sigma^2_i )$.
+Il test sfrutta la regressione $OLS$ del quadrato dei residui $\varepsilon_i$ sui regressori al quadrato e con le interazioni.
+Attraverso $R^{2}$ di tale regressione si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori. L’ipotesi nulla verrà rigettata se $LM$ risulta maggiore del valore soglia della distribuzione $\chi^{2}$ (p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
 %@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative, come accade tipicamente in presenza di eteroschedasticità.
 
-\item Test di Breusch-Pagan
-Anche in questo test l’ipotesi nulla è quella di omoschedasticità (H0: Var($\varepsilon_i$) = ($\sigma^2$)).
-Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Il loro rapporto si distribuisce quindi come una F di Snedecor. L’ipotesi nulla verrà rigettata quando la statistica F è superiore ad un valore soglia.
-\newline
-Per risolvere tale problema si può procedere attraverso il metodo di stima WLS (Weighted Least Squares).
+\item Test di Breusch-Pagan: anche in questo test l’ipotesi nulla è quella di omoschedasticità (H0: Var($\varepsilon_i$) = ($\sigma^2$)).
+Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Il loro rapporto si distribuisce quindi come una $F$ di Snedecor. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
+Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 \end{itemize}
 
 \section{Errori autocorrelati}
 
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare se gli errori siano correlati tra di loro.
-\newline
 Accade spesso infatti, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
-\newline
-Gli errori correlati si possono scindere in due componenti: $\rho$ e i-1 (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale). Si nota infatti che l’errore è legato al suo valore ritardato.
-\newline
-Possiamo classificare l’autocorrelazione in base al suo grado: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di s-esimo grado quando gli errori sono correlati con il loro valore ritardato di s gradi. Gli errori autocorrelati non incidono sulle proprietà di correttezza e consistenza degli stimatori OLS, ma solo sull’efficienza (non sono più BLUE). Come nel caso dell’eteroschedasticità la stima della varianza dei parametri e la relativa inferenza non sono più corretti e affidabili (la statistica T di Student ottiene dei valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti).
+Gli errori correlati si possono scindere in due componenti: $\rho e_{ i-1}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale). %FIXME: check notation
+Si nota infatti che l’errore è legato al suo valore ritardato.
+Possiamo classificare l’autocorrelazione in base al suo grado: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di i-esimo grado quando gli errori sono correlati con il loro valore ritardato di i gradi. Gli errori autocorrelati non incidono sulle proprietà di correttezza e consistenza degli stimatori OLS, ma solo sull’efficienza (non sono più BLUE). Come nel caso dell’eteroschedasticità la stima della varianza dei parametri e la relativa inferenza non sono più corretti e affidabili (la statistica T di Student ottiene dei valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti).
 Per individuare la caratteristica di autocorrelazione si può ricorrere a rappresentazioni grafiche o a metodi analitici.
-\newline
+
 Per quanto riguarda i grafici:
 \begin{enumerate}[noitemsep]
-\item Scatter plot dei valori osservati (y) sui valori dei regressori (x). Ovviamente si costruiranno tanti scatter plot quanti regressori.
+\item Scatter plot dei valori osservati ($y$) sui valori dei regressori ($x$). Ovviamente si costruiranno tanti scatter plot quanti regressori.
 \item Scatter plot dei residui sulle variabili esplicative; ovviamente si costruiranno tanti scatter plot quanti regressori.
 \item Scatter plot dei residui sui residui ritardati (a seconda del grado)
 \item Correlogramma: in questo grafico vengono mostrate le correlazioni a diversi gradi con relativa barra di confidenza; analizzando acf (funzione di autocorrelazione dei residui) e pacf si riesce a determinare il tipo di modello autoregressivo.
 \end{enumerate}
+
 Test (metodi analitici):
 \begin{itemize}
+\item Test di Durbin-Watson: questo test si può effettuare a seconda dell’autocorrelazione dei diversi gradi. Prendiamo in esame il test per il primo grado.
+Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi $H0:  \rho =cor( \varepsilon_i  ;  \varepsilon_i-1 )=0$ contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
+\begin{enumerate}[noitemsep]
+\item Unidirezionale destra
+\item Unidirezionale sinistra
+\item Bidirezionale	
+\end{enumerate}
+%Check
+La statistica $DW$ per l’omoschedasticità dei residui diventa uguale a $2(1-\rho)$. 
+La distribuzione di $DW$ è centrata su $2$; se infatti $DW$ è uguale a $2$ gli errori sono incorrelati; $DW$ tende a $0$ quando i residui sono correlati positivamente; $DW$ tende a $4$ quando i residui sono correlati negativamente. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
 
-
-\item Test di Durbin-Watson
-Questo test si può effettuare a seconda dell’autocorrelazione dei diversi gradi. Prendiamo in esame il test per il primo grado.
-Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi H0: $\rho$=cor($\varepsilon_i$ ; $\varepsilon_i-1$)=0 contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
-	\begin{enumerate}[noitemsep]
-	\item Unidirezionale destra
-	\item Unidirezionale sinistra
-	\item Bidirezionale	
-	\end{enumerate}
-La statistica DW per l’omoschedasticità dei residui diventa uguale a 2(1-$\rho$). 
-La distribuzione di DW è centrata su 2; se infatti DW è uguale a 2 gli errori sono incorrelati; DW tende a 0 quando i residui sono correlati positivamente; DW tende a 4 quando i residui sono correlati negativamente. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono 1 e 3. 
-
-Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il GLS.
+Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$. %Fix/check 
 
 \end{itemize}
 
@@ -92,70 +86,71 @@ Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il GLS.
 
 \begin{itshape}
 Errori eteroschedastici e incorrelati: stimatore WLS
-\end{itshape}
-\newline
-Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi uno delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori weighted least squares che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di h(i) (corrisponde alla varianza di $\varepsilon$*). Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo y*su X*B riportando così la varianza degli errori costante.
-\newline
-Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di X c'è fluttuazione dei valori di Y con lo stesso segno, o segno alternato oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori e come esplicative quelle già considerate più l’errore ritardato di un tempo. Sottraendo l’equazione considerando le variabili ritardate all’equazione del modello iniziale e raccogliendo i termini comuni, si ottengono delle stime OLS per i parametri e si ottengono degli errori incorrelati. In alternativa è possibile inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
-\newline
-y$_i$=b$_0$+b$_1$x$_i$+AR1$_i$ (errore ritardato) + $\varepsilon_i$. 
-\newline
-Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correlati si utilizzano gli stimatori dei minimi quadrati generalizzati (GLS) interpretabili in modo analogo al modello classico in quanto stimatori OLS basati su variabili trasformate. Lo stimatore risulta godere delle tre proprietà:
+\end{itshape}%FIX: structure
+
+Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi uno delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori weighted least squares che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. 
+Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrisponde alla varianza di $\varepsilon$*). 
+Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori costante.
+
+Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno, o segno alternato oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori e come esplicative quelle già considerate più l’errore ritardato di un tempo. Sottraendo l’equazione considerando le variabili ritardate all’equazione del modello iniziale e raccogliendo i termini comuni, si ottengono delle stime OLS per i parametri e si ottengono degli errori incorrelati. In alternativa è possibile inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
+\begin{equation*}
+y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
+\end{equation*}
+Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correlati si utilizzano gli stimatori dei minimi quadrati generalizzati ($GLS$) interpretabili in modo analogo al modello classico in quanto stimatori $OLS$ basati su variabili trasformate. Lo stimatore risulta godere delle tre proprietà:
 \begin{enumerate}[noitemsep]
 \item Correttezza
 \item Consistenza
-\item Efficiente in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore GLS è caratterizzato dalla minima varianza
+\item Efficiente in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore $GLS$ è caratterizzato dalla minima varianza
 \item Lo stimatore assegna un peso maggiore alle osservazioni caratterizzate da una minore varianza da considerarsi più ``affidabili''.
 \end{enumerate}
 
 \section{Multicollinearità }
 
 Se la matrice $(X^{\prime} X)^{-1}$ non è invertibile oppure ha determinante prossimo allo 0 le stime non esistono (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono stabili (coefficienti empiricamente sotto identificati).
-\newline
 Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre e quindi si ha multicollinearità. In questo caso la matrice $(X^{\prime} X)$ è singolare e le soluzioni non sono uniche. 
-\newline
+
 Esistono due tipi di collinearità:
 \begin{enumerate}[noitemsep]
 \item Perfetta: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre. Essa viola le proprietà del modello lineare classico solitamente per un errore nella definizione dei regressori o per una stranezza nei dati.
-\item Imperfetta: sussiste quando 2 o più regressori sono fortemente correlati e il determinante della matrice dei coefficienti tende a 0.
+\item Imperfetta: sussiste quando $2$ o più regressori sono fortemente correlati e il determinante della matrice dei coefficienti tende a $0$.
 \end{enumerate}
 Le principali conseguenze sono:
 \begin{enumerate}[noitemsep]
 \item Un aumento della varianza delle stime dei coefficienti.
-\item Gli intervalli di confidenza al cui interno sta il valore vero del parametro con probabilità 1-$\alpha$ risultano essere più grandi di quanto non siano in realtà.
+\item Gli intervalli di confidenza al cui interno sta il valore vero del parametro con probabilità $1-\alpha$ risultano essere più grandi di quanto non siano in realtà.
 \item Con due variabili fortemente correlate se aggiungo la seconda, l’incremento di $R^{2}$ è inferiore all’incremento che avrei aggiungendo una seconda variabile debolmente correlata con la prima. Quindi, siccome le due variabili hanno molta varianza in comune, non posso dire quale delle due è più influente rispetto all’outcome.
 \end{enumerate}
-Il metodo per la verifica di questo ultimo punto è il cosiddetto INDICE DI TOLLERANZA (valore tra 0 perfettamente correlata e 1) che misura il grado di interrelazione di una variabile indipendente rispetto alle altre. Nella pratica, TOL = 1 - $R^{2}_j$ dove $R^{2}_j$ è calcolato dalla regressione della variabile esplicativa $X_j$ (usata come risposta) in funzione di tutte le altre esplicative.
-\newline
-Un altro indicatore di collinearità è la VARIANZA MULTIFATTORIALE (VIF), ovvero il reciproco della tolleranza. Valori di tale indice superiori a 20 indicano uno stretto rapporto tra la variabile considerata e le altre ovvero un eccessivo grado di multicollinearità. Vanno considerate con attenzione anche quelle variabili con valori di VIF maggiori di 10.
-\newline
-L’ indice di collinearità è dato dalla radice del rapporto tra l’autovalore massimo della matrice $(X^{\prime}X)$ e ogni autovalore. Quando risulta essere maggiore di 30 si ritiene esistere collinearità. Tale convinzione viene rafforzata se un autovalore con condition index maggiore di 30 contribuisce a spiegare elevate quote di varianza di due o più variabili.
+Il metodo per la verifica di questo ultimo punto è il cosiddetto INDICE DI TOLLERANZA (valore tra $0$ perfettamente correlata e $1$)%FIXME
+che misura il grado di interrelazione di una variabile indipendente rispetto alle altre. 
+Nella pratica, $TOL = 1 - R^{2}_j$ dove $R^{2}_j$ è calcolato dalla regressione della variabile esplicativa $X_j$ (usata come risposta) in funzione di tutte le altre esplicative.
+
+Un altro indicatore di collinearità è la VARIANZA MULTIFATTORIALE (VIF), ovvero il reciproco della tolleranza. 
+Valori di tale indice superiori a $20$ indicano uno stretto rapporto tra la variabile considerata e le altre ovvero un eccessivo grado di multicollinearità. Vanno considerate con attenzione anche quelle variabili con valori di VIF maggiori di $10$.
+
+L’ indice di collinearità è dato dalla radice del rapporto tra l’autovalore massimo della matrice $(X^{\prime}X)$ e ogni autovalore. Quando risulta essere maggiore di $30$ si ritiene esistere collinearità. Tale convinzione viene rafforzata se un autovalore con condition index maggiore di $30$ contribuisce a spiegare elevate quote di varianza di due o più variabili.
 
 \section{Linearità}
 
-L'approssimazione lineare non è sempre la migliore. La relazione ipotizzata tra la nostra variabile dipendente y e le singole variabili esplicative x è di tipo lineare: y = f (x).
-\newline
+L'approssimazione lineare non è sempre la migliore. La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo lineare: $y = f (x)$. %con f lineare però. Fixme 
+
 Per validare la presenza di ciascun regressore all’interno dei diversi modelli dobbiamo quindi verificare la linearità di tale relazione.
-\newline
 Dunque, la variabile risposta deve essere una combinazione lineare di variabili esplicative e di parametri lineari.
-\newline
-Se una relazione tra y e X è non lineare l’effetto su y di una variazione in X dipende dal valore di X poiché l’effetto marginale di X non è costante.
+Se una relazione tra $y$ e $X$ è non lineare l’effetto su $y$ di una variazione in $X$ dipende dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. %non capisco bene il senso, questo è vero a prescindere dalla linearità.
 Se una regressione lineare è mal specificata la forma funzionale è
-errata e lo stimatore dell’effetto su y di X non è corretto nemmeno sulla media. Può capitare ad esempio che $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
-\newline
-Per verificare tale condizione è possibile ricorrere ad alcuni grafici:
+errata e lo stimatore dell’effetto su y di X non è corretto nemmeno sulla media. %still not clear
+Può capitare ad esempio che $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
+Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcuni grafici: 
 \begin{enumerate}[noitemsep]
 \item Scatter plot della risposta in funzione di ogni esplicativa presente nel modello.
 \item Scatter plot dei residui in funzione dei valori osservati della variabile dipendente; non deve essere un andamento sistematico.
 \item Scatter plot dei residui in funzione dei valori previsti; deve esserci un andamento regolare.
 \end{enumerate}
 È da notare che la non linearità potrebbe dipendere anche solo da una o da alcune esplicative e non necessariamente da tutte.
-\newline
-Nel caso di non linearità dei parametri, potrebbe esserci una funzione che li renda lineari (caso linearizzabile) oppure no (intrinsecamente non lineari).
-\newline
+Nel caso di non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure no (intrinsecamente non lineari).
+
 Tra le trasformazioni più utilizzate va ricordata quella logaritmica. Tale funzione può essere applicata alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. 
 
-Esistono tre modelli ``noti'':
+Esistono tre modelli principali: %fix ovunque
 \begin{enumerate}[noitemsep]
 \item Linear-log, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale beta della variabile dipendente.
 \item Log-linear, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale beta della risposta.
@@ -164,7 +159,9 @@ Esistono tre modelli ``noti'':
 
 \section{Non normalità}
 
-Quando gli errori ei sono indipendenti e identicamente distribuiti come N(0,$\sigma^{2}$) si possono ricavare la distribuzione degli stimatori, i test statistici, gli intervalli di confidenza e le proprietà ottimali (stima di massima verosimiglianza coincide con stima dei minimi quadrati). Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il teorema del limite centrale la distribuzione degli errori tende asintoticamente alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
+Quando gli errori $e_i$ sono indipendenti e identicamente distribuiti come $N(0,\sigma^{2})$ si possono ricavare la distribuzione degli stimatori, i test statistici, gli intervalli di confidenza e le proprietà ottimali (stima di massima verosimiglianza coincide con stima dei minimi quadrati). 
+Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il teorema del limite centrale la distribuzione degli errori tende asintoticamente alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
+%till here @Dario
 
 Conseguenze della violazione della normalità:
 \begin{enumerate}[noitemsep]
