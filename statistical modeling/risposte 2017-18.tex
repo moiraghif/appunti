@@ -40,7 +40,7 @@ Possiamo ricorrere anche ad alcuni test (metodo analitico):
 Questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come H0: Var($\varepsilon_i$) = ($\sigma^2$) e l’ipotesi alternativa come H1: Var($\varepsilon_i$) = ($\sigma^2_i$).
 Il test sfrutta la regressione OLS del quadrato dei residui $\varepsilon_i$ sui regressori al quadrato e con le interazioni.
 Attraverso $R^{2}$ di tale regressione si calcola la statistica LM=n$R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori. L’ipotesi nulla verrà rigettata se LM risulta maggiore del valore soglia della distribuzione $\chi^{2}$ (p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
-%E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
+%@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative, come accade tipicamente in presenza di eteroschedasticità.
 
