@@ -68,14 +68,14 @@ Per quanto riguarda i grafici:
 Test (metodi analitici):
 \begin{itemize}
 \item Test di Durbin-Watson: questo test si può effettuare a seconda dell’autocorrelazione dei diversi gradi. Prendiamo in esame il test per il primo grado.
-Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi $H0:  \rho =cor( \varepsilon_i  ;  \varepsilon_i-1 )=0$ contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
+Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi $H0:  \rho =cor( \varepsilon_i  ;  \varepsilon_{i-1} )=0$ contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
 \begin{enumerate}[noitemsep]
 \item Unidirezionale destra
 \item Unidirezionale sinistra
 \item Bidirezionale	
 \end{enumerate}
 %Check
-La statistica $DW$ per l’omoschedasticità dei residui diventa uguale a $2(1-\rho)$. 
+La statistica $DW$ per l'autocorrelazione dei residui diventa uguale a $2(1-\rho)$. 
 La distribuzione di $DW$ è centrata su $2$; se infatti $DW$ è uguale a $2$ gli errori sono incorrelati; $DW$ tende a $0$ quando i residui sono correlati positivamente; $DW$ tende a $4$ quando i residui sono correlati negativamente. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
 
 Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$. %Fix/check 
@@ -88,11 +88,11 @@ Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$
 Errori eteroschedastici e incorrelati: stimatore WLS
 \end{itshape}%FIX: structure
 
-Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi uno delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori weighted least squares che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. 
-Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrisponde alla varianza di $\varepsilon$*). 
-Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori costante.
+Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi uno delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori weighted least squares (WLS) che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. 
+Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrisponde alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
+Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori ad una costante ottenendo la forma $y^* = X^*B + \varepsilon$.
 
-Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno, o segno alternato oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori e come esplicative quelle già considerate più l’errore ritardato di un tempo. Sottraendo l’equazione considerando le variabili ritardate all’equazione del modello iniziale e raccogliendo i termini comuni, si ottengono delle stime OLS per i parametri e si ottengono degli errori incorrelati. In alternativa è possibile inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
+Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno, o segno alternato oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: $\rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp$. Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati $y_t^\sharp = \beta_0^\sharp + \beta_1 x_t^\sharp + w_i$ che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
 \begin{equation*}
 y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
@@ -100,7 +100,7 @@ Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correl
 \begin{enumerate}[noitemsep]
 \item Correttezza
 \item Consistenza
-\item Efficiente in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore $GLS$ è caratterizzato dalla minima varianza
+\item Efficiente in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore $GLS$ è caratterizzato dalla minima varianza $\sigma^2 (X'^{\circ}X^{\circ})^{-1}$
 \item Lo stimatore assegna un peso maggiore alle osservazioni caratterizzate da una minore varianza da considerarsi più ``affidabili''.
 \end{enumerate}
 
