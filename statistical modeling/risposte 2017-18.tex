@@ -1,4 +1,7 @@
-\documentclass[a4page, 11pt]{article}
+\documentclass[a4page, 11pt]{article} %this is behaving like \documentclass[11pt]{article}
+
+%\documentclass[a4paper, 11pt]{article} %maybe you want this?
+
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -9,6 +12,9 @@
 \usepackage{amsthm}
 \newtheorem*{remark}{Osservazione}
 
+\usepackage{enumitem} %resuming enumerations
+\usepackage{hyperref} %clickable TOC
+
 \title{Statistical Modeling}
 \author{}
 \date{}
@@ -17,6 +23,9 @@
 
 \begin{document}
 \maketitle
+%\tableofcontents
+%\newpage
+
 \section{Errori eteroschedastici}
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
 In virtù del fatto che ogni errore $\varepsilon$ è a media nulla $E(\varepsilon) = 0$ vale la relazione $E(\varepsilon^2) = Var(\varepsilon) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
@@ -52,7 +61,7 @@ Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS
 
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare se gli errori siano correlati tra di loro.
 Accade spesso infatti, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
-Gli errori correlati si possono scindere in due componenti: $\rho e_{ i-1}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale). %FIXME: check notation
+Gli errori correlati si possono scindere in due componenti: $\rho e_{ i-1}^{\#}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale).
 Si nota infatti che l’errore è legato al suo valore ritardato.
 Possiamo classificare l’autocorrelazione in base al suo grado: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di i-esimo grado quando gli errori sono correlati con il loro valore ritardato di i gradi. Gli errori autocorrelati non incidono sulle proprietà di correttezza e consistenza degli stimatori OLS, ma solo sull’efficienza (non sono più BLUE). Come nel caso dell’eteroschedasticità la stima della varianza dei parametri e la relativa inferenza non sono più corretti e affidabili (la statistica T di Student ottiene dei valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti e l'area di rifiuto del test anomalamente più ampia).
 Per individuare la caratteristica di autocorrelazione si può ricorrere a rappresentazioni grafiche o a metodi analitici.
@@ -65,22 +74,28 @@ Per quanto riguarda i grafici:
 \item Correlogramma: in questo grafico vengono mostrate le correlazioni a diversi gradi con relativa barra di confidenza; analizzando acf (funzione di autocorrelazione dei residui) e pacf si riesce a determinare il tipo di modello autoregressivo.
 \end{enumerate}
 
-Test (metodi analitici):
-\begin{itemize}
-\item \textbf{Test di Durbin-Watson}: questo test si può effettuare a seconda dell’autocorrelazione dei diversi gradi. Prendiamo in esame il test per il primo grado.
-Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi $H0:  \rho = Corr( \varepsilon_i  ;  \varepsilon_{i-1} )=0$ contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
+\textbf{Test di Durbin-Watson}: questo test si può effettuare per verificare la presenza autocorrelazione a diversi gradi. 
+Prendiamo in esame il test per il primo grado. Esso si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi \begin{equation*}
+H0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
+\end{equation*}
+contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \begin{enumerate}[noitemsep]
 \item Unidirezionale destra
 \item Unidirezionale sinistra
 \item Bidirezionale	
 \end{enumerate}
-%Check
-La statistica $DW$ per l'autocorrelazione dei residui diventa uguale a $2(1-\rho)$. 
-La distribuzione di $DW$ è centrata su $2$; se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$; $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
 
-Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$. %Fix/check 
+La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=2(1-\rho)$. Si può notare che: 
+\begin{itemize}[noitemsep]
+\item La distribuzione di $DW$ è centrata su $2$: se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; 
+\item $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$;
+\item $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$. 
+\item I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
 
 \end{itemize}
+Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore GLS è efficiente in quanto caratterizzato dalla minima varianza. 
+%Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$.
+
 
 \section{Metodo di stima WLS; per soluzioni correlate, GLS }
 
@@ -92,17 +107,25 @@ Per errori eteroschedastici si intende quando la varianza dell’errore non rima
 Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrisponde alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
 Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori ad una costante ottenendo la forma $y^* = X^*B + \varepsilon$.
 \newline
-\newline
 \begin{itshape}
 Errori omoschedastici e correlati: modello GLS
 \end{itshape}
 
-Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: $\rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp$. Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati $y_t^\sharp = \beta_0^\sharp + \beta_1 x_t^\sharp + w_i$ che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
+Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: 
+\begin{equation*}
+rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp \ .
+\end{equation*}
+Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati 
+\begin{equation*}
+y_t^\sharp = \beta_0^\sharp + \beta_1 x_t^\sharp + w_i
+\end{equation*} 
+che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. 
+
+In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
 \begin{equation*}
 y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
 con $AR1 + \varepsilon_i = v_i$ e $Corr(v_i;v_j) = 0$.
-\newline
 \newline
 \begin{itshape}
 Errori eteroschedastici e correlati: stimatore GLS
@@ -145,14 +168,17 @@ Valori di tale indice variano tra $0$ e $\infty$ perciò se superiori a $20$ ind
 
 \section{Linearità}
 
-L'approssimazione lineare non è sempre la migliore. La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo lineare: $y = f (x)$. %con f lineare però. Fixme 
+La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo: $y = f (x)$, con $f$ lineare.
 
+L'approssimazione lineare non è sempre la migliore.
 Per validare la presenza di ciascun regressore all’interno dei diversi modelli dobbiamo quindi verificare la linearità di tale relazione.
 Dunque, la variabile risposta deve essere una combinazione lineare di variabili esplicative e di parametri lineari.
-Se una relazione tra $y$ e $X$ è non lineare l’effetto su $y$ di una variazione in $X$ dipende dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. %non capisco bene il senso, questo è vero a prescindere dalla linearità.
-Se una regressione lineare è mal specificata la forma funzionale è
-errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. %still not clear
+
+Se una relazione tra $y$ e $X$ è non lineare, allora l’effetto su $y$ ($\Delta y$)  di una variazione in $X$ ($\Delta X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
+
+In questo caso, una regressione lineare è mal specificata: la forma funzionale è errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. 
 Può capitare ad esempio che $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
+
 Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcuni grafici: 
 \begin{enumerate}[noitemsep]
 \item Scatter plot della risposta ($y_i$) in funzione di ogni esplicativa ($x_j$) presente nel modello.
@@ -160,23 +186,21 @@ Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcu
 \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori previsti ($\hat{y_i}$); deve esserci un andamento regolare.
 \end{enumerate}
 È da notare che la non linearità potrebbe dipendere anche solo da una o da alcune variabili esplicative e non necessariamente da tutte.
+Quando è presente non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure che questi siano espressi in una forma intrinsecamente non lineare.
 
-Nel caso di non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure no (intrinsecamente non lineari).
-
-Nel primo caso si procede innanzitutto alla sostituzione del parametro o della variabile \textit{non lineare} con uno \textit{lineare}, poi si procede alla stima OLS ed infine si effettua l'operazione inversa riportando il parametro o la variabile alla forma originale. 
-
+Nel primo caso si procede innanzitutto alla linearizzazione del parametro (o della variabile) \textit{non lineare} con una trasformazione che lo renda \textit{lineare}, poi si procede alla stima OLS ed infine si applica la trasformazione inversa ricavando la stima del parametro originale. 
 Nel caso invece di componenti intrinsecamente non lineari si procede allora alla stima attraverso gli stimatori NLS (minimi quadrati non lineari) che sfruttano algoritmi numerici nei software per affrontare il problema di minimizzazione non lineare.
 
 Volendo utilizzare funzioni di variabili indipendenti non lineari in X possiamo riformulare una vasta famiglia di funzioni di regressione lineare come regressioni multiple.
 
 Tra le funzioni non lineari le più utilizzate sono le polinomiali e le trasformazioni logaritmiche. 
+%Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. %Superfluo?
 
-Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. 
-
-Esistono tre modelli principali: %fix ovunque
+Esistono tre modelli principali: 
 \begin{enumerate}[noitemsep]
-\item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale beta della variabile dipendente.
-\item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale beta della risposta.
+\item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale %lineare?
+ $\beta$ della variabile dipendente.
+\item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale $\beta$ della risposta.
 \item \textbf{Log-log}, in cui entrambi gli incrementi sono percentuali.
 \end{enumerate}
 
@@ -216,10 +240,10 @@ Come identificare gli outlier:
 \item Rappresentazione grafica con Boxplot e Scatter plot.
 \item Indicatori
 	\begin{itemize}[noitemsep]
-	\item Leverage: serve a verificare l’impatto che un caso specifico ha sulla capacità del modello di predire tutti i casi. Valori piccoli indicano che lo stimatore (b) di Y è basato sul contributo di molte osservazioni, mentre valori vicini a 1 indicano al contrario.
+	\item Leverage: serve a verificare l’impatto che un caso specifico ha sulla capacità del modello di predire tutti i casi. Valori piccoli indicano che lo stimatore (b) di Y è basato sul contributo di molte osservazioni, mentre valori vicini a 1 indicano il contrario.
 	\item Residui standardizzati: nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
 	\item Residui studentizzati: sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità.
-	\item Covariatio: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la i-esima osservazione.
+	\item Covariatio: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione.
 	\item Dfitts: misura l’influenza di quel caso sulla stima dei coefficienti di regressione e sulla loro varianza, quando rimosso dal processo di stima. Male valori elevati.
 	\item Dfbetas: misura l’influenza di quel caso, quando viene rimosso dal processo di stima, sulle stime di ogni coefficiente di regressione separatamente. Male valori elevati.
 	\item Distanza di Cook: misura l’influenza di un singolo caso sulla stima dei coefficienti di regressione, in termini di capacità del modello di predire tutti i casi quando il singolo caso viene rimosso dal processo di stima. Valori superiori a 1 indicano che il punto è influente.
@@ -228,52 +252,58 @@ Come identificare gli outlier:
 
 \section{Modello lineare classico multivariato}
 
-Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di r variabili esplicative z1,..,zr, e m variabili dipendenti y1,..,ym. Ognuna delle m variabili dipendenti è legata a una particolare regressione multipla. 
+Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di $r$ variabili esplicative $z_1$,..,$z_r$, e $m$ variabili dipendenti $y_1$,..,$y_m$. Ognuna delle $m$ variabili dipendenti è legata a una particolare regressione multipla. 
 
 Ipotesi del modello:
 \begin{enumerate}[noitemsep]
 \item Parametri lineari.
 \item Valori attesi degli errori casuali sono nulli.
 \item Gli errori casuali all’interno gli ogni equazione e anche tra diverse equazioni sono omoschedastici e incorrelati pp più.
-\item Le Z variabili esplicative sono non stocastiche: per ogni osservazione, il valore delle Z è una costante mentre il corrispondente valore di ogni y è una variabile casuale influenzata dagli errori casuali.
-\item Le Z variabili esplicative sono non collineari con rango (z=r+1).
-\item n $>$ r+1 per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di b sono trovate in modo analogo al caso univariato.
+\item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali.
+\item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$).
+\item $n > r+1$ per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $b$ sono trovate in modo analogo al caso univariato. %FIXME
 \item Gli errori si distribuiscono come una normale multivariata.
 \end{enumerate}
 L’$R^{2}$ è una media pesata degli $R^{2}$ delle singole equazioni
 
-\begin{remark}[] \ \\
+\begin{remark}[]\ \\
 \begin{itemize}
-\item La dipendenza della variabile dipendente $y_j$ da Z non influenza la dipendenza della variabile $y_m$.
+\item La dipendenza della variabile dipendente $y_j$ da $Z$ non influenza la dipendenza della variabile $y_m$.
 \item Abbiamo le stesse variabili esplicative in tutte le equazioni del sistema.
 \item La correlazione simultanea tra i disturbi è costante nel tempo.
 \end{itemize}
 \end{remark}
 \section{Inferenza nella Regressione Multivariata}
 
-Guardare Modello lineare classico multivariato.
-\newline
+Guardare Modello lineare classico multivariato.\\
 Gli stimatori OLS sono corretti ed efficienti. 
-\newline
-Si definisce VARIANZA GENERALIZZATA DI H il determinante della matrice di varianza-covarianza spiegata della popolazione (H) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
-\newline
+
+Si definisce VARIANZA GENERALIZZATA DI $H$ il determinante della matrice di varianza-covarianza spiegata della popolazione ($H$) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
+
 Si definisce VARIANZA GENERALIZZATA DI SIGMA il determinante della matrice di varianza-covarianza residua (SIGMA) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
-\newline
-Si può quindi definire come test del rapporto di verosimiglianza Lambda di Wilks: 
-$\wedge$=I$\Sigma^{I}$/I$\Sigma^{I}$+$H^{I}$. Da $\wedge$ si ricava (1-$\wedge$)/$\wedge$, una distribuzione asintotica F (ovvero (1-$\wedge$)/$\wedge$ si distribuisce come una F).
-\newline
-Il test del rapporto di verosimiglianza per l’ipotesi H0: B\string^ = 0 è dato dal rapporto di varianze generalizzate Lambda di Wilks: $\wedge$=I$\Sigma^{I}$/I$\Sigma^{I}$+$H^{I}$. con H\string^ , $\Sigma$\string^ matrici di varianze covarianze spiegate e residue.
-\newline
-Se è vera H0 il numeratore e il denominatore di $\wedge$ tendono a coincidere poichè H\string^ tenderà a 0. Perciò la regione di accettazione di H0 (nullità dei parametri B\string^) è per valori di $\wedge$ vicini all’1.
-\newline
-La regione di rifiuto di H0 è per valori di $\wedge$ più piccoli di 1, in cui il numeratore è più piccolo del denominatore per la presenza di H\string^.
-Data la struttura della F basata sul rapporto (1-$\wedge$)/ $\wedge$, al crescere di $\wedge$ decresce il numeratore e cresce il denominatore.
-Perciò accetto H0 per valori di F superiori ad una certa soglia e rifiuto H0 per valori di F inferiori ad una certa soglia.
-\newline
-Perciò per il test basato su F asintotica:
-regione di accettazione di H0 è per p value superiori ad $\alpha$;
-regione di rifiuto di H0 per p value inferiori ad $\alpha$;
-Analogamente si costruiscono intervalli di confidenza per i parametri e per i valori predetti delle Y.
+
+Si può quindi definire come test del rapporto di verosimiglianza Lambda di Wilks: \begin{equation*}
+\wedge=I\Sigma^{I} /I \Sigma^{I} + H^{I}\ . 
+\end{equation*}
+Da cui si ricava 
+\begin{equation*}
+(1- \wedge ) / \wedge \ ,
+\end{equation*}
+una distribuzione asintotica ad $F$ (ovvero $(1-\wedge)/ \wedge$ si distribuisce come una $F$).
+
+Il test del rapporto di verosimiglianza per l’ipotesi $H_0$: $B\string^ = 0$ è dato dal rapporto di varianze generalizzate Lambda di Wilks: 
+\begin{equation*}
+wedge=I\Sigma^{I} /I \Sigma^{I} + H^{I} \ , 
+\end{equation*} 
+con $H\string^$ , $\Sigma\string^$ matrici di varianze covarianze spiegate e residue.\\
+Se è vera $H_0$ il numeratore e il denominatore di $\wedge$ tendono a coincidere poichè $H\string^$ tenderà a $0$. Perciò la regione di accettazione di $H_0$ (nullità dei parametri $B\string^$) è per valori di $\wedge$ vicini all’$1$.\\
+La regione di rifiuto di $H_0$ è per valori di $\wedge$ più piccoli di $1$, in cui il numeratore è più piccolo del denominatore per la presenza di $H\string^$.
+Data la struttura della $F$ basata sul rapporto $(1- \wedge )/  \wedge$, al crescere di $\wedge$ decresce il numeratore e cresce il denominatore.
+Perciò accetto $H_0$ per valori di $F$ superiori ad una certa soglia e rifiuto $H_0$ per valori di $F$ inferiori ad una certa soglia.\\
+Perciò per il test basato su $F$ asintotica:
+regione di accettazione di $H_0$ è per $p-value$ superiori ad $\alpha$;
+regione di rifiuto di $H_0$ per $p-value$ inferiori ad $\alpha$;
+Analogamente si costruiscono intervalli di confidenza per i parametri e per i valori predetti delle $Y$.
 \newline
 Altri test si costruiscono in modo analogo:
 \begin{itemize}[noitemsep]
@@ -285,14 +315,8 @@ Altri test si costruiscono in modo analogo:
 
 \section{Modello lineare generalizzato}
 
-Guardare Modello lineare classico multivariato.
-\newline
-Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: Y = BZ+E in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
-\newline
-\newline
-\newline
-\newline
-\newline
+Guardare Modello lineare classico multivariato.\\
+Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $Y = BZ+E$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
 
 Nell’ipotesi classica:
 
@@ -301,18 +325,19 @@ Nell’ipotesi classica:
 \item Gli errori sono omoschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è uguale
 \item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
 \item Gli errori sono incorrelati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti non è legato al proprio e a quello degli altri individui.
-\newline
-\newline
+\end{enumerate}
+
 Nell’ipotesi intermedia:
-\newline
+\begin{enumerate}[resume, noitemsep]
+
 \item Gli errori sono omoschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale
 \item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
 \item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
 \item Gli errori sono correlati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
-\newline
-\newline
+\end{enumerate}
 Nell’ipotesi estrema:
-\newline
+\begin{enumerate}[resume, noitemsep]
+
 \item Gli errori sono eteroschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è diversa
 \item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
 \item Gli errori sono correlati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente è legato a quello degli altri individui
@@ -329,7 +354,6 @@ In altre parole nel Modello SURE abbiamo regressori diversi per ogni equazione a
 $\Sigma$jrj è quindi la somma di tutti i regressori nelle diverse equazioni.
 \newline
 Ciò permette di risolvere anche il problema di una numerosità diversa delle osservazioni delle diverse equazioni. Data nj è la numerosità delle osservazioni per l’equazione j-esima il complesso delle numerosità è dato da $\Sigma$jnj.
-\newline
 \newline
 La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza: 
 \begin{itemize}
@@ -354,7 +378,6 @@ Ad esempio gli studenti appartenenti alla stessa scuole condividono stesso ambie
 \newline
 La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
 \newline
-\newline
 Cosa succede se si ignora la struttura gerarchica dei dati?
 \begin{enumerate}[noitemsep]
 \item FALLACIA ECOLOGICA: quando ad una variabile riferita al livello macro si vuole dare validità micro.
@@ -367,9 +390,7 @@ Le regressioni a livello macro considerano i dati aggregati dati dalla media di 
 L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi.
 In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo.
 \newline
-\newline
 Yij = $\beta$0j + $\beta$ijxij + rij
-\newline
 \newline
 Diverse intercette $\beta$0j e coefficienti di regressione $\beta$1j per ciascun gruppo:
 \begin{itemize}	
@@ -393,7 +414,6 @@ In un primo tipo di modelli (mixed models) la relazione disaggregata tra i dati 
 e la varianza fra gruppi sono descritte come variabili casuali.
 \newline
 In un secondo tipo di modelli (random models) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
-\newline
 \newline
 I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
 \begin{enumerate}
@@ -428,7 +448,6 @@ OLS:
 Si consideri un modello Multilevel in cui appare solo la parte del Modello Lineare che viene stimata mediante metodo OLS con una sola variabile e ipotizzando che le variabili X e Y siano centrate ($y_{ij}= \beta_0+\Sigma_{jk} \beta_k x_{ijk}+\varepsilon_{ij}$).
 \newline
 In questo modo si vede quale sia l’effetto delle variabili esplicative sulla variabile dipendente se i dati non fossero centrati. Naturalmente gli errori si distribuiscono come una normale. 
-\newline
 \newline
 EMPTY MODEL:
 Nel modello ANOVA ad effetti casuali detto anche empty model si ha che: $y_{ij}=v_j+r_{ij}$.
@@ -488,7 +507,6 @@ Come varianze e covarianze:
 \begin{itemize}
 \item livello 1 $\sigma^{2}$
 \item livello 2 $\tau^{2}_0$
-\newline
 \end{itemize}
 TOTAL MODEL: 
 \newline
@@ -510,7 +528,7 @@ $y_{ij}=\beta_{0j}+\beta_{1j} x_{ij}+ R_{ij}$
 I parametri da stimare nel modello random intercept sono: coefficienti di regressione $\gamma$ e componenti di varianza, $\sigma_2$ e $\tau_2$. Gli effetti casuali $U_{0j}$ non sono parametri ma variabili casuali latenti, ovvero non direttamente osservabili. La letteratura riporta metodi per la stima dei parametri sotto l’assunzione che i residui $U_{0j}$ e $R_{ij}$ siano distribuiti normalmente quali: ML e REML. Esistono due metodi di stima (sotto l’assunzione di normalità dei residui) per la stima dei parametri, il full maximum likelihood (ML) e il restricted (anche chiamato residual) maximum likelihoo (REML).
 \newline
 REML è alternativo a ML. Questo metodo massimizza la verosimiglianza (likelihood) dei residui osservati ottenendo le stime degli effetti fissi usando metodi «non likelihoodlike» come ordinary least squares (OLS) o generalized least squares (GLS)) e successivamente usa queste per massimizzare la verosimiglianza dei residui (sottraendo gli effetti misti) per ottenere le stime dei parametri della varianza. Diversi algoritmi sono disponibili per ottenere queste stime: EM (expectation-maximisation), Fischer Scoring, IGLS e RIGLS. Questi sono algoritmi iterativi che convergono dopo alcune iterazioni alle stime ML o REML.
-Per testare i parametri fissi del modello si utilizza la seguente ipotesi nulla (ipotesi di significatività) su ciascun parametro $\rightarrow H0: \gamma_h = 0$.
+Per testare i parametri fissi del modello si utilizza la seguente ipotesi nulla (ipotesi di significatività) su ciascun parametro $\rightarrow H_0: \gamma_h = 0$.
 \newline
 Questa ipotesi viene verificata con un test t; questo test è noto come WALD TEST. Sotto l’ipotesi nulla il test ha approssimativamente una distribuzione t con d.f. basati sulla struttura multilevel dell’analisi. Per testare più parametri (fissi e random) del modello invece viene utilizzato il deviance test. Dalla stima del modello lineare con il metodo ML si ottiene la verosimiglianza del modello, da cui: DEVIANCE = -2 lnL (misura della bontà di adattamento ai dati del modello).
 \newline
