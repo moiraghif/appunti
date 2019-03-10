@@ -113,7 +113,7 @@ Errori omoschedastici e correlati: modello GLS
 
 Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: 
 \begin{equation*}
-rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp \ .
+\rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp \ .
 \end{equation*}
 Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati 
 \begin{equation*}
