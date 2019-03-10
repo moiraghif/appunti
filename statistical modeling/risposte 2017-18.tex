@@ -1,4 +1,7 @@
-\documentclass[a4page, 11pt]{article}
+\documentclass[a4page, 11pt]{article} %this is behaving like \documentclass[11pt]{article}
+
+%\documentclass[a4paper, 11pt]{article} %wanted this?
+
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -95,7 +98,6 @@ Per errori eteroschedastici si intende quando la varianza dell’errore non rima
 Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrisponde alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
 Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori ad una costante ottenendo la forma $y^* = X^*B + \varepsilon$.
 \newline
-\newline
 \begin{itshape}
 Errori omoschedastici e correlati: modello GLS
 \end{itshape}
@@ -115,7 +117,6 @@ In alternativa è possibile utilizzare un modello \textit{autoregressivo} (propr
 y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
 con $AR1 + \varepsilon_i = v_i$ e $Corr(v_i;v_j) = 0$.
-\newline
 \newline
 \begin{itshape}
 Errori eteroschedastici e correlati: stimatore GLS
@@ -345,7 +346,6 @@ $\Sigma$jrj è quindi la somma di tutti i regressori nelle diverse equazioni.
 \newline
 Ciò permette di risolvere anche il problema di una numerosità diversa delle osservazioni delle diverse equazioni. Data nj è la numerosità delle osservazioni per l’equazione j-esima il complesso delle numerosità è dato da $\Sigma$jnj.
 \newline
-\newline
 La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza: 
 \begin{itemize}
 \item Il modello è caratterizzato dalla presenza delle variabili esplicative ZA, ZB, ZC diverse da equazione ed equazione.
@@ -369,7 +369,6 @@ Ad esempio gli studenti appartenenti alla stessa scuole condividono stesso ambie
 \newline
 La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
 \newline
-\newline
 Cosa succede se si ignora la struttura gerarchica dei dati?
 \begin{enumerate}[noitemsep]
 \item FALLACIA ECOLOGICA: quando ad una variabile riferita al livello macro si vuole dare validità micro.
@@ -382,9 +381,7 @@ Le regressioni a livello macro considerano i dati aggregati dati dalla media di 
 L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi.
 In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo.
 \newline
-\newline
 Yij = $\beta$0j + $\beta$ijxij + rij
-\newline
 \newline
 Diverse intercette $\beta$0j e coefficienti di regressione $\beta$1j per ciascun gruppo:
 \begin{itemize}	
@@ -408,7 +405,6 @@ In un primo tipo di modelli (mixed models) la relazione disaggregata tra i dati 
 e la varianza fra gruppi sono descritte come variabili casuali.
 \newline
 In un secondo tipo di modelli (random models) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
-\newline
 \newline
 I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
 \begin{enumerate}
@@ -443,7 +439,6 @@ OLS:
 Si consideri un modello Multilevel in cui appare solo la parte del Modello Lineare che viene stimata mediante metodo OLS con una sola variabile e ipotizzando che le variabili X e Y siano centrate ($y_{ij}= \beta_0+\Sigma_{jk} \beta_k x_{ijk}+\varepsilon_{ij}$).
 \newline
 In questo modo si vede quale sia l’effetto delle variabili esplicative sulla variabile dipendente se i dati non fossero centrati. Naturalmente gli errori si distribuiscono come una normale. 
-\newline
 \newline
 EMPTY MODEL:
 Nel modello ANOVA ad effetti casuali detto anche empty model si ha che: $y_{ij}=v_j+r_{ij}$.
@@ -503,7 +498,6 @@ Come varianze e covarianze:
 \begin{itemize}
 \item livello 1 $\sigma^{2}$
 \item livello 2 $\tau^{2}_0$
-\newline
 \end{itemize}
 TOTAL MODEL: 
 \newline
