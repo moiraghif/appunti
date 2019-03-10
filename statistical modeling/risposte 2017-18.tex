@@ -230,10 +230,10 @@ Come identificare gli outlier:
 \item Rappresentazione grafica con Boxplot e Scatter plot.
 \item Indicatori
 	\begin{itemize}[noitemsep]
-	\item Leverage: serve a verificare l’impatto che un caso specifico ha sulla capacità del modello di predire tutti i casi. Valori piccoli indicano che lo stimatore (b) di Y è basato sul contributo di molte osservazioni, mentre valori vicini a 1 indicano al contrario.
+	\item Leverage: serve a verificare l’impatto che un caso specifico ha sulla capacità del modello di predire tutti i casi. Valori piccoli indicano che lo stimatore (b) di Y è basato sul contributo di molte osservazioni, mentre valori vicini a 1 indicano il contrario.
 	\item Residui standardizzati: nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
 	\item Residui studentizzati: sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità.
-	\item Covariatio: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la i-esima osservazione.
+	\item Covariatio: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione.
 	\item Dfitts: misura l’influenza di quel caso sulla stima dei coefficienti di regressione e sulla loro varianza, quando rimosso dal processo di stima. Male valori elevati.
 	\item Dfbetas: misura l’influenza di quel caso, quando viene rimosso dal processo di stima, sulle stime di ogni coefficiente di regressione separatamente. Male valori elevati.
 	\item Distanza di Cook: misura l’influenza di un singolo caso sulla stima dei coefficienti di regressione, in termini di capacità del modello di predire tutti i casi quando il singolo caso viene rimosso dal processo di stima. Valori superiori a 1 indicano che il punto è influente.
@@ -242,52 +242,58 @@ Come identificare gli outlier:
 
 \section{Modello lineare classico multivariato}
 
-Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di r variabili esplicative z1,..,zr, e m variabili dipendenti y1,..,ym. Ognuna delle m variabili dipendenti è legata a una particolare regressione multipla. 
+Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di $r$ variabili esplicative $z_1$,..,$z_r$, e $m$ variabili dipendenti $y_1$,..,$y_m$. Ognuna delle $m$ variabili dipendenti è legata a una particolare regressione multipla. 
 
 Ipotesi del modello:
 \begin{enumerate}[noitemsep]
 \item Parametri lineari.
 \item Valori attesi degli errori casuali sono nulli.
 \item Gli errori casuali all’interno gli ogni equazione e anche tra diverse equazioni sono omoschedastici e incorrelati pp più.
-\item Le Z variabili esplicative sono non stocastiche: per ogni osservazione, il valore delle Z è una costante mentre il corrispondente valore di ogni y è una variabile casuale influenzata dagli errori casuali.
-\item Le Z variabili esplicative sono non collineari con rango (z=r+1).
-\item n $>$ r+1 per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di b sono trovate in modo analogo al caso univariato.
+\item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali.
+\item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$).
+\item $n > r+1$ per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $b$ sono trovate in modo analogo al caso univariato. %FIXME
 \item Gli errori si distribuiscono come una normale multivariata.
 \end{enumerate}
 L’$R^{2}$ è una media pesata degli $R^{2}$ delle singole equazioni
 
 \begin{remark}[] \ \\
 \begin{itemize}
-\item La dipendenza della variabile dipendente $y_j$ da Z non influenza la dipendenza della variabile $y_m$.
+\item La dipendenza della variabile dipendente $y_j$ da $Z$ non influenza la dipendenza della variabile $y_m$.
 \item Abbiamo le stesse variabili esplicative in tutte le equazioni del sistema.
 \item La correlazione simultanea tra i disturbi è costante nel tempo.
 \end{itemize}
 \end{remark}
 \section{Inferenza nella Regressione Multivariata}
 
-Guardare Modello lineare classico multivariato.
-\newline
+Guardare Modello lineare classico multivariato.\\
 Gli stimatori OLS sono corretti ed efficienti. 
-\newline
-Si definisce VARIANZA GENERALIZZATA DI H il determinante della matrice di varianza-covarianza spiegata della popolazione (H) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
-\newline
+
+Si definisce VARIANZA GENERALIZZATA DI $H$ il determinante della matrice di varianza-covarianza spiegata della popolazione ($H$) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
+
 Si definisce VARIANZA GENERALIZZATA DI SIGMA il determinante della matrice di varianza-covarianza residua (SIGMA) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
-\newline
-Si può quindi definire come test del rapporto di verosimiglianza Lambda di Wilks: 
-$\wedge$=I$\Sigma^{I}$/I$\Sigma^{I}$+$H^{I}$. Da $\wedge$ si ricava (1-$\wedge$)/$\wedge$, una distribuzione asintotica F (ovvero (1-$\wedge$)/$\wedge$ si distribuisce come una F).
-\newline
-Il test del rapporto di verosimiglianza per l’ipotesi H0: B\string^ = 0 è dato dal rapporto di varianze generalizzate Lambda di Wilks: $\wedge$=I$\Sigma^{I}$/I$\Sigma^{I}$+$H^{I}$. con H\string^ , $\Sigma$\string^ matrici di varianze covarianze spiegate e residue.
-\newline
-Se è vera H0 il numeratore e il denominatore di $\wedge$ tendono a coincidere poichè H\string^ tenderà a 0. Perciò la regione di accettazione di H0 (nullità dei parametri B\string^) è per valori di $\wedge$ vicini all’1.
-\newline
-La regione di rifiuto di H0 è per valori di $\wedge$ più piccoli di 1, in cui il numeratore è più piccolo del denominatore per la presenza di H\string^.
-Data la struttura della F basata sul rapporto (1-$\wedge$)/ $\wedge$, al crescere di $\wedge$ decresce il numeratore e cresce il denominatore.
-Perciò accetto H0 per valori di F superiori ad una certa soglia e rifiuto H0 per valori di F inferiori ad una certa soglia.
-\newline
-Perciò per il test basato su F asintotica:
-regione di accettazione di H0 è per p value superiori ad $\alpha$;
-regione di rifiuto di H0 per p value inferiori ad $\alpha$;
-Analogamente si costruiscono intervalli di confidenza per i parametri e per i valori predetti delle Y.
+
+Si può quindi definire come test del rapporto di verosimiglianza Lambda di Wilks: \begin{equation*}
+\wedge=I\Sigma^{I} /I \Sigma^{I} + H^{I}\ . 
+\end{equation*}
+Da cui si ricava 
+\begin{equation*}
+(1- \wedge ) / \wedge \ ,
+\end{equation*}
+una distribuzione asintotica ad $F$ (ovvero $(1-\wedge)/ \wedge$ si distribuisce come una $F$).
+
+Il test del rapporto di verosimiglianza per l’ipotesi $H_0$: $B\string^ = 0$ è dato dal rapporto di varianze generalizzate Lambda di Wilks: 
+\begin{equation*}
+wedge=I\Sigma^{I} /I \Sigma^{I} + H^{I} \ , 
+\end{equation*} 
+con $H\string^$ , $\Sigma\string^$ matrici di varianze covarianze spiegate e residue.\\
+Se è vera $H_0$ il numeratore e il denominatore di $\wedge$ tendono a coincidere poichè $H\string^$ tenderà a $0$. Perciò la regione di accettazione di $H_0$ (nullità dei parametri $B\string^$) è per valori di $\wedge$ vicini all’$1$.\\
+La regione di rifiuto di $H_0$ è per valori di $\wedge$ più piccoli di $1$, in cui il numeratore è più piccolo del denominatore per la presenza di $H\string^$.
+Data la struttura della $F$ basata sul rapporto $(1- \wedge )/  \wedge$, al crescere di $\wedge$ decresce il numeratore e cresce il denominatore.
+Perciò accetto $H_0$ per valori di $F$ superiori ad una certa soglia e rifiuto $H_0$ per valori di $F$ inferiori ad una certa soglia.\\
+Perciò per il test basato su $F$ asintotica:
+regione di accettazione di $H_0$ è per $p-value$ superiori ad $\alpha$;
+regione di rifiuto di $H_0$ per $p-value$ inferiori ad $\alpha$;
+Analogamente si costruiscono intervalli di confidenza per i parametri e per i valori predetti delle $Y$.
 \newline
 Altri test si costruiscono in modo analogo:
 \begin{itemize}[noitemsep]
@@ -300,7 +306,7 @@ Altri test si costruiscono in modo analogo:
 \section{Modello lineare generalizzato}
 
 Guardare Modello lineare classico multivariato.\\
-Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: Y = BZ+E in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
+Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $Y = BZ+E$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
 
 Nell’ipotesi classica:
 
@@ -519,7 +525,7 @@ $y_{ij}=\beta_{0j}+\beta_{1j} x_{ij}+ R_{ij}$
 I parametri da stimare nel modello random intercept sono: coefficienti di regressione $\gamma$ e componenti di varianza, $\sigma_2$ e $\tau_2$. Gli effetti casuali $U_{0j}$ non sono parametri ma variabili casuali latenti, ovvero non direttamente osservabili. La letteratura riporta metodi per la stima dei parametri sotto l’assunzione che i residui $U_{0j}$ e $R_{ij}$ siano distribuiti normalmente quali: ML e REML. Esistono due metodi di stima (sotto l’assunzione di normalità dei residui) per la stima dei parametri, il full maximum likelihood (ML) e il restricted (anche chiamato residual) maximum likelihoo (REML).
 \newline
 REML è alternativo a ML. Questo metodo massimizza la verosimiglianza (likelihood) dei residui osservati ottenendo le stime degli effetti fissi usando metodi «non likelihoodlike» come ordinary least squares (OLS) o generalized least squares (GLS)) e successivamente usa queste per massimizzare la verosimiglianza dei residui (sottraendo gli effetti misti) per ottenere le stime dei parametri della varianza. Diversi algoritmi sono disponibili per ottenere queste stime: EM (expectation-maximisation), Fischer Scoring, IGLS e RIGLS. Questi sono algoritmi iterativi che convergono dopo alcune iterazioni alle stime ML o REML.
-Per testare i parametri fissi del modello si utilizza la seguente ipotesi nulla (ipotesi di significatività) su ciascun parametro $\rightarrow H0: \gamma_h = 0$.
+Per testare i parametri fissi del modello si utilizza la seguente ipotesi nulla (ipotesi di significatività) su ciascun parametro $\rightarrow H_0: \gamma_h = 0$.
 \newline
 Questa ipotesi viene verificata con un test t; questo test è noto come WALD TEST. Sotto l’ipotesi nulla il test ha approssimativamente una distribuzione t con d.f. basati sulla struttura multilevel dell’analisi. Per testare più parametri (fissi e random) del modello invece viene utilizzato il deviance test. Dalla stima del modello lineare con il metodo ML si ottiene la verosimiglianza del modello, da cui: DEVIANCE = -2 lnL (misura della bontà di adattamento ai dati del modello).
 \newline
