@@ -13,6 +13,7 @@
 \newtheorem*{remark}{Osservazione}
 
 \usepackage{enumitem} %resuming enumerations
+\usepackage{hyperref} %clickable TOC
 
 \title{Statistical Modeling}
 \author{}
@@ -22,6 +23,9 @@
 
 \begin{document}
 \maketitle
+%\tableofcontents
+%\newpage
+
 \section{Errori eteroschedastici}
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
 In virtù del fatto che ogni errore $\varepsilon$ è a media nulla $E(\varepsilon) = 0$ vale la relazione $E(\varepsilon^2) = Var(\varepsilon) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
@@ -70,20 +74,25 @@ Per quanto riguarda i grafici:
 \item Correlogramma: in questo grafico vengono mostrate le correlazioni a diversi gradi con relativa barra di confidenza; analizzando acf (funzione di autocorrelazione dei residui) e pacf si riesce a determinare il tipo di modello autoregressivo.
 \end{enumerate}
 
-Test (metodi analitici):
-\begin{itemize}
-\item \textbf{Test di Durbin-Watson}: questo test si può effettuare a seconda dell’autocorrelazione dei diversi gradi. Prendiamo in esame il test per il primo grado.
-Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi $H0:  \rho = Corr( \varepsilon_i  ;  \varepsilon_{i-1} )=0$ contro l’ipotesi alternativa di autocorrelazione degli errori che può assumere i valori:
+\textbf{Test di Durbin-Watson}: questo test si può effettuare per verificare la presenza autocorrelazione a diversi gradi. 
+Prendiamo in esame il test per il primo grado. Esso si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi \begin{equation*}
+H0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
+\end{equation*}
+contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \begin{enumerate}[noitemsep]
 \item Unidirezionale destra
 \item Unidirezionale sinistra
 \item Bidirezionale	
 \end{enumerate}
-%Check
-La statistica $DW$ per l'autocorrelazione dei residui diventa uguale a $2(1-\rho)$. 
-La distribuzione di $DW$ è centrata su $2$; se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$; $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
-\end{itemize}
 
+La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=2(1-\rho)$. Si può notare che: 
+\begin{itemize}[noitemsep]
+\item La distribuzione di $DW$ è centrata su $2$: se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; 
+\item $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$;
+\item $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$. 
+\item I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
+
+\end{itemize}
 Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore GLS è efficiente in quanto caratterizzato dalla minima varianza. 
 %Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$.
 
@@ -187,7 +196,7 @@ Volendo utilizzare funzioni di variabili indipendenti non lineari in X possiamo 
 Tra le funzioni non lineari le più utilizzate sono le polinomiali e le trasformazioni logaritmiche. 
 %Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. %Superfluo?
 
-Esistono tre modelli principali: %fix ovunque
+Esistono tre modelli principali: 
 \begin{enumerate}[noitemsep]
 \item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale %lineare?
  $\beta$ della variabile dipendente.
@@ -257,7 +266,7 @@ Ipotesi del modello:
 \end{enumerate}
 L’$R^{2}$ è una media pesata degli $R^{2}$ delle singole equazioni
 
-\begin{remark}[] \ \\
+\begin{remark}[]\ \\
 \begin{itemize}
 \item La dipendenza della variabile dipendente $y_j$ da $Z$ non influenza la dipendenza della variabile $y_m$.
 \item Abbiamo le stesse variabili esplicative in tutte le equazioni del sistema.
