@@ -9,6 +9,8 @@
 \usepackage{amsthm}
 \newtheorem*{remark}{Osservazione}
 
+\usepackage{enumitem} %resuming enumerations
+
 \title{Statistical Modeling}
 \author{}
 \date{}
@@ -52,7 +54,7 @@ Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS
 
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare se gli errori siano correlati tra di loro.
 Accade spesso infatti, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
-Gli errori correlati si possono scindere in due componenti: $\rho e_{ i-1}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale). %FIXME: check notation
+Gli errori correlati si possono scindere in due componenti: $\rho e_{ i-1}^{\#}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici Identicamente Distribuiti in modo normale).
 Si nota infatti che l’errore è legato al suo valore ritardato.
 Possiamo classificare l’autocorrelazione in base al suo grado: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di i-esimo grado quando gli errori sono correlati con il loro valore ritardato di i gradi. Gli errori autocorrelati non incidono sulle proprietà di correttezza e consistenza degli stimatori OLS, ma solo sull’efficienza (non sono più BLUE). Come nel caso dell’eteroschedasticità la stima della varianza dei parametri e la relativa inferenza non sono più corretti e affidabili (la statistica T di Student ottiene dei valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti e l'area di rifiuto del test anomalamente più ampia).
 Per individuare la caratteristica di autocorrelazione si può ricorrere a rappresentazioni grafiche o a metodi analitici.
@@ -77,10 +79,11 @@ Il test si basa sull’assunzione di non correlazione degli errori: l’ipotesi 
 %Check
 La statistica $DW$ per l'autocorrelazione dei residui diventa uguale a $2(1-\rho)$. 
 La distribuzione di $DW$ è centrata su $2$; se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$; $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$. I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
-
-Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$. %Fix/check 
-
 \end{itemize}
+
+Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione generalizzato lo stimatore GLS è efficiente in quanto caratterizzato dalla minima varianza. 
+%Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$.
+
 
 \section{Metodo di stima WLS; per soluzioni correlate, GLS }
 
@@ -97,7 +100,17 @@ Infatti si tratta di stimare i parametri del modello trasformato con il metodo O
 Errori omoschedastici e correlati: modello GLS
 \end{itshape}
 
-Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: $\rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp$. Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati $y_t^\sharp = \beta_0^\sharp + \beta_1 x_t^\sharp + w_i$ che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
+Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). Bisogna stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\sharp$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\sharp$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: 
+\begin{equation*}
+rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\sharp \ .
+\end{equation*}
+Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati 
+\begin{equation*}
+y_t^\sharp = \beta_0^\sharp + \beta_1 x_t^\sharp + w_i
+\end{equation*} 
+che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. 
+
+In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
 \begin{equation*}
 y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
@@ -145,14 +158,17 @@ Valori di tale indice variano tra $0$ e $\infty$ perciò se superiori a $20$ ind
 
 \section{Linearità}
 
-L'approssimazione lineare non è sempre la migliore. La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo lineare: $y = f (x)$. %con f lineare però. Fixme 
+La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo: $y = f (x)$, con $f$ lineare.
 
+L'approssimazione lineare non è sempre la migliore.
 Per validare la presenza di ciascun regressore all’interno dei diversi modelli dobbiamo quindi verificare la linearità di tale relazione.
 Dunque, la variabile risposta deve essere una combinazione lineare di variabili esplicative e di parametri lineari.
-Se una relazione tra $y$ e $X$ è non lineare l’effetto su $y$ di una variazione in $X$ dipende dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. %non capisco bene il senso, questo è vero a prescindere dalla linearità.
-Se una regressione lineare è mal specificata la forma funzionale è
-errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. %still not clear
+
+Se una relazione tra $y$ e $X$ è non lineare, allora l’effetto su $y$ ($\Delta y$)  di una variazione in $X$ ($\Delta X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
+
+In questo caso, una regressione lineare è mal specificata: la forma funzionale è errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. 
 Può capitare ad esempio che $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
+
 Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcuni grafici: 
 \begin{enumerate}[noitemsep]
 \item Scatter plot della risposta ($y_i$) in funzione di ogni esplicativa ($x_j$) presente nel modello.
@@ -160,23 +176,21 @@ Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcu
 \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori previsti ($\hat{y_i}$); deve esserci un andamento regolare.
 \end{enumerate}
 È da notare che la non linearità potrebbe dipendere anche solo da una o da alcune variabili esplicative e non necessariamente da tutte.
+Quando è presente non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure che questi siano espressi in una forma intrinsecamente non lineare.
 
-Nel caso di non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure no (intrinsecamente non lineari).
-
-Nel primo caso si procede innanzitutto alla sostituzione del parametro o della variabile \textit{non lineare} con uno \textit{lineare}, poi si procede alla stima OLS ed infine si effettua l'operazione inversa riportando il parametro o la variabile alla forma originale. 
-
+Nel primo caso si procede innanzitutto alla linearizzazione del parametro (o della variabile) \textit{non lineare} con una trasformazione che lo renda \textit{lineare}, poi si procede alla stima OLS ed infine si applica la trasformazione inversa ricavando la stima del parametro originale. 
 Nel caso invece di componenti intrinsecamente non lineari si procede allora alla stima attraverso gli stimatori NLS (minimi quadrati non lineari) che sfruttano algoritmi numerici nei software per affrontare il problema di minimizzazione non lineare.
 
 Volendo utilizzare funzioni di variabili indipendenti non lineari in X possiamo riformulare una vasta famiglia di funzioni di regressione lineare come regressioni multiple.
 
 Tra le funzioni non lineari le più utilizzate sono le polinomiali e le trasformazioni logaritmiche. 
-
-Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. 
+%Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. %Superfluo?
 
 Esistono tre modelli principali: %fix ovunque
 \begin{enumerate}[noitemsep]
-\item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale beta della variabile dipendente.
-\item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale beta della risposta.
+\item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale %lineare?
+ $\beta$ della variabile dipendente.
+\item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale $\beta$ della risposta.
 \item \textbf{Log-log}, in cui entrambi gli incrementi sono percentuali.
 \end{enumerate}
 
@@ -285,14 +299,8 @@ Altri test si costruiscono in modo analogo:
 
 \section{Modello lineare generalizzato}
 
-Guardare Modello lineare classico multivariato.
-\newline
+Guardare Modello lineare classico multivariato.\\
 Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: Y = BZ+E in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
-\newline
-\newline
-\newline
-\newline
-\newline
 
 Nell’ipotesi classica:
 
@@ -301,18 +309,19 @@ Nell’ipotesi classica:
 \item Gli errori sono omoschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è uguale
 \item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
 \item Gli errori sono incorrelati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti non è legato al proprio e a quello degli altri individui.
-\newline
-\newline
+\end{enumerate}
+
 Nell’ipotesi intermedia:
-\newline
+\begin{enumerate}[resume, noitemsep]
+
 \item Gli errori sono omoschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale
 \item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
 \item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
 \item Gli errori sono correlati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
-\newline
-\newline
+\end{enumerate}
 Nell’ipotesi estrema:
-\newline
+\begin{enumerate}[resume, noitemsep]
+
 \item Gli errori sono eteroschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è diversa
 \item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
 \item Gli errori sono correlati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente è legato a quello degli altri individui
