@@ -45,14 +45,14 @@ Per quanto riguarda i grafici:
 \end{enumerate}
 Possiamo ricorrere anche ad alcuni test (metodo analitico):
 \begin{itemize}
-\item \textbf{Test di White}: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H0: Var(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H1: Var(\varepsilon_i ) = ( \sigma^2_i )$.
+\item \textbf{Test di White}: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H_0:$ Var$(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H_1:$ Var$(\varepsilon_i ) = ( \sigma^2_i )$.
 Il test sfrutta la regressione $OLS$ del quadrato dei residui $\varepsilon_i^2$ sui regressori $x_j$, i regressori al quadrato $x_j^2$ e le loro interazioni.
 Attraverso l'indice di determinazione $R^{2}$ di tale regressione, ricavato dal rapporto tra la variabilità spiegata dalla regressione ($SSE = \sum_{i}(\hat{y_i} - \bar{y})$) e la variabilità totale ($TSS = \sum_{i} (y_i - \bar{y})$), si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori. L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^{2}$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
 %@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
 
-\item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità (H0: Var($\varepsilon_i$) = ($\sigma^2$)).
+\item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità ($H_0$: Var($\varepsilon_i$) = ($\sigma^2$)).
 Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Il loro rapporto si distribuisce quindi come una $F$ di Snedecor. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 \end{itemize}
@@ -76,7 +76,7 @@ Per quanto riguarda i grafici:
 
 \textbf{Test di Durbin-Watson}: questo test si può effettuare per verificare la presenza autocorrelazione a diversi gradi. 
 Prendiamo in esame il test per il primo grado. Esso si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi \begin{equation*}
-H0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
+H_0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
 \end{equation*}
 contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \begin{enumerate}[noitemsep]
@@ -222,7 +222,7 @@ Esistono inoltre alcuni test non parametrici che non si basano su ipotesi sulla 
 \begin{enumerate}[noitemsep]
 \item Test di Shapiro-Wilk, è compreso tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità
 \item Test di Kolmogorov Smirnov, in cui l’ipotesi nulla è la normalità
-\item Skewness test (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando H0 si rigetta la normalità, non rigettandola si dice solo che la distribuzione è simmetrica, ma non per forza normale
+\item Skewness test (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando $H_0$ si rigetta la normalità, non rigettandola si dice solo che la distribuzione è simmetrica, ma non per forza normale
 \item Test della Kurtosis (come per la simmetria, solo che si utilizza il momento quarto al posto del momento terzo)
 \end{enumerate}
 I problemi di non normalità possono essere risolti usando una trasformazione della variabile Y. La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
