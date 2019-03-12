@@ -275,7 +275,7 @@ Come identificare gli outlier:
 \item Indicatori
 \end{itemize}
 Tra questi \textbf{indicatori} è possibile distinguere tra:
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
 \item \textbf{Leverage values}: Definendo $H = X(X'X)^{-1}X'$ come la matrice di proiezione, l'elemento $h_{ii}$ sulla diagonale è definito come il leverage che verifica l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
 
 Definendo inoltre
@@ -286,13 +286,50 @@ il valore medio del leverage con k = $n^\circ$ variabili esplicative ed n = $n^\
 \begin{equation*}
 h_{ii} > \frac{2(k-1)}{n}
 \end{equation*}
-%my watch has ended(for now)
-\item \textbf{Residui standardizzati}: nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
-\item \textbf{Residui studentizzati}: sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità.
-\item \textbf{Covrati}: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione.
-\item \textbf{Dfitts}: misura l’influenza di quel caso sulla stima dei coefficienti di regressione e sulla loro varianza, quando rimosso dal processo di stima. Male valori elevati.
-\item \textbf{Dfbetas}: misura l’influenza di quel caso, quando viene rimosso dal processo di stima, sulle stime di ogni coefficiente di regressione separatamente. Male valori elevati.
-\item \textbf{Distanza di Cook}: misura l’influenza di un singolo caso sulla stima dei coefficienti di regressione, in termini di capacità del modello di predire tutti i casi quando il singolo caso viene rimosso dal processo di stima. Valori superiori a 1 indicano che il punto è influente.
+\item \textbf{Residui standardizzati}: Assumendo per i residui $\varepsilon$
+\[
+\varepsilon = (I-H)y
+\]
+allora è possibile giungere alla varianza esplicitata come
+\[
+Var(\varepsilon_i) = (1-h_{ii})\sigma^2
+\]
+Come conseguenza di ciò i residui \textit{standardizzati} sono definiti come
+\[
+\varepsilon_i^* = \frac{\varepsilon_i}{\sigma \sqrt{(1-h_{ii})}}
+\]
+In un campione distribuito normalmente il 95\% dei valori dei residui standradizzati $\varepsilon_i^*$ dovrebbe assumere valori compresi tra -2 e +2 mentre il 99\% dovrebbe assumere valori compresi tra -2.5 e +2.5; nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
+\item \textbf{Residui studentizzati}: è la versione dei residui standardizzati ma relativamente al campione.
+Di conseguenza le forme analitiche saranno le medesime facendo però riferimento non alla varianza $\sigma^2$ ma alla varianza campionaria $s^2$.
+\[
+\varepsilon_i^* = \frac{\varepsilon_i}{s_{\varepsilon i} \sqrt{(1-h_{ii})}}
+\]
+Sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità. La versione dei residui studentizzati cosiddetta \textit{jacknife} è ricavata calcolando il rapporto dei residui sulla deviazione standard dei residui ottenuta eliminando dal dataset l'$i$-esima osservazione, così per ogni residui studentizzato.
+\item \textbf{Covrati}: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione. 
+\[
+COVRATIO = \frac{(det(\sigma_i X_i'X_i^{-1}))}{det(\sigma^2(X_i'X_i)^{-1}))}
+\]
+Il valore di soglia è determinato da
+\[
+1\pm 3 \  \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\]
+\item \textbf{Dfitts}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, eliminandola dal dataset. Osservazioni con valori elevati di Dfitts sono da considerarsi punti di influenza.
+\[
+DFITTS = \frac{\hat{y} - \hat{y}_{(i)}}{S_{e(i)}\sqrt{h_{ii}}}
+\]
+con valore soglia
+\[
+\pm 2 \ \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\]
+\item \textbf{Dfbetas}: misura l’influenza dell'$i$-esima osservazione sulle stime di ogni coefficiente di regressione separatamente,eliminandola dal dataset. Ancora una volta valori elevati indicano che l'osservazione influisce molto sulla stima dei parametri.
+\[
+DFBETAS = \beta - \beta_{(i)} = X_{(i)}(X'X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
+\]
+con valore soglia $2$ oppure $2\sqrt{n}$ in caso si voglia tenere conto della numerosità delle osservazioni.
+\item \textbf{Distanza di Cook}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione \textit{nel loro complesso}, in termini di capacità del modello di predire tutti i casi quando la singola osservazione viene rimossa dal dataset. Valori superiori a 1 indicano che il punto è influente.
+\[
+D_i = \frac{(\beta - \beta_{(i)})(X'X)(\beta - \beta_{(i)})}{k\sigma_{(i)}^2}
+\]
 \end{enumerate}
 
 \section{Modello lineare classico multivariato}
