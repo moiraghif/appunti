@@ -23,6 +23,7 @@
 
 \begin{document}
 \maketitle
+\begin{multicols}{2}
 \begin{abstract}
   \textit{Data Semantcs} si occupa di comprendere il significato dei dati, nella pratica della scrittura del programma.
   È necessario prestare attenzione al significato dei dati nell'integrazione di più dataset; inoltre la semantica del dato è necessaria per la condivisione di dataset (cioè renderli fruibili da chi non ha prodotto il dataset).
@@ -38,12 +39,11 @@
   L'esame orale sarà accompagnato da un progetto software (effettuato in gruppo di, circa, 3 persone), di cui sarà fatta una presentazione orale; in alternativa al progetto è possibile scrivere un articolo di approfondimento su una tematica.
   La preparazione sarà ``ragionevolmente'' dettagliata su tutti gli argomenti, e sarà approfondito l'argomento del progetto.
 \end{abstract}
-
+\tableofcontents
 
 \newpage
 % titolo provvisorio
 \part{Grafi di conoscenza}
-\begin{multicols}{2}
 % non mi sembra molto coeso il discorso: correggere
 Il termine è coniato da Google per indicare uno strumento usato dal suo motore di ricerca.
 Il grafo permette di essere processato facilmente da una macchina e allo stesso tempo permette un livello di astrazione soddisfacente; si possono anche effettuare query come in un database a grafo.
@@ -174,20 +174,20 @@ dbpedia:The_Beatles foad:name ?album .
 Si possono così costruire query strutturate grazie al concetto di \textit{pattern match}: si definisce un sotto-grafo in cui fare interrogazioni più sofisticate.
 
 \begin{verbatim}
-// prologo: si definiscono le fonti
+# prologo: si definiscono le fonti
 PREFIX dbpedia:
           <http://dbpedia.org/resource/>
 PREFIX foaf:<http://xmlns.com/foaf/0.1/>
 ...
 
-// query di tipo SELECT
-// ASK | SELECT | DESCRIBE | CONSTRUCT
+# query di tipo SELECT
+# ASK | SELECT | DESCRIBE | CONSTRUCT
 SELECT ?album
 FROM <http://musicbrainz.org/20130302/>
 WHERE {
-  // il cuore della query:
-  // il titolo di tutte le tracce degli
-  // album dei Beatles
+  # il cuore della query:
+  # il titolo di tutte le tracce degli
+  # album dei Beatles
   dbpedia:The_Beatles foaf:made ?album .
   ?album a mo:Record ; dc:title ?title
 }
@@ -209,15 +209,15 @@ ASK WHERE {
 SELECT ?album_name ?track_title
        ?date       ?album       .
 WHERE {
-  // tutti gli album dei Beatles
+  # tutti gli album dei Beatles
   dbpedia:The_Beatles foaf:name
                          ?album .
   ?album dc:title ?album ;
          mo:track ?track .
-  // tutte le tracce degli album
+  # tutte le tracce degli album
   ?track dc:title ?track_title ;
          mo:duration ?duration ;
-  // filtra per durata
+  # filtra per durata
   FILTER (?duration > 300000 &&
           ?duration < 400000)
 }
@@ -226,11 +226,11 @@ WHERE {
 \verb|CONSTRUCT| è simile a \verb|SELECT| ma ritorna un grafo e non una lista:
 \begin{verbatim}
 CONSTRUCT {
-  // riscrive con nuova terminologia
+  # riscrive con nuova terminologia
   ?album dc:creator
               dbpedia:The_Beatles
 } WHERE {
-  // esegue la query
+  # esegue la query
   dbpedia:The_Beatles foaf:made
                          ?album .
   ?album mo:track ?track .
@@ -241,6 +241,62 @@ Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit
 
 I dataset sono integrati grazie a predicati (\verb|same|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
 SPARQL 1.1 permette di integrare un sistema di ragionamento automatico per l'uguaglianza delle entità (introduce il concetto di \textit{entailment}).
+
+\section{Vocabolari (o ontologie).}
+In RDF si ha un modello dei dati che prevede di utilizzare URI per rappresentare sia le risorse sia le proprietà.
+L'uso di URI per specificare proprietà e relazioni definiscono separatamente l'insieme di proprietà e tipi usati per descrivere un dominio: si definisce così un vocabolario per descrivere i dati, che permettono una standardizzazione della tipizzazione del dato.
+Un esempio è il predicato \verb|rdf:type| introduce un vocabolario che permette di catalogare risorse definendo i tipi di variabile.
+Si definiscono quindi ontologie comuni sfruttabili da più \textit{data provider} per uniformare la rappresentazione dei dati.
+
+Per definire un vocabolario si definiscono prima le classi (ovvero i tipi di dato) con proprietà, eventualmente diverse (ovvero usando certe proprietà solo su certe classi).
+
+Uno dei vocabolari più importanti (perché introdotto da tempo) è FOAF (\textit{Friend of a Friend}); si ricordano anche DC (\textit{Dublin Core}), che specifica una serie di predicati per rappresentare i documenti, e SKOS (\textit{Simple Knowledge Organizatin System}).
+Più vocabolari possono riferirsi allo stesso oggetto e per definizione non è lecito unificare i vocabolari in quanto dovrebbero adattarsi alla specificità del dominio.
+Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \url{schema.org}, molto utilizzato nel web e in continua evoluzione.
+Nel caso siano insufficienti, è opportuno espandere un dizionario già esistente piuttosto che crearne uno nuovo dal nulla.
+Si possono unire più vocabolari grazie a collegamenti, a livello di istanza o di schema.
+
+Un computer ha bisogno di definire un sistema per attribuire un significato al significante.
+Si possono definire tre\footnote{Esiste un quarto metodo che sarà approfondito più avanti.} sistemi per definire un'ontologia, ovvero un sistema per definire gli oggetti esistenti.
+
+\subsection{Tipi di ontologie.}
+L'uso di sistemi diversi rende complicata l'integrazione di più fonti.
+
+\subsubsection{Tesauri.}
+Si definisce un dizionario di entità linguistiche, composto dalle parole proprie della lingua e da un numero fisso di relazioni tra di loro.
+Generalmente definisce sostantivi (semplici o composti), aggettivi e verbi.
+Le relazioni lessicali sono:
+\begin{itemize}
+  \item sinonimia: più parole con significati simili;
+  \item antinomia: più parole hanno significato opposto;
+  \item polisemia: più significati della stessa parola;
+  \item iponimia (e iperonimia): quando un significato rappresenta un sottoinsieme dell'altro (casa - costruzione);
+  \item associazione: più parole strettamente legate tra di loro.
+\end{itemize}
+Tuttavia esistono dei problemi: i sinonimi non sono mai perfettamente interscambiabili e l'iponimia (o iperonimia) sottintendono molte sfumature.
+
+WordNet è un vasto database lessicale sviluppato dagli anni '90 che rappresenta i significati (o concetti) in una struttura ad albero.
+La polisemia è gestita definendo più entità diverse con lo stesso nome.
+Data una parola, si ha quindi un insieme finito di significati distinti tra di loro.
+
+\subsubsection{Tassonomia.}
+Si definisce un grafo di classificazione, generalmente con struttura ad albero.
+Le tassonomie sono strutture usate in informatica e nello specifico in Data Science, prese in prestito dalla biologia (per classificare le forme viventi), in cui tuttavia sono presenti dibattiti.
+Si usa una forma ad albero per facilitare la condivisione tra varie fonti.
+La valenza può anche non essere perfetta ma ha grande valenza in ambito scientifico ed economico.
+Il significato è spiegato in classi, superclassi e sottoclassi grazie al meccanismo dell'ereditarietà.
+È necessario specificare anche quale criterio usare per effettuare la divisione dell'albero.
+Si può anche effettuare una ripartizione dell'oggetto dividendolo nei sotto-oggetti specifici che lo compongono.
+
+\subsubsection{Ontologie assiomatiche.}
+Il significato è attribuito attraverso una serie di assiomi logici per specificare le definizioni dei termini utilizzati con riferimento alle implicazioni.
+Si definisce quindi un linguaggio $L$ di assiomi logici con una semantica formale che determina il significato in modo univoco.
+
+\subsection{Componenti di un'ontologia.}
+Definendo un oggetto, si hanno sempre delle implicazioni: sè necessario fare inferenza, ovvero si procede con un procedimento induttivo.
+Oltre all'induzione classica, esistono altre pratiche per fare inferenza.
+Le implicazioni, dal punto di vista inferenziale, fatte sulla base di ciò che è definito nel dizionario è la semantica reale delle informazioni.
+
 
 \newpage
 \end{multicols}
@@ -340,7 +396,7 @@ Verificare se Natalie Portman è nata negli Stati Uniti:
 \begin{verbatim}
   ASK
 WHERE {
-        dbr:Natalie_POrtman dbo:birthPlace ?city .
+        dbr:Natalie_Portman dbo:birthPlace ?city .
         ?city dbo:Country dbr:United_States .
       }
 \end{verbatim}
