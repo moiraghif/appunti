@@ -28,8 +28,8 @@
 
 \section{Errori eteroschedastici}
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
-In virtù del fatto che ogni errore $\varepsilon$ è a media nulla $E(\varepsilon) = 0$ vale la relazione $E(\varepsilon^2) = Var(\varepsilon) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
-Se ciò non accade gli errori si dicono eteroschedastici $Var(\varepsilon) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
+In virtù del fatto che ogni errore $\varepsilon$ è a media nulla $E(\varepsilon) = 0$ vale la relazione $E(\varepsilon^2)$ = Var$(\varepsilon) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
+Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
 Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
 Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono. 
 Per individuare questa caratteristica che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici).
@@ -45,14 +45,14 @@ Per quanto riguarda i grafici:
 \end{enumerate}
 Possiamo ricorrere anche ad alcuni test (metodo analitico):
 \begin{itemize}
-\item \textbf{Test di White}: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H0: Var(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H1: Var(\varepsilon_i ) = ( \sigma^2_i )$.
+\item \textbf{Test di White}: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H_0:$ Var$(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H_1:$ Var$(\varepsilon_i ) = ( \sigma^2_i )$.
 Il test sfrutta la regressione $OLS$ del quadrato dei residui $\varepsilon_i^2$ sui regressori $x_j$, i regressori al quadrato $x_j^2$ e le loro interazioni.
 Attraverso l'indice di determinazione $R^{2}$ di tale regressione, ricavato dal rapporto tra la variabilità spiegata dalla regressione ($SSE = \sum_{i}(\hat{y_i} - \bar{y})$) e la variabilità totale ($TSS = \sum_{i} (y_i - \bar{y})$), si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori. L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^{2}$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
 %@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
 
-\item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità (H0: Var($\varepsilon_i$) = ($\sigma^2$)).
+\item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità ($H_0$: Var($\varepsilon_i$) = ($\sigma^2$)).
 Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Il loro rapporto si distribuisce quindi come una $F$ di Snedecor. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 \end{itemize}
@@ -76,7 +76,7 @@ Per quanto riguarda i grafici:
 
 \textbf{Test di Durbin-Watson}: questo test si può effettuare per verificare la presenza autocorrelazione a diversi gradi. 
 Prendiamo in esame il test per il primo grado. Esso si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi \begin{equation*}
-H0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
+H_0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
 \end{equation*}
 contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \begin{enumerate}[noitemsep]
@@ -206,49 +206,131 @@ Esistono tre modelli principali:
 
 \section{Non normalità}
 
-Quando gli errori $e_i$ sono indipendenti e identicamente distribuiti come $N(0,\sigma^{2})$ si possono ricavare la distribuzione degli stimatori, i test statistici, gli intervalli di confidenza e le proprietà ottimali (stima di massima verosimiglianza coincide con stima dei minimi quadrati). 
-Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il teorema del limite centrale la distribuzione degli errori tende asintoticamente alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
+Quando gli errori $e_i$ sono indipendenti e identicamente distribuiti come $N(0,\sigma^{2})$ si possono ricavare la distribuzione degli stimatori, i test statistici, gli intervalli di confidenza e le proprietà ottimali (stima di massima verosimiglianza $ML$ coincide con stima dei minimi quadrati $OLS$). 
+Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il \textbf{teorema del limite centrale} la distribuzione degli errori tende \textit{asintoticamente} alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
 %till here @Dario
 
 Conseguenze della violazione della normalità:
 \begin{enumerate}[noitemsep]
-\item I parametri b possono essere espressi come combinazione lineare degli errori, per cui se gli errori non sono normali anch’essi non sono più normali
-\item Non è più possibile ricavare test basati sulla normale standardizzata
-\item Non è più possibile ricavare intervalli di confidenza per i parametri basati sulla normale standardizzata
-\item Le stime OLS non coincidono con le stime ML ottenute attraverso il metodo della massima verosimiglianza, quindi gli stimatori OLS non sono più gli stimatori corretti a minima varianza fra tutti gli stimatori corretti e quindi non sono più BLUE
+\item I parametri $\beta$ possono essere espressi come combinazione lineare degli errori, per cui se gli errori non sono normali anch’essi non sono più normali.
+\item Non è più possibile ricavare test basati sulla normale standardizzata.
+\item Non è più possibile ricavare intervalli di confidenza per i parametri basati sulla normale standardizzata.
+\item Le stime OLS non coincidono con le stime ML ottenute attraverso il metodo della massima verosimiglianza, quindi gli stimatori OLS non sono più gli stimatori corretti a minima varianza \textit{fra tutti gli stimatori corretti} e quindi non sono più \textbf{VUE}. Il fatto che le stime ML ed OLS non coincidano più rende meno affidabili le stime attraverso software statistici, che comunemente effettuano la stima attraverso il metodo della massima verosimiglianza. Nonostante gli stimatori OLS non siano più \textbf{VUE}, conservano le proprietà di correttezza, consistenza ed efficienza condizionatamente ai dati. Essendo i dati affetti da un bias sulla distribuzione dei residui $\varepsilon$ anche le stime OLS erediteranno tale bias ma, proprio in virtù di ciò, possono essere ancora considerati gli stimatori a minima varianza \textit{tra tutti gli stimatori lineari} e perciò sono considerati \textbf{BLUE}.
 \end{enumerate}
-Per individuare casi di non normalità è opportuno osservare indici quali media, mediana, varianza, simmetria e curtosi. Come rappresentazioni grafiche proposte abbiamo i box-plot, distribuzione dei residui, distribuzione cumulata dei residui, p-p plot (confronta i valori attesi associati alle probabilità cumulate dei residui campionari con i valori attesi associati alle corrispondenti probabilità cumulate teoriche della distribuzione normale) e q-q plot (confronta la distribuzione empirica di una variabile con una distribuzione normale). 
-Esistono inoltre alcuni test non parametrici che non si basano su ipotesi sulla distribuzione. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
+Per individuare casi di non normalità è opportuno:
+\begin{itemize}[noitemsep]
+\item Osservare indici descrittivi.
+\item Effettuare rappresentazioni grafiche.
+\item Effettuare test non parametrici (ovvero realizzati con lo scopo di testare la distribuzione del parametro sotto osservazione).
+\end{itemize}
+Tra gli indici descrittivi possiamo, in prima istanza, osservare indicatori quali moda, media e mediana. Banalmente quando queste corrispondono possiamo affermare che la distribuzione dei residui $\varepsilon$ è normale. Questi indicatori sono anche visualizzabili in maniera diretta utilizzando un box-plot.
+
+Tra la rappresentazioni grafiche utili rientrano:
+\begin{itemize}[noitemsep]
+\item Plot della distribuzione dei residui, per cui se la media risulta maggiore della mediana allora sarà possibile visualizzare una distribuzione caratterizzata da asimmetria \textit{positiva}(a destra), mentre in caso di media inferiore alla mediana sarà possibile visualizzare una distribuzione affetta da asimmetria \textit{negativa}(a sinistra).
+\item Plot della distribuzione cumulata dei residui, che è possibile ispezionare alla ricerca di evidenti irregolarità.
+\item P-P plot che mette a confronto la distribuzione cumulata dei residui (sulle ascisse) con la distribuzione cumulata della normale (sulle ordinate). Il risultato di ciò è che in caso di distribuzione normale allora i punti si distribuiranno in modo ordinato lungo la \textit{bisettrice}. 
+\item Q-Q plot, molto simile al precedente, mette a confronto i quantili della distribuzione normale (sulle ascisse) con i residui $\varepsilon$ (sulle ordinate). Anche in questo caso la distribuzione dei punti lungo la \textit{bisettrice} indica il soddisfacimento dell'assunzione di normalità dei residui. La diversa forma assunta dai punti sulla bisettrice può inoltre indicare una distribuzione leptocurtica, platicurtica oppure asimmetrica (a destra o a sinistra a seconda della forma assunta).
+\end{itemize}
+Esistono infine alcuni test non parametrici che non si basano su ipotesi sulla distribuzione. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
 \begin{enumerate}[noitemsep]
-\item Test di Shapiro-Wilk, è compreso tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità
-\item Test di Kolmogorov Smirnov, in cui l’ipotesi nulla è la normalità
-\item Skewness test (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando H0 si rigetta la normalità, non rigettandola si dice solo che la distribuzione è simmetrica, ma non per forza normale
-\item Test della Kurtosis (come per la simmetria, solo che si utilizza il momento quarto al posto del momento terzo)
+\item \textbf{Test di Shapiro-Wilk}, che assume valori compresi tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità. Il test parte dell'ipotesi $H_0$ : $\varepsilon\sim N(0,\sigma^2)$. In ogni caso, il test $W$ essendo caratterizzato da una forte asimmetria  potrebbe comunque portare ad un rifiuto dell'ipotesi di normalità.
+\[
+W = \frac{(\sum_i \beta_i \varepsilon_i)^2}{\sum_i 			\varepsilon_i^2}
+\]
+\item \textbf{Test di Kolmogorov Smirnov}, in cui $H_0$ : $\varepsilon\sim N(0,\sigma^2)$ e si basa sul calcolo della statistica test $D$ come la somma in valore assoluto della differenza tra le frequenze cumulative della distribuzione empirica da testare e quelle della normale. $D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata) ed in caso di superamento del valore critico in base al livello di significativà scelto comporterà il rifiuto di $H_0$.
+\item \textbf{Skewness test} (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando $H_0$ si rigetta la normalità, non rigettandola si dice solo che la distribuzione è simmetrica, ma non per forza normale.
+\[
+S = \frac{(E[X-\mu]^3)^2}{(E[X-\mu]^2)^3}
+\]
+Quando l'ipotesi di normalità è rispettata allora $E(S) = 0$.
+\item \textbf{Test della Kurtosis}, simile nella forma a quello per l'asimmetria
+\[
+K = \frac{E(X-\mu)^4}{(E[X-\mu]^2)^2}
+\]
+Sotto l'ipotesi di normalità $E(K-3) = 0$, poichè la curtosi della normale è appunto uguale a 3.
 \end{enumerate}
-I problemi di non normalità possono essere risolti usando una trasformazione della variabile Y. La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
+I problemi di non normalità possono essere risolti usando una \textit{trasformazione} della variabile $Y$. La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
+
+Tra le trasformazioni disponibili vi sono:
+
+\begin{itemize}[noitemsep]
+\item \textit{log(Y)} quando $S_\varepsilon$ cresce con $y$ o quando la distribuzione dell'errore ha asimmetria \textit{positiva}.
+\item \textit{$Y^2$} quando $S_\varepsilon$ è proporzionale a $E(y)$ o quando la distribuzione dell'errore ha asimmetria \textit{negativa}.
+\item \textit{$\sqrt{Y}$} quando $S_\varepsilon$ è proporzionale a $E(y)$.
+\item \textit{$Y^{-1}$} quando $S_\varepsilon$ cresce significativamente al crescere di $y$.
+\end{itemize}
 
 \section{Outlier}
-
+I valori cosiddetti \textbf{outlier} possono essere distinti in:
 \begin{enumerate}[noitemsep]
-\item Valori anomali (outlier): valori che si discostano in modo rilevante dall’andamento generale.
+\item Valori anomali: valori che si discostano in modo rilevante dall’andamento generale.
 \item Punti influenti: punti che influenzano in misura rilevante le stime.
 \end{enumerate}
 Non sempre un valore anomalo è anche influente; per contro esistono punti non anomali che influiscono in misura rilevante sul risultato.
 
 Come identificare gli outlier:
 \begin{itemize}[noitemsep]
-\item Rappresentazione grafica con Boxplot e Scatter plot.
+\item Rappresentazioni grafiche per mezzo di box-plot e scatter-plot.
 \item Indicatori
-	\begin{itemize}[noitemsep]
-	\item Leverage: serve a verificare l’impatto che un caso specifico ha sulla capacità del modello di predire tutti i casi. Valori piccoli indicano che lo stimatore (b) di Y è basato sul contributo di molte osservazioni, mentre valori vicini a 1 indicano il contrario.
-	\item Residui standardizzati: nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
-	\item Residui studentizzati: sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità.
-	\item Covariatio: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione.
-	\item Dfitts: misura l’influenza di quel caso sulla stima dei coefficienti di regressione e sulla loro varianza, quando rimosso dal processo di stima. Male valori elevati.
-	\item Dfbetas: misura l’influenza di quel caso, quando viene rimosso dal processo di stima, sulle stime di ogni coefficiente di regressione separatamente. Male valori elevati.
-	\item Distanza di Cook: misura l’influenza di un singolo caso sulla stima dei coefficienti di regressione, in termini di capacità del modello di predire tutti i casi quando il singolo caso viene rimosso dal processo di stima. Valori superiori a 1 indicano che il punto è influente.
-	\end{itemize}
 \end{itemize}
+Tra questi \textbf{indicatori} è possibile distinguere tra:
+\begin{enumerate}
+\item \textbf{Leverage values}: Definendo $H = X(X'X)^{-1}X'$ come la matrice di proiezione, l'elemento $h_{ii}$ sulla diagonale è definito come il leverage che verifica l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
+
+Definendo inoltre
+\begin{equation*}
+\frac{(k-1)}{n}
+\end{equation*}
+il valore medio del leverage con k = $n^\circ$ variabili esplicative ed n = $n^\circ$ osservazioni. In conseguenza di ciò il valore soglia che individua osservazioni potenzialmente anomale con un'eccessiva influenza sulla stima complessiva di tutte le osservazioni è individuato in
+\begin{equation*}
+h_{ii} > \frac{2(k-1)}{n}
+\end{equation*}
+\item \textbf{Residui standardizzati}: Assumendo per i residui $\varepsilon$
+\[
+\varepsilon = (I-H)y
+\]
+allora è possibile giungere alla varianza esplicitata come
+\[
+Var(\varepsilon_i) = (1-h_{ii})\sigma^2
+\]
+Come conseguenza di ciò i residui \textit{standardizzati} sono definiti come
+\[
+\varepsilon_i^* = \frac{\varepsilon_i}{\sigma \sqrt{(1-h_{ii})}}
+\]
+In un campione distribuito normalmente il 95\% dei valori dei residui standradizzati $\varepsilon_i^*$ dovrebbe assumere valori compresi tra -2 e +2 mentre il 99\% dovrebbe assumere valori compresi tra -2.5 e +2.5; nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
+\item \textbf{Residui studentizzati}: è la versione dei residui standardizzati ma relativamente al campione.
+Di conseguenza le forme analitiche saranno le medesime facendo però riferimento non alla varianza $\sigma^2$ ma alla varianza campionaria $s^2$.
+\[
+\varepsilon_i^* = \frac{\varepsilon_i}{s_{\varepsilon i} \sqrt{(1-h_{ii})}}
+\]
+Sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità. La versione dei residui studentizzati cosiddetta \textit{jacknife} è ricavata calcolando il rapporto dei residui sulla deviazione standard dei residui ottenuta eliminando dal dataset l'$i$-esima osservazione, così per ogni residui studentizzato.
+\item \textbf{Covrati}: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione. 
+\[
+COVRATIO = \frac{(det(\sigma_i X_i'X_i^{-1}))}{det(\sigma^2(X_i'X_i)^{-1}))}
+\]
+Il valore di soglia è determinato da
+\[
+1\pm 3 \  \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\]
+\item \textbf{Dfitts}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, eliminandola dal dataset. Osservazioni con valori elevati di Dfitts sono da considerarsi punti di influenza.
+\[
+DFITTS = \frac{\hat{y} - \hat{y}_{(i)}}{S_{e(i)}\sqrt{h_{ii}}}
+\]
+con valore soglia
+\[
+\pm 2 \ \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\]
+\item \textbf{Dfbetas}: misura l’influenza dell'$i$-esima osservazione sulle stime di ogni coefficiente di regressione separatamente,eliminandola dal dataset. Ancora una volta valori elevati indicano che l'osservazione influisce molto sulla stima dei parametri.
+\[
+DFBETAS = \beta - \beta_{(i)} = X_{(i)}(X'X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
+\]
+con valore soglia $2$ oppure $2\sqrt{n}$ in caso si voglia tenere conto della numerosità delle osservazioni.
+\item \textbf{Distanza di Cook}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione \textit{nel loro complesso}, in termini di capacità del modello di predire tutti i casi quando la singola osservazione viene rimossa dal dataset. Valori superiori a 1 indicano che il punto è influente.
+\[
+D_i = \frac{(\beta - \beta_{(i)})(X'X)(\beta - \beta_{(i)})}{k\sigma_{(i)}^2}
+\]
+\end{enumerate}
 
 \section{Modello lineare classico multivariato}
 
