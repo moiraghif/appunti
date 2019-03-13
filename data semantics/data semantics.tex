@@ -25,41 +25,58 @@
 \maketitle
 \begin{multicols}{2}
 \begin{abstract}
-  \textit{Data Semantcs} si occupa di comprendere il significato dei dati, nella pratica della scrittura del programma.
-  È necessario prestare attenzione al significato dei dati nell'integrazione di più dataset; inoltre la semantica del dato è necessaria per la condivisione di dataset (cioè renderli fruibili da chi non ha prodotto il dataset).
-  Altro problema centrale è la capacità di usare dati non strutturati, in modo tale da facilitare query.
+  La \textit{Data Semantcs} si occupa di comprendere il significato dei dati durante la scrittura di un programma.
+  Nell'ambito dell'analisi è fondamentale nell'integrazione di più dataset e nella loro condivisione.
+  Altra problematica che la \textit{Data Semantics} si pone di risolvere è l'organizzazione di dati non strutturati in modo da facilitarne l'analisi.
   
-  Scopo del corso è strutturare dei modelli per la semantica dei dati in modo tale da facilitarne l'uso; inoltre si stabiliscono strategie per attribuire semantica ai dati.
-  Bisogna inoltre capire il ruolo della semantica nell'integrazione dei dati.
-  Il corso tratta della semantica dei dati nei \textit{big data}, dell'estrazione dello \textit{knowledge graphs} (ovvero le relazioni tra gli elementi di un database, \textit{data linkage}) o la costruzione di sistemi di raccomandazione.
-  Inoltre saranno analizzate alcune tecniche di \textit{natural language processing} e la costruzione di rappresentazioni a partire dai dati.
+  Scopo del corso è costruire dei modelli per attribuire valore semantico ai dati, in modo tale da facilitarne la fruizione; si tenta inoltre di capire il ruolo della semantica nell'integrazione dei dataset.
+  Le finalità del corso rientrano nell'ambito dei \textit{big data}, nella costruzione di \textit{knowledge graphs} (ovvero la costruzione di relazioni interne a un database) e la costruzione di sistemi di raccomandazione.
+  Saranno inoltre analizzate alcune tecniche di \textit{natural language processing} per costruire rappresentazioni a partire dai dati. \newline
+  Le esercitazioni si occuperanno di interrogare \textit{knowledge graphs} e integrare fonti di dati.
 
-  Le esercitazioni si occuperanno di interrogare \textit{knowledge graphs}, modellare e costruire grafi di conoscenza e integrare fonti di dati.
-
-  L'esame orale sarà accompagnato da un progetto software (effettuato in gruppo di, circa, 3 persone), di cui sarà fatta una presentazione orale; in alternativa al progetto è possibile scrivere un articolo di approfondimento su una tematica.
-  La preparazione sarà ``ragionevolmente'' dettagliata su tutti gli argomenti, e sarà approfondito l'argomento del progetto.
+  L'esame orale sarà accompagnato da un progetto software (effettuato in gruppo di - circa - 3 persone), di cui sarà fatta una presentazione orale; in alternativa al progetto è possibile scrivere un articolo di approfondimento su una tematica a scelta.
+  La preparazione dovrà essere ``ragionevolmente'' dettagliata su tutti gli argomenti, e particolarmente approfondita sull'argomento del progetto.
 \end{abstract}
+\vfill\null
+\columnbreak
 \tableofcontents
 
 \newpage
 % titolo provvisorio
 \part{Grafi di conoscenza}
 % non mi sembra molto coeso il discorso: correggere
-Il termine è coniato da Google per indicare uno strumento usato dal suo motore di ricerca.
-Il grafo permette di essere processato facilmente da una macchina e allo stesso tempo permette un livello di astrazione soddisfacente; si possono anche effettuare query come in un database a grafo.
-Il modello a grafo permette inoltre una facile integrazione di sorgenti diverse.
-La costruzione di grafi di conoscenza è spesso effettuata a mano da una moltitudine di utenti.
-Il modello \textit{Semantic Web} ha costruito linguaggi e strumenti, approvati dal W3C, per definire, interrogare e fare inferenza su grafi di conoscenza.
-Nel mondo reale tuttavia non sono usati questi linguaggi.
+Il termine è coniato da Google per indicare uno strumento usato dal suo motore di ricerca per fornire informazioni aggiuntive durante le ricerche.
+La struttura a grafo permette di essere processata facilmente da una macchina e allo stesso tempo garantisce un livello di astrazione soddisfacente; si possono anche effettuare query come in un database a grafo (Neo4j).
+Il modello a grafo permette inoltre una facile integrazione di sorgenti diverse rendendo naturali collegamenti e relazioni.
+Il web \textit{semantico} ha costruito linguaggi e strumenti, approvati dal W3C, per definire, interrogare e fare inferenza su grafi di conoscenza; tuttavia nel mondo reale questi strumenti non hanno largo utilizzo.
+La costruzione di grafi di conoscenza è spesso effettuata a mano da una moltitudine di utenti (chiedendo recensioni tramite \textit{app}).
 
 Internet produce enormi quantità di dati diversi tra di loro, usati spesso per altri fini: la semantica dei dati si occupa di integrare grandi quantità (\textit{data volume}) da diverse fonti di dati (\textit{data variety}).
-Questo permette la costruzione di intelligenze artificiali, ovvero di programmi che eseguono task tipicamente umani con risultati simili.
+Tali dati possono essere sfruttati nella costruzione di intelligenze artificiali, ovvero di programmi che eseguono task tipicamente umani con risultati simili.
+In particolare è così possibile effettuare compiti particolarmente ardui per un umano, come l'integrazione di serie storiche con fonti multiple appartenenti a domini vari o poco noti.
 
-Esistono grafi di conoscenza aperti, quali DBpedia, Yago o Wikidata; anche alcune aziende private sviluppano il proprio per facilitare la propria attività imprenditoriale.
+Esistono grafi di conoscenza \textit{open}, quali DBpedia, Yago o Wikidata, ma alcune aziende private sviluppano il proprio grafo per facilitare l'attività imprenditoriale.
 
-I dati possono essere \textit{strutturati} (tabelle ordinate), \textit{semi-strutturati} (tabelle annidate) o \textit{non strutturati} (testi).
 
-È impossibile effettuare a mano certi compiti particolarmente ardui, come l'integrazione di serie temporali con altri documenti riguardanti lo stesso tema, soprattutto con una scarsa conoscenza del dominio.
+\section{Spazio vettoriale.}
+In un grafo di conoscenza, query e documenti sono interpretabili come vettori: per calcolarne la similarità si usa la distanza coseno.
+\begin{align*}
+  sim(r, u) &= cos(\theta) \\
+            &= \frac{u q}{|u| |q|}
+  \end{align*}
+La rappresentazione vettoriale è alla base dell'analisi testuale.
+Si usa un sistema di pesi più sofisticato per valutare diversamente l'importanza di una parola all'interno di un documento.
+Una parola è tanto più importante nel documento quante più ricorrenze ci sono nel documento (in percentuale).
+\begin{align*}
+  tf_{i, j} &= \frac{n_{i,j}}{|d_j|} \\
+  idf_i &= \log{\frac{|D|}{|\{d : i \in d\}|}} \\
+  tfidf_{i, j} &= tf_{i, j} \times idf_i
+\end{align*}
+
+Le entità, le loro proprietà e i collegamenti tra di loro sono iscritti nel grafo di conoscenza.
+Esistono linguaggi formali, definiti a inizio '900, che permettono di dichiarare relazioni tra entità ma che non sono leggibili da una macchina.
+Inoltre si possono usare assiomi logici per definire le ricorrenze nel testo.
+
 
 \section{\textit{Linking Data}.}
 I dati sono spesso collegati in modo automatico grazie a programmi di apprendimento automatico.
@@ -72,28 +89,6 @@ Informazioni di tipo diverso hanno caratteristiche diverse: si produce un grafo 
 Le \textit{preview} dei contenuti sono generate chiedendo agli sviluppatori di inserire dei contenuti nel codice HTML che sono poi interpretati dal motore di ricerca.
 
 I chatbot sono costruiti con l'ausilio di reti neurali e rappresentazioni del mondo reale.
-
-Internet può essere interrogato
-
-\section{Spazio vettoriale.}
-Le query e i documenti sono interpretabili come vettori; per calcolare la similarità tra due vettori, si usa la distanza coseno.
-\begin{align*}
-  sim(r, u) &= cos(\theta) \\
-            &= \frac{u q}{|u| |q|} \\
-            &= \frac{}{}
-  \end{align*}
-La rappresentazione vettoriale è alla base dell'analisi testuale.
-Si usa un sistema di pesi più sofisticato per valutare diversamente l'importanza di una parola all'interno di un documento.
-Una parola è tanto più importante nel documento quante più ricorrenze ci sono nel documento (in percentuale).
-\begin{align*}
-  tf_{i, j} &= \frac{n_{i,j}}{|d_j|} \\
-  idf_i &= \log{\frac{|D|}{|\{d : i \in d\}|}} \\
-  tfidf_{i, j} &= tf_{i, j} \times idf_i
-\end{align*}
-
-Le entità, le loro proprietà e i collegamenti tra di loro sono iscritti nel grafo di conoscenza.
-Esistono linguaggi formali, definiti a inizio '900 che permettono di dichiarare relazioni tra entità, ma che non sono leggibili da una macchina.
-Inoltre si possono usare assiomi logici per definire le ricorrenze nel testo.
 
 
 \section{Standard.}
@@ -293,9 +288,11 @@ Il significato è attribuito attraverso una serie di assiomi logici per specific
 Si definisce quindi un linguaggio $L$ di assiomi logici con una semantica formale che determina il significato in modo univoco.
 
 \subsection{Componenti di un'ontologia.}
-Definendo un oggetto, si hanno sempre delle implicazioni: sè necessario fare inferenza, ovvero si procede con un procedimento induttivo.
+Definendo un oggetto, si hanno sempre delle implicazioni: è necessario fare inferenza, ovvero si procede con un procedimento induttivo.
 Oltre all'induzione classica, esistono altre pratiche per fare inferenza.
 Le implicazioni, dal punto di vista inferenziale, fatte sulla base di ciò che è definito nel dizionario è la semantica reale delle informazioni.
+
+
 
 
 \newpage
