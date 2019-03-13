@@ -1,7 +1,6 @@
 \documentclass[11pt, twocolumn]{article}
 
 \usepackage[english]{babel}
-%\usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
@@ -38,7 +37,7 @@
   A \textit{decision model} is a computer-based system that make predictions based on data and statistics; a decision model may also predict what happen when an action is taken.
   A model is used to aid decisio-making, simulating elements and variables related to a particular decision.
   To make decisions, the process have to be optimized according to the data, usually using linear programming techniques.
-  To \textit{analytics} is meant the discovery, interpretation and communication of patterns in the data, usually by a machine-learning program; can be descriptive, predictive or prescriptive.
+  To \textit{analytics} is meant the discovery, interpretation and communication of patterns in the data, usually by a machine-learning program; it can be descriptive, predictive or prescriptive.
   The prescriptive analysis is used in the ``what-if'' analysis and to determine what and how to do.
 
   The decision process concerns structured and familiar problems easy to solve with a clear goal, or programmed and repetitive tasks handeled with a routine approach.
@@ -46,8 +45,29 @@
 
 
 \newpage
-\part{Optimization}
-Optimization is used to select the size of a neural network model, according to training data.
-Often the optimization is done with different data (training-set) than data used by the model (test-set).
+\tableofcontents
 
+
+\newpage
+\part{Decision Analysis}
+A difficult and important task in a business is to make a decision in a uncertain environment, expecially when there are a lot of factors to taken into account.
+The \textit{risk attitude} can impact the decision, deleting some possible choices; it is a personal attitude, depending on the person and other factors.
+
+\section{Decision Trees.}
+It is not a model, it is a method for structuring and analyzing decisions in a systematic and rational way.
+A decision tree is not suited for classification or regression, but for complex decision problems.
+Optimization is not complex in this model (it is just an argmax function).
+The decision depends on the rate of sucess of options.
+
+A decision tree is built from a \textit{decision node} from which some branches are generated (one for option); a branch is split at \textit{chance nodes} that rappresent an outcome.
+At the end \textit{end nodes} rappresent the earnings of the path.
+
+\subsection{Expected Value.}
+In order to decide between two options, the distribution of probability and earnings for each scenario have to be known.
+The \textit{Expected Value} criteria is applied to give a value to the outcomes: it is just the mean of the profits weithed by their probability.
+\begin{equation*}
+  EV (x) = \sum_x^{\text{outcomes}}\text{profit}(x) \cdot p(x)
+\end{equation*}
+Just direct outcomes (the ones descending directly by the decision node) are considered: other chance nodes must be evaluated recoursively.
+At the end, the best strategy is the option with the highter profit.
 \end{document}
