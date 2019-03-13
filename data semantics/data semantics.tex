@@ -40,6 +40,8 @@
 \vfill\null
 \columnbreak
 \tableofcontents
+\vfill\null
+\columnbreak
 
 \newpage
 % titolo provvisorio
@@ -95,9 +97,9 @@ I chatbot sono costruiti con l'ausilio di reti neurali e rappresentazioni del mo
 RDF (\textit{Resource Des...}) è lo standard per il web semantico, ovvero per l'internet elaborabile dalle macchine.
 L'unità base per rappresentare l'informazione è rappresentata da triple (affermazioni), ovvero grafi etichettati, identificati da URI (\textit{unique resource identifier}).
 Esempi di triple sono:
+\end{multicols}
 \begin{verbatim}
-<Electric Piano, label,
-                    "Electric Piano"@en>
+<Electric Piano, label, "Electric Piano"@en>
 <Elton John, instrument, Electric Piano>
 <Sails, artist, Elton John>
 \end{verbatim}
@@ -111,7 +113,7 @@ Le triple sono rappresentabili come un grafo diretto, aciclico ed etichettato:
     \
      [label]- "Electric Piano"@en
 \end{verbatim}
-
+\begin{multicols}{2}
 Alle triple si applicano degli identificativi globali (una sorta di chiave primaria SQL): si usano generalmente identificativi web (abbreviati), che specificano come recuperare l'informazione (qualsiasi cosa a cui si può attribuire un valore costante è definibile come URI).
 Tutti gli URI sono risorse, e rappresentano l'ontologia del dominio.
 
@@ -155,11 +157,9 @@ Introdotto come linguaggio per interrogare \textit{linked data}, è un linguaggi
 \end{itemize}
 Permette di interrogare (query), modificare (update) e integrare (federated) database composti da triple.
 Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più elementi di una tripla con una variabile.
-
+\end{multicols}
 \begin{verbatim}
-dbpedia:The_Beatles foaf:name
-                  "The Beatles" .
-
+dbpedia:The_Beatles foaf:name "The Beatles" .
 dbpedia:The_Beatles foad:name ?album .
 ?album mo:track ?track .
 ?album ?p ?o .
@@ -167,34 +167,33 @@ dbpedia:The_Beatles foad:name ?album .
 % musicbrainz.org
 
 Si possono così costruire query strutturate grazie al concetto di \textit{pattern match}: si definisce un sotto-grafo in cui fare interrogazioni più sofisticate.
-
 \begin{verbatim}
 # prologo: si definiscono le fonti
-PREFIX dbpedia:
-          <http://dbpedia.org/resource/>
+PREFIX dbpedia:<http://dbpedia.org/resource/>
 PREFIX foaf:<http://xmlns.com/foaf/0.1/>
 ...
 
 # query di tipo SELECT
 # ASK | SELECT | DESCRIBE | CONSTRUCT
-SELECT ?album
-FROM <http://musicbrainz.org/20130302/>
-WHERE {
-  # il cuore della query:
-  # il titolo di tutte le tracce degli
-  # album dei Beatles
-  dbpedia:The_Beatles foaf:made ?album .
-  ?album a mo:Record ; dc:title ?title
-}
+  SELECT ?album
+    FROM <http://musicbrainz.org/20130302/>
+   WHERE {
+           # il cuore della query:
+           # il titolo di tutte le tracce degli album dei Beatles
+           dbpedia:The_Beatles foaf:made ?album .
+           ?album              a         mo:Record  .
+           dc:title ?title .
+         }
 ORDER BY ?title
 \end{verbatim}
 
 \verb|ASK| ritorna \verb|true|/\verb|false| se esiste una soluzione alla query:
 \begin{verbatim}
-ASK WHERE {
-  dbpedia:The_Beatles mo:member
-      dbpedia:Paul_McCartney .
-}
+  ASK
+WHERE {
+        dbpedia:The_Beatles mo:member .
+        dbpedia:Paul_McCartney .
+      }
 
 => true
 \end{verbatim}
@@ -203,35 +202,32 @@ ASK WHERE {
 \begin{verbatim}
 SELECT ?album_name ?track_title
        ?date       ?album       .
-WHERE {
-  # tutti gli album dei Beatles
-  dbpedia:The_Beatles foaf:name
-                         ?album .
-  ?album dc:title ?album ;
-         mo:track ?track .
-  # tutte le tracce degli album
-  ?track dc:title ?track_title ;
-         mo:duration ?duration ;
-  # filtra per durata
-  FILTER (?duration > 300000 &&
-          ?duration < 400000)
-}
+ WHERE {
+         dbpedia:The_Beatles foaf:name ?album .               # tutti gli album
+                                                              # dei Beatles
+         ?album              dc:title  ?album .
+         mo:track ?track .                                    # tutte le tracce
+                                                              # degli album
+         ?track              dc:title  ?track_title .
+         mo:duration ?duration .
+         FILTER (?duration > 300000 && ?duration < 400000)    # filtra per durata
+       }
 \end{verbatim}
 
 \verb|CONSTRUCT| è simile a \verb|SELECT| ma ritorna un grafo e non una lista:
 \begin{verbatim}
 CONSTRUCT {
-  # riscrive con nuova terminologia
-  ?album dc:creator
-              dbpedia:The_Beatles
-} WHERE {
-  # esegue la query
-  dbpedia:The_Beatles foaf:made
-                         ?album .
-  ?album mo:track ?track .
-}
+            # riscrive con nuova terminologia
+            ?album dc:creator dbpedia:The_Beatles
+          }
+    WHERE {
+            # esegue la query
+            dbpedia:The_Beatles foaf:made   ?album .
+            ?album              mo:track    ?track .
+          }
 \end{verbatim}
-
+\begin{multicols}{2}
+  
 Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query.
 
 I dataset sono integrati grazie a predicati (\verb|same|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
@@ -254,10 +250,9 @@ Si possono unire più vocabolari grazie a collegamenti, a livello di istanza o d
 Un computer ha bisogno di definire un sistema per attribuire un significato al significante.
 Si possono definire tre\footnote{Esiste un quarto metodo che sarà approfondito più avanti.} sistemi per definire un'ontologia, ovvero un sistema per definire gli oggetti esistenti.
 
-\subsection{Tipi di ontologie.}
 L'uso di sistemi diversi rende complicata l'integrazione di più fonti.
 
-\subsubsection{Tesauri.}
+\subsection{Tesauri.}
 Si definisce un dizionario di entità linguistiche, composto dalle parole proprie della lingua e da un numero fisso di relazioni tra di loro.
 Generalmente definisce sostantivi (semplici o composti), aggettivi e verbi.
 Le relazioni lessicali sono:
@@ -274,7 +269,7 @@ WordNet è un vasto database lessicale sviluppato dagli anni '90 che rappresenta
 La polisemia è gestita definendo più entità diverse con lo stesso nome.
 Data una parola, si ha quindi un insieme finito di significati distinti tra di loro.
 
-\subsubsection{Tassonomia.}
+\subsection{Tassonomia.}
 Si definisce un grafo di classificazione, generalmente con struttura ad albero.
 Le tassonomie sono strutture usate in informatica e nello specifico in Data Science, prese in prestito dalla biologia (per classificare le forme viventi), in cui tuttavia sono presenti dibattiti.
 Si usa una forma ad albero per facilitare la condivisione tra varie fonti.
@@ -283,16 +278,65 @@ Il significato è spiegato in classi, superclassi e sottoclassi grazie al meccan
 È necessario specificare anche quale criterio usare per effettuare la divisione dell'albero.
 Si può anche effettuare una ripartizione dell'oggetto dividendolo nei sotto-oggetti specifici che lo compongono.
 
-\subsubsection{Ontologie assiomatiche.}
+\subsection{Ontologie assiomatiche.}
 Il significato è attribuito attraverso una serie di assiomi logici per specificare le definizioni dei termini utilizzati con riferimento alle implicazioni.
 Si definisce quindi un linguaggio $L$ di assiomi logici con una semantica formale che determina il significato in modo univoco.
 
-\subsection{Componenti di un'ontologia.}
-Definendo un oggetto, si hanno sempre delle implicazioni: è necessario fare inferenza, ovvero si procede con un procedimento induttivo.
+\section{Inferenza nell'ontologia.}
+Definendo un oggetto, si hanno sempre delle implicazioni: è necessario fare inferenza, ovvero si procede con un procedimento deduttivo.
+Dal principio dell'informatica, l'uso della logica (proposizionale e del primo ordine) permette la deduzione da parte di calcolatori.
 Oltre all'induzione classica, esistono altre pratiche per fare inferenza.
-Le implicazioni, dal punto di vista inferenziale, fatte sulla base di ciò che è definito nel dizionario è la semantica reale delle informazioni.
+Le implicazioni fatte sulla base di ciò che è definito nel dizionario, dal punto di vista inferenziale, sono la semantica reale delle informazioni.
+L'inferenza ha come obiettivi di ridurre la complessità del sistema trovando un modo per ottenere informazioni velocemente e per aumentare la flessibilità dello schema per poter essere aggiornato in tempo reale con le modifiche dell'ambiente.
 
+\subsection{Schema dell'ontologia.}
+Lo schema prescrive come deve essere organizzato il dato per entrare nel database; tuttavia i dati sono flessibili per loro natura, dunque l'operazione non è immediata.
+È necessario definire uno schema per dare una struttura ai dati: non è lecito usare nell'approccio semantico un database NoSQL troppo flessibile.
+Rispetto all'approccio relazionale, lo schema semantico è troppo flessibile: SQL non permette di modificare la struttura una volta dichiarata.
+Si procede dunque con un approccio \textit{deduttivo} (\textit{validazione indiretta}): anzichè specificare qual è la struttura del dato, si modifica lo schema al bisogno.
+Lo schema quindi è flessibile e disaccoppia lo schema dai dati (ovvero lo schema può essere modificato successivamente).
 
+Potendo esserci contraddizione nei dati, si sono costruiti linguaggi come RDF Schapes (SHACL) che permettono una validazione dei dati.
+
+\subsection{\textit{Reasoning}.}
+I linguaggi RDFS e OWL permettono l'operazione di \textit{reasoning}.
+OWL è costruito su RDFS, aggiungendo però funzionalità aggiuntive.
+% il prof sembra che faccia rap col braccio e il microfono
+Oltre ad avere sistemi deduttivi, la logica proposizionale garantisce che l'algoritmo termini (è cioè \textit{decidibile}, ovvero date le premesse è sempre possibile stabilire se una Formula Ben Formata FBF è vera o meno), mentre la logica del primo ordine è semi-decidibile.
+Anche con una procedura che termina e confermi la verità di una formula però non è utile in pratica: il tempo impiegato potrebbe essere particolarmente lungo e quindi rendere inutile il programma.
+In caso di linguaggi non decidibili, bisogna semplificare il linguaggio per trovare un compromesso tra tempo impiegato ed espressività: ci sono più linguaggi perchè il compromesso è trovato in modo diverso.
+Inoltre esistono altri linguaggi \textit{a regole} utilizzabili per fare deduzioni su RDF.
+
+\subsubsection{RDF Schema.}
+RDFS costruisce un \textit{reticolo} che parte da un nodo e garantisce ereditarietà (anche multipla) delle classi: è costruito un \textit{ordine parziale}.
+RDFS introduce implicazioni sul tipo di dato: si introduce un approccio secondo cui il mondo è composto da \textit{classi} e \textit{individui}; quindi si hanno insiemi ed elementi degli insiemi.
+Una classe è composta da individui, i quali tramite \textit{proprietà} entrano in relazione tra di loro.
+Questo approccio è coerente con il modello relazionale, e caratterizza in modo molto forte la semantica dei dati strutturati.
+Il concetto di classe vincola l'uso del tipo: una classe non può essere del tipo di un'altra.
+
+I letterali sono divisi esplicitamente dagli uri.
+
+Con RDFS si possono rappresentare e vincolare relazioni tra classi, organizzandole in gerarchie: si organizzano così tassonomie che garantiscono nativamente inferenze semplici (con proprietà transitiva).
+Anche le proprietà possono essere organizzate gerarchicamente, con proprietà che derivano da altre (\verb|figlioDi| è sotto-proprietà di \verb|parenteDi|).
+
+La semantica dei predicati è definita da regole, che determinano l'ereditarietà (classi derivate), la transitività di classi e relazioni e simili.
+
+I predicati \verb|rdfs:domain| e \verb|rdfs:range| indicano che tutti gli oggetti di una classe appartengono anche a un'altra classe.
+Questi due predicati non sono usati in \url{schema.org} perché troppo rigidi.
+
+Lo schema non può dedurre contraddizioni, dunque
+
+\subsubsection{SPARQL 1.1.}
+La versione $1.1$ introduce gli \textit{Entailment Regimes}: procedure che calcolano tutte le implicazioni degli assiomi; uno dei sistemi più noti è Virtuoso.
+
+\subsubsection{OWL.}
+È un motore inferenziale composto da più sotto-linguaggi, con l'obiettivo di ridurre la confusione lasciata da RDFS.
+OWL2 è diviso in tre progetti:
+\begin{itemize}
+  \item OWL 2 EL: limitato a classificazioni di base, ma la complessità è polinomiale;
+  \item OWL 2 QL: usa una sintassi simile a SQL;
+  \item OWL 2 RL: è usato per implementare efficientemente in sistemi \textit{rule-based}.
+\end{itemize}
 
 
 \newpage
