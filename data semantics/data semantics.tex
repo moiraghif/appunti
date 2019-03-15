@@ -94,8 +94,8 @@ I chatbot sono costruiti con l'ausilio di reti neurali e rappresentazioni del mo
 
 
 \section{Standard.}
-RDF (\textit{Resource Des...}) è lo standard per il web semantico, ovvero per l'internet elaborabile dalle macchine.
-L'unità base per rappresentare l'informazione è rappresentata da triple (affermazioni), ovvero grafi etichettati, identificati da URI (\textit{unique resource identifier}).
+RDF (\textit{Resource Description Framework}) è lo standard per il web semantico, ovvero per l'internet elaborabile dalle macchine.
+L'unità base per rappresentare l'informazione è rappresentata da triple (affermazioni), ovvero grafi etichettati, identificati da URI (\textit{Unique Resource Identifier}).
 Esempi di triple sono:
 \end{multicols}
 \begin{verbatim}
@@ -114,12 +114,12 @@ Le triple sono rappresentabili come un grafo diretto, aciclico ed etichettato:
      [label]- "Electric Piano"@en
 \end{verbatim}
 \begin{multicols}{2}
-Alle triple si applicano degli identificativi globali (una sorta di chiave primaria SQL): si usano generalmente identificativi web (abbreviati), che specificano come recuperare l'informazione (qualsiasi cosa a cui si può attribuire un valore costante è definibile come URI).
+Alle triple si applicano degli identificativi globali (una sorta di chiave primaria SQL, gli URI, appunto): si usano generalmente identificativi web (abbreviati, detti prefissi), che specificano come recuperare l'informazione (qualsiasi cosa a cui si può attribuire un valore costante è definibile come URI).
 Tutti gli URI sono risorse, e rappresentano l'ontologia del dominio.
 
-Le triple sono strutturate con un soggetto, un predicato e un oggetto.
-Il soggetto è composto da un URI o da un \textit{black node} (ovvero costanti), il predicato da un URI, un \textit{black node} o da un letterale, a cui può essere attribuito un tipo (stringhe, stringhe, date o booleani) per permettere operazioni.
-I \textit{black node} sono nodi anonimi per consentire una buona costruzione del grafo.
+Le triple sono strutturate con un \textbf{soggetto}, un \textbf{predicato} e un \textbf{oggetto}.
+Il soggetto è composto da un URI o da un \textit{blank node} (ovvero costanti \textit{locali}), il predicato può essere composto solo da un URI mentre gli oggetti possono essere URI, \textit{blank nodes} oppure letterali, che possono essere \textit{plain literal}, ovvero letterali puri, oppure \textit{typed literal}, a cui è attribuito un tipo (stringhe, date o booleani) per permettere operazioni.
+I \textit{blank node} sono nodi anonimi per consentire una buona costruzione del grafo.
 
 \subsection{Pubblicazione.}
 I \textit{linked data} riassumono delle pratiche per pubblicare e unire dati provenienti dal web:
@@ -139,7 +139,7 @@ L'approccio è tornato in auge grazie ai \textit{crawler} dei motori di ricerca,
 Non tutti i formati sono compatibili con RDF (Microdata e hCard non lo sono) mentre altri sì (RDFa, JSON-LD); nonostante questo non ci sono differenze significative tra i vari formati (il modello è il medesimo).
 
 hCard e vCard sono basati su HTML, ponendo delle convenzioni su come gestire le informazioni. \newline
-I microdati usano tag speciali introdotti in HTML5 per definire \textit{itemscope}, \textit{itemtype} e \textit{itempropriety}: si definisce (\textit{itemscope}) un oggetto di un certo tipo (\textit{itemtype}) con determinate proprietà (\textit{itemprop}), che in RDF si inseriscono tramite \textit{black node}.
+I microdati usano tag speciali introdotti in HTML5 per definire \textit{itemscope}, \textit{itemtype} e \textit{itempropriety}: si definisce (\textit{itemscope}) un oggetto di un certo tipo (\textit{itemtype}) con determinate proprietà (\textit{itemprop}), che in RDF si inseriscono tramite \textit{blank node}.
 I microdati sono parti di codice integrate dentro al testo, visualizzabili solamente nel codice sorgente.
 Si usano dei tipi definiti da vocabolari\footnote{\url{https://schema.org/} è un dizionario che definisce in modo non eccessivamente prescrittivo oggetti e proprietà.}, utilizzabili anche in RDF, adottati come standard. \newline
 RDFa specifica all'inizio il vocabolario adottato, mentre il codice rimane scritto in HTML. \newline
@@ -160,7 +160,7 @@ Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più
 \end{multicols}
 \begin{verbatim}
 dbpedia:The_Beatles foaf:name "The Beatles" .
-dbpedia:The_Beatles foad:name ?album .
+dbpedia:The_Beatles foaf:name ?album .
 ?album mo:track ?track .
 ?album ?p ?o .
 \end{verbatim}
@@ -230,7 +230,7 @@ CONSTRUCT {
   
 Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query.
 
-I dataset sono integrati grazie a predicati (\verb|same|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
+I dataset sono integrati grazie a predicati (\verb|same as|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
 SPARQL 1.1 permette di integrare un sistema di ragionamento automatico per l'uguaglianza delle entità (introduce il concetto di \textit{entailment}).
 
 \section{Vocabolari (o ontologie).}
@@ -241,7 +241,7 @@ Si definiscono quindi ontologie comuni sfruttabili da più \textit{data provider
 
 Per definire un vocabolario si definiscono prima le classi (ovvero i tipi di dato) con proprietà, eventualmente diverse (ovvero usando certe proprietà solo su certe classi).
 
-Uno dei vocabolari più importanti (perché introdotto da tempo) è FOAF (\textit{Friend of a Friend}); si ricordano anche DC (\textit{Dublin Core}), che specifica una serie di predicati per rappresentare i documenti, e SKOS (\textit{Simple Knowledge Organizatin System}).
+Uno dei vocabolari più importanti (perché introdotto da tempo) è FOAF (\textit{Friend of a Friend}); si ricordano anche DC (\textit{Dublin Core}), che specifica una serie di predicati per rappresentare i documenti, e SKOS (\textit{Simple Knowledge Organizating System}).
 Più vocabolari possono riferirsi allo stesso oggetto e per definizione non è lecito unificare i vocabolari in quanto dovrebbero adattarsi alla specificità del dominio.
 Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \url{schema.org}, molto utilizzato nel web e in continua evoluzione.
 Nel caso siano insufficienti, è opportuno espandere un dizionario già esistente piuttosto che crearne uno nuovo dal nulla.
@@ -292,7 +292,7 @@ L'inferenza ha come obiettivi di ridurre la complessità del sistema trovando un
 \subsection{Schema dell'ontologia.}
 Lo schema prescrive come deve essere organizzato il dato per entrare nel database; tuttavia i dati sono flessibili per loro natura, dunque l'operazione non è immediata.
 È necessario definire uno schema per dare una struttura ai dati: non è lecito usare nell'approccio semantico un database NoSQL troppo flessibile.
-Rispetto all'approccio relazionale, lo schema semantico è troppo flessibile: SQL non permette di modificare la struttura una volta dichiarata.
+Rispetto all'approccio relazionale, lo schema semantico è più flessibile: SQL non permette di modificare la struttura una volta dichiarata.
 Si procede dunque con un approccio \textit{deduttivo} (\textit{validazione indiretta}): anzichè specificare qual è la struttura del dato, si modifica lo schema al bisogno.
 Lo schema quindi è flessibile e disaccoppia lo schema dai dati (ovvero lo schema può essere modificato successivamente).
 
@@ -314,7 +314,7 @@ Una classe è composta da individui, i quali tramite \textit{proprietà} entrano
 Questo approccio è coerente con il modello relazionale, e caratterizza in modo molto forte la semantica dei dati strutturati.
 Il concetto di classe vincola l'uso del tipo: una classe non può essere del tipo di un'altra.
 
-I letterali sono divisi esplicitamente dagli uri.
+I letterali sono divisi esplicitamente dagli URI.
 
 Con RDFS si possono rappresentare e vincolare relazioni tra classi, organizzandole in gerarchie: si organizzano così tassonomie che garantiscono nativamente inferenze semplici (con proprietà transitiva).
 Anche le proprietà possono essere organizzate gerarchicamente, con proprietà che derivano da altre (\verb|figlioDi| è sotto-proprietà di \verb|parenteDi|).
@@ -324,7 +324,7 @@ La semantica dei predicati è definita da regole, che determinano l'ereditariet�
 I predicati \verb|rdfs:domain| e \verb|rdfs:range| indicano che tutti gli oggetti di una classe appartengono anche a un'altra classe.
 Questi due predicati non sono usati in \url{schema.org} perché troppo rigidi.
 
-Lo schema non può dedurre contraddizioni, dunque
+Lo schema non può dedurre contraddizioni, dunque.
 
 \subsubsection{SPARQL 1.1.}
 La versione $1.1$ introduce gli \textit{Entailment Regimes}: procedure che calcolano tutte le implicazioni degli assiomi; uno dei sistemi più noti è Virtuoso.
@@ -335,7 +335,7 @@ OWL2 è diviso in tre progetti:
 \begin{itemize}
   \item OWL 2 EL: limitato a classificazioni di base, ma la complessità è polinomiale;
   \item OWL 2 QL: usa una sintassi simile a SQL;
-  \item OWL 2 RL: è usato per implementare efficientemente in sistemi \textit{rule-based}.
+  \item OWL 2 RL: è usato per  essere implementato efficientemente in sistemi \textit{rule-based}.
 \end{itemize}
 
 
