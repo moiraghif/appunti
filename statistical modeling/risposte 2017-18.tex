@@ -235,19 +235,19 @@ Tra la rappresentazioni grafiche utili rientrano:
 Esistono infine alcuni test non parametrici che non si basano su ipotesi sulla distribuzione. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
 \begin{enumerate}[noitemsep]
 \item \textbf{Test di Shapiro-Wilk}, che assume valori compresi tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità. Il test parte dell'ipotesi $H_0$ : $\varepsilon\sim N(0,\sigma^2)$. In ogni caso, il test $W$ essendo caratterizzato da una forte asimmetria  potrebbe comunque portare ad un rifiuto dell'ipotesi di normalità.
-\[
+\begin{equation*}
 W = \frac{(\sum_i \beta_i \varepsilon_i)^2}{\sum_i 			\varepsilon_i^2}
-\]
+\end{equation*}
 \item \textbf{Test di Kolmogorov Smirnov}, in cui $H_0$ : $\varepsilon\sim N(0,\sigma^2)$ e si basa sul calcolo della statistica test $D$ come la somma in valore assoluto della differenza tra le frequenze cumulative della distribuzione empirica da testare e quelle della normale. $D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata) ed in caso di superamento del valore critico in base al livello di significativà scelto comporterà il rifiuto di $H_0$.
 \item \textbf{Skewness test} (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando $H_0$ si rigetta la normalità, non rigettandola si dice solo che la distribuzione è simmetrica, ma non per forza normale.
-\[
+\begin{equation*}
 S = \frac{(E[X-\mu]^3)^2}{(E[X-\mu]^2)^3}
-\]
+\end{equation*}
 Quando l'ipotesi di normalità è rispettata allora $E(S) = 0$.
 \item \textbf{Test della Kurtosis}, simile nella forma a quello per l'asimmetria
-\[
+\begin{equation*}
 K = \frac{E(X-\mu)^4}{(E[X-\mu]^2)^2}
-\]
+\end{equation*}
 Sotto l'ipotesi di normalità $E(K-3) = 0$, poichè la curtosi della normale è appunto uguale a 3.
 \end{enumerate}
 I problemi di non normalità possono essere risolti usando una \textit{trasformazione} della variabile $Y$. La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
@@ -276,60 +276,63 @@ Come identificare gli outlier:
 \end{itemize}
 Tra questi \textbf{indicatori} è possibile distinguere tra:
 \begin{enumerate}
-\item \textbf{Leverage values}: Definendo $H = X(X'X)^{-1}X'$ come la matrice di proiezione, l'elemento $h_{ii}$ sulla diagonale è definito come il leverage che verifica l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
+\item \textbf{Leverage values}: Definita $H = X(X'X)^{-1}X'$, nota come matrice di proiezione, gli elementi $h_{ii}$ sulla diagonale, chiamati leverage, possono essere usati per verificare l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
 
-Definendo inoltre
-\begin{equation*}
-\frac{(k-1)}{n}
+Si dimostra che il valor medio del leverage è:
+%just per coerenza
+\begin{equation*} 
+\frac{(k-1)}{n}\ ,
 \end{equation*}
-il valore medio del leverage con k = $n^\circ$ variabili esplicative ed n = $n^\circ$ osservazioni. In conseguenza di ciò il valore soglia che individua osservazioni potenzialmente anomale con un'eccessiva influenza sulla stima complessiva di tutte le osservazioni è individuato in
+con $k = n^\circ$ variabili esplicative ed $n = n^\circ$ osservazioni.
+Può dunque essere considerato 
 \begin{equation*}
 h_{ii} > \frac{2(k-1)}{n}
 \end{equation*}
+come valore soglia per individuare osservazioni potenzialmente anomale con un'eccessiva influenza sulla stima complessiva di tutte le osservazioni 
 \item \textbf{Residui standardizzati}: Assumendo per i residui $\varepsilon$
-\[
+\begin{equation*}
 \varepsilon = (I-H)y
-\]
-allora è possibile giungere alla varianza esplicitata come
-\[
-Var(\varepsilon_i) = (1-h_{ii})\sigma^2
-\]
+\end{equation*}
+allora è possibile scrivere la varianza esplicitata come
+\begin{equation*}
+Var(\varepsilon_i) = (1-h_{ii})\sigma^2\ .
+\end{equation*}
 Come conseguenza di ciò i residui \textit{standardizzati} sono definiti come
-\[
+\begin{equation*}
 \varepsilon_i^* = \frac{\varepsilon_i}{\sigma \sqrt{(1-h_{ii})}}
-\]
-In un campione distribuito normalmente il 95\% dei valori dei residui standradizzati $\varepsilon_i^*$ dovrebbe assumere valori compresi tra -2 e +2 mentre il 99\% dovrebbe assumere valori compresi tra -2.5 e +2.5; nel caso in cui il valore del residuo standardizzato sia maggiore di 3 probabilmente l’osservazione è un outlier.
+\end{equation*}
+In un campione distribuito normalmente il $95\%$ dei valori dei residui standradizzati $\varepsilon_i^*$ dovrebbe assumere valori compresi tra $-2$ e $+2$ mentre il $99\%$ dovrebbe assumere valori compresi tra $-2.5$ e $+2.5$; nel caso in cui il valore del residuo standardizzato sia maggiore di $3$ probabilmente l’osservazione è un outlier.
 \item \textbf{Residui studentizzati}: è la versione dei residui standardizzati ma relativamente al campione.
 Di conseguenza le forme analitiche saranno le medesime facendo però riferimento non alla varianza $\sigma^2$ ma alla varianza campionaria $s^2$.
-\[
+\begin{equation*}
 \varepsilon_i^* = \frac{\varepsilon_i}{s_{\varepsilon i} \sqrt{(1-h_{ii})}}
-\]
+\end{equation*}
 Sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità. La versione dei residui studentizzati cosiddetta \textit{jacknife} è ricavata calcolando il rapporto dei residui sulla deviazione standard dei residui ottenuta eliminando dal dataset l'$i$-esima osservazione, così per ogni residui studentizzato.
 \item \textbf{Covrati}: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione. 
-\[
-COVRATIO = \frac{(det(\sigma_i X_i'X_i^{-1}))}{det(\sigma^2(X_i'X_i)^{-1}))}
-\]
+\begin{equation*}
+\mathrm{COVRATIO} = \frac{(det(\sigma_i X_i'X_i^{-1}))}{det(\sigma^2(X_i'X_i)^{-1}))}
+\end{equation*}
 Il valore di soglia è determinato da
-\[
+\begin{equation*}
 1\pm 3 \  \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
-\]
-\item \textbf{Dfitts}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, eliminandola dal dataset. Osservazioni con valori elevati di Dfitts sono da considerarsi punti di influenza.
-\[
-DFITTS = \frac{\hat{y} - \hat{y}_{(i)}}{S_{e(i)}\sqrt{h_{ii}}}
-\]
+\end{equation*}
+\item \textbf{Dfitts}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, eliminandola dal dataset. Osservazioni con valori elevati di Dfitts sono associati a punti influenti.
+\begin{equation*}
+\mathrm{DFITTS} = \frac{\hat{y} - \hat{y}_{(i)}}{S_{e(i)}\sqrt{h_{ii}}}
+\end{equation*}
 con valore soglia
-\[
+\begin{equation*}
 \pm 2 \ \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
-\]
+\end{equation*}
 \item \textbf{Dfbetas}: misura l’influenza dell'$i$-esima osservazione sulle stime di ogni coefficiente di regressione separatamente,eliminandola dal dataset. Ancora una volta valori elevati indicano che l'osservazione influisce molto sulla stima dei parametri.
-\[
-DFBETAS = \beta - \beta_{(i)} = X_{(i)}(X'X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
-\]
+\begin{equation*}
+\mathrm{DFBETAS} = \beta - \beta_{(i)} = X_{(i)}(X'X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
+\end{equation*}
 con valore soglia $2$ oppure $2\sqrt{n}$ in caso si voglia tenere conto della numerosità delle osservazioni.
-\item \textbf{Distanza di Cook}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione \textit{nel loro complesso}, in termini di capacità del modello di predire tutti i casi quando la singola osservazione viene rimossa dal dataset. Valori superiori a 1 indicano che il punto è influente.
-\[
+\item \textbf{Distanza di Cook}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione \textit{nel loro complesso}, in termini di capacità del modello di predire tutti i casi quando la singola osservazione viene rimossa dal dataset. Valori superiori a 1 ( o eventualmente a $4/n$, essendo $n$ il numero di osservazioni) indicano che il punto è influente.
+\begin{equation*}
 D_i = \frac{(\beta - \beta_{(i)})(X'X)(\beta - \beta_{(i)})}{k\sigma_{(i)}^2}
-\]
+\end{equation*}
 \end{enumerate}
 
 \section{Modello lineare classico multivariato}
