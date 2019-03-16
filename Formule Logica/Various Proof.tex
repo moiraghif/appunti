@@ -1,0 +1,139 @@
+\documentclass[]{article}
+
+\def\imp{\to} %implies instead of \to so it's easier to read in logic language
+\def\ifof{\leftrightarrow} %if and only if (iff already exists)
+\def\n{\neg}%easier to write
+\usepackage{proof}
+\usepackage{amssymb}
+
+\title{Some Proof of Logic}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+	\item $\vdash_{INT}$ (A$\imp\neg$B)$\imp$(B$\imp\neg$A)
+	$$ 
+	\infer[^{i\imp (1)}]{(A\imp\neg B)\imp(B\imp\neg A)}{
+	  \infer[^{i \imp (3)}]{B\imp\neg A}
+	  {
+	  	\infer[^{i\neg (2)}]{\neg A}
+	  	{
+	  	  \infer[^{i \bot}]{\bot}
+	  	  {
+	  	  	\infer[^{e\imp}]{\neg B, B}
+	  	  	{
+	  	  		\infer[^{(1)}]{A\imp\neg B}{}, & \infer[^{(2)}]{A}{}
+	  	  	}
+	  	  }
+	  	}
+	  }
+	} 
+	$$
+	\item $\vdash_{INT}$ A $\imp\neg\neg$A 
+	$$
+	\infer[^{i\imp(1)}]{A\imp\neg\neg A}{
+	  \infer[^{i\neg(2)}]{\neg\neg A}{
+	  	\infer[i \bot]{\bot}{\infer[^{(1)}]{A}{},\infer[^{(2)}]{\neg A}{}}
+	  }
+	}
+	$$
+
+	$\nvdash_{INT} \neg\neg A \imp A$ but $\nvdash_{CL} \neg\neg A \imp A$
+	$$
+	\infer[^{i\imp(1)}]{\neg\neg A \imp A}{
+	  \infer[^{e\neg(2) \gets \textrm{Problem for INT}}]{A}{
+	    \infer[^{i\bot}]{\bot}{\infer[^{(1)}]{\neg\neg A}{},\infer[^{(2)}]{\neg A}{}}
+  	  }
+	}
+	$$
+	
+	\item 49.b $\vdash_{INT} \neg \neg \neg A \ifof \neg A$
+	
+	$\vdash \neg A \imp \neg \neg \neg A$
+	$$
+	\infer[^{i\imp(1)}]{\neg A \imp \neg \n\n A}{
+	  \infer[^{i\n(2)}]{\n\n\n A}{
+	    \infer[^{i\bot}]{\bot}{
+	      \infer[^{(1)}]{\n A}{}, \infer[^{(2)}]{\n\n A}{}	
+	    }
+	  }
+	}
+	$$
+	
+	$\vdash \n\n\n A \imp \neg A$
+	$$
+	\infer[^{i\imp (2)}]{\n\n\n A \imp \neg A}{
+	  \infer[^{i\n(1)}]{\n A}{
+	    \infer[^{i\bot}]{\bot}{
+	      \infer[^{RD \textrm{ (ex. 2)}}]{\n\n A}{\infer[^{(1)}]{A}{}} & \infer[^{(2)}]{\n\n\n A}{} 
+	    }	
+	  }	
+	}
+	$$
+	\pagebreak
+	\item 50 a. $\n(A\ifof \n A)$
+	$$
+	\infer[^{i\n (1)}]{\n(A\ifof \n A)}{
+	  \infer[^{i \bot}]{\bot}{
+	    \infer[^{i\n (2)}]{\n A}{
+	    	\infer[^{i \bot}]{\bot}{
+	    	  \infer[^{e \imp}]{\n A, A}{
+	    	  	\infer[^{e \land}]{A \imp \n A}
+	    	  		{\infer[^{(1)}]{(A \imp \n A) \land (A \gets \n A)}{}}{}
+	    	  		&
+	    	  		\infer[^{(2)}]{A}{}
+    		  }
+	    	}
+    	}
+	    &
+	    \infer[^{e \imp}]{A}{
+	    \infer[^{i\n (2)}]{\n A}{
+	    	\infer[^{i \bot}]{\bot}{
+	    		\infer[^{e \imp}]{\n A, A}{
+	    			\infer[^{e \land}]{A \imp \n A}
+	    			{\infer[^{(1)}]{(A \imp \n A) \land (A \gets \n A)}{}}{}
+	    			&
+	    			\infer[^{(2)}]{A}{}
+	    		}
+	    	}
+	    }
+	    &
+	    \infer[^{(1)}]{\n A \imp A}{}
+        }	
+	  }
+	}
+	$$
+	
+	\item 63. De Morgan: $\n(A\lor B) \ifof \n A \land \n B$
+	
+	$\gets$
+	$$
+	\infer[^{i \imp (1)}]{(\n A  \land \n B) \imp \n (A \lor B)}{
+	  \infer[^{i \n (2)}]{\n (A \lor B)}{
+	    \infer[^{e \lor (3)(4)}]{\bot}{
+	    \infer[^{(2)}]{A\lor B}{}
+	    &
+	    \infer[^{i \bot}]{\bot}{
+	      \infer[^{e \land}]{\neg A}{\infer[^{(1)}]{\neg A \land \n B}{}}
+	      &
+	      \infer[^{(3)}]{A}{}	
+	    }
+    	&
+    	\infer[^{i \bot}]{\bot}{
+    		\infer[^{e \land}]{\neg B}{\infer[^{(1)}]{\neg A \land \n B}{}}
+    		&
+    		\infer[^{(4)}]{B}{}	
+    	}	
+	    }	
+	  }
+	}
+	$$
+	$\imp$
+	$$
+	
+	$$
+\end{enumerate}
+
+\end{document}

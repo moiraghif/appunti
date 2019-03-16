@@ -1,0 +1,330 @@
+\documentclass[11pt, twocolumn]{article}
+
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+
+\title{\textbf{Statistical Modeling}}
+\author{}
+\date{}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Lo scopo del corso è riuscire a muoversi con dimestichezza all'interno di un dataset: è privilegiata la teoria perché indipendente dalla piattaforma; inoltre sono presentati numerosi esercizi svolti e database di esempio.
+  Durante il corso si generalizza il modello lineare classico andando oltre alle sue premesse, arrivando al modello lineare multi-livello (che costruisce una gerarchia nei dati).
+
+  L'esame è composto da una parte teorica di due domande (da un database di 15 note) e un esercizio da eseguire in R o SAS.
+  Le slide sono sufficienti alla preparazione dell'esame, ma in più è offerta una dispensa ufficiale.
+\end{abstract}
+
+\newpage
+\part{Premesse all'analisi}
+Il modello stabilisce cosa fare coi dati: la finalità del modello stabilisce l'interpretazione da dare al risultato e i dati da raccogliere.
+I test sul modello devono essere fatti su un campione \textit{significativo}: i risultati potrebbero non essere veritieri.
+Il campione è necessario anche coi \textit{Big Data}, dato che aumentano l'eterogeneità dei dati.
+
+Nella prima parte della costruzione del modello, lo statistico deve collaborare con l'esperto di dominio per individuare il fine del modello e i caratteri da osservare.
+In un secondo momento si procede con un'analisi descrittiva (o esplorativa) del dataset (tramite grafici come istogrammi o boxplot, oppure calcolando valori indice).
+Si individuano dunque gli \textit{outliers} (ovvero i valori anomali), da eliminare prima dell'analisi vera e propria.
+
+Si analizza poi la matrice di correlazione $R$, per eliminare casi di \textit{multicollinearità} (ovvero i casi in cui la correlazione $\varrho \to 1$).
+
+Si deve sciogliere il conflitto tra adattamento dei dati e parsimonia in modo tale da rendere comprensibile il modello ma garantendo una certa qualità nell'adattamento.
+
+Il modello reale tiene conto dunque dell'errore, che considera cosa non è conoscibile e di componenti sistematici (esclusione di variabili) o di errori di misurazione; dai campioni (poco significativi) inoltre si può avere un errore stocastico.
+
+
+Il modello statistico ha come scopo la comprensione e la minimizzazione dell'errore.
+Non si arriva a formulare regole di causa-effetto ma solamente a relazioni empiriche.
+
+Si stabilisce il modello di regressione individuando le variabili (e il loro grado) e il valore dei parametri nel vettore $b$.
+Dunque si calcolano i valori stimati sui valori noti ($\hat{y_i}$) e si calcola l'errore con la formula $\varepsilon_i = y_i - \hat{y_i}$.
+Al variare del campione nella popolazione, i valori dei parametri cambiano: è così possibile costruire una distribuzione (col metodo Montecarlo) di tali parametri.
+L'errore dunque non è deterministico ma stocastico (cioè casuale), dato che varia in base al campione selezionato.
+
+Il criterio scelto per ricercare $b$ è il criterio dei minimi quadrati ordinari che rende minima la norma del vettore di scarti $\varepsilon$.
+
+
+\newpage
+\part{Modello lineare classico}
+Il modello lineare classico ha delle premesse molto rigide a causa della sua natura.
+Si tratta perlopiù di \textit{ipotesi semplificatrici} che saranno rimosse con modelli più avanzati (tranne per le ultime due).
+La formula è lineare:
+\begin{equation*}
+  y = Xb + \varepsilon
+\end{equation*}
+
+\subsection*{Linearità.}
+Le variabili e i parametri del modello sono lineari.
+
+\subsection*{Non sistematicità degli errori}
+Il vettore casuale ha valore atteso nullo (altrimenti il nostro modello non è imparziale):
+\begin{equation*}
+  E(\varepsilon_i)=0, i = 1,\hdots,n 
+\end{equation*}
+% $E(\varepsilon|X)=0$
+e quindi segue che:
+\begin{align*}
+  E(y | X) &= E(Xb + \varepsilon) \\
+           &= Xb + E(\varepsilon) \\
+           &= Xb + 0 = Xb
+\end{align*}
+
+\subsection*{Sfericità degli errori.}
+Gli errori sono omoschedastici (cioè la varianza è costante) e non correlati:
+\begin{align*}
+  E(\varepsilon) &= E(y - Xb) \\
+                 &= E(Xb - Xb) = 0
+\end{align*}
+e quindi:
+\begin{align*}
+  &var(\varepsilon_i) = E(\varepsilon_i^2) = \sigma_i^2 \\
+  &cov(\varepsilon_i, \varepsilon_j) = E(\varepsilon_i\varepsilon_j) = 0)
+\end{align*}
+Di fatto molti casi reali sono correlati tra di loro (ovvero un'osservazione influenza le altre), come nella finanza, nelle serie temporali o nelle coordinate spaziali.
+
+\subsection*{Non omoschedasticità.}
+È una mera convenzione: si presume che la matrice del disegno $X$ sia fissa e nota di dimensione $n \times p+1$ ; questa astrazione garantisce una semplificazione del problema.
+Le componenti non stocastiche sono riassunte dalla componente erratica.
+
+\subsection*{Non stocasticità delle variabili esplicative}
+I valori delle $x_j$ variabili esplicative non sono soggetti a fluttuazioni da campione a campione, perciò $E(X) = X$ e $Cov(X,\varepsilon) = 0$. La parte non fissa delle $x_j$ finisce in $\varepsilon$.
+
+\subsection*{Normalità degli errori.}
+Il soddisfacimento dell'ipotesi che $\varepsilon_i \sim N(0,\sigma^2)$ ovvero che la distribuzione dell’errore campionario sia normale provoca anche la normalità nella distribuzione di $y$ e di $\hat{\beta}$.
+Questo permette la formulazione di test e la costruzione di intervalli di confidenza.
+
+
+\subsection*{Non collinearità.}
+Le variabili della matrice $X$ sono linearmente indipendenti. $X$ ha rango uguale al numero delle colonne (i caratteri, più una costante). Da ciò deriva che $X'X$ non è singolare: in caso contrario $X'X$ non è invertibile e il modello non risolvibile.
+
+\subsection*{Numerosità della popolazione.}
+Il numero di osservazioni è sempre maggiore del numero di caratteri osservati: $n \geq p + 1$.
+Se questa proprietà non è soddisfatta, la matrice del disegno non è invertibile e dunque non è possibile la costruzione di alcun modello.
+
+
+\section{Stima dei parametri.}
+Per stimare i parametri, la formula matriciale è:
+\begin{equation*}
+  b = Hy = (X'X)^{-1}X' y
+\end{equation*}
+
+Si dice che uno stimatore è \textit{corretto} se il valore medio della sua distribuzione è pari a quello della popolazione ($E(\theta) = E(x)$).
+Invece per \textit{consistenza} si intende che con una popolazione infinita il valore stimato sia quello della popolazione.
+In sostanza:
+\begin{equation*}
+  \lim_{n\to\infty} Var(\hat{\theta}) = 0
+\end{equation*}
+
+Tra due (o più) stimatori è preferibile lo stimatore più \textit{efficiente}, ovvero con una varianza minore nella sua distribuzione.
+Generalmente uno stimatore segue una distribuzione normale, supponiamo $\beta_j \sim N(\mu,\sigma^2)$ (ha una distribuzione normale), si effettua un test (con probabilità dell'errore di primo grado $\alpha$ arbitrario) per verificare la significatività di un parametro $\beta_j$ con varianza $\sigma$ nota:
+\begin{align*}
+  &P[-Z_{\frac{\alpha}{2}} < \frac{\beta_j}{\frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}} < +Z_{\frac{\alpha}{2}}] \\
+  &= P[-Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}} < \beta_j < Z_{\frac{\alpha}{2}} \frac{\sigma}{\sqrt{n\sigma^{-1}_{j.j}}}] = 1 - \alpha
+\end{align*}
+Solitamente nel modello lineare l'ipotesi nulla ($H_0$) è l'ipotesi che il parametro sia nullo $\beta_j \sim N(0,\sigma^2)$.
+
+I test statistici per la significatività sono generalmente $F$ e $T$ (il primo è il quadrato del secondo) quando la varianza della popolazione $\sigma^2$ è ignota; nel caso invece di $\sigma^2$ nota allora è possibile sfruttare il test $Z$.
+
+La distribuzione $T$ di Student è anche esplicitabile come:
+
+\begin{align*}
+\frac{Z}{\chi^2 * gdl}
+\end{align*}
+
+mentre la $F$ di Snedecor è riassumibile come:
+
+\begin{align*}
+\frac{\frac{SSE}{k}}{\frac{SSR}{n-k-1}}
+\end{align*}
+
+Nello specifico questa formula è sintetizzabile come il rapporto tra due distribuzioni $\chi^2$ ed i rispettivi gradi di libertà.
+
+Oltre al test d'ipotesi per verificare la significatività dei parametri è possibile anche calcolare l'intervallo di confidenza di un parametro così da misurarne il possibile impatto.
+\newline
+\newline
+La stima dei \textit{minimi quadrati ordinari (OLS)} e la \textit{stima di massima verosimiglianza} sono equivalenti poichè ricavano gli stessi valori per i parametri sfruttando due meccanismi differenti. Mentre la prima trova il valore dei parametri che minimizza la varianza, la seconda calcola i parametri che massimizzano la probabilità di osservare i valori da noi osservati. 
+
+\section{Variabili nominali.}
+Il sistema più diffuso per la gestione di variabili nominali è convertirle in \textit{dummys}: una serie di variabili fittizie con valore $0$ o $1$ in base al valore assunto dalla variabile.
+In questo modo è possibile interpretare facilmente il risultato ottenuto.
+Il numero di variabili dummy generate da un carattere qualitativo è pari a $v - 1$ (dove $v$ è il numero di possibili valori), per evitare multicollinearità; una variabile non è mai inserita.
+
+
+\newpage
+\part{Violazione delle ipotesi classiche}
+Dato che ``tutti i modelli sono falsi'', le ipotesi classiche non sono scorrette, tuttavia semplificano in modo eccessivo: in circostanze reali è difficile trovare fenomeni che le soddisfino tutte.
+Si possono però eliminare tutte le ipotesi classiche (a eccezione delle ultime due elencate precedentemente) in modo tale da ottenere un modello più veritiero.
+
+\section{Residui eteroschedastici.}
+La varianza dell'errore spesso dipende dalle variabili indipendenti: la distribuzione dell'errore è diversa per ogni osservazione.
+Continuano a valere correttezza, linearità e consistenza:
+
+\begin{align*}
+  E(\hat{B}) &= E(Hy) \\
+             &= H E(y) \\
+             &= H E(Xb + e) \\
+             &= H X E(b) + E(e) \\
+             &= (X'X)^{-1}X'X E(b) + 0 = b
+\end{align*}
+
+La varianza tuttavia è maggiore:
+
+\begin{align*}
+  Var(\hat{B}) &= E((Hy - b)(Hy - b)') \\
+               &= E((H(Xb + e) - b)(H(Xb + e) - b)') \\
+\end{align*}
+
+Ciò che non vale più, quindi, è l'efficienza: per questo motivo lo stimatore non è più considerabile BLUE. Questo avrà una conseguenza anche sui test d'ipotesi, per cui la regione di rifiuto diventerà molto più ampia, e per la stima degli intervalli di confidenza, che saranno più stretti e meno affidabili.
+
+\subsection*{Come individuare l'eteroschedasticità.}
+La violazione dell'ipotesi di eteroschedasticità è rilevabile attraverso due modalità: una di ispezione grafica ed una orientata verso dei test su misura.
+Per quanto riguarda l'ispezione grafica, preferibile come primo approccio, è necessario ricorrere a visualizzazioni quale lo \textbf{Scatterplot}: con quest'ultimo è possibile mettere a confronto diverse coppie di elementi sugli assi, tutte egualmente valide.
+\newline
+Tra queste coppie abbiamo:
+\begin{itemize}
+\item $Y$ vs $X$
+\item \textit{Residui stimati} vs $Y$\textit{predetta}
+\item \textit{Residui al quadrato} vs \textit{Regressori}
+\item \textit{Valori osservati} vs \textit{Valori predetti}
+\item \textit{Residui} vs \textit{Regressori}
+\end{itemize}
+Per quanto riguarda invece i test di misura, il primo utile allo scopo è il \textbf{Test di White}. Questo test si basa sull'ipotesi $H_0$ che vi sia effettivamente \textit{omoschedasticità} tra i residui e che quindi:
+\begin{align*}
+Var(e|X) = \sigma^2I_n
+\end{align*}
+Il meccanismo del test è piuttosto semplice:
+\begin{itemize}
+\item Prima di tutto si procede a regredire $Y$ rispetto alle variabili esplicative $X_j$ e a ricavare l'errore $\varepsilon_i$.
+\item Successivamente si procede a regredire $\varepsilon_i$ rispetto alle variabili esplicative $x_j$ e al loro quadrato $x_j^2$, oltre che alle loro interazioni.
+\item Si determina il coefficiente di determinazione $R^2$ della regressione e si procede alla costruzione del valore
+\begin{align*}
+LM = nR^2 \\
+LM \sim \chi^2
+\end{align*}
+con $n$ numero di regressori.
+\item Se $LM$ cade all'interno della regione di rifiuto allora vorrà dire che $\varepsilon_i^2$ varia al variare delle $x_j$ e sarà quindi da confermare la presenza di \textit{eteroschedasticità}.
+\end{itemize}
+Molto simile al Test di White è il \textbf{Test di Breusch-Pagan} che invece di regredire su $\varepsilon_i^2$ effettua la regressione su
+\begin{align*}
+S^2 = \frac{\sum_{i} \varepsilon_i^2}{n}
+\end{align*}
+Questo meccanismo punta quasi a normalizzare i residui $\varepsilon_i^2$ per cui se $S^2$ ed $\varepsilon^2$ divergono significa che c'è \textit{eteroschedasticità}.
+\subsection*{Modello WLS per soluzioni con errori eteroschedastici.}
+Una volta appurata la presenza di residui eteroschedastici ed incorrelati $Cov(\varepsilon_i^*;\varepsilon_j^*) = 0$ è necessario costruire un modello per correggere questa violazione dell'ipotesi di \textit{sfericità degli errori}. Prima di tutto dal classico modello OLS 
+\begin{align*}
+y = Xb + \varepsilon^*
+\end{align*}
+ricaviamo la varianza campionaria dei residui $S^2_i = h_i$ e poi procediamo a dividere ogni componente per $\sqrt{h_i}$
+\begin{align*}
+y^* = \frac{y}{\sqrt{h_i}}\\
+X^* = \frac{X}{\sqrt{h_i}}\\
+\varepsilon = \frac{\varepsilon^*}{\sqrt{h_i}}
+\end{align*}
+ottenendo infine un modello trasformato con
+\begin{align*}
+Var(\varepsilon) = \frac{h_i}{h_i} = 1
+\end{align*}
+Per questa ragione il modello è chiamato \textbf{WLS} ovvero \textbf{Weighted Least Squares} ed è definito nella sua forma funzionale come:
+\begin{align*}
+y^* = X^*b + \varepsilon
+\end{align*}
+\section{Residui correlati.}
+Per quanto riguarda l'ipotesi di \textit{sfericità degli errori} oltre all'\textit{omoschedasticità} abbiamo anche l'assunzione di \textit{incorrelazione} dei $\varepsilon_i$. In caso quindi di residui \textbf{correlati} abbiamo che:
+\begin{align*}
+Cov(\varepsilon_i;\varepsilon_j)\not = 0\\
+y_i = x_i b + \varepsilon_i^\sharp
+\end{align*}
+Questo tipo di situazione si verifica spesso in caso di serie storiche o spaziali.
+L'autocorrelazione può essere \textit{positiva} se i residui risultano essere consecutivamente dello stesso segno, oppure \textit{negativa} se i residui consecutivi risultassero di segno diverso.
+Per quanto riguarda le proprietà dello stimatore anche nel caso di residui correlati $\varepsilon_i^\sharp$  abbiamo \textit{correttezza} e \textit{consistenza} ma non vi è \textit{efficienza}, poichè la matrice non è più scomponibile. Questo provoca a cascata come effetto che la \textit{t di Student} non sia più affidabile, perchè basata proprio sull'ipotesi di incorrelazione dei residui ($S^2$ sottostima pesantemente $\sigma^2$). Conseguenza naturale di ciò è che la regione di rifiuto risulta più ampia e gli intervalli di confidenza più stretti.
+\subsection*{Come individuare la correlazione nei residui.}
+Anche in questo caso l'individuazione avviene sia per via \textit{grafica} che attraverso dei \textit{test}.
+Per quanto riguarda l'individuazione \textit{grafica} per mezzo di \textbf{scatterplot}:
+\begin{itemize}
+\item $Y$ vs \textit{Regressori}
+\item \textit{Residui} vs \textit{Regressori}
+\item \textit{Residui} vs \textit{Residui ritardati}
+\item \textit{Correlogramma}
+\end{itemize}
+Nello specifico per quanto riguarda il \textit{correlogramma} questo si basa sulla rappresentazione di residui con lag temporale (o spaziale) e ci permette di scomporre i \textit{gradi di correlazione} così da poterli visualizzare entro \textit{bande di confidenza}.
+
+Per quanto riguarda i test invece il più utilizzato è il cosiddetto \textbf{Test di Durbin-Watson}. Questo test parte dall'ipotesi
+\begin{align*}
+H_0 : \rho = Corr [\varepsilon_i^\sharp;\varepsilon_j^\sharp] = 0
+\end{align*}
+Per questo motivo il test è costruito come
+\begin{align*}
+DW = \frac{\sum_i(\varepsilon_i^\sharp - \varepsilon_{i-1}^\sharp)^2}{\sum_i\varepsilon_i^2}
+\end{align*}
+che ammettendo omoschedasticità e quindi avendo
+\begin{align*}
+E(\varepsilon_i^\sharp) = 0 \\
+E(\varepsilon_i^{\sharp2}) = Var(\varepsilon_i^\sharp)
+\end{align*}
+è ricondotta alla forma
+\begin{align*}
+DW = \frac{(2\sigma^2 - 2\rho\sigma^2)^2}{\sigma^2} = 2(1-\rho)
+\end{align*}
+in questo modo avremo che
+\begin{align*}
+DW = 2 \quad incorrelazione \quad  \rho = 0\\
+DW = 0 \quad correlazione \  positiva \quad \rho = 1\\
+DW = 4 \quad correlazione \  negativa \quad \rho = -1
+\end{align*}
+\subsection*{Modello GLS per soluzioni con errori correlati.}
+Per la costruzione del \textbf{ modello GLS} esistono due approcci possibili.
+
+Un primo approccio è basato sulla stima di $\rho$ regredendo $\varepsilon_i^\sharp$ in funzione delle variabili esplicative $x_j$. Una volta ricavato $\rho$ sarà allora possibile utilizzarlo per moltiplicare ogni componente dell'equazione ritardata nella forma che segue
+\begin{align*}
+\rho y_{i-1} = \rho\beta_0 + \rho\beta_1 x_{i-1} + \rho\varepsilon_{i-1}^\sharp
+\end{align*}
+e successivamente procedendo ad effettuare
+\begin{align*}
+y_i - \rho y_{i-1} = \beta_0(1-\rho) + \beta_1(x_i-\rho x_{i-1}) + w_i
+\end{align*}
+\begin{align*}
+con \  w_i = \varepsilon_i^\sharp - \rho\varepsilon_{i-1}^\sharp
+\end{align*} 
+ottenendo
+\begin{align*}
+y_i^\sharp = \beta_0^\sharp + \beta_1^\sharp + w_i
+\end{align*}
+ovvero un'equazione OLS di tipo classico con errori incorrelati dato che
+\begin{align*}
+Cov(w_i;w_{i-1}) = 0
+\end{align*}
+
+Il secondo approccio è invece quello del \textit{modello autoregressivo}, incorporato nel software \textit{SAS}.
+Questo approccio in sintesi incorpora automaticamente un modello autoregressivo (\textit{AR1}) per la componente d'errore.
+\begin{align*}
+y_t = \beta_0 + \beta_1 x_i + \varepsilon_t^\sharp \\
+y_i = \beta_0 + \beta_1 x_i + AR1_i + \varepsilon_i^\sharp \\ 
+= \beta_0 + \beta_1 x_i + v_{i(1)}
+\end{align*}
+con
+\begin{align*}
+v_{i(1)} = AR1_i + \varepsilon_i^\sharp
+\end{align*}
+in modo che
+\begin{align*}
+E(v_{i(1)},v_{i-1(1)}) = 0
+\end{align*}
+\section{Stimatori dei minimi quadrati generalizzati GLS}
+Quando gli errori non rispettano l'ipotesi di sfericità in quanto sia eteroschedastici che correlati tra loro allora la matrice di varianze e covarianze dei residui appare come
+\[
+\Sigma_\varepsilon = 
+\begin{bmatrix}
+\sigma_1^2 & \rho_{12} & \rho_{1p} \\
+\rho_{12} & \sigma_2^2 & \rho_{2p} \\
+\hdotsfor{3} \\
+\rho_{1p} & \rho_{2p} & \sigma_p^2
+\end{bmatrix}
+\]
+In questo caso si utilizzano gli stimatori dei minimi quadrati generalizzati (GLS) interpretabili analogamente al modello classico in quanto trattasi di stimatori OLS basati su \textit{variabili trasformate}.
+\end{document}
