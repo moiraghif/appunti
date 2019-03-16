@@ -357,31 +357,65 @@ D_i = \frac{(\beta - \beta_{(i)})(X'X)(\beta - \beta_{(i)})}{k\sigma_{(i)}^2}
 
 Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di $r$ variabili esplicative $z_1$,..,$z_r$, e $m$ variabili dipendenti $y_1$,..,$y_m$. Ognuna delle $m$ variabili dipendenti è legata a una particolare regressione multipla. 
 
-Ipotesi del modello:
+Per l'$i$-esimo individuo abbiamo:
+\begin{align*}
+y_i = [y_{i1},...,y_{ij},...,y_{im}]\\
+z_i = [1,z_{i1},...,z_{ik},...,z_{ir}]\\
+\varepsilon_i = [\varepsilon_{i1},...,\varepsilon_{ij},...,\varepsilon_{im}]
+\end{align*}
+Mentre la matrice dei parametri $\beta$ (m, r+1) per le m equazioni è:
+\[
+\beta =
+\begin{bmatrix}
+\beta_{10} & \beta_{1k} & \beta_{1r} \\
+\dots&\dots&\dots \\
+\beta_{j0} & \beta_{jk} & \beta_{jr} \\
+\dots&\dots&\dots \\
+\beta_{m0} & \beta_{mk} & \beta_{mr} 
+\end{bmatrix}
+\]
+In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce ad una variabile risposta $y_{1,...,m}$ mentre ogni colonna si riferisce ad una variabile esplicativa $z_{1,...,r}$. 
+\newline
+Ciò implica che anche riferendosi ad una singola $y_i$, comunque la stima avviene nel complesso, con il prodotto tra la matrice delle variabili esplicative $Z$ e appunto $\beta$ che comprende al suo interno però \textbf{tutti} i parametri stimati riguardanti l'insieme delle variabili dipendenti $y_{1,...,m}$, rendendo di fatto i parametri che stimano le diverse variabili dipendenti $y$ influenzati gli dagli altri. In questo particolare aspetto risiede infatti la differenza tra un modello multivariato su $m$ variabili dipendenti $y$ ed $m$ modelli univariati, ognuno con una specifica $y$ come variabile dipendente.
+
+Nel suo complesso perciò il modello multivariato appare come $$ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,m)} + E_{(m,n)}$$
+Con il contenuto della matrice delle variabili dipendenti interpretabile come:
+\begin{itemize}[noitemsep]
+\item Ogni colonna rappresenta un individuo con i valori assunti dalle $y_m$ variabili dipendenti per quell'individuo.
+\item Ogni riga rappresenta il valore assunto dalla singola variabile dipendente $y_i$ su tutti gli individui.
+\end{itemize}
+
+Le ipotesi del modello sono analoghe a quelle formulate per il modello univariato ma, essendo applicate su più variabili dipendenti risultano molto più stringenti:
 \begin{enumerate}[noitemsep]
-\item Parametri lineari.
-\item Valori attesi degli errori casuali sono nulli.
-\item Gli errori casuali all’interno gli ogni equazione e anche tra diverse equazioni sono omoschedastici e incorrelati pp più.
-\item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali.
-\item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$).
-\item $n > r+1$ per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $b$ sono trovate in modo analogo al caso univariato. %FIXME
-\item Gli errori si distribuiscono come una normale multivariata.
+\item Parametri lineari;
+\item Valori attesi degli errori casuali sono nulli $E(\varepsilon_{ij}) = 0$;
+\item Gli errori casuali all’interno gli ogni equazione e \textit{anche tra diverse equazioni} sono omoschedastici e incorrelati;
+\item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali;
+\item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$), contrariamente la matrice $Z'Z$ non sarebbe invertibile e non sarebbe calcolabile lo stimatore dei minimi quadrati;
+\item La numerosità della popolazione $n$ è maggiore del numero degli $r$ parametri stimati più l'intercetta ($n > r+1$) per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
+\begin{equation*}
+\hat{\beta} = y_j Z'(Z'Z)^{-1}
+\end{equation*}
+\item Gli errori $E$ si distribuiscono come una normale multivariata:
+\begin{equation*}
+E \sim N(0,s^2 I_{nm})
+\end{equation*}
+con $0$ vettore delle medie  e $s^2 I_{nm}$ matrice di varianze e covarianze della variabile casuale multivariata $E$. Permane la condizione di ortogonalità poichè i residui sono incorrelati sia con le variabili esplicative $Z$ che con i valori predetti della variabile dipendente $\hat{Y}$.
 \end{enumerate}
-L’$R^{2}$ è una media pesata degli $R^{2}$ delle singole equazioni
+L’$R^{2}$ in quest'ottica è una media pesata degli $R^{2}$ delle singole equazioni (sempre tenendo conto della numerosità dei casi che per tipo di rilevazione e missing value può non essere uguale nelle diverse equazioni).
 
 \begin{remark}[]\ \\
 \begin{itemize}
-\item La dipendenza della variabile dipendente $y_j$ da $Z$ non influenza la dipendenza della variabile $y_m$.
-\item Abbiamo le stesse variabili esplicative in tutte le equazioni del sistema.
-\item La correlazione simultanea tra i disturbi è costante nel tempo.
+\item La dipendenza della variabile dipendente $y_j$ da $Z$ \textbf{non influenza} la dipendenza delle altre variabili $y_m$.
+\item Abbiamo le \textbf{stesse} variabili esplicative in tutte le equazioni del sistema.
+\item La correlazione simultanea tra i disturbi è \textbf{costante} nel tempo.
 \end{itemize}
 \end{remark}
 \section{Inferenza nella Regressione Multivariata}
+Gli stimatori OLS sono corretti ed efficienti, poichè il teorema di Gauss-Markov vale anche per il caso multivariato. Infatti nell'ambito degli stimatori lineari e corretti del vettore dei parametri, lo stimatore $\beta$ dei minimi quadrati è quello a \textit{varianza minore}. Inoltre per il modello di regressione multivariata con rango pieno con errori $E$ normalmente distribuiti anche le $m$ variabili dipendenti $Y$ sono distribuite secondo una normale multivariata $$Y \sim N(BZ, \Sigma_Y)$$ mentre i parametri stimati $\beta$ $$\beta \sim N(B,\hat{H})$$ con $\hat{H}$ matrice di varianze e covarianze spiegata della popolazione , positiva definita ed efficiente che si dimostra essere distribuita in modo indipendente da $E$ matrice degli errori.
 
-Guardare Modello lineare classico multivariato.\\
-Gli stimatori OLS sono corretti ed efficienti. 
-
-Si definisce VARIANZA GENERALIZZATA DI $H$ il determinante della matrice di varianza-covarianza spiegata della popolazione ($H$) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
+Si definisce invece \textit{varianza generalizzata} di $\hat{H}$ il suo determinante.
+%arrivato qui 16/03/2019%
 
 Si definisce VARIANZA GENERALIZZATA DI SIGMA il determinante della matrice di varianza-covarianza residua (SIGMA) che si dimostra essere distribuita in modo indipendente dalla matrice degli errori.
 
