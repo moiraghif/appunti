@@ -70,4 +70,23 @@ The \textit{Expected Value} criteria is applied to give a value to the outcomes:
 \end{equation*}
 Just direct outcomes (the ones descending directly by the decision node) are considered: other chance nodes must be evaluated recoursively.
 At the end, the best strategy is the option with the highter profit.
+
+\subsection{Risk Aversion.}
+The expected value approach works well if the action can be taken multiple times (big numbers rule): the value of a risky alternative may be different.
+The \textit{certainty equivalent} ($CE$) for an alternative is the amount that is equally preferred to compensate the risk.
+A person is defined as \textit{risk-averse}, \textit{risk-neutral} or \textit{risk-seeking} if a more secure but less convenient option, or a risky but convenient option is preferred; or in other terms, if $CE$ is $>, = , < 0$.
+The risk aversion can be calculated through a \textit{utility function}: options can be evaluated to sort them and to select the best one.
+This function is defined but not known.
+An example of function is the exponential:
+\begin{equation*}
+  u(x) = 1 - e^{-\frac{x}{R}}, \hspace{25pt} R > 0
+\end{equation*}
+where $R$ is the \textit{Risk Tolerance}, and depends on the decision-maker; with an high value, $u(x)$ rappresent a lower risk aversion.
+The $CE$ can be calculated with the formula:
+\begin{equation*}
+  CE = - R \cdot \ln(1 - E[u])
+\end{equation*}
+
+A perfect information removes all uncertainty but is expensive.
+A unperfect information does not worth more than a perfect information but has a lower cost.
 \end{document}
