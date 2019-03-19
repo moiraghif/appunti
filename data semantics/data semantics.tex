@@ -359,6 +359,7 @@ per l'oggetto, non per il soggetto.)
 
 \subsubsection{SPARQL 1.1.}
 La versione $1.1$ introduce gli \textit{Entailment Regimes}: procedure che calcolano tutte le implicazioni degli assiomi; uno dei sistemi più noti è Virtuoso.
+I risultati possono essere esportati come \verb|.xml|, \verb|.csv| o \verb|.tsv|.
 
 \subsubsection{OWL.}
 È un motore inferenziale composto da più sotto-linguaggi, con l'obiettivo di ridurre la confusione lasciata da RDFS.
@@ -368,6 +369,29 @@ OWL2 è diviso in tre progetti:
   \item OWL 2 QL: usa una sintassi simile a SQL;
   \item OWL 2 RL: è usato per  essere implementato efficientemente in sistemi \textit{rule-based}.
 \end{itemize}
+
+\section{\textit{Search Engine} semantici.}
+Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
+Per la gestione di pattern di architettura ci sono tre possibili approcci:
+\begin{itemize}
+\item \textbf{Crawling}: i dati sono memorizzati in un database locale;
+\item \textbf{On-the-fly deferencing}: gli URI sono deferenziati quando il programma richiede i dati;
+\item \textbf{Federated query}: ogni richiesta è delegata ad un servizio diverso.
+\end{itemize}
+Anche per il \textit{reasoner} ci sono strategie diverse.
+
+\section{\textit{Semantic Framework}.}
+Si usano dei framework per archiviare i dati in grafi per la facilità della gestione delle relazioni (si interroga per ottenere nuova conoscenza).
+
+\subsection{RDF4J.}
+È un framework per Java per gestire, archiviare (in diversi modi) e interrogare documenti RDF, organizzando tramite un paradigma ad oggetti.
+
+\subsection{Apache Jena.}
+È un'api per RDF, offre un reasoner organizzando i dati ad oggetti.
+
+\subsection{\textit{Triplestore}.}
+Un \textit{triplestore} archivia le triple e le filtra per elementi fissati.
+Non ha una struttura interna.
 
 
 \newpage
