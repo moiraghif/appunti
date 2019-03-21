@@ -53,7 +53,7 @@ Attraverso l'indice di determinazione $R^{2}$ di tale regressione, ricavato dal 
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
 
 \item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità $\bigl(H_0$: Var($\varepsilon_i$) = ($\sigma^2)\bigr)$.
-Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
+Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 \end{itemize}
 
@@ -155,14 +155,14 @@ Tutto questo è possibile assumendo come nota la matrice di varianze e covarianz
 
 \section{Multicollinearità }
 
-Se la matrice $(X^{\prime} X)^{-1}$ non è invertibile oppure ha determinante prossimo allo 0 le stime non esistono (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono stabili (coefficienti empiricamente sotto identificati).
+Se la matrice $(X^{\prime} X)$ non è invertibile oppure ha determinante prossimo allo 0 le stime non esistono (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono stabili (coefficienti empiricamente sotto identificati).
 
-Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre e quindi si ha multicollinearità. In questo caso la matrice $(X^{\prime} X)$ è singolare e le soluzioni non sono uniche. 
+Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre e quindi si ha multicollinearità. In questo caso la matrice $(X^{\prime} X)$ è detta singolare e le soluzioni non sono uniche. 
 
 Esistono due tipi di collinearità:
 \begin{enumerate}[noitemsep]
-\item \textbf{Perfetta}: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre. Essa viola le proprietà del modello lineare classico solitamente per un errore nella definizione dei regressori o per una stranezza nei dati o ancora per la presenza di due variabili che sono direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio}).
-\item \textbf{Imperfetta}: sussiste quando $2$ o più regressori sono fortemente correlati e il determinante della matrice dei coefficienti tende a $0$. Questa condizione non provoca l'impossibilità della stima dei coefficienti come per la collinearità perfetta ma dà origine a coefficienti fortemente distorti.
+\item \textbf{Perfetta}: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre. Essa viola le proprietà del modello lineare classico. Solitamente ciò si verifica per un errore nella definizione dei regressori o per una stranezza nei dati o ancora per la presenza di due variabili che sono direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio}).
+\item \textbf{Imperfetta}: sussiste quando $2$ o più regressori sono fortemente correlati e il determinante della matrice dei coefficienti tende a $0$. Questa condizione non provoca l'impossibilità della stima dei coefficienti come per la collinearità perfetta ma dà origine a coefficienti fortemente distorti e caratterizzati da una varianza molto alta.
 \end{enumerate}
 Le principali conseguenze sono:
 \begin{enumerate}[noitemsep]
@@ -246,7 +246,7 @@ Tra la rappresentazioni grafiche utili rientrano:
 \item P-P plot che mette a confronto la distribuzione cumulata dei residui (sulle ascisse) con la distribuzione cumulata della normale (sulle ordinate). Il risultato di ciò è che in caso di distribuzione normale allora i punti si distribuiranno in modo ordinato lungo la \textit{bisettrice}. 
 \item Q-Q plot, molto simile al precedente, mette a confronto i quantili della distribuzione normale (sulle ascisse) con i residui $\varepsilon$ (sulle ordinate). Anche in questo caso la distribuzione dei punti lungo la \textit{bisettrice} indica il soddisfacimento dell'assunzione di normalità dei residui. La diversa forma assunta dai punti sulla bisettrice può inoltre indicare una distribuzione leptocurtica, platicurtica oppure asimmetrica (a destra o a sinistra a seconda della forma assunta).
 \end{itemize}
-Esistono infine alcuni test non parametrici che non si basano su ipotesi sulla distribuzione. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
+Esistono, infine, alcuni test non parametrici che non si basano su ipotesi sulla distribuzione ma che sono appunto detti non parametrici poichè testano la distribuzione dei parametri. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
 \begin{enumerate}[noitemsep]
 \item \textbf{Test di Shapiro-Wilk}, che assume valori compresi tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità. Il test parte dell'ipotesi $H_0$ : $\varepsilon\sim N(0,\sigma^2)$. In ogni caso, il test $W$ essendo caratterizzato da una forte asimmetria  potrebbe comunque portare ad un rifiuto dell'ipotesi di normalità.
 \begin{equation*}
@@ -397,7 +397,7 @@ Le ipotesi del modello sono analoghe a quelle formulate per il modello univariat
 0 & 0 & \dots & \dots & \sigma^2 I_n
 \end{bmatrix}
 \]
-Con dimensione $(nm,nm)$ poichè ogni matrice $\Sigma_\varepsilon$ relativa ad ogni singola equazione è di dimensione $(n,n)$ ed essendo $m$ il numero di variabili dipendenti $y$ otteniamo appunto una matrice di varianze e covarianze di questa dimensionalità. Mentre gli elementi diagonali di questa matrice rappresentano gli errori relativi alla medesima equazione, le matrici $0$ che non si trovano sulla diagonale, racchiudono le correlazioni fra gli errori relativi ad equazioni diverse. Per le matrici $0$ infatti abbiamo sulla diagonale la correlazione di \textit{ogni individuo} con sè stesso relativamente alle diverse variabili dipendenti $y$ (ovvero le scelte dell'$i$-esimo individuo riguardo una determinata $y_i$ non influenzerebbe le scelte dello stesso individuo riguardo un altra $y_j$, ipotesi molto forte) mentre per gli elementi non diagonali abbiamo la correlazione di ogni individuo \textit{con un altro} (questa ipotesi molto meno forte rispetto alla precedente) ;
+Con dimensione $(nm,nm)$ poichè ogni matrice $\Sigma_\varepsilon$ relativa ad ogni singola equazione è di dimensione $(n,n)$ ed essendo $m$ il numero di variabili dipendenti $y$ otteniamo appunto una matrice di varianze e covarianze di questa dimensionalità. Mentre gli elementi diagonali di questa matrice rappresentano gli errori relativi alla medesima equazione, le matrici $0$ che non si trovano sulla diagonale, racchiudono le correlazioni fra gli errori relativi ad equazioni diverse. Per le matrici $0$ infatti abbiamo sulla diagonale la correlazione di \textit{ogni individuo} con sè stesso relativamente alle diverse variabili dipendenti $y$ (ovvero le scelte dell'$i$-esimo individuo riguardo una determinata $y_i$ non influenzerebbero le scelte dello stesso individuo riguardo un altra $y_j$, ipotesi molto forte) mentre per gli elementi non diagonali abbiamo la correlazione di ogni individuo \textit{con un altro} (questa ipotesi molto meno forte rispetto alla precedente) ;
 \item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali;
 \item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$), contrariamente la matrice $Z'Z$ non sarebbe invertibile e non sarebbe calcolabile lo stimatore dei minimi quadrati;
 \item La numerosità della popolazione $n$ è maggiore del numero degli $r$ parametri stimati più l'intercetta ($n > r+1$) per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
@@ -419,9 +419,9 @@ abbiamo che
 \begin{equation*}
 (\Sigma_Y = YY') = (\hat{H}=\hat{B}ZZ'\hat{B}')+(\hat{\Sigma}_E=\hat{E}\hat{E}')
 \end{equation*}
-Con $\Sigma_Y$ matrice di varianze e covariante di $Y$, $\hat{H}$ matrice di varianze e covariante \textit{spiegate} e $\hat{\Sigma_E}$ matrice di varianze e covariante \textit{residue}.
+Con $\Sigma_Y$ matrice di varianze e covariante di $Y$, $\hat{H}$ matrice di varianze e covariante \textit{spiegate} e $\hat{\Sigma}_E$ matrice di varianze e covariante \textit{residue}.
 
-La grossa differenza tra soluzione univariata e multivariata, però, sta nelle \textit{covarianze}, poichè a differenza della soluzione univariata varianze spiegate e residue non sono scalari ma, appunto matrici; occorre quindi tenere conto delle correlazioni tra le soluzioni.
+La grossa differenza tra soluzione univariata e multivariata, però, sta nelle \textit{covarianze}, poichè a differenza della soluzione univariata, varianze spiegate e residue non sono scalari ma, appunto, matrici; occorre quindi tenere conto delle correlazioni tra le soluzioni.
 
 Nel caso multivariato classico infatti le parti diagonali di $\hat{\Sigma}_E$ e $\hat{H}$ sono \textit{identiche}.
 \begin{equation*}
@@ -437,7 +437,7 @@ L’$R^{2}$ in quest'ottica è una media pesata degli $R^{2}$ delle singole equa
 \end{itemize}
 \end{remark}
 \section{Inferenza nella Regressione Multivariata}
-Gli stimatori OLS sono corretti ed efficienti, poichè il teorema di Gauss-Markov vale anche per il caso multivariato. Infatti nell'ambito degli stimatori lineari e corretti del vettore dei parametri, lo stimatore $\beta$ dei minimi quadrati è quello a \textit{varianza minore}. Inoltre per il modello di regressione multivariata con rango pieno con errori $E$ normalmente distribuiti anche le $m$ variabili dipendenti $Y$ sono distribuite secondo una normale multivariata $$Y \sim N(BZ, \Sigma_Y)$$ mentre i parametri stimati $\beta$ $$\beta \sim N(B,\hat{H})$$ con $\hat{H}$ matrice di varianze e covarianze spiegata della popolazione , positiva definita ed efficiente che si dimostra essere distribuita in modo indipendente da $E$ matrice degli errori.
+Gli stimatori OLS sono corretti ed efficienti, poichè il teorema di Gauss-Markov vale anche per il caso multivariato. Infatti nell'ambito degli stimatori lineari e corretti del vettore dei parametri, lo stimatore $\beta$ dei minimi quadrati è quello a \textit{varianza minore}. Inoltre per il modello di regressione multivariata con rango pieno con errori $E$ normalmente distribuiti anche le $m$ variabili dipendenti $Y$ sono distribuite secondo una normale multivariata $$Y \sim N(BZ, \Sigma_Y)$$ mentre i parametri stimati $\beta$ $$\beta \sim N(B,\hat{H})$$ con $\hat{H}$ matrice di varianze e covarianze spiegate della popolazione, positiva definita ed efficiente, e che si dimostra essere distribuita in modo indipendente da $E$ matrice degli errori.
 \'{E} però il caso di notare che sia $\Sigma_Y$ che $\hat{H}$ sono entrambi matrici di varianza e covarianza \textit{non diagonali} e, di conseguenza, sono influenzate dalle correlazioni.
 
 Si definisce invece \textit{varianza generalizzata} di $\hat{H}$ il suo determinante. Decidiamo di utilizzare la varianza generalizzata di $\hat{H}$ perchè ci è impossibile usare sia $t$ che $F$ in quanto misure univariate. A proposito di quanto detto riguardo la non diagonalità di $\hat{H}$, la sua varianza generalizzata è proprio una misura di variabilità che considera la correlazione tra le variabili. 
@@ -451,7 +451,7 @@ La varianza generalizzata si dimostra infatti uguale a $0$ in caso di presenza d
 Analogamente si definisce \textit{varianza generalizzata} di $\Sigma_E$ il determinante della matrice di varianza-covarianza residua. 
 \newline
 \newline
-Considerando che $\hat{H}$ si distribuisce come una variabile casuale di \textbf{Wishart} con $r$ \textit{gradi di libertà} e $\Sigma_E$ sempre come una Wishart con $r-n$ \textit{gradi di libertà} e considerando la Wishart una generalizzazione multivariata di $F$ possiamo quindi definire come \textbf{test del rapporto di verosimiglianza Lambda di Wilks}: \begin{equation*}
+Considerando che $\hat{H}$ si distribuisce come una variabile casuale di \textbf{Wishart} con $r$ \textit{gradi di libertà} e $\Sigma_E$ sempre come una Wishart con $(r-n)$ \textit{gradi di libertà} e considerando la Wishart una generalizzazione multivariata di $F$ possiamo quindi definire come \textbf{test del rapporto di verosimiglianza Lambda di Wilks}: \begin{equation*}
 \wedge= \frac{|\Sigma_E|}{|\Sigma_E + \hat{H}|} 
 \end{equation*}
 Che si distribuisce \textit{asintoticamente} come una $\chi^2$ con $mr$ \textit{gradi di libertà}. \\
@@ -464,11 +464,11 @@ che nel caso sia rispettata l'ipotesì di normalità dei residui
 E \sim N(0,\sigma^2 I_{nm})
 \end{equation*}
 permette di costruire \textit{test multivariati} per i parametri  del modello analoghi a quelli costruiti utilizzando $F$ nel caso univariato.\\
-Il test del rapporto di verosimiglianza Lambda di Wilks assume come ipotesi nulla $H_0$: 
+Il test del rapporto di verosimiglianza Lambda di Wilks assume come ipotesi nulla: 
 \begin{equation*}
 H_0:\hat{B} = 0 
 \end{equation*} 
-per cui nel caso $H_0$ si rivelasse vera allora $\wedge$ tenderà ad 1 per la struttura stessa di $F$. \\
+per cui nel caso $H_0$ si rivelasse vera allora $\wedge$ tenderebbe ad 1 per la struttura stessa di $F$. \\
 Se infatti $H_0$ è vera il numeratore e il denominatore di $\wedge$ tenderanno a coincidere poichè $\hat{H}$ tenderà a $0$. Perciò la regione di accettazione di $H_0$ (nullità dei parametri $\hat{B}$) è per valori di $\wedge$ vicini all’$1$. Tenendo quindi conto di queste circostanze e per la struttura di $F$, per $\hat{H}$ che tende a $0$ anche $F$ tenderà a $0$, cadendo così nella \textit{regione di accettazione} del test.
 
 La regione di rifiuto di $H_0$ è per valori di $\wedge$ più piccoli di $1$, in cui il numeratore è più piccolo del denominatore per la presenza di $\hat{H}$.
