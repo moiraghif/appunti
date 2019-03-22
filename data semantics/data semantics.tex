@@ -5,8 +5,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{listings}
-\usepackage{multicol}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1.2in]{geometry}
 \usepackage[utf8]{inputenc}
 \counterwithin*{section}{part}
 
@@ -23,7 +22,6 @@
 
 \begin{document}
 \maketitle
-\begin{multicols}{2}
 \begin{abstract}
   La \textit{Data Semantcs} si occupa di comprendere il significato dei dati durante la scrittura di un programma.
   Nell'ambito dell'analisi è fondamentale nell'integrazione di più dataset e nella loro condivisione.
@@ -37,11 +35,8 @@
   L'esame orale sarà accompagnato da un progetto software (effettuato in gruppo di - circa - 3 persone), di cui sarà fatta una presentazione orale; in alternativa al progetto è possibile scrivere un articolo di approfondimento su una tematica a scelta.
   La preparazione dovrà essere ``ragionevolmente'' dettagliata su tutti gli argomenti, e particolarmente approfondita sull'argomento del progetto.
 \end{abstract}
-\vfill\null
-\columnbreak
+\newpage
 \tableofcontents
-\vfill\null
-\columnbreak
 
 \newpage
 % titolo provvisorio
@@ -97,7 +92,6 @@ I chatbot sono costruiti con l'ausilio di reti neurali e rappresentazioni del mo
 RDF (\textit{Resource Description Framework}) è il linguaggio standrad per il web semantico, ovvero per \textit{l'internet elaborabile dalle macchine}.
 L'unità base per rappresentare l'informazione è rappresentata da triple (affermazioni), ovvero grafi etichettati, identificati da URI (\textit{Unique Resource Identifier}).
 Esempi di triple sono:
-\end{multicols}
 \begin{verbatim}
 <Electric Piano, label, "Electric Piano"@en>
 <Elton John, instrument, Electric Piano>
@@ -113,7 +107,6 @@ Le triple sono rappresentabili come un grafo diretto, aciclico ed etichettato:
     \
      [label]- "Electric Piano"@en
 \end{verbatim}
-\begin{multicols}{2}
 Alle triple si applicano degli identificativi globali (una sorta di chiave primaria SQL, gli URI, appunto): si usano generalmente identificativi web (abbreviati, detti prefissi), che specificano come recuperare l'informazione (qualsiasi cosa a cui si può attribuire un valore costante è definibile come URI).
 Tutti gli URI sono risorse, e rappresentano l'ontologia del dominio.
 
@@ -156,9 +149,8 @@ Introdotto come linguaggio per interrogare \textit{linked data}, è un linguaggi
 \end{itemize}
 Permette di interrogare (query), modificare (update) e integrare (federated) database composti da triple. Il principio di SPARQL è quello di \textit{pattern matching}, ovvero le query descrivono sottografi del grafo principale e quelli che matchano rappresentano i risultati.
 Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più elementi di una tripla con una variabile.
-\end{multicols}
 \begin{verbatim}
-dbpedia:The_Beatles foaf:name "The Beatles" . <- (importante ricordare il punto alla fine)
+dbpedia:The_Beatles foaf:name "The Beatles" . # importante il punto alla fine
 dbpedia:The_Beatles foaf:name ?album .
 ?album mo:track ?track .
 ?album ?p ?o .
@@ -202,14 +194,14 @@ WHERE {
 SELECT ?album_name ?track_title
        ?date       ?album       .
  WHERE {
-         dbpedia:The_Beatles foaf:name ?album .               # tutti gli album
-                                                              # dei Beatles
+         dbpedia:The_Beatles foaf:name ?album .             # tutti gli album
+                                                            # dei Beatles
          ?album              dc:title  ?album;
-         mo:track ?track .                                    # tutte le tracce
-                                                              # degli album
+         mo:track ?track .                                  # tutte le tracce
+                                                            # degli album
          ?track            dc:title  ?track_title;
          mo:duration ?duration .
-         FILTER (?duration > 300000 && ?duration < 400000)    # filtra per durata
+         FILTER (?duration > 300000 && ?duration < 400000)  # filtra per durata
        }
 \end{verbatim}
 
@@ -225,7 +217,6 @@ CONSTRUCT {
             ?album              mo:track    ?track .
           }
 \end{verbatim}
-\begin{multicols}{2}
   
 Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query.
 
@@ -300,10 +291,9 @@ Lo schema quindi è flessibile e disaccoppia lo schema dai dati (ovvero lo schem
 Potendo esserci contraddizione nei dati, si sono costruiti linguaggi come RDF Schapes e SHACL che permettono una validazione dei dati attraverso la definizione di vincoli.
 
 \subsection{\textit{Reasoning}.}
-I linguaggi RDFS e OWL permettono l'operazione di \textit{reasoning}.
-OWL è costruito su RDFS, aggiungendo però funzionalità aggiuntive.
+I linguaggi RDFS e OWL permettono l'operazione di \textit{reasoning}, ovvero l'inferenza di nuova conoscenza a partire da più antologie esistenti.
 % il prof sembra che faccia rap col braccio e il microfono
-Oltre ad avere sistemi deduttivi, la logica proposizionale garantisce che l'algoritmo termini (è cioè \textit{decidibile}, ovvero date le premesse è sempre possibile stabilire se una Formula Ben Formata FBF è vera o meno), mentre la logica del primo ordine è semi-decidibile.
+Oltre ad avere sistemi deduttivi, la logica proposizionale garantisce che l'algoritmo termini (è cioè \textit{decidibile}, ovvero date le premesse è sempre possibile stabilire se una FBF - Formula Ben Formata - è vera o meno), mentre la logica del primo ordine è semi-decidibile.
 Anche con una procedura che termina e confermi la verità di una formula però non è utile in pratica: il tempo impiegato potrebbe essere particolarmente lungo e quindi rendere inutile il programma.
 In caso di linguaggi non decidibili, bisogna semplificare il linguaggio per trovare un compromesso tra tempo impiegato ed espressività: ci sono più linguaggi perchè il compromesso è trovato in modo diverso.
 Inoltre esistono altri linguaggi \textit{a regole}, ovvero linguaggi non puramente logici, ma che vi si ispirano, utilizzabili per fare deduzioni su RDF che sono più efficienti.
@@ -357,18 +347,50 @@ allora [u type z]
 per l'oggetto, non per il soggetto.)                
 \end{verbatim}
 
+Nonostante tutti i pregi, RDFS presenta alcuni svantaggi: non ha restrizioni locali all'appartenenza di domini, non ha vincoli di cardinalità e le classi non possono essere combinate.
+OWL è stato introdotto per colmare queste lacune.
+
+
 \subsubsection{SPARQL 1.1.}
 La versione $1.1$ introduce gli \textit{Entailment Regimes}: procedure che calcolano tutte le implicazioni degli assiomi; uno dei sistemi più noti è Virtuoso.
 I risultati possono essere esportati come \verb|.xml|, \verb|.csv| o \verb|.tsv|.
 
 \subsubsection{OWL.}
-È un motore inferenziale composto da più sotto-linguaggi, con l'obiettivo di ridurre la confusione lasciata da RDFS.
+È un motore inferenziale composto da più sotto-linguaggi, con l'obiettivo di ridurre la confusione lasciata da RDFS, tuttavia ne aumenta la complessità computazionale.
+È un linguaggio \textit{formale} (è un linguaggio logico processabile da elaboratori), \textit{esplicito} (non ambiguo) e \textit{condiviso}.
 OWL2 è diviso in tre progetti:
 \begin{itemize}
   \item OWL 2 EL: limitato a classificazioni di base, ma la complessità è polinomiale;
   \item OWL 2 QL: usa una sintassi simile a SQL;
   \item OWL 2 RL: è usato per  essere implementato efficientemente in sistemi \textit{rule-based}.
 \end{itemize}
+È frequente definire ontologie senza usare tutta la capacità espressiva di OWL.
+
+Rispetto a RDFS si introduce l'equivalenza tra classi con \verb|owl:equivalentClass| e tra individui con \verb|owl:sameAs|, tuttavia il loro uso ha delle implicazioni semantiche (riflessività, transitività e simmetria); inoltre l'equivalenza può essere fatta anche a livello di proprietà con \verb|owl:equivalentProperty|.
+Si può anche specificare la disgiunzione tra due elementi con \verb|owl:differentFrom|, in opposizione alla UNI (\textit{Unique Name Assumption}), secondo cui oggetti con nomi diversi sono distinti.
+Le proprietà possono essere disgiunte con \verb|owl:propertyDisjointWith|.
+
+Le proprietà di OWL sono distinte in due categorie: ObjectProperties (la proprietà è una risorsa) o DatatypeProperties (la proprietà è un letterale); questa distinzione facilita la costruzione di grafi specificando quali proprietà sono utilizzabili per attraversare il grafo.
+
+La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamento parziale: si può costruire un reticolo finito (quindi con limite superiore e inferiore).
+Una relazione in OWL ha le proprietà di simmetria e di transitività; inoltre matematicametne è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.
+Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
+
+
+\section{Logiche descrittive.}
+Sono una famiglia di logiche usate per rappresentare il grafo di conoscenza; più una logica è complessa ed espressiva maggiori sono il tempo di esecuzione e la complessità.
+Sono state introdotte per lo studio del linguaggio naturale prima del \textit{deep learning}.
+OWL DL (\textit{OWL Descriptive Logic}) si basa su SHIQ (è equivalente a SHOINDn).
+Una logica è composta da una TBox, ovvero l'ontologia della logica, e una ABox (\textit{Assertional Box}), che comprende i dati veri e propri.
+Nelle logiche descrittive la difficoltà è costruire classi complesse (coi relativi costruttori). \newline
+Una classe può quindi essere definita basandosi su più classi tramite una serie di operatori logici.
+La semantica dunque si definisce ricorsivamente dagli elementi più semplici ai più complicati.
+
+Gli assiomi usati in queste logiche sono estremamente semplici ma si applicano ugualmente anche a classi più complesse.
+
+L'interpretazione $I$ di un assioma soddisfa l'assioma A ($I \models A$) solamente se sono rispettate alcune regole: con una teoria logica composta da assiomi, se ne possono avere un'infinità di interpretazioni ma ogni assioma riduce l'insieme di interpretazioni possibili.
+Un'ontologia ha esattamente questo compito: ridurre il numero di interpretazioni e permettere l'inferenza.
+
 
 \section{\textit{Search Engine} semantici.}
 Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
@@ -394,8 +416,9 @@ Un \textit{triplestore} archivia le triple e le filtra per elementi fissati.
 Non ha una struttura interna.
 
 
+
+
 \newpage
-\end{multicols}
 \part{Esercitazioni.}
 
 \section{SPARQL.}
