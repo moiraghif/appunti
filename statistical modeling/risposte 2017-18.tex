@@ -513,57 +513,86 @@ H_0 : B_{cA} = B_{vA}
 
 
 \section{Modello lineare generalizzato}
-
-Guardare Modello lineare classico multivariato.\\
+Il modello linearre multivariato generalizzato supera le ipotesi, molto stringenti, del modello lineare multivariato classico.
 Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $Y = BZ+E$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
 
-Nell’ipotesi classica:
+Nell’ipotesi \emph{classica} infatti abbiamo che:
 
 \begin{enumerate}[noitemsep]
-\item Gli errori sono omoschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale
-\item Gli errori sono omoschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è uguale
-\item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
-\item Gli errori sono incorrelati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti non è legato al proprio e a quello degli altri individui.
+\item Gli errori sono \textbf{omoschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale;
+\item Gli errori sono \textbf{omoschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è uguale;
+\item Gli errori sono \textbf{incorrelati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui;
+\item Gli errori sono \textbf{incorrelati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti non è legato al proprio e a quello degli altri individui.
 \end{enumerate}
+Infatti ipotizzando 3 variabili dipendenti:
+\begin{itemize}[noitemsep]
+\item Spesa viaggi
+\item Spesa partite
+\item Spesa concerti
+\end{itemize}
+La parte di variabilità non spiegata dalle variabili esplicative ($\Sigma_{E}$) è identica per tutti gli individui, per ognuna delle 3  variabili dipendenti(omoschedasticità). Inoltre la stessa $\Sigma_E$ per l’individuo \textit{i}-esimo non è influenzata dall’individuo \textit{k}-esimo per ogni variabile dipendente. La parte non spiegata dalle variabili esplicative dell’individuo \textit{i}-esimo rispetto alla spesa viaggi (ad esempio) non è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto alla spesa partite (incorrelazione).
 
-Nell’ipotesi intermedia:
-\begin{enumerate}[resume, noitemsep]
 
-\item Gli errori sono omoschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale
-\item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
-\item Gli errori sono incorrelati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui
-\item Gli errori sono correlati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
+Nell’ipotesi \emph{intermedia}, invece:
+\begin{enumerate}[noitemsep]
+
+\item Gli errori sono \textbf{omoschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale;
+\item Gli errori sono \textbf{eteroschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa;
+\item Gli errori sono \textbf{incorrelati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui;
+\item Gli errori sono \textbf{correlati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
 \end{enumerate}
-Nell’ipotesi estrema:
-\begin{enumerate}[resume, noitemsep]
+Infatti facendo riferimento all'esempio precedente potremmo dire che:
+\begin{itemize}[noitemsep]
+\item La parte di variabilità non spiegata dalle variabili esplicative è identica per tutti gli individui per spesa viaggi ad esempio (omoschedasticità nella stessa equazione);
+\item La parte di variabilità non spiegata dalle variabili esplicative per tutti gli individui è diversa  per spesa viaggi, partite, concerti (eteroschedasticità fra diverse equazioni);
+\item La parte non spiegata dalle variabili esplicative per l’individuo \textit{i} non è influenzata da quella dell'individuo \textit{k} per ogni variabile dipendente e per le varie voci di spesa (incorrelazione fra individui diversi);
+\item La parte non spiegata dalle variabili esplicative dell’individuo \textit{i} rispetto alla spesa  è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto alla spesa partite ad esempio (correlazione per medesimo individuo).
+\end{itemize}
+Nell’ipotesi \emph{estrema}:
+\begin{enumerate}[noitemsep]
 
-\item Gli errori sono eteroschedastici all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è diversa
-\item Gli errori sono eteroschedastici tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa
-\item Gli errori sono correlati all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente è legato a quello degli altri individui
-\item Gli errori sono correlati fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
+\item Gli errori sono \textbf{eteroschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è diversa;
+\item Gli errori sono \textbf{eteroschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa;
+\item Gli errori sono \textbf{correlati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente è legato a quello degli altri individui;
+\item Gli errori sono \textbf{correlati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
 \end{enumerate}
-Quindi occorre usare non le singoli sottomatrici di correlazione degli errori $\Sigma\varepsilon(i)$, ma la matrice $\Sigma\varepsilon$ relativa all’intero modello.
+Continuando l'esempio precedente avremo quindi tutto l'opposto dell'ipotesi classica:
+\begin{itemize}[noitemsep]
+\item La parte di variabilità non spiegata dalle variabili esplicative è diversa per tutti gli individui per spesa viaggi ad esempio (eteroschedasticità nella stessa equazione);
+\item La parte di variabilità non spiegata dalle variabili esplicative per tutti gli individui è diversa  per spesa viaggi, partite, concerti (eteroschedasticità fra diverse equazioni);
+\item La parte non spiegata dalle variabili esplicative per l'individuo \textit{i} è influenzata dall’individuo \textit{k} per ogni variabile dipendente come ad esempio fra spesa viaggi e spesa partite (correlazione fra individui diversi);
+\item La parte non spiegata dalle variabili esplicative dell’individuo \textit{i} rispetto alla spesa  è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto ad esempio alla spesa partite (correlazione per medesimo individuo)
+\end{itemize}
+Quindi occorre usare non le singoli sottomatrici di correlazione degli errori $\Sigma_{E(i)}$, ma la matrice $\Sigma_E$ relativa all’intero modello.
 
 \section{Modello SURE}
 
-Secondo un approccio più realistico, degli r regressori si usano solo i regressori effettivamente legati alle diverse variabili dipendenti: r1 nella prima, r2 nella seconda, ..., rm nell’ultima.
+Nel modello \textbf{S}eemenely \textbf{U}ncorrelated \textbf{R}egression \textbf{E}quation, anche detto \textbf{SURE} segue un approccio più realistico: degli $r$ regressori si usano solo i regressori effettivamente legati alle diverse variabili dipendenti, che potrebbero anche essere tutti, come nel caso classico del modello lineare multivariato, ma che in caso di non significatività potrebbero portare ad una differenziazione delle diverse equazioni. Inoltre questo modello permette di risolvere anche il problema di una numerosità diversa delle osservazioni tra le diverse equazioni.
 \newline
-In altre parole nel Modello SURE abbiamo regressori diversi per ogni equazione all’interno dell’insieme complessivo dei regressori per l’insieme delle equazioni del modello. 
+In altre parole nel modello SURE abbiamo regressori diversi per ogni equazione all’interno dell’insieme complessivo dei regressori per l’insieme delle equazioni del modello. 
 \newline
-$\Sigma$jrj è quindi la somma di tutti i regressori nelle diverse equazioni.
+Quindi la somma di tutti i regressori nelle diverse equazioni è uguale a
+\begin{equation*}
+\sum_{j=1}^n r_j
+\end{equation*}
 \newline
-Ciò permette di risolvere anche il problema di una numerosità diversa delle osservazioni delle diverse equazioni. Data nj è la numerosità delle osservazioni per l’equazione j-esima il complesso delle numerosità è dato da $\Sigma$jnj.
+Data $n_j$ come la numerosità delle osservazioni per l’equazione $j$-esima allora il complesso delle numerosità è dato da 
+\begin{equation*}
+\sum_{j=1}^m n_j
+\end{equation*}.
 \newline
 La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza: 
 \begin{itemize}
-\item Il modello è caratterizzato dalla presenza delle variabili esplicative ZA, ZB, ZC diverse da equazione ed equazione.
+\item Il modello è caratterizzato dalla presenza delle variabili esplicative $Z_A$, $Z_B$, $Z_C$ diverse da equazione ed equazione.
 \item Gli errori sono:
 	\begin{itemize}[noitemsep]
-	\item omoschedastici e incorrelati nella stessa equazione
-	\item eteroschedastici fra diverse equazioni
-	\item correlati per lo stesso individuo e incorrelati tra individui diversi fra diverse equazioni
+	\item omoschedastici e incorrelati nella stessa equazione;
+	\item eteroschedastici fra diverse equazioni;
+	\item correlati per lo stesso individuo e incorrelati tra individui diversi fra diverse equazioni.
 	\end{itemize}
 \end{itemize}
+Considerando $B^*$ come stimatore dei coefficienti del modello OLS e $\hat{B}^*$ come lo stimatore del modello SURE, possiamo affermare che i due risultano identici ma per la costruzione del modello SURE $\hat{B}^*$ possiede dei parametri uguali a zero proprio per permettere di ottenere equazioni differenziate nel numero delle variabili esplicative. La possibilità di differenziare il numero di covariate risiede infatti nel porre uguale a zero il valore della variabile non presente nell'equazione $x$ così che questa, moltiplicata per il rispettivo coefficiente $B$ generi un influenza nulla sulla stima di $Y$. \newline
+\textbf{NB}: Quando si omettono delle variabili, essendo i coefficienti di regressione parziali (influenzati, cioè, dalle altre variabili esplicative poichè stimati sulla totalità di esse) cambiano tutti i coefficienti di regressione.
 
 \section{Il problema dei dati gerarchici e uso di Regressione multilevel}
 
