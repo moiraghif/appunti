@@ -20,26 +20,32 @@ Tutorial Git: http://rogerdudler.github.io/git-guide/index.it.html
 
 # Ecco i link ai pdf delle materie:
 
-[Foundation of Computer Science (ENGLISH)](https://github.com/moiraghif/appunti/blob/master/Foundation%20of%20Computer%20Science/AppuntiSQL.pdf)
+* Foundation of Computer Science 
 
-[Foundation of Computer Science (ITALIANO)](https://github.com/moiraghif/appunti/blob/master/Foundation%20of%20Computer%20Science/Appunti%20di%20SQL%20(ITA).pdf)
+  * [Foundation of Computer Science (ENGLISH)](https://github.com/moiraghif/appunti/blob/master/Foundation%20of%20Computer%20Science/AppuntiSQL.pdf)
 
-[Data Management](https://github.com/moiraghif/appunti/blob/master/data%20management/DataManagement.pdf)
+  * [Foundation of Computer Science (ITALIANO)](https://github.com/moiraghif/appunti/blob/master/Foundation%20of%20Computer%20Science/Appunti%20di%20SQL%20(ITA).pdf)
 
-[Data Management(Some English Stuff translated to Italian)](https://github.com/moiraghif/appunti/blob/master/data%20management/DataManagement_ita.pdf)
+* Data Management
 
-[Data Semantics](https://github.com/moiraghif/appunti/blob/master/data%20semantics/data%20semantics.pdf)
+  * [Data Management](https://github.com/moiraghif/appunti/blob/master/data%20management/DataManagement.pdf)
 
-[Descision Models](https://github.com/moiraghif/appunti/blob/master/decision%20models/decision%20models.pdf)
+  * [Data Management(Some English Stuff translated to Italian)](https://github.com/moiraghif/appunti/blob/master/data%20management/DataManagement_ita.pdf)
 
-[Juridical Issues](https://github.com/moiraghif/appunti/blob/master/diritto%20digitale/diritto%20digitale.pdf)
+* [Data Semantics](https://github.com/moiraghif/appunti/blob/master/data%20semantics/data%20semantics.pdf)
 
-[Machine Learning(ITALIANO)](https://github.com/moiraghif/appunti/blob/master/machine%20learning/machine%20learning.pdf)
+* [Descision Models](https://github.com/moiraghif/appunti/blob/master/decision%20models/decision%20models.pdf)
 
-[Machine Learning (ENGLISH)](https://github.com/moiraghif/appunti/blob/master/machine%20learning/ML_pranav.pdf)
+* [Juridical Issues](https://github.com/moiraghif/appunti/blob/master/diritto%20digitale/diritto%20digitale.pdf)
 
-[Social Issues](https://github.com/moiraghif/appunti/blob/master/social/social.pdf)
+* Machine Learning
+  
+  * [Machine Learning(ITALIANO)](https://github.com/moiraghif/appunti/blob/master/machine%20learning/machine%20learning.pdf)
 
-[Statistical Modeling](ancora da definire)
+  * [Machine Learning (ENGLISH)](https://github.com/moiraghif/appunti/blob/master/machine%20learning/ML_pranav.pdf)
 
-[Web Marketing](https://github.com/moiraghif/appunti/blob/master/web%20marketing/web%20marketing.pdf)
+* [Social Issues](https://github.com/moiraghif/appunti/blob/master/social/social.pdf)
+
+* [Statistical Modeling](ancora da definire)
+
+* [Web Marketing](https://github.com/moiraghif/appunti/blob/master/web%20marketing/web%20marketing.pdf)
