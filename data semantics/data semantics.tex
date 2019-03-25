@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 
+\usepackage{graphicx}
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -8,6 +9,7 @@
 \usepackage[margin=1.2in]{geometry}
 \usepackage[utf8]{inputenc}
 \counterwithin*{section}{part}
+\graphicspath{ {./img/} }
 
 % lunedì        10:30-12:30 U14/T024 (U14/1)
 % mercoledì     10:30-13:30 U14/T024 (U14/1)
@@ -371,16 +373,28 @@ Rispetto a RDFS si introduce l'equivalenza tra classi con \verb|owl:equivalentCl
 Si può anche specificare la disgiunzione tra due elementi con \verb|owl:differentFrom|, in opposizione alla UNI (\textit{Unique Name Assumption}), secondo cui oggetti con nomi diversi sono distinti.
 Le proprietà possono essere disgiunte con \verb|owl:propertyDisjointWith|.
 
-Le proprietà di OWL sono distinte in due categorie: ObjectProperties (la proprietà è una risorsa) o DatatypeProperties (la proprietà è un letterale); questa distinzione facilita la costruzione di grafi specificando quali proprietà sono utilizzabili per attraversare il grafo.
+Le proprietà di OWL sono distinte in due categorie: \textbf{ObjectProperties} (la proprietà è una risorsa) o \textbf{DatatypeProperties} (la proprietà è un letterale); questa distinzione facilita la costruzione di grafi specificando quali proprietà sono utilizzabili per attraversare il grafo.
 
-La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamento parziale: si può costruire un reticolo finito (quindi con limite superiore e inferiore).
-Una relazione in OWL ha le proprietà di simmetria e di transitività; inoltre matematicametne è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.
-Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
+La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamento parziale: si può costruire un reticolo finito (quindi con limite superiore e inferiore, rispettivamente uguali all'insieme \textit{universo} e all'insieme \textit{vuoto}).
 
-Un concetto si dice \textit{soddisfacibile} se esiste almeno una sua interpretazione; invece un concetto si dice \textit{sussunto} a un altro modello se in qualsiasi interpretazione della prima teoria si ha un sottoinsieme della seconda teoria.
+Una relazione in OWL può possedere determinate proprietà:
+\begin{itemize}
+\item \textbf{Simmetria};
+\item \textbf{Transitività};
+\item \textbf{Transitività inversa};
+\item \textbf{Funzionalità}: ovvero si ha al più un valore per un argomento permettendo l'uso di identificativi e di funzioni inverse;
+\item \textbf{Funzionalità inversa}: quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
+\end{itemize}
+%ha le proprietà di simmetria e di transitività; inoltre matematicamente è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.%
+%Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.%
+%fatto ad elenco secondo me risulta più intuitivo.
+Un concetto si dice:
+\begin{itemize}
+\item \textit{Soddisfacibile} se esiste almeno una sua interpretazione; 
+\item \textit{Sussunto} a un altro concetto se qualsiasi interpretazione del primo concetto è sottoinsieme di un interpretazione del secondo;
+\item Due concetti si dicono \textit{equivalenti} se l'interpretazione del primo concetto è sempre uguale a quella del secondo in tutte le interpretazioni della teoria, al contrario si dicono \textit{disgiunti}.
+\end{itemize}
 Il concetto di interpretazione in logica quindi è puramente teorico: è lo strumento matematico usato per attribuire un significato ai dati; l'inferenza permette di attribuire significati aggiuntivi indipendentemente dalla semantica iniziale.
-Due concetti si dicono \textit{equivalenti} se l'interpretazione del primo concetto è sempre uguale a quella del secondo in tutte le interpretazioni della teoria; al contrario si dicono \textit{disgiunti}.
-
 È possibile utilizzare il \textit{reasoner} per verificare la correttezza delle relazioni.
 La conoscenza ha senso se è soddisfacibile: una teoria è incosistente se non ha interpretazioni che la rendono vera; caso analogo si verifica quando una classe è sussunta all'insieme vuoto: in tal caso non ha interpretazioni possibili.
 Dal punto di vista pragmatico, con un \textit{reasoner} si verifica la soddisfacibilità della teoria, si inferiscono gerarchie e nuove relazioni e ancora il tipo degli individui.
@@ -391,15 +405,30 @@ Dal punto di vista pragmatico, con un \textit{reasoner} si verifica la soddisfac
 Sono una famiglia di logiche usate per rappresentare il grafo di conoscenza; più una logica è complessa ed espressiva maggiori sono il tempo di esecuzione e la complessità.
 Sono state introdotte per lo studio del linguaggio naturale prima del \textit{deep learning}.
 OWL DL (\textit{OWL Descriptive Logic}) si basa su SHIQ (è equivalente a SHOINDn).
-Una logica è composta da una TBox, ovvero l'ontologia della logica, e una ABox (\textit{Assertional Box}), che comprende i dati veri e propri.
+Una logica è composta da una TBox (\textit{Terminological Box}), ovvero l'ontologia della logica, e una ABox (\textit{Assertional Box}), che comprende i dati veri e propri.
 Nelle logiche descrittive la difficoltà è costruire classi complesse (coi relativi costruttori). \newline
+\begin{center}
+	\includegraphics[scale=0.4]{IMG1.png}
+\end{center}
 Una classe può quindi essere definita basandosi su più classi tramite una serie di operatori logici.
 La semantica dunque si definisce ricorsivamente dagli elementi più semplici ai più complicati.
-
-Gli assiomi usati in queste logiche sono estremamente semplici ma si applicano ugualmente anche a classi più complesse.
-
+\begin{center}
+\includegraphics[scale=0.5]{IMG2.png}
+\end{center}
+L'\textit{interpretazione} dei costrutti è insiemistica:
+\begin{center}
+\includegraphics[scale=0.4]{IMG3.png}
+\end{center}
+Gli assiomi usati in queste logiche sono estremamente semplici ma si applicano ugualmente anche a classi più complesse. Avendo infatti complicato le classi possiamo ottenere assiomi più \textit{semplici}:
+\begin{center}
+\includegraphics[scale=0.5]{IMG4.png}
+\end{center}
+Possiamo definire un interpretazione anche degli assiomi.
 L'interpretazione $I$ di un assioma soddisfa l'assioma A ($I \models A$) solamente se sono rispettate alcune regole: con una teoria logica composta da assiomi, se ne possono avere un'infinità di interpretazioni ma ogni assioma riduce l'insieme di interpretazioni possibili.
 Un'ontologia ha esattamente questo compito: ridurre il numero di interpretazioni e permettere l'inferenza.
+\begin{center}
+\includegraphics[scale=0.6]{IMG5.png}
+\end{center}
 
 
 \section{\textit{Search Engine} semantici.}
@@ -413,21 +442,20 @@ Per la gestione di pattern di architettura ci sono tre possibili approcci:
 Anche per il \textit{reasoner} ci sono strategie diverse.
 
 \section{\textit{Semantic Framework}.}
-Si usano dei framework per archiviare i dati in grafi per la facilità della gestione delle relazioni (si interroga per ottenere nuova conoscenza).
-
-\subsection{RDF4J.}
-È un framework per Java per gestire, archiviare (in diversi modi) e interrogare documenti RDF, organizzando tramite un paradigma ad oggetti.
-
-\subsection{Apache Jena.}
-È un'api per RDF, offre un reasoner organizzando i dati ad oggetti.
-
-\subsection{\textit{Triplestore}.}
-Un \textit{triplestore} archivia le triple e le filtra per elementi fissati.
-Non ha una struttura interna.
-
-
-
-
+Si usano dei framework per archiviare i dati in grafi per la facilità della gestione delle relazioni (si interroga per ottenere nuova conoscenza):
+\begin{itemize}
+\item \textbf{RDF4J} è un framework per Java per gestire, archiviare (in diversi modi) e interrogare documenti RDF, organizzando tramite un paradigma ad oggetti;
+\item \textbf{Aoache Jena} è un'api per RDF, offre un reasoner organizzando i dati ad oggetti;
+\item Un \textbf{triplestore} archivia le triple e le filtra per elementi fissati ed è fatto per ricevere query SPARQL. Ci permette di fare inferenza per mezzo di reasoner o entailment ma non ha struttura interna, poichè non ha struttura per le proprietà. Alcuni esempi di triplestore sono \textit{Openlink Virtuoso}, che permette di avere più grafi e di avere quindi strutture quadruple e non triple e \textit{AllegroGraph};
+\item \textbf{Property Graph} a differenza del triplestore ha una struttura interna a costo però di perdere la possibilità di effettuare inferenza. Alcuni esempi di property graph sono \textit{GraphDB8} e \textit{Neo4j}.
+\end{itemize}
+Tra i reasoner più conosciuti vi sono:
+\begin{itemize}
+\item Pellet (OWL DL);
+\item Racer (OWL DL);
+\item Hermit;
+\item Reasoner nativi di Jena, GraphDB8 e AllegroGraph.
+\end{itemize}
 \newpage
 \part{Esercitazioni.}
 
