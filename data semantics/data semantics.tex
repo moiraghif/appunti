@@ -23,7 +23,6 @@
 
 \begin{document}
 \maketitle
-\begin{multicols}{2}
 \begin{abstract}
   La \textit{Data Semantcs} si occupa di comprendere il significato dei dati durante la scrittura di un programma.
   Nell'ambito dell'analisi è fondamentale nell'integrazione di più dataset e nella loro condivisione.
@@ -38,10 +37,8 @@
   La preparazione dovrà essere ``ragionevolmente'' dettagliata su tutti gli argomenti, e particolarmente approfondita sull'argomento del progetto.
 \end{abstract}
 \vfill\null
-\columnbreak
 \tableofcontents
 \vfill\null
-\columnbreak
 
 \newpage
 % titolo provvisorio
@@ -97,7 +94,6 @@ I chatbot sono costruiti con l'ausilio di reti neurali e rappresentazioni del mo
 RDF (\textit{Resource Description Framework}) è il linguaggio standrad per il web semantico, ovvero per \textit{l'internet elaborabile dalle macchine}.
 L'unità base per rappresentare l'informazione è rappresentata da triple (affermazioni), ovvero grafi etichettati, identificati da URI (\textit{Unique Resource Identifier}).
 Esempi di triple sono:
-\end{multicols}
 \begin{verbatim}
 <Electric Piano, label, "Electric Piano"@en>
 <Elton John, instrument, Electric Piano>
@@ -113,7 +109,6 @@ Le triple sono rappresentabili come un grafo diretto, aciclico ed etichettato:
     \
      [label]- "Electric Piano"@en
 \end{verbatim}
-\begin{multicols}{2}
 Alle triple si applicano degli identificativi globali (una sorta di chiave primaria SQL, gli URI, appunto): si usano generalmente identificativi web (abbreviati, detti prefissi), che specificano come recuperare l'informazione (qualsiasi cosa a cui si può attribuire un valore costante è definibile come URI).
 Tutti gli URI sono risorse, e rappresentano l'ontologia del dominio.
 
@@ -156,7 +151,6 @@ Introdotto come linguaggio per interrogare \textit{linked data}, è un linguaggi
 \end{itemize}
 Permette di interrogare (query), modificare (update) e integrare (federated) database composti da triple. Il principio di SPARQL è quello di \textit{pattern matching}, ovvero le query descrivono sottografi del grafo principale e quelli che matchano rappresentano i risultati.
 Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più elementi di una tripla con una variabile.
-\end{multicols}
 \begin{verbatim}
 dbpedia:The_Beatles foaf:name "The Beatles" . <- (importante ricordare il punto alla fine)
 dbpedia:The_Beatles foaf:name ?album .
@@ -225,7 +219,6 @@ CONSTRUCT {
             ?album              mo:track    ?track .
           }
 \end{verbatim}
-\begin{multicols}{2}
   
 Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query.
 
@@ -395,7 +388,6 @@ Non ha una struttura interna.
 
 
 \newpage
-\end{multicols}
 \part{Esercitazioni.}
 
 \section{SPARQL.}
