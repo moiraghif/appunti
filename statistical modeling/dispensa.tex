@@ -1,0 +1,149 @@
+\documentclass[11pt]{article}
+
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+
+\title{\textbf{Dispensa di \textit{Statistical Modeling}}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\part{Modello lineare}
+I modelli esplicitano la relazione tra variabili trovando un compromesso tra adattamento ai dati e parsimonia (Popper): ``\textit{all models are wrong, some are usefull}''.
+Infatti un modello lineare può rappresentare in modo esatto i dati tramite una funzione $y = f(x_1, x_2, x_3... x_k)$ senza errore $\varepsilon$.
+L'errore $\varepsilon$ è dovuto a variazioni individuali, componenti sistematiche del modello, errori di misura o di campionamento.
+Un modello è così caratterizzato dalla formula:
+\begin{equation*}
+  \underline{y} = f(x_1, x_2, x_3, ... x_k) + \varepsilon
+\end{equation*}
+
+A livello teorico la scelta delle variabili indipendenti deve tenere conto di relazioni, anche ipotizzate; di fatto però sono comunque influenzate dalla metodologia di raccolta, dalla popolazione e dal campionamento effettuato.
+Il modello dunque è prima specificato, poi stimato e verificato e infine, se supera i test, utilizzato.
+
+\paragraph{Specificazione del modello.}
+Inizialmente si specifica quali sono le variabili dipendenti e quale la dipendente e la relazione tra queste (lineare o meno).
+
+\paragraph{Stima del modello.}
+Successivamente si procede col calcolo del vettore $b$ (stima del vettore dei parametri $\beta$) basandosi sul campione (di numerosità $n$), mentre la componente erratica $\varepsilon$ rimane per definizione ignota.
+
+\paragraph{Verifica del modello.}
+Si passa alla verifica della bontà del modello grazie a indicatori descrittivi e test statistici; inoltre anche l'analisi dei residui consente una valutazione della bontà di adattamento.
+La fase di verifica serve per rifiutare il modello se eccessivamente sbagliato (dunque è necessario specificare un nuovo modello), ma non fornisce indicazioni sulla correttezza del modello. \newline
+
+La formula del modello è riassumibile in forma matriciale con la formula
+\begin{equation*}
+  y = \beta X + \varepsilon
+\end{equation*}
+dove però la matrice del disegno $X$ è composta da una colonna fittizia composta solamente da $1$ e dai dati campionari, per aggiungere al vettore $b$ la quota $b_0$.
+I coefficienti $b_j$ si interpretano come la variazione unitaria della variabile $x_j$ a parità di altre condizioni (\textit{ceteris paribus}).
+
+\section{Stima del modello.}
+Uno degli approcci utilizzati per il calcolo del vettore $b$ è il metodo dei minimi quadrati lineari:
+\begin{align*}
+  \min & \sum{(y_i - x_i b)^2} \\
+  =& \min \sum{e_i^2} \\
+  =& \min \{ (y -X b)'(y - X b) \}
+\end{align*}
+Si calcola quindi il gradiente della funzione obiettivo:
+\begin{equation*}
+  \frac{\partial{e'e}}{\partial{b}} = -2 X'(y - X b)
+\end{equation*}
+L'esistenza di un minimo impone la nullità del gradiente ($X'(y - X b)$); e quindi, se la matrice $X$ ha rango pieno, il sistema possiede un'unica soluzione per:
+\begin{equation*}
+  b = (X'X)^{-1}X'y
+\end{equation*}
+Lo stimatore rappresenta quindi il vettore dei parametri dei minimi quadrati; inoltre questa stima coincide con la stima lineare efficiente dei parametri.
+
+
+
+\section{Bontà di adattamento.}
+Per misurare quanto un modello si adatta ai dati, generalmente si usa l'indice di correlazione $R^2$: l'obiettivo è trovare una relazione che permette di spiegare la variabilità del fenomeno.
+Si divide dunque la variabilità in \textit{spiegata} e \textit{residua}:
+\begin{align*}
+  &y_i = \hat{y_i} + e_i \\
+  &\sigma^2_{tot} = \sigma^2_{sp} + \sigma^2_{res}
+\end{align*}
+
+Si può quindi calcolare il coefficiente di correlazione multipla (o di determinazione) $R^2$ che rappresenta la quantità di varianza spiegata dal modello:
+\begin{equation*}
+  R^2 = \frac{\sigma^2_{sp}}{\sigma^2_{tot}}
+\end{equation*}
+Tuttavia questa misura aumenta con l'inserimento di ogni nuovo regressore (senza mai diminuire) andando contro al principio di parsimonia: si introduce quindi una penalità per la complessità del modello ($\tilde{R}^2$, o $R^2$ aggiustato).
+\begin{equation*}
+  \tilde{R}^2 = 1 - \frac{\sigma^2_{res}}{\sigma^2_{tot}} \cdot \frac{n-1}{n-k-1}
+\end{equation*}
+
+\section{Modello lineare classico.}
+Il modello lineare classico si basa su alcune assunzioni (5 delle quali semplificatrici) per descrivere la realtà:
+\begin{enumerate}
+  \item linearità;
+  \item numerosità della popolazione;
+  \item non sistematicità degli errori;
+  \item sfericità degli errori;
+  \item non stocasticità delle variabili esplicative;
+  \item non collinearità delle variabili esplicative;
+  \item normalità degli errori.
+\end{enumerate}
+
+\paragraph{Linearità.}
+Necessaria per la forma funzionale del modello (modello di regressione \textit{lineare}): i parametri sono stimati in modo funzionale.
+
+\paragraph{Numerosità della popolazione.}
+È necessario che la matrice inversa di $X'X$ sia unica perché si possa effettuare una stima dei parametri del modello.
+Dunque il numero di osservazioni deve essere maggiore del numero di variabili più la costante: $n > k+1$.
+
+\paragraph{Non sistematicità degli errori.}
+L'errore $\varepsilon$ rappresenta la variazione della variabile dipendente non spiegata dal modello e dovrebbe essere casuale.
+Il valore atteso dunque della variabile $\varepsilon$ è nullo: $E(\varepsilon|X) = 0$.
+
+\paragraph{Sfericità degli errori (omoschedasticità e incorrelazione).}
+La varianza della variabile $\varepsilon$ è costante (omoschedastica) e non correlata con le variabili esplicative (incorrelata).
+Di fatto però in molte situazioni si verifica correlazione tra le osservazioni.
+Formalmente:
+\begin{align*}
+  &Var(e_i) = \sigma^2 \\
+  &Cov(e_i, e_j) = 0
+\end{align*}
+
+\paragraph{Non stocasticità delle variabili esplicative.}
+I valori delle variabili esplicative non sono soggetti a fluttuazioni dipendenti dal campione, perciò $Cov(X,\varepsilon) = 0$.
+Eventuali componenti stocastiche sono riassunte dalla componente erratica $\varepsilon$.
+
+\paragraph{Non collinearità delle variabili esplicative.}
+Per far sì che la matrice del disegno abbia rango pieno, non possono esserci due variabili con correlazione perfetta ($\varrho = \pm1$): si deve procedere eliminando una delle due variabili, che rappresentano lo stesso fenomeno registrato in modi diversi.
+
+\paragraph{Normalità degli errori.}
+Se gli errori seguono una distribuzione normale è possibile effettuare test statistici o costruire intervalli di confidenza e previsione.
+Infatti, sotto ipotesi di normalità si ha che:
+\begin{equation*}
+  \varepsilon \sim N(0, \sigma^2)
+\end{equation*}
+e quindi:
+\begin{equation*}
+  b \sim N(\beta, \sigma^2(X'X)^{-1})
+\end{equation*}
+
+\subsection{Assunzioni del modello lineare classico.}
+Il modello lineare classico si basa su quattro assunzioni semplificatrici, che cadono nei modelli più complessi.
+
+\paragraph{Prima assunzione.}
+La distribuzione della componente erratica $\varepsilon$ condizionata a $X$ ha media nulla: $E(\varepsilon_i | X) = 0$
+
+\paragraph{Seconda assunzione.}
+Le osservazioni sono tra di loro indipendenti.
+
+\paragraph{Terza assunzione.}
+I valori anomali (\textit{outliers}) sono improbabili e con momento quarto finito.
+Un valore anomalo è un'osservazione che da sola altera significativamente la distribuzione: è necessario rimuoverla dalla matrice del disegno per poter ottenere un modello veritiero.
+
+\paragraph{Quarta assunzione.}
+Non si verificano casi di collinearità perfetta (ovvero un regressore non è una funzione lineare esatta degli altri).
+Eventuali variabili che non rispettano questa assunzione sono semplicemente rimosse senza danno.
+
+% fino a pagina 33
+\end{document}

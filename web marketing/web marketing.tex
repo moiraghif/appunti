@@ -1,0 +1,791 @@
+\documentclass[11pt]{article}
+
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+\usepackage{enumitem}
+\usepackage[autostyle]{csquotes}
+\usepackage{array}
+\usepackage{multirow}
+
+
+\newenvironment{nosepitemize}{\begin{itemize}[noitemsep,topsep=0ex]}{\end{itemize}}
+
+
+% email: (@unimib.it o @jakala.com)
+% nico.didomenica@unimib.it
+% attilio.revivo@unimib.it
+% tutor data science: giovanni.collini@unimib,it
+% tutor per gli altri: marta.laudiano@unimib.it
+
+\title{\textbf{Web Marketing}}
+\author{}
+\date{}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Per i frequentanti l'esame consisterà in un progetto che farà media con lo scritto, con possibilità di orale integrativo.
+  Il progetto (fatto in gruppi di tre persone) per Data Science sarà un progetto in R di elaborazione dei dati con relativa presentazione.
+  Altrimenti per le altre facoltà l'esame consiste in una presentazione frontend e backend di un'app (pre-esistente) proposta da un cliente.
+  Per il corso di DataScience inoltre vi saranno delle lezioni di tutorato su R.
+  
+  Per i non frequentanti l'esame consiste in uno scritto (composto da 10 domande aperte) e un orale.
+  L'esame comunque verte solamente sulle slide.
+\end{abstract}
+
+\section{Lezione 1 - Attilio - 01 marzo}
+% @momolo {{{
+% mi spiace ragazzi, vado a fare foundation of probability...
+% se volete continuare la dispensa avete tutta la mia stima :)
+% }}}
+Diverse definizioni di marketing:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Consiste nell'individuazione e nel soddisfacimento dei bisogni umani e sociali. 
+	Il marketing è sopratutto una prospettiva. 
+	Questa è una definizione più filosofica.
+	
+	\item (AMA - American Marketing Association): Il maketing è l'insieme di attività, istituzioni (qua c'è anche un elemento personale nel senso ci sono delle persone che fanno marketing) e processi volti alla creazione, comunicazione e scambio di offerte (se c'è un bisogno che non è ancora espresso, bisogna anche pensare ai prodotti non esistenti quindi creazione, una volta creato è importante anche comunicarlo e scambiarlo) che hanno valore per acquirenti, clienti, partner e la società in generale (questa cosa tocca a un bel po' di persone). 
+	E' una Definizione più tecnica rispetto alla prima.
+	
+	\item L'insieme dei processi, coerenti e coordinati, finalizzato a produrre scambi e relazioni, fra individui e organizzazioni, con una finalità sempre duplice: 
+	\begin{itemize}[noitemsep]
+		\item creare valore economico e sociale per l'offerta;
+		\item trasferire valore funzionale, simbolico, emozionale o esperienziale per la domanda.
+	\end{itemize} 
+	Qui si accenna il tema della funzione sociale. 
+	Si vogliono soddisfare dei beni non sempre tangibili, quindi oltre il mangiare e/o bere.
+	
+	\item Una visione sociale: Il marketing è il processo sociale mediante il quale individui e gruppi ottengono ciò di cui hanno bisogno e ciò che desiderano tramite la creazione dell'offerta e il libero scambio di prodotti e servizi di valore.
+\end{enumerate}
+
+~\\
+Un'affermazione di Drucker che spiega molto bene il marketing: 
+\enquote{Si può sempre presumere che vi sarà sempre necessità di vendere.
+	Ma lo scopo del marketing è  quello di rendere superflua la vendita. 
+	Lo scopo è conoscere e comprendere il cliente al punto che il prodotto o servizio sia tanto adatto alle sue esigenze da vendersi da solo.
+	Teoricamente il risultato del marketing è un cliente pronto ad effettuare l'acquisto. 
+	Allora non rimane che rendere disponibile il prodotto o servizio.}
+\newline
+Qua si osserva che l'operazioni di vendita è separato dal marketing. L'obbiettivo che conoscere le persone che hanno determinati bisogni e trovare il modo di soddisfarli. Ad esempio vendere ghiaccio agli Eschimese non è marketing ma solo uno bravo a vendere.
+
+\noindent
+Due prospettive complementari del marketing:\\
+
+\begin{center}
+	\begin{tabular}{c | c}
+		Analisi di marketing & Marketing management \\
+		\hline
+		\begin{tabular}{l}
+			\\
+			BtoC (Business to Consumer) \\
+			BtoB (Business to Business) \\
+			CtoC (Consumer to Consumer)\\
+			BtoG (Business to Government)\\
+		\end{tabular}
+		
+		&
+		
+		\multicolumn{1}{m{9cm}}{~\newline Ovvero l'arte e la scienza della scelta dei mercati obiettivo, nonché dell'acquisizione, del mantenimento e della crescita della clientela tramite la creazione, la distribuzione e la comunicazione di un valore superiore}
+	\end{tabular}
+\end{center}
+
+\noindent
+I campi d'azione del marketing sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Beni
+	\item Servizi
+	\item Eventi
+	\item Esperienze: ad esempio Eataly
+	\item Persone: uno che tifa una squadra come Inter(preferenze personali)
+	\item Luoghi: Turista
+	\item Diritti di proprietà: Disney lascia usare il topolino sulla maglietta di altri
+	\item Organizzazioni
+	\item Informazioni: Tante aziende fanno marketing su quanto sono brave a raccogliere e gestire e sfruttare le informazioni
+	\item Idee: ha a fare con la comunicazioni sociale
+\end{itemize}
+~\\
+Gli attori del marketing sono :
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Marketing manager che è responsabile della gestione della domanda;
+	\item Il cliente potenziale che ormai ha sempre meno ruolo passivo che rende il marketing un po' più complesso per le aziende.
+\end{itemize}
+~\\
+Gli stati della domanda sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Domanda negativa: Una cosa che non ti piace e che non vuoi proprio vedere, ad esempio l'olio di palma;
+	\item Domanda inesistente: è una domanda non esistente perché non interessa a nessuno;
+	\item Domanda latente: è un domanda esistente ma non c'è nessuno che la produce. E' il paradiso per un marketing manager. Ad esempio, il primo Mac contro quello di IBM (grande ingombrante) oppure gli smartphone con le loro fotocamere.
+	\item Domanda declinante;
+	\item Domanda irregolare;
+	\item Domanda piena;
+	\item Domanda eccessiva;
+	\item Domanda nociva: Sigarette
+\end{itemize}
+\noindent
+La domanda serve per definire il mercato e senza questo non c'è il marketing.
+Secondo gli economisti è un insieme di acquirenti e venditori che effettuano transazioni su un prodotto o un insieme di prodotti.
+Tradizionalmente era il luogo fisico dello scambio dei beni e servizi. 
+Oggi è molto più de-localizzato ad esempio Amazon.
+Secondo i marketing manager il mercato è un gruppo di clienti diversi in base ai loro bisogni, prodotti, geografia e demografia. I venditori si raggruppano in settori. 
+~\\
+
+\noindent Un semplice sistema di marketing è:
+\begin{verbatim}
+                     ----->[Comunicazioni]---->-->
+                    |                            |
+                 Settori   ---[Beni/Servizi]--> Mercato
+                (insieme di                    (insieme di
+                venditori)  <----[Denaro]-----  aquirenti)
+                    |                            |
+                    <--<----[Informazioni]<------
+\end{verbatim}
+
+\noindent I diversi tipi dei mercati sono:
+\begin{itemize}[noitemsep, topsep=0ex]
+	\item Mercati dei consumatori
+	\item Mercati delle imprese
+	\item Mercati globali
+	\item Mercati delle organizzazione non profit
+	\item Mercati della pubblica amministrazione
+\end{itemize}
+
+\noindent
+Il mercato oggi è globale, il mercato locale ad esempio dipende anche da cosa succede in Cina. 
+Il marketplace è il luogo (fisco o virtuale) dove avvengono le transazioni.
+Il meta-mercato indica un insieme dei prodotti complementari e strettamente correlati nella mente dei consumatori, anche se situati in settori distinti. Ad esempio nell'ambito del turismo uno può voler andare in un lunapark o un cinema oppure campeggio o hotel a 5$\star$.
+~\\
+
+\noindent I concetti chiave del marketing: 
+\begin{itemize}[topsep=0ex] %meglio non usare noitemsep
+	\item Bisogni, desideri e domanda
+	\begin{itemize}[topsep=0ex,noitemsep]
+		\item Per i bisogni si segue la gerarchia dei bisogni di Maslow:
+		
+		1. Bisogni Fisiologici $\to$ 2. Bisogni di Sicurezza 
+		$\to$ 3. Bisogni Sociale $\to$ 4. Bisogni di Stima $\to$
+		5. Bisogni di auto-realizzazione.
+		
+		%Inoltre i bisogni possono essere di diverso tipo: Bisogni Espressi, Reali, Inespressi, di Gratificazione e Segreti.
+		\item I desideri sono plasmati in funzione della cultura, della società e della psicologia
+		\item la domanda è un desiderio specifico insieme alla capacità (economica o pratica) di soddisfarlo
+	\end{itemize}
+	\item Mercati obiettivo, posizionamento e segmentazione:
+	
+	Non tutti i consumatori sono uguali, quindi è importante suddividere il mercato in segmenti e definire quali segmenti siano prioritari in termini di opportunità, questo tipo di mercato è detto di tipo obiettivo. A ogni mercato obiettivo viene dedicata un'offerta specifica, che poi viene posizionata nella mente dei potenziali clienti evidenziando i vantaggi distintivi rispetto agli altri.
+	\item Offerte e marche:
+	
+	Le imprese rispondono ai bisogni dei clienti definendo una proposta di valore (value proposition) ossia un insieme di benefici che atto a soddisfare tali bisogni. La value proposition può essere tangibile (costo, assistenza) o intangibili, la value proposition diventa concreta in un'offerta. La marca è un'offerta proveniente da una fonte nota, conosciuta a cui vengono associati elementi caratterizzanti.
+	\item Valore e soddisfazione:
+	
+	L'acquirente sceglie le offerte che gli forniscono il maggior Valore che è il rapporto tra benefici e costi (tangibili o intangibili). L'intangibilità rende la formula incerta quindi deve essere identificata e/o creata. \newline
+	In tal senso il marketing management è l'attività che identifica, crea, comunica, distribuisce, misura e controlla il valore per il cliente.\newline
+	La soddisfazione è il frutto del percepito rispetto alle aspettative.
+	\item Canali e marketing:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Canali di comunicazione: il canale che l'azienda usa, una volta era a una via, adesso a due vie, per dare informazioni, offerte ecc. C'è ne sono tantissimi: la pubblicità, la mail, Social.
+		\item Canali di distribuzione: Solitamente negozi, Internet sta diventando un grande canali di distribuzione ed è anche un canale di comunicazione.
+		\item Canali di servizio: Helpdesk, assistenza clienti.
+		
+		I tre canali possono essere sovrapposti, ad esempio Internet può essere usare anche come canale di servizio con Twitter.
+	\end{itemize}
+	\item Supply chain:
+	
+	E' il canale che va dalle materie prima fino ai prodotti finiti. 
+	Il sistema di distribuzione della supply chain fa riferimento a più aziende/operatori che si suddividono il valore totale.
+	Alcune aziende usano strategie di integrazione verticale, acquisendo le catene intermedie, per acquisire una quota maggiore di tale valore.
+	\item Concorrenza:
+	
+	La concorrenza comprende tutte le offerte che possono essere considerate da un acquirente un'alternativa possibile per la soddisfazione di un dato bisogno. Può essere anche un concorrente totalmente inaspettato, ad esempio gli smartphone della Apple e Samsung per Kodak una decina di anni fa.\newline
+	Per un'attività di successo è cruciale identificare con precisione il perimetro della concorrenza.
+	\item Ambiente di marketing
+\end{itemize}
+
+\bigskip
+\noindent I fattori che influenzano l'evoluzione del marketing:
+\begin{itemize}[noitemsep, topsep=0ex]
+	\item Tecnologia di rete
+	\item Globalizzazione
+	\item Deregolamentazione
+	\item Privatizzazione
+	\item Livello di concorrenza più elevato
+	\item Convergenza di settore
+	\item Trasformazione del commercio al dettaglio
+	\item Disintermediazione
+	\item Potere d'acquisto dei consumatori
+	\item Informazione dei consumatore
+	\item Partecipazione dei consumatori
+	\item Resistenza dei consumatori
+\end{itemize}
+~\\
+\noindent In parallelo i marketing manager possono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Utilizzare Internet come potente canale informativo e di vendita
+	\item Ottenere informazioni più complete e approfondite sui mercati, clienti acquisiti, clienti potenziali e concorrenti
+	\item Entrare nei social media per amplificare il messaggio e la comunicazione esterna
+	\item Inviare pubblicità/promozioni/campioni a clienti che lo hanno richiesto/consentito
+	\item Raggiungere i consumatori in movimento (sfruttando mobile marketing)
+	\item Produrre/vendere beni differenziati a livello individuale
+	\item Migliorare la propria organizzazione
+	\item Migliorare l'efficienza
+\end{itemize}
+~\\
+Il marketing olistico è costituito da diverse componenti:
+\begin{verbatim}
+Funzione     Alta      Altre Funzioni    Comunicazioni   Prodotto e    Canali
+Marketing  Direzione    Aziendali                    \    Servizi       /
+     \        |           /                           \      |         /
+      \       |          /                             \     |        /
+       \      |         /                               \    |       /
+        \     |        /                                 \   |      /
+        Marketing Interno                             Marketing Integrato
+                        \                            /
+                         \                          /                           
+                          \                        /
+                           \                      /
+                            \                    /
+                              Marketing Olistico 
+                            /                    \
+                           /                      \
+                          /                        \
+                         /                          \
+            Marketing   /                         Marketing Relazionale
+       Socialmente Responsabile                       /      |     \
+       /    |       |     \                          /       |      \
+      /     |       |      \                        /        |       \
+  Etica  Ambiente  Sistema  Comunità             Clienti    Canali     Partner
+                   Legale                                                            
+\end{verbatim}
+
+Il marketing relazionale ha lo scopo di costituire relazioni a lungo termine, con reciproca soddisfazione delle parti in causa, in modo da migliorare e sviluppare le rispettive attività economiche. 
+Le categorie di soggetti sono: I Clienti, Dipendenti, Partner di marketing e Membri della comunità finanziaria dell'impresa. 
+
+Abbiamo che attirare un nuovo cliente può costare 5 volte di più che sviluppare uno già acquisito. Inoltre alla share of market si affianca il concetto di share of customer e la sua crescita passa attraverso cross-selling(Ti ho venduto il cellulare ti vendo anche la cuffia), up-selling(ti ho venduto 10 bottiglie, adesso te ne vendo 20) e trading-up(aveva comprato la bottiglia di 50 unità e adesso compra la bottiglia a 75 unità). 
+
+Si parla del mercato integrato quando vengono progettate e realizzate attività di marketing finalizzate a comunicare e trasferire valore ai clienti in modo che l'intero sia maggiore della somma delle sue parti. 
+Per fare ciò occorre mappare le diverse attività di marketing e poi progettare e realizzare ogni singola attività tenendo conto di tutte le altre, in modo che, opportunamente integrate, rendano massimo il valore per il cliente.
+
+Nel marketing olistico, i dipendenti dell'azienda sono anch'essi parte del processo di marketing e contribuiscono al successo dei piani aziendali. 
+E' opportuno dedicare tempo e risorse per allineare il personale a quanto l'azienda propone all'esterno. Questo viene gestito con il marketing interno.
+
+Il performance marketing richiede la comprensione dei ritorni finanziari e non dei programmi di marketing in una prospettiva ampia. 
+E' opportuno monitorare un sistema articolato di indicatore(ricavi, soddisfazione dei clienti, aspetti legali, etici, sociali ed ambientali). 
+Inoltre è sempre più rivelante la responsabilità finanziaria ossia la capacità di valutare l'impatto finanziario di un piano di marketing attraverso metriche sempre più complesse ed articolate.
+
+\section{Lezione 1 - Di Domenica - 13 marzo} 
+\textbf{Customer Experience}(CRM) è come l'azienda interagisce con il cliente. Prima le aziende si concentravano di più sul prodotto che sul cliente adesso invece si concentrano tanto sul cliente e il prodotto viene influenzato dal cliente. Infatti si può vedere che il 50\% dei clienti hanno aspettative più alte rispetto al passato e il 70\% è estremamente frustrato dalle promesse non mantenute. Inoltre abbiamo che un cliente soddisfatto condivide la sua esperienza con 4/5 persone mediamente mentre un cliente insoddisfatto lo fanno con 9/12 persone.
+
+Framework per la Customer Experience:
+
+Monitorare l'esperienza durante l'intero ciclo di vita del cliente, che consiste nel conoscere, considerare, comparare, comprare e infine possedere,  attraverso tutti i canali di contatto tra cui:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Negozio/Assistente di vendita
+	\item TV, Radio, Outdoor
+	\item Direct mail (posta)
+	\item E-mail
+	\item Telefono/Cellulare
+	\item Web/Portale
+	\item Blog/Social
+	\item Influenza sociale
+\end{itemize}
+Dopo aver utilizzato questi canali bisogna introdurre un circolo virtuoso basato sulla conoscenza ed il valore del cliente:
+\begin{verbatim}
+Comprendere(Data Analytics)------>Valorizzare(Consigli per far 
+         >                                    sentire il cliente bene)
+         |                                      |
+         |                                      |
+         |                                      |
+         |                                      <
+Monitorare(con il reporting)<-----Engage(Classici piani 
+                                         fedeltà o premi)
+\end{verbatim}
+Infine devo allineare i processi organizzativi relativi alla Customer Experience, quindi devo gestire l'organizzazione, i sistemi e il processo.
+
+Posso avere 3 driver che mi rendono la comunicazione con il cliente più efficace (clusterizzare i cliente):
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Per comportamento d'acquisto, per tracciare e collegare le transazioni al cliente. Una volta capito il tipo di transazioni usate si possono identificare 3 macrogrupppi:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Tradizionale
+		\item Multi-Channel
+		\item Tech-Advocate
+	\end{itemize}
+	\item Per esigenza, si divide in 3 gruppi:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Famiglia 
+		\item Giovane coppia
+		\item Single
+	\end{itemize}
+	\item Per valore, posso scoprire chi è:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Fedele
+		\item Alto Spendente 
+		\item Basso Spendente
+	\end{itemize}
+\end{enumerate}
+Una volta clusterizzato/caratterizzato il cliente, ci parlo con i vari canali di comunicazione. Infine c'è la customer journey: 
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Awareness: devo farmi conoscere;
+	\item Knowledge: come mi conoscono gli altri e come mi relaziono; 
+	\item Consideration: come il cliente mi considera; 
+	\item Selection: il cliente mi sceglie/seleziona;
+	\item Satisfaction: il cliente è soddisfatto e torna altre volte da me; 
+	\item Loyalty: uso degli acceleratori che mi permettono di agganciare il cliente;
+	\item Advocacy: i miei clienti diventano i miei messaggeri.
+\end{itemize}
+
+Tutto questo è possibile grazie all'analisi dei dati che comprende: Raccolta dati dei clienti e potenziali clienti, poi interviene la gestione di tali dati(Data Management) nella quale vengono Puliti, Deduplicati e Normalizzati questi dati. Tra i punti principali della gestione dei dati abbiamo Mater Data che serve sopratutto per intercettare inserimento dei dati duplicati e la Privacy. 
+Poi abbiamo la fase di Analisi dei dati e Machine Learning per la segmentazione dei clienti (cluser analysis), insights e reporting da cui traiamo le strategie per marketing, merchandising e retailing. 
+Infine abbiamo le operations che consistono nella la pianificazione e design della campagna e la sua esecuzione da cui si traggono altri dati, ri-iniziando così il circolo.
+
+Con la gestione virtuosa della Customer Experience abbiamo diversi benefici:
+\begin{itemize}[topsep=0ex,noitemsep]
+	\item Increme to della loyalty: 
+	I clienti rimangono con l'azienda più a lungo e tendono ad essere più fedeli e soddisfatti se il servizio offerto si adatta meglio alle loro esigenze;
+	\item Incremento opportunità di vendita: 
+	Le aziende che gestiscono meglio la customer experience hanno alto indice di up/cross selling;
+	\item Riduzione dei costi: 
+	Aumenta l'efficienza nell'erogazione del servizio, inoltre si ha una riduzione della attrition e costi di retention, si riducono anche i costi del marketing, vendita e post-vendita;
+	\item Incremento advocacy: 
+	I clienti soddisfatti raccomandano i prodotti/servizi dell'azienda e richiedono meno frequentemente servizi ed attenzione(visto che sono soddisfatti della qualità del prodotto).
+\end{itemize}
+
+%importante ha  detto che lo chiede all'esame in qualche appello.
+Customer Journey ha 3 macroaree:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Prima dell'acquisto: può riguardare un prospect (potenziale cliente) o un customer, prima dell'acquisto posso fare
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Passaparola (Canale umano);
+		\item Vetrina (Canale Fisico);
+		\item Cartellonistica (Canale Fisico);
+		\item Catalogo (Canale Fisico);
+		\item Rivista Digitale (Canale Digitale);
+		\item Website (Canale Digitale);
+		\item Testimonial e Celebrità (Canale Umano o Digitale);
+		\item Social (Canale Digitale).
+	\end{itemize}
+	Per farmi crescere come marchio, per farmi conoscere, per essere attraente.
+	
+	\item Durante l'acquisto: Uno volta che mi sono fatto conoscere e il cliente entra nel negozio, entrano in gioco:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Promotors che propongono i prodotti oppure le offerte ai clienti (Canali Umano); 
+		\item Design e Layout dello Store (Canale Fisico); 
+		\item E-commerce (Canale Digitale); 
+		\item Assistente di vendita opportunamente formate (Canale Umano);
+		\item Icone del marchio ovver le immagini associati al marchio come il colore, logo (Canale Fisico);
+		\item Iterazione con il prodotto (Canale Fisico).
+	\end{itemize} 
+	
+	\item Dopo l'acquisto per tenere stretto il cliente l'azienda può usare: 
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Promozioni Dedicate (Canale Fisico); 
+		\item Eventi, proponendo nuove esperienze ai clienti più fedeli (Canale Fisico); 
+		\item Newsletter e Mailing, per dire come si sta evolvendo l'azienda e i nuovi prodotti che ha (Canale Digitale);
+		\item Call Center in realtà costa tanto quindi tante aziende stanno iniziando a sfruttare dei bot che rispondono alle domande più comuni (Canale Digitale);
+		\item Social Network Aggiorno il cliente, faccio pubblicità (Canale Digitale); 
+		\item Post-Vendita, ti seguo dopo la vendita, chiedendo magari il feedback sul prodotto (Canale Fisico o Digitale).
+	\end{itemize}
+\end{enumerate}
+
+
+
+\section{Lezione 2 - Di Domenica - 15 marzo} %Di Nico
+
+Nella Strategia della customer experience abbiamo: la \textbf{Contact Strategy}, va a braccetto con la \textbf{Contact Policy}, in realtà in alcune aree vanno in contrapposizione. La comtact strategy comprende:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Chi vado a contattare(quali sono i target) e come vado a contattarli. 
+	\item Una volta definito il target devo definire gli obbiettivi della campagna, le campagne possono essere di ingaggio oppure di soddisfazione (quali campagne creano soddisfazione al cliente). 
+	\item Poi arriva il mezzo (come): posso usare le porte analitiche o quelle tecnologiche.
+	\item Infine è fondamentale quando contattare il cliente.
+\end{itemize} 
+La contact policy invece determina ogni quanto contatto il cliente, ad esempio un overcontacting del cliente può avere effetti negativi.
+
+Individuazione del target può avvenire per mezzo di una \textbf{Target Perimeter} poi si passa al analisi del comportamento del cliente seguito da una fase di priority target nella quale vado a dare una priorità ad alcuni clienti, infine si sceglie un azione da applicare al cliente.
+Gli obiettivi delle azioni sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Ingaggio
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Creare nuovi clienti
+		\item Mantenere i clienti attuali
+		\item Aumentare il valore del cliente
+	\end{itemize}
+	\item Soddisfazione
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Conoscenza del marchio
+		\item Rafforzamento del legame con il cliente
+	\end{itemize}
+\end{itemize}
+\textbf{Event Based Marketing} serve a veicolare alla singola persona il messaggio giusto, al momento giusto e tramite il canale giusto.
+
+Bisogna innanzitutto definire un catalogo degli eventi, ad esempio, Scadenza dei prodotti o investimenti oppure la disattivazione del servizio da parte del cliente. 
+Una volta definito il catalogo bisogna definire il piano d'azione associato a questi eventi , ad esempio dopo la disattivazione del servizio contatto il cliente per capire il perché e offrirli un altro servizio o qualche beneficio. 
+Infine bisogna predisporre il processo e tecnologie abilitanti per automatizzare le interazioni con il cliente.
+
+Il \textbf{Concept Marketing} è il programma fedeltà, quindi per definirlo abbiamo bisogno ad esempio di:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Tipologia di Programma: A punti, status o un misto e una durata del programma
+	\item Adesione: Modalità di ingaggio, il modulo di sottoscrizione e lo strumento di partecipazione
+	\item Meccaniche: di accumulo base e piani di accelerazione
+	\item Reward Scheme: come dare il premio, sconti oppure dei premi
+	\item Touch Point (canale di comunicazione): Piano di comunicazione, Calendario attività e la customer experience.
+\end{itemize}
+Gli obiettivi del concept marketing può essere quello di influenzare i comportamenti d'acquisto (la frequenza) a breve termine e l'enfasi sul posizionamento del brand a lungo termine.
+
+Per definire il modello operativo devo definire i driver di segmentazione in base ai:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Bisogni, Possono essere i
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Fedeli
+		\item Discount Drinker
+		\item Amanti degli animali
+		\item I drogati di Biocare
+	\end{itemize}
+	\item Valore
+	\item Abitudine di contatto: La Frequenza, il canale preferito, Complessità della richiesta.
+\end{itemize}
+
+Abbiamo anche le logiche di gestione delle interazioni e per la configurazione organizzativa. 
+Per quanto riguarda le interazioni vado a definire una serie di flussi che mi permettono di contattare il cliente.
+E infine come questa va scaricata all'interno della configurazione organizzativa.
+I segmenti utilizzati solitamente sono così costituiti:
+\begin{enumerate}[topsep=0ex]
+	\item Segmentazione Socio-Demografico
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Famiglie numerose, li identifico con la:
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Presenza dei figli
+			\item Spesa media alta
+			\item Alta frequenza d'acquisto
+			\item Non legati alla marca.
+		\end{itemize}
+		\item Anziani, sono:
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Sensibili alle promozioni
+			\item Legati alla marca
+			\item Considerano il prezzo come una leva importante
+			\item Utilizzano solo i canali fisici
+		\end{itemize}
+		\item Single
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Acquistano principalmente prodotti pronti
+			\item Bassa sensibilità al prezzo
+			\item Bassa frequenza d'acquisto
+		\end{itemize}
+	\end{itemize}
+	\item Segmentazioni per abitudini/Comportamento:
+	\begin{itemize}[topsep=0ex,noitemsep]
+		\item Clienti della Domenica
+		\begin{itemize}[topsep=0ex,noitemsep]
+			\item Si recano nei punti vendita sopratutto nel weekend
+			\item Spesa media alta
+			\item Non hanno preferenza per certi reparti
+		\end{itemize}
+		\item Lavoratori
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Si recano nei punti vendita in certe fasce orarie
+			\item Si recano spesso nei punti vendita
+			\item Acquistano principalmente cibi pronti
+			\item Utilizzano canali digitali
+		\end{itemize}
+		\item Discount
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Acquistano principalmente nei discount
+			\item La leva più importante è il prezzo
+			\item Non sono interessati alla marca
+		\end{itemize}
+	\end{itemize}
+	\item Segmentazione per stili di consumo:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Amanti del fresco
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Acquistano prevalentemente nel reparto fresco
+			\item Acquistano prodotti legati ai regimi vegano/vegetariano e macrobiotico
+		\end{itemize}
+		\item PetCare 
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Prevalentemente donne
+			\item Acquistano molti prodotti petcare e vegani
+			\item Si informano sui Social
+		\end{itemize}
+		\item Biocare Addicted
+		\begin{itemize}[noitemsep,topsep=0ex]
+			\item Acquistano prodotti con prezzo elevato
+			\item In particolare relativi alla cura persona
+			\item Non sono sensibili alle promozioni
+			\item Si informano sui canali digitali
+		\end{itemize}
+	\end{itemize} 
+\end{enumerate}
+
+Per l'impostazione strategica per definire il customer care gli obiettivi sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Gestione dell'interazione con cliente lungo tutto il ciclo di vita
+	\item Ottimizzazione dell'esperienza medianti l'uso integrato dei canali
+	\item Gestione e monitoring delle customer satisfaction
+	\item Raccolta e uso delle informazioni sui clienti (comportamento e aspettative)
+	\item Supporto alle attività della vendita
+	\item Gestione dei processi interni relativi alla governance
+\end{itemize}
+Inizialmente abbiamo una decentralizzazione con responsabilità distribuite, il cliente interagisce con più dipartimenti e questi dipartimenti non si parlano tra di loro. 
+Da responsabilità distribuite passo alle responsabilità centralizzate, quindi reindirizzo le richieste del cliente verso un unico punto.
+
+Il customer service è ormai cruciale nelle e-commerce, visto che il 70\% dei clienti compra prodotti online, diverse sono le ragioni tra cui il prezzo, lo shopping più semplice, visualizzazioni delle opinioni di altri clienti e consapevolezza sui prodotti/offerte, il restante 30\% è invece preoccupato riguardo alla diffusione dei propri dati, i costi di spedizione, non avere tempo per recarsi alle poste per il reso o scambio e sopratutto \textbf{non si sentono abbastanza supportati senza professionista durante l'acquisto}.
+Inoltre il customer service può essere utile per cnvertire i clienti potenziali in clienti reali, ampliare up e cross selling, ridurre il tasso di abbandono incrementando quindi la customer retention.
+I consumatori prendono sempre maggiore confidenza con il mondo digitali ma sono tuttavia sono insicuri e quindi vanno supportati.
+
+L'impostazione strategica si divide in 2 parti: La parte strategica e la parte operativa.
+
+Nella parte strategica abbiamo la visione strategica, che consiste in:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Value proposition
+	\item Customer expectations
+	\item Obiettivi del business
+\end{itemize}
+e il modello strategico:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Attività del caring
+	\item Linee guida sulle modalità di gestione
+	\item Livello di differenziazione
+	\item Utilizzo di canali
+	\item Livello di centralizzazione e decentralizzazione
+	\item Business milestones e impatti strategici
+\end{itemize}
+Una volta definita il modello strategico entriamo nella parte operativa, quindi definire il modello operativo cioè la modalità di gestione per Cliente, canale e servizio, l'organizzazione del supporto, strategia di routing dei contatti e l'infrastruttura tecnologia. 
+Dopo il modello operativo abbiamo il governance model, come allineo l'organizzazione, quali sono i processi di governance all'interno dell'azienda e il livelli di servizio.
+Infine abbiamo il modello di alimentazione:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Posso o internalizzare tutto oppure basarmi su aziende esterne.
+	\item Scelta dei partner
+	\item Qual'è il service level agreement (SLA)
+	\item Le modalità di monitoraggio del servizio
+\end{itemize} 
+Un esempio del approccio progettuale del modello di servizio può essere:
+\begin{verbatim}
+Customer - - - - - Clienti Privati - - - Imprese - - - Negozi
+   |
+Canale   - - - Telefono - Chat - E-mail - Social - Fax - App - Web
+   |                  \   /         \       |       /     \     /
+Processi - - Real Time support - Non Real Time Support - Automated
+   |                                                      Response
+Organizzazione - Customer Service - Logistica - Product - Store
+   |                                           Management
+Posizione - - - Dove sono localizzati tutti questi canali - - -
+   |
+Tecnologia - - - Piattaforme di comunicazioni, CRM,
+                 Gestione della conoscenza e Documenti
+\end{verbatim}
+
+\noindent Il Social CRM può essere utile per:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Acquisizione customer utilizzando Social media, qua mi sposto dalla comunicazione tradizionale marketing a un verso verso due versi.
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Far conoscere il marchio
+		\item Ratings, Testimonial, Word of mouth, Viral Marketing
+		\item Search Engine Optimization
+		\item Target Advertising
+	\end{itemize}
+	\item Customer Experience per servire, crescere e tenere i clienti, fa leva sui social media per migliorare l'iterazione con e l'esperienza del cliente. Posso:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Creare risorse self-service
+		\item Creare comunità self-helping
+		\item Monitorare e ingaggiare
+		\item Target influencer e la loro gestione
+	\end{itemize}
+	\item Innovazione del cliente, uso i social per sollecitare idee e collaborare con i clienti attraverso:
+	\begin{itemize}[noitemsep,topsep=0ex]
+		\item Sentiment Analysis
+		\item Crowdsourcing
+		\item Comunità private ed aperte
+		\item Ricerca del mercato
+		\item Buzz monitoring
+	\end{itemize}
+\end{itemize}
+Infine abbiamo il customer insights per ascoltare e capire i clienti.
+
+Per sfruttare i social media, il fattore principale è filtrare informazione utile e fare ciò c'è bisogno di una sinergia tra Servizi On-Board (cioè gestiti dalla compagnia come Blogs, Reviews, Forum Member Profile ecc.) e Canali sociali Off-Board(come i social network, video, knowledge base ecc. non gestiti dalla compagnia) per avere l'informazione, in seguito si usano i software analitici per text analytics e social analytics e measurement. 
+Infine c'è l'ottimizzazione del flusso attroverso Social Dashboard, Moderazione centralizzata ecc.
+
+\noindent Gli ambiti di intervento sono:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Definizione modello operativo target: Bisogna definire i processi per la gestione della customer experience.
+	\item Evoluzione degli scenari organizzativi: Bisogna identificare i ruoli e responsabilità derivanti dalle modifiche del modello operativo e supportare l'identificazione dei ruoli chiave da coprire
+	\item Definizione dell'architettura applicativa: Bisogna raccogliere i requisiti del business e identificare gli impatti sui sistemi attuali, infine definire architettura applicativa di dettaglio a supporto del nuovo modello di customer experience.
+\end{enumerate}
+
+Nel contesto di riferimento per i tools e acceleratori nella ricerca della multicanalità abbiamo:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Mercato: Proliferazione dei canali digitali e destinazione di una parte del budget di marketing allo sviluppo di tali canali.
+	\item Azienda: Mancanza di integrazione tecnologi/organizzativa tra i canali offline e online con una difficoltà di posizionare il cliente al centro e la limitata capacità di individuare i bisogni dei clienti e rispondere adeguatamente.
+\end{itemize}
+Quindi abbiamo il mercato che sta procedendo avanti rapidamente e abbiamo delle aziende anche con ottimi prodotti che si chiedono come debbano abituarsi a tale mercato.
+
+Quindi bisogna indagare il comportamento multicanale dei consumatori al fine di definire delle azioni di marketing efficaci da veicolare tramite i canali più appropriati.
+
+\section{Lezione 2 - Attilio - 20 marzo} %Lezione 2 Attilio
+
+Le quattro P del marketing sono:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Prodotto;
+	\item Punti Vendita; 
+	\item Promozioni;
+	\item Prezzo.
+\end{itemize}
+Le 4 P fanno parte del marketing Mix e il marketing mix influenza il valore per il cliente:
+\[
+\text{Valore per il cliente} = \dfrac{\text{benefici attesi*percezione di performance}}{\text{costi da sostenere * onerosità percepita}}
+\]
+Nel passaggio al marketing management moderno le 4 P diventano:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Persone - Serve un organizzazione per gestire tale persone
+	\item Processi
+	\item Programmi - La differenza tra la strategia e la tattica è che la strategia non cambia tanto spesso quanto la tattica, la strategia è un programma a lungo termine, le tattiche variano in base al mercato o in base ai feedback.
+	\item Performance - E' il pezzo fondamentale per un buon lavoro, poiché è ciò che vuole il financial officer della compagnia.
+\end{itemize}
+Un marketing manager deve(vengono approfonditi più tardi):
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Sviluppo di strategia e piani di marketing: la strategia deve pressoché rimanere invariata se progettata bene mentre i piano dipendono dal mercato ad esempio un nuovo concorrente;
+	\item Raccolta di informazione di marketing: Se capisco cosa il mercato mi dice, ma devo capire il fine della persona che mi dà tale informazione ad esempio Google dà le informazione ma solo ciò che va bene a lui, la cosa migliorare è usare queste informazioni per integrarle alle informazioni sicure che già si hanno;
+	\item Collegamento con il cliente: Parte del prof Di Domenica;
+	\item Costruzione di marche forti: è una questione anche di fiducia, una persona si fida molto più di una marca più forte quando vi sono due marche che fanno la stesso cosa (hanno lo stesso prodotto);
+	\item Definizione dell'offerta: Conosciute le persone interessate bisogna portarli a conoscere il prodotto;
+	\item Distribuzione del valore: Bisogna far arrivare il prodotto al cliente;
+	\item Comunicazione del valore: Bisogna capire quanto investire nel marketing digitale e quanto in quello fisico;
+	\item Creazione di una crescita a lungo termine: Capire cosa funziona e cosa possa funzionare meglio, capire la performance.
+\end{itemize}
+I dieci comandamenti del marketing:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Segmentazione del mercato è una parola chiave, oggi pensare di fare una cosa che vada bene per tutti è praticamente impossibili vista anche la concorrenza che si trova in giro, quindi va capito quali sono le persone che ci interessano e quelli che non ci interessano
+	\item Capire i bisogni delle persone che ci interessano, capendo le loro preferenze, percezioni, e i comportamento
+	\item Conoscere i propri concorrenti, i loro punti di forza e di debolezza
+	\item Costruire rapporti di partnership con i propri stakeholder(non solo i shareholder) e li ricompensa
+	\item Sviluppa sistemi per identificare opportunità classificare e scegliere le migliori
+	\item Utilizza un sistema di pianificazioni di marketing che permette di ottenere piani efficaci nel lungo e nel breve termine, uno può far uscire i prodotto e venderli con fretta ma importante è a lungo termine cosa comporta es. BuddyBank di Unicredit che regalava le AirPods.
+	\item Esercita un forte controllo sulla propria offerta di prodotti e servizi
+	\item Costruisce marchi forti utilizzando li strumenti di promozione e comunicazione più efficaci ed efficienti
+	\item Sviluppa una leadership di marketing e uno spirito di squadra fra i suoi vari reparti
+	\item Potenzia costantemente le strutture tecnologiche che le forniscono un vantaggio competitivo di mercato
+\end{enumerate}
+
+~\\
+\subsection{Sviluppo di strategie e piani di marketing}
+Nella fase della pianificazione strategica del mercato olistico bisogna ricerca, creare e distribuire il valore. 
+La Pianificazione strategica a livello aziendale risulta efficace quando:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Si concentra su un numero limitato di obiettivi
+	\item Definisce rigidamente le politiche e i valori principali dell'azienda
+	\item Definisce gli ambiti competitivi
+	\item Presenta una visione a lungo termine
+	\item E' breve, facile da ricordare e significativa
+\end{itemize}
+\pagebreak
+La valutazione delle opportunità può essere effettuata mediante la matrice di BCG (Boston Consulting Group), che aiuta a identificare le opportunità più interessanti:
+\begin{verbatim}
+                       Quota Di Mercato
+                          /     |     \
+                      Bassa     |     Alta
+                -------------------------------     
+               |                |              |
+       Alta    | Question Marks |    Stars     |
+       /       |                |              |
+Crescita  -----|-------------------------------|
+       \       |                |              |
+       Bassa   |      Dogs      |   Cash Cows  |
+               |                |              |
+                -------------------------------
+\end{verbatim}
+Un altro modo è la matrice di Igor Ansoff:
+\begin{verbatim}
+                              Prodotti
+                              /   |   \
+                       Attuali    |    Nuovi
+                 -------------------------------     
+                |                 |   Sviluppo  |
+      Attuali   |  Penetrazione   |      del    |
+      /         |                 |   Prodotto  |
+Mercato --------|-------------------------------|
+      \         |    Svilippo     |             |
+      Nuovi     |       del       | Diversific- |  
+                |     Mercato     |   azione    |
+                 -------------------------------
+\end{verbatim}
+Si può fare anche la SWOT analysis: (Strengths, Weakness, Opportunities, Threats).\newline
+
+Riassumendo abbiamo che alcune possibilità sono per sfruttare le opportunità sono:
+\begin{nosepitemize}
+	\item Trarre vantaggio dalle tendenze di convergenza fra più settori con introduzione di prodotti e servizi ancora assenti
+	\item Rendere più efficiente il processo d'acquisto
+	\item Soddisfare un bisogno di informazione e consulenza
+	\item Personalizzare un prodotto/servizio
+	\item Introdurre nuove funzionalità
+	\item Prodotto/Servizio più rapido
+	\item Rendere prezzo più basso
+\end{nosepitemize}
+
+Secondo Porter le strategie possibili sono:
+\begin{itemize}[topsep=0ex]
+	\item Leadership di costo: Produrre al costo minimo per poter offrire il prodotto ai prezzi più bassi
+	\item Differenziazione: Focalizzazione su qualità performance superiore rispetto ai benefici più rilevanti per il consumatore
+	\item Specializzazione: L'impresa si concentra su uno o comunque pochi segmenti di mercato, mira a conoscerli per poi perseguire su ciascuno di essi una strategia di leadership di costo o di differenziazione
+\end{itemize}
+Gli obiettivi della pianificazioni devono essere:
+\begin{itemize}[noitemsep,topsep=0ex]
+	\item Espressi in termini quantitativi - Bisogna esprimere gli obiettivi in termini numerici in un certo dato tempo,
+	\item Realisti
+	\item Coerenti
+	\item Organizzati in una gerarchia di priorità
+\end{itemize}
+
+\subsection{Raccolta di informazione}
+il problema del sistema informativo di marketing (SIM) è che le aziende non parlano quasi mai con il cliente finale, raccolgono informazioni attraverso o pipeline oppure cookies(sistemi informativi).
+
+Il marketing intelligence è importante per tenere sotto controllo i mutamenti dell'ambiente circostante le sue fonti sono: propri dipendenti, partner distributivi, professionisti esterni, prodotti/attività dei concorrenti, clienti, dati pubblici e ricerche esterne. Anche Intenet è una fonte molto importanti di dati, ad esempio con, il Forum, agenti di vendita, Social, Blog, Siti di recensioni, siti di reclamo.
+
+Sono molto importanti anche le analisi del macroambiente che può portare a cambiamenti radicali nel mercato, queste analisi comprendono lo studio: 
+\begin{nosepitemize}
+	\item Demografico: variazione della popolazione, età, etnie
+	\item Economico: psicologia del consumatore, redditto
+	\item Socioculturale: valori, subculture
+	\item Naturale: impatto sull'ambiente
+	\item Tecnologico: impatti di tale tecnologie
+	\item Socio-Politico: leggi nuove
+\end{nosepitemize}
+
+La previsione della domanda è una faccenda molto complessa e ha come accezioni: la domanda potenziale, la domanda disponibile(può essere economico, fisico), il target e domanda penetrata. Un modo per capirlo è usare l'albero della quota di mercato, dove continuo a prendere sottoinsiemi di persone prese dal ramo precedente quindi si moltiplica la percentuale sulla percentuale precedente. 
+Un esempio è: Consideriamo che la comunicazione ha avuto un efficacia (chi lo ha sentito) del 71\%, ma poi il prodotto viene apprezzato dal 46\% e il 63\% è disponibile a pagarlo, il 57\% trova il posto dove comprarlo e il 65\% rimane fedele al prezzo allora la quota di mercato è \verb|= 0,71*0,46*0,63*0,57*0,65=0,076| quindi il 7,6\%.
+
+Per le ricerche del mercato abbiamo quest'analisi lineare:
+\begin{verbatim}
+Definire il    Sviluppare  Raccogliere  Analizzare   Presentare  Prendere
+Problema e --> il piano -->   le      -->    le   -->    i    -->   la
+gli Obiettivi  di ricerca  informazioni informazioni risultati   decisioni
+\end{verbatim}
+Le fonti disponibili per tale analisi sono le ricerche: multiclient, di marketing personalizzate, di marketing specialistiche e "faidate".
+Una delle analisi importanti è quelle delle serie storiche abbastanza lunghe e capire i rapporti di causa effetto fra determinate variabili, ad esempio quanto la TV influenza il comportamento del consumatore ecc.
+
+\subsection{Collegamento con i clienti}
+Il comportamento del cliente è influenzato da diversi fattori tra i quali culturali, sociali, personali, situazionale e psicologici; sfruttando tali fattori si vuole persuadere il cliente, tenendo conto della piramide dei bisogni di Maslow, teoria della motivazione di Freud(bisogni inconsci) e di Herzberg(fattori igienici e motivanti).
+
+Il processo decisionale d'acquisto di un consumatore può essere visto come un modello lineare:
+\begin{verbatim}
+Percezione   Ricerca     Valutazione  Decisioni  Comportamento
+del   -->    di    -->     di    -->   di   -->     post
+problema   informazione  alternative  acquisto      acquisto
+\end{verbatim}
+
+Una visione più complessa è la seguente: Il comportamento del consumatore varia in base al rischio percepito e il peso degli elementi razionali o emozionali nel processo di acquisto, quindi avremo una griglia con 4 quadranti:
+\begin{table}
+	\centering
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{Coinvolgimento Rischio}& Alto & es. Casa, macchina & es. Cosmetici, Abbigliamento\\ \cline{2-4}
+											   & Basso & es. Sugo, Nuova Pasta & es. Sigarette, Dolci\\ \hline
+											   & & Razionale & Emotivo\\ \cline{3-4}
+											   & & \multicolumn{2}{c|}{Thinking}\\ \hline                                
+	\end{tabular}
+\end{table}
+Ma non solo è importante e complesso capire anche come la mente reagisce agli stimoli, conoscendone le dinamiche è possibile definire delle strategie di approccio che abbiano possibilità di successo.
+
+\end{document}

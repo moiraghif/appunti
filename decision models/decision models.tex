@@ -1,0 +1,92 @@
+\documentclass[11pt, twocolumn]{article}
+
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\counterwithin*{section}{part}
+
+\title{\textbf{Decision Models}}
+\author{}
+\date{}
+
+% contatti
+% U14/2048, venerdì 16:30 - 17:30
+% enza.messina@unimib.it
+%
+% libri
+% _The Analystic Edge_, Bertsimas, O'Hair, Pulleyblank, Dynamic Idea LCC, 2016
+% _Spreadsheet Modeling and decision analysis_, Cliff T. Radsgale, Thomson, 2007
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  The course will have 28 hours of lectures and 18 of exercises.
+  Books are not necessary: scientific papers are available on the Moodle platform.
+
+  The exam will be different for students who attend the course: there are five periodic assignments (14 points) done individually, a group (2 or 3 people) project (16 points) and an optional oral exam (3 points).
+  For students who do not attend the course there are just the group project and the oral exam.
+  The project can also be done alone, but it is preferible to work in small groups; data can be taken from \url{kaggle.com}.
+  The assignments will be evaluated 1 point each, and 3 of 5 will be discussed during the oral exam. \newline
+
+  During the course there will be presented some advanced models to make decisions.
+  \textit{Decision making} is the process of making a choice between a number of options.
+  A \textit{decision model} is a computer-based system that make predictions based on data and statistics; a decision model may also predict what happen when an action is taken.
+  A model is used to aid decisio-making, simulating elements and variables related to a particular decision.
+  To make decisions, the process have to be optimized according to the data, usually using linear programming techniques.
+  To \textit{analytics} is meant the discovery, interpretation and communication of patterns in the data, usually by a machine-learning program; it can be descriptive, predictive or prescriptive.
+  The prescriptive analysis is used in the ``what-if'' analysis and to determine what and how to do.
+
+  The decision process concerns structured and familiar problems easy to solve with a clear goal, or programmed and repetitive tasks handeled with a routine approach.
+\end{abstract}
+
+
+\newpage
+\tableofcontents
+
+
+\newpage
+\part{Decision Analysis}
+A difficult and important task in a business is to make a decision in a uncertain environment, expecially when there are a lot of factors to taken into account.
+The \textit{risk attitude} can impact the decision, deleting some possible choices; it is a personal attitude, depending on the person and other factors.
+
+\section{Decision Trees.}
+It is not a model, it is a method for structuring and analyzing decisions in a systematic and rational way.
+A decision tree is not suited for classification or regression, but for complex decision problems.
+Optimization is not complex in this model (it is just an argmax function).
+The decision depends on the rate of sucess of options.
+
+A decision tree is built from a \textit{decision node} from which some branches are generated (one for option); a branch is split at \textit{chance nodes} that rappresent an outcome.
+At the end \textit{end nodes} rappresent the earnings of the path.
+
+\subsection{Expected Value.}
+In order to decide between two options, the distribution of probability and earnings for each scenario have to be known.
+The \textit{Expected Value} criteria is applied to give a value to the outcomes: it is just the mean of the profits weithed by their probability.
+\begin{equation*}
+  EV (x) = \sum_x^{\text{outcomes}}\text{profit}(x) \cdot p(x)
+\end{equation*}
+Just direct outcomes (the ones descending directly by the decision node) are considered: other chance nodes must be evaluated recoursively.
+At the end, the best strategy is the option with the highter profit.
+
+\subsection{Risk Aversion.}
+The expected value approach works well if the action can be taken multiple times (big numbers rule): the value of a risky alternative may be different.
+The \textit{certainty equivalent} ($CE$) for an alternative is the amount that is equally preferred to compensate the risk.
+A person is defined as \textit{risk-averse}, \textit{risk-neutral} or \textit{risk-seeking} if a more secure but less convenient option, or a risky but convenient option is preferred; or in other terms, if $CE$ is $>, = , < 0$.
+The risk aversion can be calculated through a \textit{utility function}: options can be evaluated to sort them and to select the best one.
+This function is defined but not known.
+An example of function is the exponential:
+\begin{equation*}
+  u(x) = 1 - e^{-\frac{x}{R}}, \hspace{25pt} R > 0
+\end{equation*}
+where $R$ is the \textit{Risk Tolerance}, and depends on the decision-maker; with an high value, $u(x)$ rappresent a lower risk aversion.
+The $CE$ can be calculated with the formula:
+\begin{equation*}
+  CE = - R \cdot \ln(1 - E[u])
+\end{equation*}
+
+A perfect information removes all uncertainty but is expensive.
+A unperfect information does not worth more than a perfect information but has a lower cost.
+\end{document}

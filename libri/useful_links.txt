@@ -1,0 +1,11 @@
+Neo4j utils:
+
+-https://github.com/mneedham (in particolare noi abbiamo sfruttato la repo https://github.com/mneedham/modeling-worked-example)
+
+
+-https://markhneedham.com/blog/ (blog dell'autore delle repo sopra citate, nonchè boss di neo4j)
+
+
+altri esempi di script utili
+
+-https://github.com/moxious/meetup-dataset

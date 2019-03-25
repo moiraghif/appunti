@@ -3,7 +3,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref} %clickable stuffs
 \usepackage{mathtools}
-\usepackage[margin=0.65in]{geometry}
+\usepackage[margin=1.3in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[autostyle]{csquotes}
@@ -13,7 +13,7 @@
 %It was to print the bibliography, just to be give credit to the author of the original content but I guess we could leave it in a separate file biblio and print it here
 
 \addbibresource{biblio.bib}
-%Aggiungere alla biblio anche gli autori degli appunti dell'anno scorso (se sapete i nomi)
+%Aggiungere alla biblio anche gli autori degli appunti dell'anno scorso (Alex Ceccotti, il rappresentante)
 
 
 \graphicspath{ {./img/} }
@@ -28,127 +28,74 @@
 %\tableofcontents %maybe would be nice to add?
 %Some one commented it (MoMo) so I thought it was not necessary
 
-\section{Data Modelling}
+\section{Data Modelling.}
 Il data modelling è uno strumento per descrivere parte del mondo reale che ci permette di:
 \begin{itemize}[noitemsep]
-\item Immagazzinare dati (write data)
-\item Interrogare i dati (read data)
+\item immagazzinare dati (write data);
+\item interrogare i dati (read data).
 \end{itemize}
-Un data model è composto prima di tutto da un modello concettuale (teoria) e poi da un linguaggio (anche grafico a volte) per descrivere e interrogare i dati. Un data model è sempre disponibile in un databasse management system che supporta la semantica del modello. Alcune delle caratteristiche più importanti di un data model sono:
+Un data model è composto da un modello concettuale (teoria) e da un linguaggio (anche grafico a volte) per descrivere e interrogare i dati. Un data model è sempre disponibile in un database management system (DBMS) che supporta la semantica del modello. Alcune delle caratteristiche più importanti di un data model sono:
 \begin{itemize}[noitemsep]
 \item Machine readability
 \item Expressive power
+  %
+  % poco chiaro
 \item Semplicità? Flessibilità? Standardizzazione?
 \end{itemize}
 Il data model più famoso  e conosciuto è il modello relazionale.
-\subsection{Relational model}
 
-Aspetti positivi :
-
+\subsection{Relational model.}
+Aspetti positivi:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Molto rigido come regole.
-	\item
-	Il RDBMS sfrutta le proprietà ACID :
-	\begin{itemize}
-		
-		\item
-		A : Atomicity : serve affinché l'operazione o avviene su tutti i dati o non avviene, ad esempio se vi è un aggiornamento nei dati questo aiuta affinché i dati non vengano aggiornati solo parzialmente.
-		\item
-		C : Consistency : I dati o il nuovo dato che viene aggiunto rispetta lo schema prestabilito. E se si viola la consistenza con un'operazione tutta l'operazione fallisce.
-		\item
-		I : Isolation : gestisce come l'integrità delle transazioni sono viste dall'utente. Inoltre garantisce che durante un'operazione (query) non vengano svolte altre operazioni, e che lo stato del database venga modificato solo prima della fine della query.
-		\item
-		D : Durability : garantisce che una transazione effettuata sopravvivrà per sempre, anche se il sistema crasha. Dovuto grazie ai server di
-		backup e log files.
-	\end{itemize}
+\item Schema rigido.
+\item Sfrutta le proprietà ACID :
+  \begin{itemize}
+  \item Atomicity: l'operazione è \textit{atomica}, ovvero o avviene per intero (\texttt{COMMIT}) o restituisce un errore e il database ritorna alla forma iniziare (\texttt{ROLLBACK}); ad esempio se si aggiornano i dati o sono aggiornati tutti o non è aggiornato nessuno.
+  \item Consistency: i nuovi dati inseriti rispecchiano lo schema prestabilito (o l'operazione di inserimento fallisce);
+  \item Isolation: le singole operazioni non influiscono sulle altre; per fare questo il database costruisce una coda di esecuzione dei processi, così lo stato del database non muta durante l'esecuzione di una singola richiesta;
+  \item Durability: la persistenza del file è garantita (virtualmente a tempo indefinito) anche in caso di crash del sistema; per ottenere questo risultato sono utilizzati backup e log files.
+  \end{itemize}
 \end{enumerate}
-Il RDBMS esiste già da 35 anni quindi è ben sviluppato e molto conosciuto, molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Gli aspetti limitanti sono:
-
+Il modello relazionale esiste da ormai 35 anni, è ben sviluppato e molto conosciuto: molti dati sono ancora salvati in questo formato ed è efficace ancora per molte operazioni. Tuttavia presenta numerosi svantaggi:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	un attributo può avere solo un valore.
-	\item
-	non è compatibile con molti linguaggi moderni.
-	\item
-	molto rigido come linguaggio
-	\item
-	non accetta i loop.
-	\item
-	Difficile modificare le tabelle.
-	\item
-	La performance.
+\item un attributo può avere solo un valore;
+\item non è compatibile con i moderni linguaggi di programmazione ad oggetti;
+\item il linguaggio è molto rigido;
+\item non permette loop nei dati;
+\item la modifica di tabelle esistenti è difficile e dispendiosa;
+\item è poco prestante in alcuni contesti.
 \end{enumerate}
 Nei RDBMS la performance (inteso come velocità) dipende da vari fattori:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Numero delle righe
-	\item
-	Tipo di operazione
-	\item
-	Algoritmo scelto
-	\item
-	La struttura dati scelta
+\item numero delle righe;
+\item tipo di operazione;
+\item algoritmo scelto;
+\item struttura dei dati.
 \end{itemize}
 
-Per Scaling Up intendiamo potenziare le macchine, mentre per Scaling out intendiamo aggiungere macchine, per i RDBMS è più facile Scale up che Scale out. 
-Il costo è un altro dei problemi, installare il software richiede un costo molto alto e hardware molto complesso.
-Inoltre se continuiamo a aggiungere server (scaling out) il prezzo dell'Hardware aumenta esponenzialmente mentre il guadagno complessivo sul tempo di risposta scende asintoticamente.
+Per \textit{Scaling Up} si intende potenziare la singola macchina, mentre per \textit{Scaling out} si intende aggiungere macchine in una rete di calcolatori; quest ultimo è molto difficile da effettuare su un database di tipo relazionale.
+Il costo è un altro dei problemi: l'acquisto di macchine di una certa potenza è molto alto e non garantisce un aumento lineare delle prestazioni, che anzi scendono asintoticamente.
 \newline
-\subsection{NoSQL}
-Di fronte a questi svantaggi sorge una nuova "tecnologia": i NoSQL(Not Only SQL).
-Le proprietà dei NoSQL sono:
 
+\subsection{NoSQL.}
+Per risolvere i problemi dei database relazionali, nasce un movimento informatico chiamato NoSQL (\textit{Not Only SQL}) che non rifiuta il modello ma propone approcci alternativi. I database di tipo NoSQL, pur essendo molto diversi tra di loro, hanno caratteristiche comuni:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Non hanno nessuno schema o modello prefissato
-	\begin{itemize}
-		
-		\item
-		A differenza dei modelli SQL nei quali bisogna prima definire il modello, nel caso NoSQL non esiste un modello rigido.
-		\item
-		Per aggiungere un nuovo attributo non vi è bisogno di cambiare il modello a differenza dei SQL.
-		\item
-		I modelli NoSQL seguono l'assunzione del mondo aperto (ciò che non è vero è sconosciuto, ma non per forza falso) mentre SQL segue l'assunzione del mondo chiuso (solo ciò che è noto come vero è vero)
-	\end{itemize}
-
-	\def\labelenumi{\arabic{enumi}.}
-	 
-	\item
-	Segue il teorema CAP:
-	\begin{itemize}
-		\item E' impossibile per un sistema informatico distribuito(vuol dire sistemi interconnessi tra loro e la comunicazione avviene solo attraverso messaggi) fornire simultaneamente le tre garanzie (infatti si possono soddisfare solo 2 di esse):
-		\begin{enumerate}		
-			\item
-			\textbf{(C)C}onsistency(Coerenza) : Tutti i nodi vedono gli stessi dati allo stesso istante. Se è assente allora una soluzione è mostrare il dato precedente alla modifica cioè non quello più recente.
-			\item
-			\textbf{(A)}vailability(Disponibilità) : La garanzia che ogni richiesta ottenga una risposta su ciò che è fallito e ciò che ha avuto successo. Se è assente aspetterò per lunghi tempi senza ricevere una risposta.
-			\item
-			\textbf{(P)}artition Tolerance(Tolleranza sulle partizioni) : Il sistema funziona anche dopo aver perso un numero arbitrario di pezzi del sistema.
-		\end{enumerate}
-		\item
-		I sistemi RDBMS sono dei software CA, ed è possibile creare dei modelli RDBMS basati sul CAP
-		\item
-		I sistemi NoSQL sono dei sistemi solitamente CP o AP.
-		\item
-		Uno preferisce la disponibilità sulla coerenza, perché è meglio vedere un vecchio dato non coerente che vedere un errore di fallimento di caricamento dei dati.
-	\end{itemize}
-
-	\item
-	Segue Principio BASE:
-	\begin{itemize}
-		
-		\item
-		Basic Availability : completare una richiesta anche se parzialmente consistente, ad esempio nel caso di fallimento. E' possibile fare ciò grazie al fatto che usa server sparsi ovunque con un grado di	replicazione del database e in caso di malfunzionamento del database richiesto non tutto il sistema cede la disponibilità.
-		\item
-		Soft State : Abbandonano la richiesta di consistenza dei ACID praticamente completamente, cioè i dati possono avere schemi diversi.
-		\item
-		Eventual consistency : I sistemi NoSQL richiedono che a un certo punto i dati convergeranno a uno stato consistente (non si fa garanzie sul quando), e quindi prima di allora ho una consistenza ritardata cioè prima del momento dello stato consistente posso ricevere come risposta qualunque valore come risposta di una query.
-	\end{itemize}
+\item non hanno nessuno schema o modello prestabilito: la costruzione di un modello rigido per la registrazione dei dati è considerata una limitazione da superare, pertanto per aggiungere un nuovo attributo non è necessario modificare l'intero modello;
+\item seguono l'assunzione del mondo aperto: ciò che non è vero è sconosciuto, ma non per forza falso, mentre SQL segue l'assunzione del mondo chiuso (è vero solo ciò che è noto lo sia).
+\item seguono il teorema CAP: è impossibile per un sistema informatico distribuito (cioè un sistema interconnesso la cui comunicazione avviene solo attraverso messaggi) fornire simultaneamente tutte e tre le proprietà (si possono soddisfare solamente 2):
+  \begin{enumerate}
+  \item \textbf{(C)}onsistency (Coerenza): tutti i nodi vedono gli stessi dati allo stesso istante; se è assente allora una soluzione è mostrare il dato precedente alla modifica e non quello più recente.
+  \item \textbf{(A)}vailability (Disponibilità): il ricevere una risposta in un tempo determinato per ogni richiesta (fallita o meno); se assente non si riceve risposta in caso di fallimento della richiesta;
+  \item \textbf{(P)}artition Tolerance (Tolleranza al partizionamento): il sistema funziona anche con dati frammentanti su una rete di calcolatori;
+  \end{enumerate}
+  Il modello relazionale ha le proprietà CA, mentre i NoSQL generalmente sono CP o AP.
+  Si può preferire la disponibilità alla coerenza quando è preferibile ottenere dati non aggiornati piuttosto che messaggi di errore.
+\item seguono il principio BASE (ovviamente, il contrario di ACID):
+  \begin{itemize}
+  \item Basic Availability: la consistenza può anche non essere garantita interamente, mostrando solamente una parte dei dati realmente disponibili (è il tipico caso di crash di un nodo che quindi non può trasmettere i dati al resto della rete);
+  \item Soft State: i dati possono avere schemi diversi (a differenza del modello relazionale);
+  \item Eventual Consistency: i sistemi NoSQL richiedono che, ad un certo punto, i dati convergano a uno stato consistente senza specificare quando; prima del raggiungimento della consistenza si possono avere valori non veritieri.
+  \end{itemize}
 \end{enumerate}
 
 
@@ -158,134 +105,131 @@ Le proprietà dei NoSQL sono:
 \hline
 ACID & BASE \\
 \hline
-• Forte Coerenza & • Coerenza debole\\
-• Poca disponibilità & • Disponibilità è la cosa principale\\
+• Forte Coerenza & • Coerenza debole \\
+• Poca disponibilità & • Disponibilità come priorità \\
 • Pessimo "Multitasking" & \quad e sacrifica per questo (CAP)\\
-• Complesso & • Veloce e Semplice\\
+• Rigido & • Veloce e Semplice \\
 \hline
-
 \end{tabular}
 \end{center}
-Esempi e tipologie di modelli NoSQL :
 
+I modelli NoSQL si dividono in macrocategorie:
 \begin{enumerate}[noitemsep]
-	 
-	\item
-	Key Value (Dynamo, Voldemort, Rhino DHT) : Sono delle tabelle con	chiavi che si riferiscono/puntano a un certo dato, è molto simile a Document based. 
-	\item
-	Column family (Big Table, Cassandra) : In grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato ragruppato in colonna.
-	\item
-	Document based (CouchDB, MongoDB) : Di solito salvati con file JSON, salvati come una \textless{}chiave -- valore\textgreater{}. E' facile ricercare dati in questo formato. JSON è basato su due strutture :1) chiave -- valore per gli oggetti e 2) lista ordinata di elementi.
-	\item
-	Graph based (Neo4J, FlockDB) : Uso i vertici/nodi e archi per
-	rappresentare i dati e legami tra di loro. E' difficile fare scaling	con i grafi per quanto riguarda l'immagazzinamento ma è molto rapido nelle query.
+\item Key Value (Dynamo, Voldemort, Rhino DHT): sono delle tabelle con chiavi che si riferiscono (o puntano) a un certo dato, è molto simile ai Document based.
+  %
+  % poco chiaro :/
+\item Column family (Big Table, Cassandra): in grado di salvare grandi quantità di dati, la chiave colonna si riferisce a un certo dato raggruppato in colonna.
+\item Document based (CouchDB, MongoDB): di solito salvati con file JSON, contenente un insieme ordinato di coppie \textless{}chiave -- valore\textgreater{}; è facile ricercare dati in questo formato;
+\item Graph based (Neo4J, FlockDB): sfrutta il concetto matematico di grafo per archiviare i dati come nodi ed esaltare i legami tra di essi costruendo archi; è difficile da scalare per quanto riguarda l'immagazzinamento (è difficile tagliare un grafo) ma è molto rapido nelle query.
 \end{enumerate}
-Dobbiamo sacrificare o la dimensione del database o la sua non complessità:
+
+% La ridondanza dei dati facilita le ricerche pur aumentando le dimensioni dei dati stessi: si sacrifica spazio di archiviazione a favore della velocità di esecuzione.
+La semplicità del modello permette di archiviare un maggior numero di dati:
 \begin{center}
 	\includegraphics[scale=0.4]{IMAGE1.jpg}
 \end{center}
 
 
-
-\subsubsection{Document Based\cite{MongoDB}}
-MongoDB è -come già affermato- un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono storati in formato BSON (Binary JSON) e l'accesso ai dati stessi è possibile grazie all'esistenza di indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere la funzione join. Le principali differenze sono le seguenti:
+\subsubsection{Document Based (MongoDB).}
+MongoDB è, come già affermato, un sistema di gestione basato sui documenti (document based management system), in cui i dati vengono archiviati in formato BSON (Binary JSON) e letti tramite indici. Volendo fare un confronto con i database di tipo SQL, Mongo DB non prevedere operazioni di join. Le principali differenze sono le seguenti:
 \begin{center}
 	\includegraphics[scale=0.6]{IMAGE2.jpg}
 \end{center}
+
+% poco chiaro
 Nel caso in cui si verifichi un massiccio caricamento di dati, si potrebbe decidere di apportare alcune modifiche al processo per fissarlo:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
-	\item
-	Disabilitare la scrittura su un file di tipo log
+\item Disabilitare il riconoscimento dei dati, che è un segnale trasmesso tra processi di comunicazione, computer o dispositivi, per indicare il riconoscimento o la ricezione del messaggio, come parte di un protocollo di comunicazione
+\item Disabilitare la scrittura su un file di tipo log
 \end{itemize}
-Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà persa per sempre.
+Bisogna stare molto attenti nel fare ciò, perché ogni ogni perdita non sarà registrata e di conseguenza sarà definitiva.
 \newline
-Per grandi dataset risulta molto utile l'utilizzo di alcune strutture aggiuntive chiamate indici: simili agli indici dei libri, rappresentano un modo più veloce per recuperare informazioni.
-Potrebbe essere richiesto più tempo durante la fase di inserimento degli stessi indici, ma questi renderanno l'esecuzione delle query molto più rapida. 
-Un indice primario (basic one) è sempre quello definito per l'id. 
 
-Ma come funziona esattamente?
-Fondamentalmente, senza un indice, Mongo si comporterebbe come un semplice scansionatore di tabelle (esattamente come fa SQL). Dovrebbe di conseguenza cercare per tutto il ``libro'' al fine di trovare il risultato della query. L'analogia con il libro si esplicita al meglio nel seguente meccanismo: se non avessimo l'indice nei nostri libri, saremmo costretti a leggere il libro interamente fino a che non troviamo il paragrafo o il capitolo da cui siamo intenzionati a partire nella lettura. 
-L'indicizzazione evita proprio questo problema (che risulta ancora più complicato se il database è ampio), fornendo una lista ordinata che indica il contenuto.
-Dal momento che l'indicizzazione rallenta molto le modifiche, sarebbe necessario scegliere solamente una coppia di indici per ogni collection; la parte difficile è decidere quali. MongoDB dà, di default, un limite di 64 indici!
+Per dataset di grandi dimensioni risulta molto utile l'utilizzo di indici: simili agli indici dei libri (o delle tabelle SQL), rappresentano un modo più veloce per recuperare informazioni.
+L'uso di indici rallenta l'inserimento di nuovi dati (perché appunto devono essere indicizzati) ma velocizza notevolmente le ricerche. Il campo "\_id" è sempre indicizzato.
+Senza un indice, MongoDB analizza a tappeto tutti i documenti (esattamente come SQL). Metaforicamente dovrebbe leggere ogni volta tutto il libro perrecuperare l'informazione.
+L'indicizzazione evita proprio questo problema (che aumenta con le dimensioni della collection), organizzando il contenuto in una lista ordinata.
+Dato che l'indicizzazione rallenta le modifiche, è buona norma utilizzare solamente un paio di indici per ogni collection; il limite di MongoDB è di 64 indici.
 
+%poco chiaro
 L'aggregazione utilizza pipeline e opzioni.
 La pipeline di aggregazione avvia l'elaborazione dei documenti della raccolta (collection) e passa il risultato alla pipeline successiva per ottenere risultati, ad esempio: \ $ match e \ $ group.
 Possiamo utilizzare lo stesso operatore in diverse pipeline.
 
-Per molte ragioni (principalmente commerciali), Mongo offre anche un'interfaccia SQL; abbiamo bisogno del connettore BI (Business Intelligence): genera lo schema relazionale e usa tale schema per accedere ai dati.
+Per ragioni commerciali, MongoDB offre anche un'interfaccia SQL tramite il connettore BI (Business Intelligence): genera lo schema relazionale e lo usa per accedere ai dati.
 
-\subsubsection{GraphDB\cite{Neo4J}}
 
-Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni degli stessi nodi. 
-Ha un sacco di applicazioni, come: social media, raccomandazioni, geo, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, autorizzazione e controllo degli accessi.
-\newline
-Il modello a grafo di proprietà con etichette (labeled-property graph model) ha le seguenti caratteristiche:
-
+\subsubsection{GraphDB (Neo4J).}
+Un grafo è una collezione di nodi e archi, i quali rappresentano le relazioni tra gli stessi nodi.
+Ha un sacco di applicazioni, come: social media, raccomandazioni, luoghi geografici, reti logistiche, grafici per le transazioni finanziarie (per il rilevamento delle frodi), master data management, bioinformatica, sistemi di autorizzazione e controllo degli accessi. \newline
+Il modello a grafo con etichette (labeled-property graph model) ha le seguenti caratteristiche:
 \begin{itemize}[noitemsep]
-	 
-	\item
-	Contiene \textbf{nodi} e \textbf{relazioni};
-	\item
-	I nodi contiene \textbf{proprietà} (chiave : coppie di valori);
-	\item
-	I nodi possono essere etichettati con una o più \textbf{etichette};
-	\item
-	Le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
-	\item
-	Come i nodi, anche le relazioni possono avere delle proprietà.
-	\item
-	%magari migliorare questa parte (Sicuramente fa pena nella lista)
-	Le relazioni possono essere \textbf{fine-grained} or \textbf{generic}: \\Consideriamo il caso della relazione $Address$, si può fare distinzione tra:
-	\begin{itemize}
-		
-		 \item le relazioni fine-grained come \texttt{HOME$\_$ADDRESS} o \texttt{WORK$\_$ADDRESS} o \texttt{DELIVERY$\_$ADDRESS} 
-		 \item oppure potremmo scegliere solamente \texttt{ADDRESS} e specificare di quale tipo di indirizzo si tratta \texttt{ADDRESS\{type:`home'\}}. Questo metodo prende il nome di generic relationship. 
-	\end{itemize}		 
-	In genere si preferisce il generic, specialmente per quei casi in cui bisogna trovare tutti gli indirizzi di un cliente: tutto quello che basta fare è trovare la relazione \texttt{ADDRESS}, mentre nel caso del fine-grained sarebbe necessario trovare uno a uno tutti i tipi di indirizzi (immaginate di avere 100 tipi di indirizzo!). Con l'altro metodo (generic) per trovare il \texttt{DELIVERY$\_$ADDRESS} tutto ciò che bisogna fare è identificare \texttt{ADDRESS\{type:`delivery'\}}. 
-
+\item contiene \textbf{nodi} e \textbf{relazioni};
+\item i nodi contengono \textbf{proprietà} (coppie chiave-valore);
+\item i nodi possono essere etichettati con una o più \textbf{etichette};
+\item le relazioni sono nominali e direzionali, con un nodo d'inizio e uno di fine;
+\item le relazioni, come i nodi, possono avere delle proprietà (e queste possono avere anche valori).
 \end{itemize}
-Un database a grafo (Graph Database, GD) può usare sia un motore di archiviazione nativo o non-nativo (native or non-native storage) che un motore di elaborazione (processing engine).
-\newline
-L'archiviazione a grafo di tipo nativo è ottimizzata per la gestione a grafo nativa, mentre l'archiviazione a grafo di tipo non nativo tratta i dati in un modello non basato su grafico pur continuando a supportare un linguaggio di query grafico. Esempi sono: Relational, Object oriented DB, Wide Column. 
-In un modello relazionale, per esempio, in una join bomb si può utilizzare un grafo per connettere due tabelle. 
-Il problema con i database relazionali e la maggior parte dei database NoSQL è la mancanza di relazioni.
-Inoltre in SQL le joining tables aggiungono un livello di complessità in più, e specialmente nel caso di tabelle scarse con colonne nulle l'operazione richiede un controllo speciale nel codice.
-Nel caso di un mercato, solo per vedere cosa ha comprato un cliente, dobbiamo fare un sacco di joins costose sul cliente che ha comprato uno specifico prodotto con altri prodotti per il sistema di raccomandazione. 
-For the NoSQL DBs, whether key-value, document or column-oriented, we might use the aggregation technique to see the relationship, but the relationship between aggregates aren't citizen in the data model. Indeed the aggregation is a costly operation since it doesn't exploit index free adjacency (the data is physically near) and since they stay inside of aggregates with structure in form of nested maps and even after the aggregation there is no back link to point backward and run
-other interesting queries. 
+% magari migliorare questa parte (Sicuramente fa pena nella lista)
+% l'ho tolta dall'elenco e rivista un po' :)
+Le proprietà delle relazioni possono essere assegnate con un criterio \textbf{fine-grained} o \textbf{generic}. Considerando il caso della relazione \texttt{ADDRESS}, si può fare distinzione tra:
+\begin{itemize}
+\item fine-grained: \texttt{HOME\_ADDRESS}, \texttt{WORK\_ADDRESS} o \texttt{DELIVERY\_ADDRESS} (sono tutte etichette diverse);
+\item generic: \texttt{ADDRESS:home}, \texttt{ADDRESS:work} o \texttt{ADDRESS:delivery} (l'etichetta è sempre \texttt{ADDRESS}, con un attributo che ne indica il tipo).
+\end{itemize}
+Generalmente è preferito il secondo metodo per la minore complessità nello scrivere query (come ad esempio elencare tutti gli indirizzi di una data persona).
 
-In a native graph storage the attributes and nodes and the referenced nodes are stored together, to optimize the graph processing engine. 
-Performing a query the graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the other SQL and NoSQL models will suffer in performance speed with the increase of data. 
-Moreover we can add more data/nodes and relationship without disturbing the already existing model.
+Un database a grafo può usare un motore di archiviazione nativamente a grafo o usare altri sistemi di archiviazione. Il primo ottimizza la gestione de grafi, mentre il secondo archivia i dati in formato tabellare o tramite documenti per poi interrogare il database come se fosse un grafo.
+Il metodo tabellare per esempio archivia le relazioni su una tabella relazionale che può essere interrogata tramite \textit{join bomb} (join con se stessa), tuttavia questo sistema degenera in fretta all'aumentare della distanza tra due nodi.
+
+Il database a grafo risolve quindi il problema dei database relazionali (e di molti altri database NoSQL) a gestire le relazioni interne ai dati.
+Infatti anche altri modelli NoSQL, indipendentemente dal modello in uso, soffrono perdite di prestazioni quando sono effettuate aggregazioni di dati (soprattutto non indicizzati) dal momento che i collegamenti non sono nativi nel modello e manca il concetto di prossimità.
+Si può tentare di risolvere il problema con dati annidati tra di loro ma la struttura del database risulterebbe eccessivamente complessa e non permetterebbe altre query.
+Il DBA in base ai suoi bisogni (integrazione con altre applicazioni) può benissimo decidere di usare un database a grafo con una gestione dei dati non nativa senza che questo impatti sulla qualità del prodotto finale.
+% sono arrivato qui (@moiraghif)
+%ti ho spostato io (@pkasela) dietro di un paragrafo che non sono sicuro della traduzione.
+In un archivio nativo a grafo gli attributi, i nodi e i nodi referenziati sono memorizzati insieme per ottimizzare l'engine di processamento a grafo.
+%In a native graph storage the attributes, the nodes and the referenced nodes are stored together to optimize the graph processing engine.
+Per eseguire una query nel modello a grafo, il tempo di risposta non tipende strettamente dal numero totale di nodi (che rimane più o meno costante) perché la query viene processata nella porzione locale del grafo connessa al nodo base, mentre nei modelli relazionali e altri modelli NoSQL peggiorano le prestazioni al aumentare dei dati (spesso in una maniera lineare).
+%Performing a query in a graph-model, the response time does not strictly depend on the total number of nodes (it remains nearly constant) because the query is processed locally to the portion of the graph which is connected to the base node, while the Relational Model and other NoSQL models will suffer in performance speed with the increase of data (often in a way more than linear). 
+Inoltre è possibile aggiungere altri nodi e relazioni senza disturbare il modello già esistente anche nel caso i dati non abbiano la stessa struttura.
+%Moreover it is possible to add more nodes and relationship without disturbing the already existing model, even if datas do not share the same structure. 
 \newline
-The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB, this makes sure that the retrieval is faster but it comes at a cost: the efficiency of queries that do not use graph traversal, for example the writing time etc.
-\newline
-It's important to note that it's neither good nor bad to use native or non-native engine, simply one needs to make a choice based on his/her needs. % for example my DB is based on a non-graph backend (like MySQL) so it would be useful to use a non native graph storage. 
-\newline
-Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
-The properties of the cypher language are:
+%come si traduce processing engine in Italiano?
+Il processing engine usa "index-free adjacency" cioé i nodi connessi sono collegati fisicamente tra di loro, ciò velocizza il loro recupero da una query, ma questa velocità ha un prezzo: l'efficacia dei query che non sfruttano le proprietà del grafo viene peggiorata, ad esempio nel caso delle operazioni di I/O.   
+%The processing engine uses index-free adjacency, meaning that connected nodes physically points to each other in the DB; this makes sure that the retrieval is faster but it comes at a cost: the time efficiency of queries that do not use graph traversal, for example I/O operation, is increased. \newline
+
+Neo4j implementa un linguaggio Cypher di query di tipo dichiartivo. Cypher permette i query al grafo usando sitassi simile a quella di SQL o SPARQL, ma comunque ottimizato per i grafi.\\
+%Neo4j implements a declarative graph query language Cypher. Cypher allows graphs to be queried using simple syntax somewhat comparable to SQL or SPARQL, but particularly optimized for graph traversals.\\
+Le proprietà del linguaggio cypher sono:
+%The properties of the cypher language are:
 
 \begin{enumerate}[noitemsep]
 	 
 	\item
-	Pattern-matching query language
+	Linguaggio di tipo Pattern-matching
+	%Pattern-matching query language
 	\item
-	Humane language, easy to learn, read and understand
+	Linguaggio di facile da imparare, leggere e capire.
+	%Humane language, easy to learn, read and understand
 	\item
-	Expressive yet compact
+	Espressivo ma comunque compatto
+	%Expressive yet compact
 	\item
-	Declarative : Say what you want, not how
+	Dichiarativo: Bisogna dichiarare ciò che si vuole non come farlo
+	%Declarative : Say what you want, not how
 	\item
-	Borrows from well known query languages especially SQL, yet clearly it's different enough to see that it deals with graphs and not SQL	DBs.
+	Fortemente influenzato da altri linguaggi (per query) sopratutto SQL, ma rimane comunque diverso da SQL abbastanza da capire che il modello utilizzato è a grafo e non SQL.
+	%Borrows from well known query languages especially SQL, yet clearly it's different enough to see that it deals with graphs and not SQL	DBs.
 	\item
-	Aggregation, Ordering, Limit
+	Aggregazione, Ordinamento e Limiti
+	%Limiti??
+	%Aggregation, Ordering, Limit
 	\item
-	Update the Graph
+	Aggiornare il grafo
+	%Update the Graph
 \end{enumerate}
-\paragraph{A real example is the following}:\\ 
+\paragraph{Una applicazione pratica del GraphDB}:\\ 
 We want to manage a server farm, we define a relational model for managing it. 
 We know that a user access to application which runs on a VM and each application uses a DB and a secondary DB. 
 Each of the VM is hosted on a server placed in a rack structure managed by a load balancer.
@@ -649,14 +593,10 @@ multiple horizontal partitions called \textbf{regions}. Each region consists of 
 Read or write access to a region is controlled by a \textbf{RegionServer}. There will usually be more than one region in each RegionServer. As regions grow, they split into multiple regions based on configurable policies (may also be split manually).
 
 Each HBase installation will include a Hadoop \textbf{Zookeeper service} that is implemented across multiple nodes.
-Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras?
+Hbase may share this Zookeeper ensemble with the rest of the Hadoop cluster or use a dedicated service. %When an HBase client wishes to read or write to a specific key value, it will ask Zookeeper for the address of the RegionServer that controls the HBase catalog. The client will then establish a connection with that RegionServer and request to read or write the key value concerned. %extras? Yes but just to tell something more on how it works.
 
-The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the
-balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to
-determine the location of the HBase catalog tables, which can be then be interrogated to determine the
-location of the appropriate RegionServer. The client will then request to read or modify a key value from
-the appropriate RegionServer. The RegionServer reads or writes to the appropriate disk files, which are
-located on HDFS. %taken almost literally from the suggested course book "Next Generation DB"
+The HBase \textbf{master server} performs a variety of housekeeping tasks. In particular, it controls the balancing of regions among RegionServers. If a RegionServer is added or removed, the master will organize for its regions to be relocated to other RegionServers. An HBase client consults Zookeeper to determine the location of the HBase catalog tables, which can be then be interrogated to determine the location of the appropriate RegionServer. The client will then request to read or modify a key value from the appropriate RegionServer. 
+The RegionServer reads or writes to the appropriate disk files, which are located on HDFS. %taken almost literally from the suggested course book "Next Generation DB". If something is well written it's the best thing to do.
 
 Summing up, the four major components (nodes) of HBase are:
 \begin{enumerate}[noitemsep]
@@ -684,7 +624,7 @@ Cassandra uses ZooKeeper to find the replicas in other nodes, given a node we de
 %%%
 
 
-\begin{figure}
+\begin{figure}[h] %otherwise it is in the HBase section
 \centering
 \includegraphics[width=100 mm]{cassandrawrite.png}
 \caption{\label{cassandrawrite:fig} Data writing procedure in Cassandra.}
@@ -743,7 +683,7 @@ I client leggeranno il file dalla replica più vicina a loro (rack awareness). E
 Formati di file supportati: Text, CSV, JSON, SequenceFile, binary key/value pair format, Avro*, Parquet*, ORC, optimized row columnar format.
 
 \subsection{Map Reduce}
-Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. "Mapred" risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
+Map Reduce è un motore di computazione distribuito. Ogni programma è scritto in stile funzionale ed è eseguito in parallelo. Prende spunto dalle funzioni "Mapcar" e "Reduce" del LISP,che applicano rispettivamente un'operazione su tutti gli elementi di un insieme e ne combinano i valori restituendone il risultato. "Mapred" risolve problemi legati alla gestione di processi di gestione/processing di BigData (ad esempio distributed pattern-based searching, distributed sorting) quali:
 \begin{itemize}[noitemsep]
 \item Come assegnare i 'lavori' ai singoli 'worker'
 \item Cosa succede se ci sono più 'lavori' che 'worker'
@@ -756,7 +696,13 @@ Map Reduce è un motore di computazione distribuito. Ogni programma è scritto i
 	\includegraphics[scale=1]{IMAGE8.png}\\
 	Map Reduce
 \end{center}
-La fase di Map esegue lo stesso codice su un grande ammontare di record, estrae le informazioni rilevanti, le ordina e le unisce. La fase di Reduce aggrega i risultati intermedi e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map (\texttt{map (k, v) -> [(k’, v’)]}) e di reduce (\texttt{reduce (k’, [v’]) -> [(k’, v’)]}). Tutte le altre attività le svolge  $MapRed$.
+L'architettura è di tipo master-slave. Il nodo master ha il compito di gestire la coda dei job,suddividere i work nei vari blocchi e notificarne il termine/fallimento. I nodi slave gestiscono i singoli job,inviando al nodo master informazioni sullo svolgimento.
+\newline
+Ogni job è caratterizzato dalle operazioni di map e di reduce. 
+
+La fase di Map esegue lo stesso codice su un grande ammontare di record,i dati di input vengono trasformati in coppie chiave-valore e "filtrati" in un altro insieme di coppie chiave-valore. Questo secondo insieme viene restituito al framework, che esegue delle operazioni di shuffle \& sort,raggruppando gli elementi con la stessa chiave. 
+
+La fase di Reduce aggrega i risultati intermedi (combinando gli elementi con la stessa chiave) e genera l’output. Il programmatore dovrà esclusivamente definire le due funzioni di map (\texttt{map (k, v) -> [(k’, v’)]}) e di reduce (\texttt{reduce (k’, [v’]) -> [(k’, v’)]}). Tutte le altre attività le svolge  $MapRed$.
 \subsection{Hadoop}
 Hadoop è un framework che supporta applicazioni distribuite con elevato accesso ai dati, unisce il sistema MapReduce (parallel and distributed computation) e l’HDFS (hadoop storage and file system).
 \begin{center}
@@ -809,8 +755,8 @@ As reported in Fig.~\ref{data_lake_arch:fig}, components of a typical data lake 
 
 
 \begin{itemize}
-\item The data is first loaded into a \textbf{transient loading zone}, where basic data quality checks are performed using MapReduce or Spark by leveraging the Hadoop cluster. 
-\item Once the quality checks have been performed, the data is loaded into Hadoop in the \textbf{raw data zone}.
+\item The data is first loaded into a \textbf{transient loading zone}, where basic data quality checks are performed (for example using MapReduce or Spark by leveraging the Hadoop cluster). 
+\item Once the quality checks have been performed, the data is loaded (for example into Hadoop) in the \textbf{raw data zone}.
 
 \item An organization can, if desired, perform standard data cleansing and data validation methods and place the data in the \textbf{refined zone}. 
 
@@ -890,5 +836,6 @@ Esistono perciò delle strategie per gestire tali conflitti:
 \item $Conflict\ Resolution$, che fa attenzione a dati e metadati prima di decidere sulla risoluzione del conflitto. Questa strategia può essere divisa in "deciding" (quando viene scelto un valore tra quelli esistenti) e "mediating" (quando viene scelto un valore che non appartiene per forza a quelli esistenti, per esempio la media).
 \end{itemize}
 \clearpage
+\nocite{*}
 \printbibliography
 \end{document}
