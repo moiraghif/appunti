@@ -1,5 +1,4 @@
-Appunti del corso di Data Science dell'Università degli Studi di
-Milano Bicocca a.a. 2018/2019.
+# Appunti del corso di Data Science dell'Università degli Studi di Milano Bicocca a.a. 2018/2019.
 
 Scrivete in italiano comprensibile!
 Andate a capo dopo ogni frase, così è più facile modificare il testo
@@ -19,7 +18,7 @@ Tutorial Git: http://rogerdudler.github.io/git-guide/index.it.html
 
 
 
-Ecco i link ai pdf delle materie:
+# Ecco i link ai pdf delle materie:
 
 [Foundation of Computer Science (ENGLISH)](https://github.com/moiraghif/appunti/blob/master/Foundation%20of%20Computer%20Science/AppuntiSQL.pdf)
 
