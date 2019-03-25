@@ -376,6 +376,15 @@ La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamen
 Una relazione in OWL ha le proprietà di simmetria e di transitività; inoltre matematicametne è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.
 Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
 
+Un concetto si dice \textit{soddisfacibile} se esiste almeno una sua interpretazione; invece un concetto si dice \textit{sussunto} a un altro modello se in qualsiasi interpretazione della prima teoria si ha un sottoinsieme della seconda teoria.
+Il concetto di interpretazione in logica quindi è puramente teorico: è lo strumento matematico usato per attribuire un significato ai dati; l'inferenza permette di attribuire significati aggiuntivi indipendentemente dalla semantica iniziale.
+Due concetti si dicono \textit{equivalenti} se l'interpretazione del primo concetto è sempre uguale a quella del secondo in tutte le interpretazioni della teoria; al contrario si dicono \textit{disgiunti}.
+
+È possibile utilizzare il \textit{reasoner} per verificare la correttezza delle relazioni.
+La conoscenza ha senso se è soddisfacibile: una teoria è incosistente se non ha interpretazioni che la rendono vera; caso analogo si verifica quando una classe è sussunta all'insieme vuoto: in tal caso non ha interpretazioni possibili.
+Dal punto di vista pragmatico, con un \textit{reasoner} si verifica la soddisfacibilità della teoria, si inferiscono gerarchie e nuove relazioni e ancora il tipo degli individui.
+
+
 
 \section{Logiche descrittive.}
 Sono una famiglia di logiche usate per rappresentare il grafo di conoscenza; più una logica è complessa ed espressiva maggiori sono il tempo di esecuzione e la complessità.
@@ -562,9 +571,26 @@ Si cercano i giocatori di Football americano che pesano più di 100kg.
 CONSTRUCT {
             ?x rdf:type dbo:AmericanFootballPlayer .
           }
-    WHERE {
+i    WHERE {
             ?x dbo:weight ?kg .
             FILTER(?kg > 1000000000)
           }
 \end{verbatim}
+
+
+\section{Protégé.}
+Progetto \textit{Open Source} per gestire ontologie, permette di caricare direttamente l'ontologia di \url{dbpedia.org} o di \url{schema.org}.
+DBPedia usa più di $400$ classi, usandone anche di \textit{sporche} (ovvero ripetute o poco utili).
+Usando il \textit{reasoner}, sono evidenziate le incongruenze (ovvero classi inconsistenti), che non possono avere dunque istanze.
+
+\subsection*{Costruzione di un'ontologia.}
+Si costruisce una semplice ontologia per la costruzione di un semplice domino geografico.
+\begin{verbatim}
+City  <  Region  <  Country  <  Continent
+\end{verbatim}
+In Protégé, si definisce una nuova ontologia con \verb|File > New| e inserendo poi sottoclassi di \verb|owl:Thing|.
+Popolata l'ontologia con delle istanze arbitrarie, si definiscono le proprietà.
+Si cerca di ridurre al minimo il numero di relazioni (si ha un'intuizione della definizione di contenimento), ma non è possibile tentando di ridurre al minimo le classi.
+Nel menù \verb|Object properties| è possibile definire nuove proprietà e definire dominio e immagine; si attribuiscono poi le proprietà alle istanze andando su \verb|Entities > Individuals| e cliccando su \verb|Object properties assertions| (a destra).
+
 \end{document}
