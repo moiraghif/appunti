@@ -388,24 +388,16 @@ Una relazione in OWL può possedere determinate proprietà:
 %ha le proprietà di simmetria e di transitività; inoltre matematicamente è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.%
 %Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.%
 %fatto ad elenco secondo me risulta più intuitivo.
-Un concetto si dice:
-\begin{itemize}
-\item \textit{Soddisfacibile} se esiste almeno una sua interpretazione; 
-\item \textit{Sussunto} a un altro concetto se qualsiasi interpretazione del primo concetto è sottoinsieme di un interpretazione del secondo;
-\item Due concetti si dicono \textit{equivalenti} se l'interpretazione del primo concetto è sempre uguale a quella del secondo in tutte le interpretazioni della teoria, al contrario si dicono \textit{disgiunti}.
-\end{itemize}
-Il concetto di interpretazione in logica quindi è puramente teorico: è lo strumento matematico usato per attribuire un significato ai dati; l'inferenza permette di attribuire significati aggiuntivi indipendentemente dalla semantica iniziale.
-È possibile utilizzare il \textit{reasoner} per verificare la correttezza delle relazioni.
-La conoscenza ha senso se è soddisfacibile: una teoria è incosistente se non ha interpretazioni che la rendono vera; caso analogo si verifica quando una classe è sussunta all'insieme vuoto: in tal caso non ha interpretazioni possibili.
-Dal punto di vista pragmatico, con un \textit{reasoner} si verifica la soddisfacibilità della teoria, si inferiscono gerarchie e nuove relazioni e ancora il tipo degli individui.
 
-
-
-\section{Logiche descrittive.}
-Sono una famiglia di logiche usate per rappresentare il grafo di conoscenza; più una logica è complessa ed espressiva maggiori sono il tempo di esecuzione e la complessità.
+\subsubsection{OWL Description Logic.}
+Le logiche descrittive sono una famiglia di logiche usate per rappresentare il grafo di conoscenza; più una logica è complessa ed espressiva maggiori sono il tempo di esecuzione e la complessità.
 Sono state introdotte per lo studio del linguaggio naturale prima del \textit{deep learning}.
 OWL DL (\textit{OWL Descriptive Logic}) si basa su SHIQ (è equivalente a SHOINDn).
-Una logica è composta da una TBox (\textit{Terminological Box}), ovvero l'ontologia della logica, e una ABox (\textit{Assertional Box}), che comprende i dati veri e propri.
+Una logica è composta da una TBox (\textit{Terminological Box}), ovvero l'ontologia della logica, il suo schema, e una ABox (\textit{Assertional Box}), che comprende i dati veri e propri che possono essere di due tipi:
+\begin{itemize}
+\item Un individuo appartiene ad una classe;
+\item Due individui appartengono ad una relazione.
+\end{itemize}
 Nelle logiche descrittive la difficoltà è costruire classi complesse (coi relativi costruttori). \newline
 \begin{center}
 	\includegraphics[scale=0.4]{IMG1.png}
@@ -429,7 +421,24 @@ Un'ontologia ha esattamente questo compito: ridurre il numero di interpretazioni
 \begin{center}
 \includegraphics[scale=0.6]{IMG5.png}
 \end{center}
+Un concetto si dice:
+\begin{itemize}
+\item \textit{Soddisfacibile} se esiste almeno una sua interpretazione; 
+\item \textit{Sussunto} a un altro concetto se qualsiasi interpretazione del primo concetto è sottoinsieme di un interpretazione del secondo;
+\item Due concetti si dicono \textit{equivalenti} se l'interpretazione del primo concetto è sempre uguale a quella del secondo in tutte le interpretazioni della teoria, al contrario si dicono \textit{disgiunti}.
+\end{itemize}
+Il concetto di interpretazione in logica quindi è puramente teorico: è lo strumento matematico usato per attribuire un significato ai dati; l'inferenza permette di attribuire significati aggiuntivi indipendentemente dalla semantica iniziale.
+È possibile utilizzare il \textit{reasoner} per verificare la correttezza delle relazioni.
+La conoscenza ha senso se è soddisfacibile: una teoria è incosistente se non ha interpretazioni che la rendono vera; caso analogo si verifica quando una classe è sussunta all'insieme vuoto: in tal caso non ha interpretazioni possibili.
 
+Da un punto di vista pragmatico, con un \textit{reasoner} possiamo:
+\begin{itemize}
+\item Fare un check di consistenza;
+\item Inferire nuove relazioni;
+\item Inferire gerarchie;
+\item Ereditare proprietà;
+\item Inferire la classe degli individui.
+\end{itemize}
 
 \section{\textit{Search Engine} semantici.}
 Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
