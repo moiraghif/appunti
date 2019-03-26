@@ -89,7 +89,7 @@ contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \item Bidirezionale	
 \end{enumerate}
 
-La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=2(1-\rho)$. Si può notare che: 
+La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=\dfrac{\sum_{i} (\varepsilon_i - \varepsilon_{i-1})^2}{\sum_{i} \varepsilon_i^2}$, si dimostra sotto ipotesi di omoschedaticità di $\varepsilon$ che $DW = 2(1-\rho)$. Si può notare che: 
 \begin{itemize}[noitemsep]
 \item La distribuzione di $DW$ è centrata su $2$: se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; 
 \item $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$;
