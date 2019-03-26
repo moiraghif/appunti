@@ -10,11 +10,11 @@ appropriarvi di appunti altrui.
 
 
 
-Tutorial LaTeX: https://www.latex-tutorial.com/tutorials/
+Tutorial LaTeX: [https://www.latex-tutorial.com/tutorials/](https://www.latex-tutorial.com/tutorials/)
 
-Tutorial Git: http://rogerdudler.github.io/git-guide/index.it.html
+Tutorial Git: [http://rogerdudler.github.io/git-guide/index.it.html](http://rogerdudler.github.io/git-guide/index.it.html)
 
-(più avanzato: https://www.tutorialspoint.com/git/)
+(più avanzato: [https://www.tutorialspoint.com/git/](https://www.tutorialspoint.com/git/))
 
 
 

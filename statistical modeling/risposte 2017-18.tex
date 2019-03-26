@@ -8,6 +8,8 @@
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1.3in]{geometry}
+\usepackage{cancel}
+
 
 \usepackage{amsthm}
 \newtheorem*{remark}{Osservazione}
@@ -29,10 +31,11 @@
 \section{Errori eteroschedastici}
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
 In virtù del fatto che ogni errore $\varepsilon_i$ è a media nulla $E(\varepsilon_i) = 0$ vale la relazione $E(\varepsilon_i^2)$ = Var$(\varepsilon_i) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
-Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
+Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza\footnote{Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. }
+(lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
 Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
 Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono. 
-Per individuare questa caratteristica, che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici).
+Per individuare questa caratteristica, che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici), lo stesso ragionamento vale anche per la F di Snedcor sui singoli parametri.
 
 Per quanto riguarda i metodi grafici:
 
@@ -53,7 +56,7 @@ Attraverso l'indice di determinazione $R^{2}$ di tale regressione, ricavato dal 
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
 
 \item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità $\bigl(H_0$: Var($\varepsilon_i$) = ($\sigma^2)\bigr)$.
-Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
+Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n $(\sum_{i}\varepsilon_i^2 / n)$. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 \end{itemize}
 
@@ -86,7 +89,7 @@ contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
 \item Bidirezionale	
 \end{enumerate}
 
-La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=2(1-\rho)$. Si può notare che: 
+La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=\dfrac{\sum_{i} (\varepsilon_i - \varepsilon_{i-1})^2}{\sum_{i} \varepsilon_i^2}$, si dimostra sotto ipotesi di omoschedaticità di $\varepsilon$ che $DW = 2(1-\rho)$. Si può notare che: 
 \begin{itemize}[noitemsep]
 \item La distribuzione di $DW$ è centrata su $2$: se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; 
 \item $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$;

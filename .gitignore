@@ -11,3 +11,7 @@
 *.bcf
 *.blg
 *.run.xml
+
+#R and jupyter checkpoint
+.Rhistory
+.ipynb_checkpoints
