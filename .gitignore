@@ -12,5 +12,6 @@
 *.blg
 *.run.xml
 
-#R don't know where it came from
+#R and jupyter checkpoint
 .Rhistory
+.ipynb_checkpoints
