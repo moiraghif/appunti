@@ -599,68 +599,72 @@ Considerando $B^*$ come stimatore dei coefficienti del modello OLS e $\hat{B}^*$
 
 \section{Il problema dei dati gerarchici e uso di Regressione multilevel}
 
-I modelli statistici si basano su campionamento casuale semplice da popolazione infinita o finita con reinserimento. In tal caso vige l’ipotesi di indipendenza tra le singole osservazioni.
-\newline 
-In molti casi, però i dati risultano essere raggruppati in cluster ovvero presentano una struttura gerarchica (ad esempio Ospedale - Pazienti). In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un campionamento a più stadi perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento dei dati diversi (livelli gerarchici della struttura dei dati).
-\newline
-Il campionamento a stadi implica la dipendenza tra le osservazioni appartenenti allo stesso gruppo (esse hanno medesima probabilità di essere estratte).
-\newline
+I modelli statistici, di solito, si basano sull'assunzione di indipendenza delle osservazioni, ottenuta per mezzo di un \textit{campionamento casuale semplice} da popolazione infinita o finita con reinserimento. In questo caso si dice che le osservazioni si distribuiscono come una variabile casuale e che sono \textbf{IID}, ovvero \textbf{I}denticamente ed \textbf{I}ndipendentemente \textbf{D}istribuite.
+ 
+In molti casi, però i dati risultano essere raggruppati in cluster ovvero presentano una struttura gerarchica (ad esempio Ospedale - Pazienti). In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un \textit{campionamento a più stadi} perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento diversi (livelli gerarchici della struttura dei dati). Questo tipo di campionamento implica infatti \textbf{dipendenza} tra le osservazioni appartenenti allo stesso gruppo.
+
 Ad esempio gli studenti appartenenti alla stessa scuole condividono stesso ambiente, stessi insegnanti, stesso quartiere di provenienza oltre a scambi e comunicazioni tra essi.
-\newline
-La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
+
+Quando i dati possiedono una struttura gerarchica significa che possono essere scomposti in dati \textit{dell'unità} e dati \textit{del gruppo}. La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
 \newline
 Cosa succede se si ignora la struttura gerarchica dei dati?
 \begin{enumerate}[noitemsep]
-\item FALLACIA ECOLOGICA: quando ad una variabile riferita al livello macro si vuole dare validità micro.
-\item FALLACIA ATOMISTICA: quando ad una variabile riferita al livello micro si vuole dare validità macro.
+\item Potrei \textbf{aggregare} i dati micro a livello macro, andando incontro a quella che è definita \textbf{fallacia ecologica}: se vi è correlazione tra variabili a livello \textit{macro} non può essere usata per fare asserzioni a livello \textit{micro}.
+\item Potrei \textbf{disaggregare}, ovvero utilizzare i dati \textit{macro} a livello \textit{micro} ignorando la variabilità tra i gruppi, andando incontro a quella che è definita \textbf{fallacia atomistica}: se vi è correlazione tra variabili a livello \textit{micro} non può essere usata per fare asserzioni a livello \textit{macro}.
 \end{enumerate}
-la variabile dipendente y ha sia un aspetto individuale sia di gruppo; la variabile x pur essendo misurata a livello individuale contiene anche una quota di variabilità imputabile al gruppo, infatti la media di x in un gruppo può essere diversa dalla media di x in un altro gruppo poiché la composizione della x nei gruppi può essere diversa.
-\newline
-Le regressioni a livello macro considerano i dati aggregati dati dalla media di x ed y e sono quindi diverse dalle regressioni a livello micro tra x ed y.
-\newline
+La variabile dipendente $Y$, quindi, ha sia un aspetto individuale sia uno di gruppo; la variabile $X$ pur essendo misurata a livello individuale contiene anche una quota di variabilità imputabile al gruppo, infatti la media di $X$ in un gruppo può essere diversa dalla media di $X$ in un altro gruppo poiché la composizione della $X$ nei gruppi può essere diversa.
+
+Le regressioni a livello \textit{macro} considerano i dati aggregati dati dalla media di $X$ ed $Y$ e sono quindi diverse dalle regressioni a livello \textit{micro} tra $X$ ed $Y$.
+
 L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi.
-In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo.
-\newline
-Yij = $\beta$0j + $\beta$ijxij + rij
-\newline
-Diverse intercette $\beta$0j e coefficienti di regressione $\beta$1j per ciascun gruppo:
+
+In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in un altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo
+\begin{equation*}
+Y_{ij} = \beta_{0j} + \beta_{ij} x_{ij} + r_{ij}
+\end{equation*}
+con diverse intercette $\beta_{0j}$ e coefficienti di regressione $\beta_{ij}$ per ciascun gruppo:
 \begin{itemize}	
-\item se i coefficienti $\beta$0j e $\beta$1j sono entrambe costanti allora la struttura
-gerarchica non ha effetto = regressione OLS;
-\item se i due coefficienti dipendono entrambe da j allora la regressione OLS
-non può essere utilizzata:
-	\begin{itemize}
-	\item Se varia solo $\beta$0j con j allora si ha un modello random intercept
- 	\item Se anche $\beta$1j varia con j allora il modello è detto random coefficient
-	\end{itemize}
+\item Se i coefficienti $\beta_{0j}$ e $\beta_{ij}$ sono entrambi costanti allora la struttura
+gerarchica non ha effetto, ovvero non vi è differenza con una regressione OLS;
+\item Se i due coefficienti dipendono entrambe da $j$, ovvero dal gruppo di cui sono espressione, allora la regressione OLS
+non può essere utilizzata.
 \end{itemize}
-Pertanto data la struttura dei dati, si può pensare di porre assieme la regressione tra i gruppi e la regressione entro i gruppi.
+Nello specifico riguardo quest'ultimo punto:
+	\begin{enumerate}
+	\item Se varia solo $\beta_{0j}$ con $j$ allora si ha un modello \textbf{Random Intercept};
+ 	\item Se anche $\beta_{ij}$ varia con $j$ allora il modello è detto \textbf{Random Coefficient}.
+	\end{enumerate}
+Pertanto data la struttura dei dati, si può pensare di porre assieme la \textit{regressione tra i gruppi} e la \textit{regressione entro i gruppi}.
 
 
-\section{Modello multilevel: definizione e significato}
+\section{Modello Multilevel: definizione e significato}
 
-Il Modello Multilevel è un Modello di analisi della covarianza a effetti casuali, la regressione cattura la relazione disaggregata tra i dati e quindi descrive la varianza nei gruppi, mentre l’analisi della varianza cattura la relazione aggregata fra i gruppi e quindi descrive la varianza fra gruppi. Spezza in due l’analisi mettendo insieme la covarianza: elimina gli aspetti individuali, analizza gli effetti di gruppo e riesce ad attribuire la varianza al gruppo di appartenenza.
-\newline
-In un primo tipo di modelli (mixed models) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi
+Il \textbf{modello Multilevel} è un modello di analisi della \textbf{covarianza} a effetti casuali: in prima istanza la \textbf{regressione lineare} cattura la relazione disaggregata tra i dati e quindi descrive la \textbf{varianza nei gruppi} mentre, successivamente, \textbf{l’analisi della varianza} cattura la relazione aggregata fra i gruppi e quindi descrive la \textbf{varianza fra gruppi}. Questo modello spezza in due l’analisi mettendo insieme la covarianza:
+\begin{enumerate}
+\item Elimina gli aspetti individuali; 
+\item Analizza gli effetti di gruppo;
+\item Attribuisce la varianza al gruppo di appartenenza.
+\end{enumerate}
+In un primo tipo di modelli (\textbf{Mixed Models}) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi
 e la varianza fra gruppi sono descritte come variabili casuali.
 \newline
-In un secondo tipo di modelli (random models) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
+In un secondo tipo di modelli (\textbf{Random Models}) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
 \newline
 I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
 \begin{enumerate}
-\item Per $u_j=0$ e nessuna gerarchia dei dati, Modello Lineare: 
+\item Per $u_j=0$ e nessuna gerarchia dei dati, \textbf{Modello Lineare}: 
 \begin{equation*}
 y_i= \gamma_{00}+\Sigma_k \beta_k(x_{ik}-\bar{x}_k) + \varepsilon_i \ ;
 \end{equation*}
-\item Per $u_j=0$ Regressione Multilevel: 
+\item Per $u_j=0$ \textbf{Regressione Multilevel}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + \Sigma_k \beta_k(x_{ijk}-\bar{x}_k) + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k \beta_k (x{ik} - \bar{x}_k) = 0$ e $u_j$ fisso Analisi Varianza: 
+\item Per $\Sigma_k \beta_k (x_{ik} - \bar{x}_k) = 0$ e $u_j$ fisso \textbf{Analisi Varianza}: 
 \begin{equation*}
 y_{ij} = \gamma_{00}+ u_j + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico Analisi Varianza Casuale: 
+\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico \textbf{Analisi Varianza Casuale}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + u_j + \varepsilon_{ij}.
 \end{equation*}
