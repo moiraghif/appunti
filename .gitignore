@@ -11,3 +11,6 @@
 *.bcf
 *.blg
 *.run.xml
+
+#R don't know where it came from
+.Rhistory
