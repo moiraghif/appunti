@@ -439,7 +439,13 @@ Da un punto di vista pragmatico, con un \textit{reasoner} possiamo:
 \item Ereditare proprietà;
 \item Inferire la classe degli individui.
 \end{itemize}
-
+In proposito ad OWL \textit{DL} occorre specificare una distinzione molto netta tra:
+\begin{itemize}
+\item Assunzione del \textit{mondo chiuso}, tipica dei database relazionali, per cui tutto ciò che è al di fuori del database è da ritenersi falso;
+\item Assuzione del \textit{mondo aperto}, tipica di ontologie e logiche descrittive, per cui tutto ciò che è fuori \textit{potrebbe} essere vero tanto quanto ciò che è dentro.
+\end{itemize}
+Inoltre sempre riguardo OWL, in quanto base di conoscenza, occorre fare riferimento all'assuzione denominata \textbf{unique name assumption}, che in OWL appunto non ha valore, poichè due oggetti con lo stesso nome possono indicare due cose distinte, non necessariamente essere la stessa cosa.
+\subsubsection{Rule based reasoning}
 \section{\textit{Search Engine} semantici.}
 Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
 Per la gestione di pattern di architettura ci sono tre possibili approcci:
