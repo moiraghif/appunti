@@ -638,8 +638,64 @@ Pertanto data la struttura dei dati, si può pensare di porre assieme la \textit
 
 
 \section{Modello Multilevel: definizione e significato}
+Per effettuare l'analisi della \textbf{covarianza} occorre partire da quello che è definito modello \textbf{ANOVA}:
+\begin{equation*}
+y_{ij} = \gamma_{00} + u_j +r_{ij}
+\end{equation*}
+con $u_j$ uguale all'effetto dell'unità macro $j$, ovvero la differenza tra la media generale e la media del gruppo $j$, $r_{ij}$ residuo relativo all'unità micro $i$ appartenente al gruppo $j$ e $\gamma_{00}+u_j$ media relativa al gruppo $j$ e $\gamma_{00}$ media di $y$ relativa all'intera popolazione.
 
-Il \textbf{modello Multilevel} è un modello di analisi della \textbf{covarianza} a effetti casuali: in prima istanza la \textbf{regressione lineare} cattura la relazione disaggregata tra i dati e quindi descrive la \textbf{varianza nei gruppi} mentre, successivamente, \textbf{l’analisi della varianza} cattura la relazione aggregata fra i gruppi e quindi descrive la \textbf{varianza fra gruppi}. Questo modello spezza in due l’analisi mettendo insieme la covarianza:
+Nel complesso dato:
+\begin{center}
+$y_{(1,n)} = [y_{1(1,n)},\dots,y_{p(1,n_p)}]$ \\
+$r_{(1,n)}=[r_1,\dots,r_p)$ \\
+con \  $(n_1+\dots+n_p) = n$
+\end{center}
+e costruendo $A$ matrice \textit{presenza-assenza}, composta solo di $0$ e $1$
+\[A_{p,n}=
+\begin{bmatrix}
+1_{(n_{1},1)} & 0&0 \\
+0&1_{(n_{2},1)}&0 \\
+0&0&1_{(n_{p},1)}
+\end{bmatrix}
+\]
+possiamo procedere ad calcolare
+\begin{center}
+$u_1= u_1 A_1$ \\
+$u_2 = u_2 A_2$ \\
+$\dots \ \dots \ \dots$ \\
+$u_p = u_p A_p$
+\end{center}
+ottenendo cosi per il gruppo $j$-esimo
+\begin{equation*}
+y_{j_{(1,n)}} -\gamma_{00_{(1,p)}} = u_{j_{(p,n)}} + r_{j_{(1,n)}}
+\end{equation*}
+\begin{equation*}
+(y-\gamma_{00})(y-\gamma_{00})' = [uA-e][uA-e]' = uAAu'+rr'
+\end{equation*}
+Questa struttura è fondamentale per ricondurre il modello ANOVA alla struttura del modello lineare con $u = \beta$, $A = X$, $y-\gamma_{00}=y$ ed $r = \varepsilon$.
+
+Il \textbf{modello Multilevel} è un modello di analisi della \textbf{covarianza} a effetti casuali: in prima istanza la \textbf{regressione lineare} (OLS) cattura la relazione disaggregata tra i dati, così da eliminare l'effetto distorsivo sulla varianza trai gruppi e ricavare la varianza nei gruppi. 
+Se infatti le caratteristiche $x$ delle osservazioni appartenenti ai diversi gruppi sono differenti tra gruppo e gruppo l'analisi della varianza viene distorta e si attribuiscono alla varianza fra i gruppi effetti che dipedono da tali caratteristiche.
+
+Ciò avviene attraverso 4 fasi:
+\begin{enumerate}
+\item Prima si procede al calcolo della devianza totale di $Y$;
+\item Si stimano i coefficienti di regressione;
+\item Si calcola la devianza spiegata di $X$ (SSE);
+\item Infine si stima la devianza residua corretta di $y$ uguale a $SSR_{yc}=SST_y - SSE_x$.
+\end{enumerate}
+Successivamente, \textbf{l’analisi della varianza} (ANOVA) cattura la relazione aggregata fra i gruppi e quindi descrive la \textbf{varianza fra gruppi}.
+
+Ciò avviene in 3 fasi:
+\begin{enumerate}
+\item Si effettua l'analisi della varianza su $SSR_{yc}$;
+\item Si calcola la devianza spiegata del \textbf{fattore sperimentale} corretta per l'effetto della covariata $X$, ottenuta come $SSE_{yc} = SST_{yc}-SSR_{yc}$;
+\item Nel complesso quindi
+\begin{equation*}
+SST_y = SSE_x + SST_{yc} = SSE_x + SSE_{yc} + SSR_{yc}
+\end{equation*}
+\end{enumerate}
+Questo modello quindi spezza in due l’analisi mettendo insieme la covarianza:
 \begin{enumerate}
 \item Elimina gli aspetti individuali; 
 \item Analizza gli effetti di gruppo;
@@ -649,22 +705,22 @@ In un primo tipo di modelli (\textbf{Mixed Models}) la relazione disaggregata tr
 e la varianza fra gruppi sono descritte come variabili casuali.
 \newline
 In un secondo tipo di modelli (\textbf{Random Models}) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
-\newline
+
 I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
 \begin{enumerate}
-\item Per $u_j=0$ e nessuna gerarchia dei dati, \textbf{Modello Lineare}: 
+\item Per $u_j=0$ e nessuna gerarchia dei dati, abbiamo un  \textbf{Modello Lineare}: 
 \begin{equation*}
 y_i= \gamma_{00}+\Sigma_k \beta_k(x_{ik}-\bar{x}_k) + \varepsilon_i \ ;
 \end{equation*}
-\item Per $u_j=0$ \textbf{Regressione Multilevel}: 
+\item Per $u_j=0$ otteniamo una \textbf{Regressione Multilevel}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + \Sigma_k \beta_k(x_{ijk}-\bar{x}_k) + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k \beta_k (x_{ik} - \bar{x}_k) = 0$ e $u_j$ fisso \textbf{Analisi Varianza}: 
+\item Per $\Sigma_k \beta_k (x_{ik} - \bar{x}_k) = 0$ e $u_j$ fisso abbiamo un'\textbf{Analisi della Varianza}: 
 \begin{equation*}
 y_{ij} = \gamma_{00}+ u_j + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico \textbf{Analisi Varianza Casuale}: 
+\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico otteniamo un'\textbf{Analisi della Varianza Casuale}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + u_j + \varepsilon_{ij}.
 \end{equation*}
