@@ -570,7 +570,7 @@ Quindi occorre usare non le singoli sottomatrici di correlazione degli errori $\
 
 \section{Modello SURE}
 
-Nel modello \textbf{S}eemenely \textbf{U}ncorrelated \textbf{R}egression \textbf{E}quation, anche detto \textbf{SURE} segue un approccio più realistico: degli $r$ regressori si usano solo i regressori effettivamente legati alle diverse variabili dipendenti, che potrebbero anche essere tutti, come nel caso classico del modello lineare multivariato, ma che in caso di non significatività potrebbero portare ad una differenziazione delle diverse equazioni. Inoltre questo modello permette di risolvere anche il problema di una numerosità diversa delle osservazioni tra le diverse equazioni.
+Nel modello \textbf{S}eemengly \textbf{U}ncorrelated \textbf{R}egression \textbf{E}quation, anche detto \textbf{SURE} segue un approccio più realistico: degli $r$ regressori si usano solo i regressori effettivamente legati alle diverse variabili dipendenti, che potrebbero anche essere tutti, come nel caso classico del modello lineare multivariato, ma che in caso di non significatività potrebbero portare ad una differenziazione delle diverse equazioni. Inoltre questo modello permette di risolvere anche il problema di una numerosità diversa delle osservazioni tra le diverse equazioni.
 \newline
 In altre parole nel modello SURE abbiamo regressori diversi per ogni equazione all’interno dell’insieme complessivo dei regressori per l’insieme delle equazioni del modello. 
 \newline
@@ -594,31 +594,47 @@ La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a q
 	\item correlati per lo stesso individuo e incorrelati tra individui diversi fra diverse equazioni.
 	\end{itemize}
 \end{itemize}
-Considerando $B^*$ come stimatore dei coefficienti del modello OLS e $\hat{B}^*$ come lo stimatore del modello SURE, possiamo affermare che i due risultano identici ma per la costruzione del modello SURE $\hat{B}^*$ possiede dei parametri uguali a zero proprio per permettere di ottenere equazioni differenziate nel numero delle variabili esplicative. La possibilità di differenziare il numero di covariate risiede infatti nel porre uguale a zero il valore della variabile non presente nell'equazione $x$ così che questa, moltiplicata per il rispettivo coefficiente $B$ generi un influenza nulla sulla stima di $Y$. \newline
-\textbf{NB}: Quando si omettono delle variabili, essendo i coefficienti di regressione parziali (influenzati, cioè, dalle altre variabili esplicative poichè stimati sulla totalità di esse) cambiano tutti i coefficienti di regressione.
+Considerando $B^*$ come stimatore dei coefficienti del modello OLS e $\hat{B}^*$ come lo stimatore del modello SURE, possiamo affermare che i due risultano identici ma per la costruzione del modello SURE $\hat{B}^*$ possiede dei parametri uguali a zero proprio per permettere di ottenere equazioni differenziate nel numero delle variabili esplicative. La possibilità di differenziare il numero di covariate risiede infatti nel porre uguale a zero il valore della variabile non presente nell'equazione $x$ così che questa, moltiplicata per il rispettivo coefficiente $B$ generi un influenza nulla sulla stima di $Y$. 
+\newline
+\newline
+\textbf{NB}: Quando si omettono delle variabili, essendo i coefficienti di regressione parziali (influenzati, cioè, dalle altre variabili esplicative poichè stimati sulla totalità di esse) cambiano tutti i coefficienti di regressione in base all'equazione di riferimento. Infatti ipotizzando di avere una variabile $X_j$ presente in 2 equazioni distinte il coefficiente $\beta$ corrispondente sarà diverso proprio in virtù del fatto che le stime sono influenzate le une dalle altre.
 
 \section{Il problema dei dati gerarchici e uso di Regressione multilevel}
 
 I modelli statistici, di solito, si basano sull'assunzione di indipendenza delle osservazioni, ottenuta per mezzo di un \textit{campionamento casuale semplice} da popolazione infinita o finita con reinserimento. In questo caso si dice che le osservazioni si distribuiscono come una variabile casuale e che sono \textbf{IID}, ovvero \textbf{I}denticamente ed \textbf{I}ndipendentemente \textbf{D}istribuite.
  
-In molti casi, però i dati risultano essere raggruppati in cluster ovvero presentano una struttura gerarchica (ad esempio Ospedale - Pazienti). In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un \textit{campionamento a più stadi} perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento diversi (livelli gerarchici della struttura dei dati). Questo tipo di campionamento implica infatti \textbf{dipendenza} tra le osservazioni appartenenti allo stesso gruppo.
-
-Ad esempio gli studenti appartenenti alla stessa scuole condividono stesso ambiente, stessi insegnanti, stesso quartiere di provenienza oltre a scambi e comunicazioni tra essi.
+In molti casi, però i dati risultano essere raggruppati in cluster ovvero presentano una struttura gerarchica come ad esempio:
+\begin{itemize}
+\item  Ospedale - Pazienti;
+\item  Classi - Studenti;
+\item Imprese - Impiegati.
+\end{itemize}
+ In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un \textit{campionamento a più stadi} perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento diversi (livelli gerarchici della struttura dei dati). Questo tipo di campionamento implica infatti \textbf{dipendenza} tra le osservazioni appartenenti allo stesso gruppo. Ad esempio gli studenti appartenenti alla stessa scuole condividono stesso ambiente, stessi insegnanti, stesso quartiere di provenienza oltre a scambi e comunicazioni tra essi.
 
 Quando i dati possiedono una struttura gerarchica significa che possono essere scomposti in dati \textit{dell'unità} e dati \textit{del gruppo}. La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
 \newline
 Cosa succede se si ignora la struttura gerarchica dei dati?
 \begin{enumerate}[noitemsep]
-\item Potrei \textbf{aggregare} i dati micro a livello macro, andando incontro a quella che è definita \textbf{fallacia ecologica}: se vi è correlazione tra variabili a livello \textit{macro} non può essere usata per fare asserzioni a livello \textit{micro}.
-\item Potrei \textbf{disaggregare}, ovvero utilizzare i dati \textit{macro} a livello \textit{micro} ignorando la variabilità tra i gruppi, andando incontro a quella che è definita \textbf{fallacia atomistica}: se vi è correlazione tra variabili a livello \textit{micro} non può essere usata per fare asserzioni a livello \textit{macro}.
+\item Potrei \textbf{aggregare} i dati micro (le unità) a livello macro (le sovrastrutture), ad esempio le condizioni di lavoro degli impiegati di un'azienda non possono essere attribuite ai singoli impiegati, così facendo si andrebbe incontro a quella che è definita \textbf{fallacia ecologica}: se vi è correlazione tra variabili a livello \textit{macro} non può essere usata per fare asserzioni a livello \textit{micro}.
+\item Potrei \textbf{disaggregare}, ovvero utilizzare i dati \textit{macro} a livello \textit{micro} ignorando la variabilità tra i gruppi (ad esempio, le caratteristiche degli studenti non possono dire nulla sulla scuola se non è messa in luce esplicitamente la loro appartenenza all'una o all'altra scuola), andando incontro a quella che è definita \textbf{fallacia atomistica}: se vi è correlazione tra variabili a livello \textit{micro} non può essere usata per fare asserzioni a livello \textit{macro}.
 \end{enumerate}
-La variabile dipendente $Y$, quindi, ha sia un aspetto individuale sia uno di gruppo; la variabile $X$ pur essendo misurata a livello individuale contiene anche una quota di variabilità imputabile al gruppo, infatti la media di $X$ in un gruppo può essere diversa dalla media di $X$ in un altro gruppo poiché la composizione della $X$ nei gruppi può essere diversa.
-
+Ipotizzando una \textbf{regressione Multilevel}, in cui la regressione di $Y$ su $X$ è la funzione lineare di $x$ che meglio spiega $y$ ed ipotizzando che i dati abbiano struttura ad un livello, nulla cambia rispetto al Modello lineare classico univariato, singolare o multiplo, infatti assume forma:
+\begin{equation*}
+y = \beta_0 + \beta_1 x + r
+\end{equation*}
+Ipotizzando invece una struttura a più livelli con:
+\begin{itemize}
+\item $j$ identificativo del gruppo;
+\item $i$ identificativo dell'unità entro il gruppo;
+\item $x_{ij}$ ed $y_{ij}$ osservazioni di $X$ e $Y$ sulle unità micro del gruppo $j$;
+\item $\bar{x}_{.j}$ e $\bar{y}_{.j}$ medie di gruppo $j$ per $X$ e $Y$.
+\end{itemize}
+ad esempio il soggetto 1 del primo gruppo è diverso dal soggetto 1 del secondo gruppo. \\
+ La variabile dipendente $Y$, quindi, ha sia un aspetto individuale sia uno di gruppo; la variabile $X$ pur essendo misurata a livello individuale contiene anche una quota di variabilità imputabile al gruppo, infatti la media di $X$ in un gruppo può essere diversa dalla media di $X$ in un altro gruppo poiché la composizione della $X$ nei gruppi può essere diversa.
 Le regressioni a livello \textit{macro} considerano i dati aggregati dati dalla media di $X$ ed $Y$ e sono quindi diverse dalle regressioni a livello \textit{micro} tra $X$ ed $Y$.
-
-L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi.
-
-In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in un altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo
+\newline
+\newline
+L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi. In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in un altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo
 \begin{equation*}
 Y_{ij} = \beta_{0j} + \beta_{ij} x_{ij} + r_{ij}
 \end{equation*}
@@ -634,15 +650,39 @@ Nello specifico riguardo quest'ultimo punto:
 	\item Se varia solo $\beta_{0j}$ con $j$ allora si ha un modello \textbf{Random Intercept};
  	\item Se anche $\beta_{ij}$ varia con $j$ allora il modello è detto \textbf{Random Coefficient}.
 	\end{enumerate}
-Pertanto data la struttura dei dati, si può pensare di porre assieme la \textit{regressione tra i gruppi} e la \textit{regressione entro i gruppi}.
-
+Ci sono diversi modi di approcciare lo studio della relazione tra $Y$ ed $X$:
+\begin{itemize}
+\item \textbf{Relazione diseggregata}: è una relazione in cui il raggruppamento delle unità (ovvero la sovrastruttura) viene ignorato
+\begin{equation*}
+y_{ij} = \beta_0 + \beta_1 x_{ij} +r_{ij} 
+\end{equation*}
+\item \textbf{Relazione aggregata fra i gruppi}: si può infatti essere interessati alla relazione aggregata, ovvero a livello macro, fra i gruppi, quindi alla relazione tra $\bar{x}_{.j}$ e $\bar{y}_{.j}$
+\begin{equation*}
+\bar{y}_{.j} = \beta_0 + \beta_1 \bar{x}_{.j} + r_j
+\end{equation*}
+\item \textbf{Relazione entro ciascun gruppo}: poichè si può essere interessati alla relazione tra $x_{ij}$ ed $y_{ij}$ entro ciascun gruppo $j$. Questo avviene assumendo $\alpha_1$ costante entro ciascun gruppo
+\begin{equation*}
+y_{ij} - \bar{y}_{.j} = \alpha_1(x_{ij} - \bar{x}_{.j}) + r
+\end{equation*}
+\item \textbf{Relazione Multilevel}: data la struttura dei dati, si può pensare di porre assieme la \textit{regressione tra i gruppi} e la \textit{regressione entro i gruppi} per cui $y_{ij}$ sarebbe funzione sia delle relazioni \textbf{entro} i gruppi, sia di quelle \textbf{tra} i gruppi.
+\begin{equation*}
+y_{ij} = \beta_0 + \beta_1 \bar{x}_{.j} +\alpha_1(x_{ij} - \bar{x}_{.j}) + r
+\end{equation*} 
+\end{itemize}
 
 \section{Modello Multilevel: definizione e significato}
-Per effettuare l'analisi della \textbf{covarianza} occorre partire da quello che è definito modello \textbf{ANOVA}:
+Per effettuare l'analisi della \textbf{covarianza} (\textbf{ANCOVA}) occorre prima di tutto partire da quello che è definito modello \textbf{ANOVA}, ovvero il modello di analisi della varianza:
 \begin{equation*}
 y_{ij} = \gamma_{00} + u_j +r_{ij}
 \end{equation*}
-con $u_j$ uguale all'effetto dell'unità macro $j$, ovvero la differenza tra la media generale e la media del gruppo $j$, $r_{ij}$ residuo relativo all'unità micro $i$ appartenente al gruppo $j$ e $\gamma_{00}+u_j$ media relativa al gruppo $j$ e $\gamma_{00}$ media di $y$ relativa all'intera popolazione.
+con:
+\begin{itemize}
+\item $u_j$ uguale all'effetto dell'unità macro $j$, ovvero la differenza tra la media generale e la media del gruppo $j$;
+\item $r_{ij}$ residuo relativo all'unità micro $i$ appartenente al gruppo $j$;
+\item $\gamma_{00}+u_j$ media relativa al gruppo $j$;
+\item $\gamma_{00}$ media di $y$ relativa all'intera popolazione.
+\end{itemize}
+Il modello di analisi della varianza ANOVA cerca di spiegare in che misura la variabilità della variabile dipendente $y$ è dovuta a differenze delle medie fra i gruppi. E' infatti il modello utilizzato in caso di stima di $y$ con sole covariate $x_j$ di tipo qualitativo.
 
 Nel complesso dato:
 \begin{center}
@@ -672,10 +712,28 @@ y_{j_{(1,n)}} -\gamma_{00_{(1,p)}} = u_{j_{(p,n)}} + r_{j_{(1,n)}}
 \begin{equation*}
 (y-\gamma_{00})(y-\gamma_{00})' = [uA-e][uA-e]' = uAAu'+rr'
 \end{equation*}
+Per avere un'idea della variabilità nei gruppi, su tutti i gruppi $j$ si considerano le devianze intra gruppo e, nell'ipotesi di omoschedasticità, essendo la varianza di ogni errore pari a $\sigma^2$ otteniamo che la devianza residua totale $SSR = n\sigma^2$.
+\newline
+\newline
+Allo stesso modo la devianza tra i gruppi corrisponde alla devianze delle medie di gruppo perciò $SSE = \sum^p_{j=1} (u_j A_j)^2$.
+\newline
+\newline
+Da cui devianza totale $SST = SSE + SSR$.
+
+Definendo a questo punto
+\begin{center}
+$\tau^2 = \frac{uAA'u'}{n}$ \\
+$\sigma^2 = \frac{rr'}{n}$
+\end{center}
+Otteniamo il \textbf{coefficiente di correlazione intraclasse} $\rho$
+\begin{equation*}
+\rho = \frac{\tau^2}{\tau^2 + \sigma^2}
+\end{equation*}
+ovvero come rapporto tra \textbf{devianze tra i gruppi} e \textbf{devianza complessiva}.
+
 Questa struttura è fondamentale per ricondurre il modello ANOVA alla struttura del modello lineare con $u = \beta$, $A = X$, $y-\gamma_{00}=y$ ed $r = \varepsilon$.
 
-Il \textbf{modello Multilevel} è un modello di analisi della \textbf{covarianza} a effetti casuali: in prima istanza la \textbf{regressione lineare} (OLS) cattura la relazione disaggregata tra i dati, così da eliminare l'effetto distorsivo sulla varianza trai gruppi e ricavare la varianza nei gruppi. 
-Se infatti le caratteristiche $x$ delle osservazioni appartenenti ai diversi gruppi sono differenti tra gruppo e gruppo l'analisi della varianza viene distorta e si attribuiscono alla varianza fra i gruppi effetti che dipedono da tali caratteristiche.
+Il \textbf{modello ANCOVA} è un modello di analisi della \textbf{covarianza}: se infatti le caratteristiche $x$ delle osservazioni appartenenti ai diversi gruppi sono differenti tra gruppo e gruppo l'analisi della varianza viene distorta e si attribuiscono alla varianza fra i gruppi effetti che dipedono da tali caratteristiche. Occorre quindi prima di tutto eliminare l'effetto di queste caratteristiche sulla variabile dipendente e, successivamente, effettuare l'analisi della varianza depurata.
 
 Ciò avviene attraverso 4 fasi:
 \begin{enumerate}
@@ -690,7 +748,7 @@ Ciò avviene in 3 fasi:
 \begin{enumerate}
 \item Si effettua l'analisi della varianza su $SSR_{yc}$;
 \item Si calcola la devianza spiegata del \textbf{fattore sperimentale} corretta per l'effetto della covariata $X$, ottenuta come $SSE_{yc} = SST_{yc}-SSR_{yc}$;
-\item Nel complesso quindi
+\item Nel complesso quindi si ottiene
 \begin{equation*}
 SST_y = SSE_x + SST_{yc} = SSE_x + SSE_{yc} + SSR_{yc}
 \end{equation*}
@@ -701,31 +759,36 @@ Questo modello quindi spezza in due l’analisi mettendo insieme la covarianza:
 \item Analizza gli effetti di gruppo;
 \item Attribuisce la varianza al gruppo di appartenenza.
 \end{enumerate}
-In un primo tipo di modelli (\textbf{Mixed Models}) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi
-e la varianza fra gruppi sono descritte come variabili casuali.
+Il modello ANOVA è specificabile anche in una versione ad \textit{effetti casuali}, per cui abbiamo la stessa struttura citata in precedenza ma con $U_j$ ipotizzata variabile casuale con $(0, \tau^2)$ di cui $u_j$ è una particolare manifestazione e $E_{ij}$ un'altra variabile casuale con $(0,\sigma^2)$. In questo caso il modello è definito ad \textit{effetti misti}. Mentre quindi non cambia la forma, cambia la sostanza. Sotto il profilo interpretativo significa infatti che le media parziali $u_j$ sono determinazioni di una variabile casuale $U_j$. In questo caso il Test F serve a verificare $H_0$ che le media parziali ottenute dal campione possano essere ritenute nel complesso equivalenti, ma per confrontare tra loro le strutture di secondo livello, non si utilizzano più i valori delle medie campionarie, ma i loro intervalli di confidenza; ciò significa probabilizzare la gerarchia.
+
+Nel caso si consideri l'intera popolazione o $U_j$ ed $E_j$ abbiano distribuzione non normale è meglio utilizzare l'analisi della varianza ad effetti fissi.
 \newline
+\newline
+Per concludere, dopo le lunghe premesse, il modello ANCOVA ad effetti variabili è appunto definito \textbf{modello Multilevel}: restando valide tutte le considerazioni riguardo il modello ANOVA ad effetti casuali in prima istanza la \textbf{regressione lineare} (OLS) cattura la relazione disaggregata tra i dati, così da eliminare l'effetto distorsivo sulla varianza tra i gruppi e ricavare la varianza nei gruppi, mentre l'analisi della varianza cattura la relazione aggregata fra i gruppi e descrivi quindi la varianza fra  gruppi.
+
+In un primo tipo di modelli (\textbf{Mixed Models}) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi e la varianza fra gruppi sono descritte come variabili casuali.
+
 In un secondo tipo di modelli (\textbf{Random Models}) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
 
 I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
 \begin{enumerate}
-\item Per $u_j=0$ e nessuna gerarchia dei dati, abbiamo un  \textbf{Modello Lineare}: 
+\item Per $u_j=0$ e nessuna gerarchia dei dati, abbiamo un  \textbf{modello Lineare}: 
 \begin{equation*}
 y_i= \gamma_{00}+\Sigma_k \beta_k(x_{ik}-\bar{x}_k) + \varepsilon_i \ ;
 \end{equation*}
-\item Per $u_j=0$ otteniamo una \textbf{Regressione Multilevel}: 
+\item Per $u_j=0$ otteniamo una \textbf{regressione Multilevel}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + \Sigma_k \beta_k(x_{ijk}-\bar{x}_k) + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k \beta_k (x_{ik} - \bar{x}_k) = 0$ e $u_j$ fisso abbiamo un'\textbf{Analisi della Varianza}: 
+\item Per $\Sigma_k \beta_k (x_{ik} - \bar{x}_k) = 0$ e $u_j$ fisso abbiamo un'\textbf{ANOVA}: 
 \begin{equation*}
 y_{ij} = \gamma_{00}+ u_j + \varepsilon_{ij};
 \end{equation*}
-\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico otteniamo un'\textbf{Analisi della Varianza Casuale}: 
+\item Per $\Sigma_k\beta_k(x_{ik}- \bar{x}_k) = 0$ e $u_j$ stocastico otteniamo un'\textbf{ANOVA ad effetti casuali}: 
 \begin{equation*}
 y_{ij} = \gamma_{00} + u_j + \varepsilon_{ij}.
 \end{equation*}
 \end{enumerate}
-
 \section{Modello Multilevel: OLS, Empty, Mixed, Total Effects}
 
 La stima del modello multilevel si compone di 4 step:
