@@ -802,27 +802,44 @@ y_{ij} = \gamma_{00} + u_j + \varepsilon_{ij}.
 \end{enumerate}
 \section{Modello Multilevel: OLS, Empty, Mixed, Total Effects}
 
-La stima del modello multilevel si compone di 4 step:
+La stima del modello Multilevel si compone di 4 step:
 \begin{enumerate}[noitemsep]
-\item Si stima innanzitutto il modello lineare solitamente con il metodo di stima OLS (Unstructured ordinary least squares model (OLS)).
-\item Poi si propone l’empty model (Unconditional means model UMM) vale a dire l’analisi della varianza a effetti casuali.
+\item Si stima innanzitutto il modello lineare solitamente con il metodo di stima OLS;
+\item Si propone poi l'Empty model ( anche detto \textbf{Unconditional means model UMM}) vale a dire l’analisi della varianza a effetti casuali.
 \item Random intercepts model (RIM) cioè l’analisi della covarianza a effetti casuali per l’analisi della varianza.
 \item Random slopes and intercepts model (UGM) analisi della covarianza a effetti casuali sia per il modello lineare che per l’analisi della varianza.
 \end{enumerate}
-OLS: 
-Si consideri un modello Multilevel in cui appare solo la parte del Modello Lineare che viene stimata mediante metodo OLS con una sola variabile e ipotizzando che le variabili X e Y siano centrate ($y_{ij}= \beta_0+\Sigma_{jk} \beta_k x_{ijk}+\varepsilon_{ij}$).
-\newline
-In questo modo si vede quale sia l’effetto delle variabili esplicative sulla variabile dipendente se i dati non fossero centrati. Naturalmente gli errori si distribuiscono come una normale. 
-\newline
-EMPTY MODEL:
-Nel modello ANOVA ad effetti casuali detto anche empty model si ha che: $y_{ij}=v_j+r_{ij}$.
-In questo caso la variabile dipendente y dipende dagli effetti casuali:
+\subsection*{1. Stima modello lineare con metodo di stima OLS}
+Si consideri un modello Multilevel in cui appare solo la parte del modello Lineare che viene stimata mediante metodo OLS con una sola variabile e ipotizzando che le variabili $X$ e $Y$ siano centrate
+\begin{equation*}
+y_{ij}= \beta_0+\Sigma_{jk} \beta_k x_{ijk}+\varepsilon_{ij}
+\end{equation*}
+In questo modo si vede quale sia l’effetto delle variabili esplicative sulla variabile dipendente se i dati non fossero centrati. Naturalmente gli errori si distribuiscono come una normale.
+
+Si può proporre anche regressioni Multilevel introducendo variabili esplicative $Z$ misurate sui gruppi, e quindi rappresentanti il livello 2, invece che sugli individui. Questo aspetto inoltre può essere esteso anche all'interazione \textit{cross-level}, ciò significa che nel modello si possono introdurre variabili prodotto originate dall'interazione tra variabili misurate sull'individuo e misurate sui gruppi cui gli individui appartengono $z_w x_k$. Per risolvere la regressione multilevel si può scomporre il coefficiente di regressione in parte \textit{between} e parte \textit{within}. 
+
+Il \textbf{modello di Cronbach} fa esattamente questo
+\begin{equation*}
+y_{ij} = \alpha +\beta_{within}(x_{ij}-\bar{x}_{.j}) +\beta_{between}\bar{x}_{.j}+\varepsilon
+\end{equation*}
+dove il \textit{contextual effect} $\delta$ è l'effetto della media dei gruppi che non è contemplato dal valore individuato
+\begin{equation*}
+\delta = \beta_{between}-\beta_{within}
+\end{equation*}
+dove $\beta_{between}-\beta_{within}$ sono gli effetti dovuti alla sovrastruttura al netto degli effetti individuali. 
+\subsection*{2. Empty model}
+Nel modello ANOVA ad effetti casuali detto anche \textbf{Empty model} si ha che
+\begin{equation*}
+y_{ij}=v_j+r_{ij}
+\end{equation*}
+In questo caso la variabile dipendente $y$ dipende dagli effetti casuali:
 \begin{itemize}
-\item a livello di gruppo, Vj, distribuiti in modo normale $N(\gamma_0, \tau_2)$
-\item a livello individuale, dai residui $R_{ij}$, distribuiti in modo normale $N(0, \sigma_2)$ 
+\item a livello di gruppo, $V_j$, distribuiti in modo normale $N(\gamma_0, \tau^2)$
+\item a livello individuale, dai residui $R_{ij}$, distribuiti in modo normale $N(0, \sigma^2)$ 
 \end{itemize}
+con $V_j$ ed $R_{ij}$ \textbf{indipendenti} e \textbf{mutualmente incorrelate}. \\
 La variabilità all’interno di ogni gruppo è quindi dovuta solamente alla distribuzione casuale della variabile dipendente.
-\newline
+
 L’intercetta casuale a livello di gruppo può essere scomposta in due parti: l’intercetta fissa media tra tutti i gruppi e la misura della sua deviazione attorno alla media tra i gruppi di tipo casuale: $v_j=\gamma_0+u_j$.
 \newline
 Possiamo riscrivere il modello nel seguente modo: $y_{ij}=\gamma_0+u_{jj}+r_{ij}$.
@@ -837,8 +854,7 @@ Il test F come in ogni analisi della varianza può essere utilizzato per verific
 \newline
 Ciò significa probabilizzare la gerarchia fra medie parziali in quanto, quanto più sono piccoli gli intervalli di confidenza è maggiore la loro capacità di fornire informazioni sui valori veri ignoti di Uj. A differenza che nell’analisi della varianza casuale nel Modello Multilevel che è come ricordato un’analisi della covarianza casuale, tali intervalli di confidenza sono al netto dell’influenza delle variabili X del modello lineare. Questa probabilizzazione della gerarchia influenza e rende più robusto il confronto fra strutture di secondo livello in quanto una media parziale uj di una struttura J si considera superiore a un’altra media parziale ug di una struttura G se e solo se l’estremo inferiore del suo intervallo di confidenza inf (uj) è più grande dell’estremo superiore dell’altra sup(ug) in quanto solo in questo caso con un elevato grado di probabilità il valore vero di J sarà più grande di G.
 
-MIXED MODEL: %Fix structure
-
+\subsection*{3. Random intercept model} %Fix structure
 Se si inserisce nel modello una variabile esplicativa $x_k$ il modello diventa il vero e proprio random intercept model (mixed model) $y_{ij}=\gamma_0+\beta_1 x_{ij}+ u_j + \delta_{ij}$ dove $u_j$ è la determinazione della variabile casuale $U_j \ (j=1,...,p)$ variabili casuali indipendenti e identicamente distribuite normalmente dalla formula $N(\gamma_0, \tau_2)$ e rappresentano i residui di 2 livello. Esse sono indipendenti e quindi incorrelate con i residui di primo livello $\delta_{ij}$ determinazioni delle variabili casuali normalmente distribuite $\Delta_{ij} \sim N(0,\sigma_2)$
 
 In questo caso la variabile dipendente y dipende:
@@ -873,8 +889,7 @@ Come varianze e covarianze:
 \item livello 1 $\sigma^{2}$
 \item livello 2 $\tau^{2}_0$
 \end{itemize}
-TOTAL MODEL: 
-\newline
+\subsection*{4. Random slopes and intercepts model} 
 La relazione tra variabile dipendente ed esplicative può variare tra i gruppi in modi diversi: si può avere un’eterogeneità delle regressioni tra i diversi gruppi (si parla anche di interazione gruppo – covariate). Ad esempio nel caso dell’analisi delle performance degli studenti appartenenti alle scuole, si può assumere che l’effetto dello stato socio economico o dell’intelligenza individuale sulle performance possa essere diverso nelle singole scuole.
 \newline
 La struttura dei dati ed il loro raggruppamento può essere spiegato quindi anche facendo variare i coefficienti della regressione da gruppo a gruppo.
