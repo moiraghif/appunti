@@ -46,6 +46,6 @@ Tutorial Git: [http://rogerdudler.github.io/git-guide/index.it.html](http://roge
 
 * [Social Issues](https://github.com/moiraghif/appunti/blob/master/social/social.pdf)
 
-* [Statistical Modeling](ancora da definire)
+* [Statistical Modeling Risposte alle domande dell'esame](https://github.com/moiraghif/appunti/blob/master/statistical%20modeling/risposte%202017-18.pdf)
 
 * [Web Marketing](https://github.com/moiraghif/appunti/blob/master/web%20marketing/web%20marketing.pdf)
