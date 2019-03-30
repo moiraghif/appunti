@@ -31,7 +31,7 @@
 \section{Errori eteroschedastici}
 Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
 In virtù del fatto che ogni errore $\varepsilon_i$ è a media nulla $E(\varepsilon_i) = 0$ vale la relazione $E(\varepsilon_i^2)$ = Var$(\varepsilon_i) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
-Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza\footnote{Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. }
+Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza (Vedi Appendice per una dimostrazione) %Linkare le due cose dopo
 (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
 Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
 Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono. 
@@ -62,7 +62,7 @@ Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS
 
 \section{Errori autocorrelati}
 
-Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare se gli errori siano correlati tra di loro.
+Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori non siano correlati tra di loro.
 Accade spesso infatti, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
 Gli errori correlati si possono scindere in due componenti: $\rho \varepsilon_{i-1}^{\#}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici IID, ovvero indipendentemente ed identicamente distribuiti in modo normale).
 Si nota infatti che l’errore è legato al suo valore ritardato.
@@ -122,8 +122,17 @@ Bisogna innanzitutto stimare il coefficiente di autocorrelazione di primo ordine
 \end{equation*}
 Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati 
 \begin{equation*}
-y_t^\# = \beta_0^\# + \beta_1 x_t^\# + w_i
+y_t^\# = \beta_0^\# + \beta_1 x_t^\# + w_t
 \end{equation*} 
+dove
+\begin{equation*}
+\begin{matrix}
+y_t^\# = y_t - \rho y_{t-1}\\
+\beta_0^\# = \beta_0(1 -\rho)\\
+x_t^\# = x_t - \rho x_{t-1}\\
+w_t =\varepsilon_t^\# - \rho \varepsilon_{t-1}^\# 
+\end{matrix}
+\end{equation*}
 che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. 
 
 In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
@@ -370,17 +379,19 @@ Mentre la matrice dei parametri $\beta$ (m, r+1) per le m equazioni è:
 \[
 \beta =
 \begin{bmatrix}
-\beta_{10} & \beta_{1k} & \beta_{1r} \\
-\dots&\dots&\dots \\
-\beta_{j0} & \beta_{jk} & \beta_{jr} \\
-\dots&\dots&\dots \\
-\beta_{m0} & \beta_{mk} & \beta_{mr} 
+\beta_{10} & \dots & \beta_{1k} & \dots & \beta_{1r} \\
+\vdots& \ddots & \vdots& &\vdots \\
+\beta_{j0} & \dots & \beta_{jk} & \dots & \beta_{jr} \\
+\vdots& &\vdots& \ddots &\vdots \\
+\beta_{m0} & \dots & \beta_{mk} & \dots & \beta_{mr} 
 \end{bmatrix}
 \]
 In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce ad una variabile risposta $y_{1,...,m}$ mentre ogni colonna si riferisce ad una variabile esplicativa $z_{1,...,r}$. 
 \newline
 %Ciò implica che anche riferendosi ad una singola $y_i$, comunque la stima avviene nel complesso, con il prodotto tra la matrice delle variabili esplicative $Z$ e appunto $\beta$ che comprende al suo interno però \textbf{tutti} i parametri stimati riguardanti l'insieme delle variabili dipendenti $y_{1,...,m}$, rendendo di fatto i parametri che stimano le diverse variabili dipendenti $y$ influenzati gli dagli altri. In questo particolare aspetto risiede infatti la differenza tra un modello multivariato su $m$ variabili dipendenti $y$ ed $m$ modelli univariati, ognuno con una specifica $y$ come variabile dipendente.%
-Nel suo complesso perciò il modello multivariato appare come $$ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,m)} + E_{(m,n)}$$
+Nel suo complesso perciò il modello multivariato appare come 
+\[ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,m)} + E_{(m,n)} \quad \text{ ovvero}\]
+\[ \forall j \in [1,m] \quad y_j= \beta_{j0} + \beta_{j1}z_1 + \dots + \beta_{jr}z_r + \varepsilon_j \]
 Con il contenuto della matrice delle variabili dipendenti interpretabile come:
 \begin{itemize}[noitemsep]
 \item Ogni colonna rappresenta un individuo con i valori assunti dalle $y_m$ variabili dipendenti per quell'individuo.
@@ -832,5 +843,17 @@ Il confronto si basa sulla funzione di log-verosimiglianza. Perciò indicate ris
 \newline
 Se l’obiettivo è quello di sottoporre a verifica l’ipotesi che riguarda la nullità congiunta di tutti i coefficienti (esclusa l’intercetta), si può pensare a ragion veduta di operare un confronto fra due modelli, l’empty-model e il modello ipotizzato. Questo test può essere applicato sia alla parte fissa sia a quella random del modello.
 
+\section{Appendice}
+\subsection{Dimostrazione Non Efficienza in Errori Eteroschedastici}
+Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. $ \hfill \square$
+
+\subsection{Non collinarietà dopo la trasformazione ritardata}
+Il modello trasformato è 
+\[y^{\#}_t = \beta_{0} + \beta_1x_t^{\#} + w_t \] 
+quindi abbiamo che 
+\[ cov(w_t,w_{t-1}) = cov(\varepsilon_t^{\#} - \rho \varepsilon_{t-1}^\#, \varepsilon_{t-1}^\# - \rho \varepsilon_{t-2}^\#) =  \]
+\[ = cov(\varepsilon_{t}^\#,\varepsilon_{t-1}^\#) -\rho cov(\varepsilon_{t-1}^\#,\varepsilon_{t-1}^\#) - \rho cov(\varepsilon_{t}^\#,\varepsilon_{t-2}^\#) + \rho^2 cov(\varepsilon_{t-1}^\#,\varepsilon_{t-2}^\#) = \]
+\[ = \rho - \rho - \rho^3 + \rho^3  = 0 \]
+il risulta poteva anche essere intuitivo poiché ho eliminato la parte ritardata che era presente nella variabile e portava alla multicollinarietà. $\hfill \square$
 
 \end{document}
