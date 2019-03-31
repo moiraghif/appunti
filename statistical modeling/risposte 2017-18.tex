@@ -840,55 +840,74 @@ In questo caso la variabile dipendente $y$ dipende dagli effetti casuali:
 con $V_j$ ed $R_{ij}$ \textbf{indipendenti} e \textbf{mutualmente incorrelate}. \\
 La variabilità all’interno di ogni gruppo è quindi dovuta solamente alla distribuzione casuale della variabile dipendente.
 
-L’intercetta casuale a livello di gruppo può essere scomposta in due parti: l’intercetta fissa media tra tutti i gruppi e la misura della sua deviazione attorno alla media tra i gruppi di tipo casuale: $v_j=\gamma_0+u_j$.
-\newline
-Possiamo riscrivere il modello nel seguente modo: $y_{ij}=\gamma_0+u_{jj}+r_{ij}$.
-\newline
-In questo modello quindi la variabilità totale di y può essere scomposta nella somma delle varianze ai due livelli, varianza fra i gruppi e varianza nei gruppi: $var(y)=var(U_j)+var(R_{ij})=\sigma_2+\tau_2$.
-\newline
-Si può quindi definire il coefficiente $r^{2} / (r^{2}+\sigma^{2})$  di  correlazione intraclasse: 
-\newline
-Il coefficiente di correlazione intraclasse misura quindi la quota di varianza di y spiegata dall’appartenenza ai gruppi degli Individui. Se il coefficiente di correlazione intraclasse è nullo, ovvero tutti gli uj sono nulli, allora il raggruppamento è irrilevante ed è inutile utilizzare altri modelli rispetto alla regressione semplice. Se invece il coefficiente di correlazione intraclasse è positivo è necessario considerare un modello gerarchico.
-\newline
-Il test F come in ogni analisi della varianza può essere utilizzato per verificare in termini inferenziali l’ipotesi che le intercette casuali uj siano nel complesso tra loro equivalenti (se non c’è differenza fra gruppi). In questo caso il test F serve per capire se nel complesso vale l’ipotesi nulla che le medie parziali ottenute nel campione possano essere ritenute nel complesso equivalenti. Per confrontare tra loro le strutture di secondo livello (ad esempio scuole, ospedali, università) come nell’analisi della varianza casuale non si utilizzano i valori delle medie campionarie, non informative del vero valore di Uj ma i loro intervalli di confidenza che comprendono con una probabilità del 90\%, 95\%, 99\% i valori veri ignoti di Uj.
-\newline
-Ciò significa probabilizzare la gerarchia fra medie parziali in quanto, quanto più sono piccoli gli intervalli di confidenza è maggiore la loro capacità di fornire informazioni sui valori veri ignoti di Uj. A differenza che nell’analisi della varianza casuale nel Modello Multilevel che è come ricordato un’analisi della covarianza casuale, tali intervalli di confidenza sono al netto dell’influenza delle variabili X del modello lineare. Questa probabilizzazione della gerarchia influenza e rende più robusto il confronto fra strutture di secondo livello in quanto una media parziale uj di una struttura J si considera superiore a un’altra media parziale ug di una struttura G se e solo se l’estremo inferiore del suo intervallo di confidenza inf (uj) è più grande dell’estremo superiore dell’altra sup(ug) in quanto solo in questo caso con un elevato grado di probabilità il valore vero di J sarà più grande di G.
+L’intercetta casuale a livello di gruppo può essere scomposta in due parti: l’intercetta fissa media tra tutti i gruppi $\gamma_{00}$ e la misura della sua deviazione attorno alla media tra i gruppi di tipo casuale $u_j$
+\begin{equation*}
+v_j=\gamma_{00}+u_j
+\end{equation*}
+Possiamo a questo punto riscrivere il modello nel seguente modo: 
+\begin{equation*}
+y_{ij}=\gamma_{00}+u_{j}+r_{ij}
+\end{equation*}
+In questo modello quindi la variabilità totale di $y$ può essere scomposta nella somma delle varianze ai due livelli, varianza fra i gruppi e varianza nei gruppi
+\begin{equation*}
+Var(y)=Var(U_j)+Var(R_{ij})=\tau^2+\sigma^2
+\end{equation*}
+Si può quindi definire il coefficiente di correlazione intraclasse, come visto in precedenza
+\begin{equation*}
+\rho = \frac{\tau^2}{\tau^2+\sigma^2}
+\end{equation*} 
+Il coefficiente di correlazione intraclasse $\rho$ misura quindi la quota di varianza di $y$ spiegata dall’appartenenza ai gruppi dei singoli individui. Se $\rho = 0$, ovvero tutti gli $u_j$ sono nulli, allora il raggruppamento è irrilevante ed è inutile utilizzare altri modelli oltre il modello lineare semplice. Nel caso invece $\rho$ fosse positivo, è necessario considerare un modello di tipo gerarchico.
 
-\subsection*{3. Random intercept model} %Fix structure
-Se si inserisce nel modello una variabile esplicativa $x_k$ il modello diventa il vero e proprio random intercept model (mixed model) $y_{ij}=\gamma_0+\beta_1 x_{ij}+ u_j + \delta_{ij}$ dove $u_j$ è la determinazione della variabile casuale $U_j \ (j=1,...,p)$ variabili casuali indipendenti e identicamente distribuite normalmente dalla formula $N(\gamma_0, \tau_2)$ e rappresentano i residui di 2 livello. Esse sono indipendenti e quindi incorrelate con i residui di primo livello $\delta_{ij}$ determinazioni delle variabili casuali normalmente distribuite $\Delta_{ij} \sim N(0,\sigma_2)$
+Il Test $F$ come in ogni analisi della varianza può essere utilizzato per verificare in termini inferenziali l’ipotesi che le intercette casuali $u_j$ siano nel complesso tra loro equivalenti (nel caso non ci fosse differenza fra gruppi). In questo caso il Test $F$ serve per capire se nel complesso vale l’ipotesi nulla $H_0$ che le medie parziali ottenute nel campione possano essere ritenute nel complesso equivalenti. Per confrontare tra loro le strutture di secondo livello (ad esempio scuole, ospedali, università) come nell’analisi della varianza casuale non si utilizzano i valori delle medie campionarie, non informative del vero valore di $U_j$ ma i loro \textit{intervalli di confidenza} che comprendono con una probabilità del 90\%, 95\%, 99\% i valori veri ignoti di $U_j$.
+Ciò significa probabilizzare la gerarchia fra medie parziali in quanto, quanto più sono piccoli gli intervalli di confidenza, maggiore è la loro capacità di fornire informazioni sui valori veri ignoti di $U_j$. 
+\newline
+\newline
+\textbf{NB} A differenza dell’analisi della varianza casuale, nel Modello Multilevel che è, come ricordato, un’analisi della \textit{covarianza casuale}, tali intervalli di confidenza sono \textbf{al netto dell’influenza delle variabili $X$ del modello lineare}. Questa probabilizzazione della gerarchia influenza e rende più robusto il confronto fra strutture di secondo livello in quanto una media parziale $u_j$ di una struttura $J$ si considera superiore a un’altra media parziale $u_g$ di una struttura $G$ se e solo se l’estremo inferiore del suo intervallo di confidenza è più grande dell’estremo superiore dell’altra in quanto, solo in questo caso, con un elevato grado di probabilità, il valore vero di $J$ sarà più grande di $G$.
 
-In questo caso la variabile dipendente y dipende:
+\subsection*{3. Random intercept model}
+Se si inserisce nel modello Empty una variabile esplicativa $x_k$ il modello diventa il vero e proprio random intercept model (mixed model) 
+\begin{equation*}
+y_{ij}=\gamma_{00}+\beta_1 x_{ij}+ u_j + \varepsilon_{ij} 
+\end{equation*}
+dove $u_j$ è la determinazione della \textit{variabile casuale} $U_j$ distribuita normalmente $N(\gamma_{00}, \tau^2)$ a rappresentazione dei residui di secondo livello. Esse sono indipendenti e quindi incorrelate con i residui di primo livello $\varepsilon_{ij}$ determinazioni della variabile casuale normalmente distribuita $E_{ij} \sim N(0,\sigma^2)$
+
+In questo caso la variabile dipendente $y$ dipende:
 \begin{itemize}
-\item dalle variabili x e dai relativi parametri fissi $\beta_1$.
-\item dall’effetto casuale a livello di gruppo, $u_j$, che si distribuisce in modo normale  $N(\gamma_0, \tau_2)$.
-\item dall’effetto casuale a livello individuale $\delta_{ij}$, che si distribuisce in modo normale $N(0,\sigma_2)$.
+\item dalle variabili $x$ e dai relativi parametri fissi $\beta_1$;
+\item dall’effetto casuale a livello di gruppo $u_j$, che si distribuisce in modo normale  $N(\gamma_{00}, \tau^2)$;
+\item dall’effetto casuale a livello individuale $\varepsilon_{ij}$, che si distribuisce in modo normale $N(0,\sigma^2)$.
 \end{itemize}
-La correlazione intraclasse misura la quota di varianza di y spiegata dall’appartenenza ai gruppi degli Individui al netto della quota di varianza spiegata da x (a differenza del modello empty in questa circostanza ho x che spiega una parte della variabilità non dovuta all’appartenenza a un gruppo di un individuo). Per questa ragione il suo valore può decrescere anche molto dal caso empty. Il modello comprende 4 parametri da stimare:
+La correlazione intraclasse $\rho$ misura la quota di varianza di $y$ spiegata dall’appartenenza ai gruppi dei singoli individui,\textbf{al netto della quota di varianza spiegata da $x$} (a differenza del modello Empty, in questa circostanza ho $x$ che spiega una parte della variabilità non dovuta all’appartenenza a un gruppo di un individuo). Per questa ragione il suo valore può decrescere anche molto dal caso rispetto al caso del modello Empty. 
+
+Il modello comprende 4 parametri da stimare:
 \begin{itemize}
-\item i coefficienti di regressione $\gamma_0$ e $\beta_1$ e le componenti della varianza $\sigma^{2}$ e $\tau^{2}_0$.
-\item Il coefficiente di regressione $\beta_1$ può essere interpretato come variazione di Y corrispondente ad una variazione unitaria di x.
-\item In un modello di regressione semplice la variabilità di Y non spiegata dalla regressione è semplicemente data dal residui $\delta_{ij}$.
+\item i coefficienti di regressione $\gamma_{00}$ e $\beta_1$; \item le componenti della varianza $\sigma^{2}$ e $\tau^{2}$.
 \end{itemize}
-La variabilità in un modello multilevel fa riferimento a più popolazioni:
+Il coefficiente di regressione $\beta_1$ può essere interpretato come variazione di $Y$ corrispondente ad una variazione unitaria di $x$. In un modello di regressione semplice la variabilità di $Y$ non spiegata dalla regressione è semplicemente data dai residui $\varepsilon_{ij}$.
+
+La variabilità in un modello multilevel, invece, fa riferimento a più popolazioni:
 \begin{itemize}
-\item Le v.c. $U_j$ possono essere viste come le variabili casuali che descrivono i residui a livello di gruppo, ovvero gli effetti di gruppo non spiegati da x.
-\item La v.c. $\Delta$ può essere vista come variabile casuale che descrive i residui a livello individuale, ovvero gli effetti individuali non spiegati da x.
+\item La v.c. $U_j$ può essere vista come le variabile casuale che descrive i residui a livello di gruppo, ovvero gli effetti di gruppo non spiegati da $x$.
+\item La v.c. $E_{ij}$ può essere vista come variabile casuale che descrive i residui a livello di individuo, ovvero gli effetti individuali non spiegati da $x$.
 \end{itemize}
-Rappresentazioni di un modello random intercept:
+\subsubsection*{Rappresentazioni di un modello random intercept}
 \begin{itemize}
 \item Micro model: $y_{ij}=\beta_1 x_{ij}+R_{ij}$
 \item Macro model: $\beta_{0j}=\gamma_{00}+U_{0j}$
 \end{itemize}
-Come unica equazione multilevel: $y_{ij}=\gamma_{00}+\beta_1 x_{ij}+ U_{0j}+R_{ij}$
+Come unica equazione multilevel
+\begin{equation*}
+y_{ij}=\gamma_{00}+\beta_1 x_{ij}+ U_{0j}+R_{ij}
+\end{equation*}
+Con
 \begin{itemize}
 \item parte fissa del modello $y_{ij}=\gamma_{00}+\beta_1 x_{ij}$
 \item parte casuale (random part) del modello $U_{0j}+ R_{ij}$
 \end{itemize}
-Come varianze e covarianze:
-\begin{itemize}
-\item livello 1 $\sigma^{2}$
-\item livello 2 $\tau^{2}_0$
-\end{itemize}
+e come varianze e covarianze al primo livello $\sigma^2$, ed al secondo livello $\tau^2$.
+\newline
+\newline
+\textbf{NB} Variabili esplicative relative al secondo livello possono essere misurate direttamente sulle unità di secondo livello o derivate dalle misurazioni effettuate sulle unità di primo livello. Inoltre spesso la numerosità dei vari gruppi è diversa da gruppo a gruppo, questo però non rappresenta un problema grazie all'\textbf{effetto shrinkage}, che tiene conto della diversa numerosità dei gruppi facendo pesare di più per la stima complessiva, i gruppi più numerosi. 
 \subsection*{4. Random slopes and intercepts model} 
 La relazione tra variabile dipendente ed esplicative può variare tra i gruppi in modi diversi: si può avere un’eterogeneità delle regressioni tra i diversi gruppi (si parla anche di interazione gruppo – covariate). Ad esempio nel caso dell’analisi delle performance degli studenti appartenenti alle scuole, si può assumere che l’effetto dello stato socio economico o dell’intelligenza individuale sulle performance possa essere diverso nelle singole scuole.
 \newline
