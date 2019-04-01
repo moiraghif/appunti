@@ -472,6 +472,61 @@ Tra i reasoner più conosciuti vi sono:
 \item Hermit;
 \item Reasoner nativi di Jena, GraphDB8 e AllegroGraph.
 \end{itemize}
+
+\section{Integrazione di grafi di conoscenza.}
+L'integrazione virtuale (l'uso di predicati \verb|sameAs| e simili) non scala bene con grossi database: per fare questo è necessario effettuare un'integazione in altro modo (\textit{data integration}).
+Prima di iniziare è necessario definire dei \textit{mapping} a livello di schema, oppure integrare le istanze tramite \textit{entity co-resolution} (\verb|sameAs|), \textit{link discovery} o \textit{instance matching} (o \textit{record linkage}).
+
+Quando si costruisce un grafo di conoscenza (soprattutto verticale, ovvero su un solo tema ma in modo approfondito), si parte generalmente da dati strutturati (tabelle o database relazionali).
+Si può effettuare una traduzione semantica della tabella (\textit{mapping}) per convertire una tabella in formato RDF, però facendo questo si trascurano le relazioni e le loro proprietà e non si ha controllo sugli elementi duplicati.
+Per rispondere a queste problematiche, si possono usare strumenti quali R2ML per annotare le tuple del database relazionale e mappandole con programmi scritti \textit{ad hoc}.
+Gli strumenti di \textit{semantic table annotation and integration} tentano di stabilire quali entità esistono in un database e aiutano nella costruzione di un grafo di conoscenza.
+
+Un altro modo per accrescere un grafo di conoscenza è quello di processare testi (prendento informazioni dall'abstract di \url{wikidata.org}, per esempio): strutturare informazioni in formato tabellare è un processo lungo e costoso, dunque è indispensabile sfruttare tecniche di \textit{Natural Language Processing} (NLP); tuttavia l'uso di abbreviazioni o espressioni gergali rende difficile un processo automatico del testo.
+Da una parte il problema è strutturare informazioni da un testo (\textit{information extraction}), tipico caso di studio di intelligenze artificiali e semantica computazionale, mentre dall'altra è difficile rendere utile l'informazione estratta integrandola all'interno della base di conoscenza.
+Gli obiettivi dell'estrazione delle informazioni sono la \textit{named entity recognition} e la \textit{relation extraction}: la prima serve per riconoscere un'entità di un testo, mentre la seconda tenta di stabilire le relazioni tra queste entità.
+Per integrare le entità in un grafo di conoscenza, si effettua un'opearazione di \textit{entity linking}.
+
+\subsection{\textit{Matching}.}
+Per prima cosa, un'oprazione di \textit{matching} deve tener conto della similarità tra due entità appartenenti a fonti diverse tramite un opportuno indice; il problema (nei sistemi classici) tuttavia è trovare un criterio di similarità e di combinare i risultati nel modo ottimale: ogni indice si sofferma su un aspetto diverso del problema e devono essere combinati in modo opportuno.
+Questo processo è fondamentale per interrogare diverse basi di dati con una sola query.
+Di fatto quest ultimo problema è risolto tramite tecniche di apprendimento automatico (\textit{machine learning} o \textit{deep learning}), che ricavano una funzione di sintesi in modo automatico.
+
+Combinati i valori, si ha comunque un problema di decisione (cosa includere nel grafo di conoscenza), introducendo un valore di soglia o tramite tecniche di ottimizzazione, o ancora tramite tecniche di apprendimento automatico.
+In rarissimi casi tuttavia un algoritmo riuscirebbe a ottenere prestazioni pari a quelle umane: integrando grandi quantità di dati l'automatizzazione è necessaria ma situazioni critiche richiedono l'intervento umano.
+Si deve quindi trovare un compromesso tra automatizzazione e intervento umano grazie all'interattività, soprattutto in caso di risultato incerto.
+L'approccio \textit{pay as you go} tenta di integrare dando una priorità ai dati, che nel tempo saranno consolidati e modificati: così facendo si possono automatizzare dei processi, offrendo un risultato sporco, in attesa di una rifinitura umana.
+
+La \textit{similarità lessicale} è la prossimità tra il significato di due parole; si usano anche sistemi basati sull'analisi di dati.
+Due proprità possono anche essere simili perchè collegano entità dello stesso tipo (stesso range e stesso dominio).
+Tuttavia si hanno delle difficoltà dovute alla polisemia dei termini: proprio per questo, il problema non è trovare l'algoritmo perfetto ma trovare la combinazione migliore tra più criteri.
+
+Si tenta di sfruttare le stesse ontologie per fonti diverse, nonostante questo non sia sempre possibile (perchè di fatto possono essere preferiti linguaggi propri anche con \textit{open data}).
+
+\subsection{\textit{Agreement Maker Lite}.}
+Si tratta di un \textit{tool} per aiutare esperti di dominio nel processo di \textit{ontology matching}: è considerato uno dei migliori esistenti a livello internazionale.
+Si tenta quindi di costruire delle corrispondenze tra termini appartenenti a ontologie diverse: la prima si chiama \textit{source ontology} che si allinea alla \textit{target ontology}.
+Mappando la \textit{source ontology} si calcola un valore di confidenza per il processo di matching; inoltre si può stabilire la cardinalità tra sorgente e obiettivo: una cardinalità \verb|1:1| stabilisce una relazione unica tra due entità, così come \verb|1:n| stabilisce un rapporto per cui ad un'entità della fonte ne corrispondono più nell'obiettivo.
+
+Il software nella versione normale calcola una matrice di similarità di dimensioni $N \times M$ (dove $N$ ed $M$ sono le cardinalità delle due ontologie) usata per individuare relazioni di equivalenza.
+Si effettua un \textit{match} solamente sugli elementi che superano una certa soglia.
+Le dimensioni della matrice però degenerano velocemente e quindi la gestione della memoria è ardua: la versione \textit{lite} tuttavia conserva in memoria solamente i valori superiori alla soglia, così da ridurre la memoria utilizzata.
+
+Gli indici utilizzati sono la \textit{precision} $p$, la \textit{recall} $r$ e la loro media armonica \textit{F-measure} $F$.
+Sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico.
+Un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la similarità coseno usando le frasi come vettori.
+
+La similarità è ereditabile e può anche essere comparata tra nodi fratelli.
+L'indice $DSI \in [0; +1]$ misura la similarità tenendo conto della similarità dei nodi ascendenti.
+\begin{equation*}
+  DSI = MPC \cdot bas\_sim(C, C^*) + \frac{2(1 - MCP)}{n \cdot (n + 1)} \sum_{i=1}^n(n + 1 - i) \cdot base\_sim(parent_{C_i}, parent_{C^*_i})
+\end{equation*}
+Dove la similarità base $bas\_sim$ empiricamente è un valore intorno a $0.75$ in quanto la similarità dei nodi ascendenti tende a $0.25$. \newline
+L'indice SSC invece considera la similarità tra i nodi fratelli:
+\begin{equation*}
+  SSC = MCP \cdot bas\_sim(C, C^*) + \frac{1-MCP}{n}\sum_{i=1}^n{\max\{base\_sim(S_i, S_1) ... base\_sim(S_i, S_m)\}}
+\end{equation*}
+
 \newpage
 \part{Esercitazioni.}
 
