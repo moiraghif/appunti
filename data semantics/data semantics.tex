@@ -297,7 +297,7 @@ Componenti principali dell'ontologia assiomatica sono:
 \end{itemize}
 Si definisce quindi un linguaggio $L$ di assiomi logici con una semantica formale che determina il significato in modo univoco.
 
-\section{Inferenza nell'ontologia.}
+\section{Inferenza nell'ontologia}
 Definendo un oggetto, si hanno sempre delle implicazioni: è necessario quindi fare inferenza, ovvero procedere con un procedimento deduttivo per rendere esplicita la conoscenza implicita. L'inferenza (un meccanismo fondamentale della semantica) nasce infatti dal ragionamento su delle premesse, con l'obiettivo di estrarre \textit{conoscenza vera} da \textit{premesse vere}, effettuando una generalizzazione con un certo margine di errore.
 Dal principio dell'informatica, l'uso della logica (proposizionale e del primo ordine) permette la deduzione da parte di calcolatori.
 Oltre all'induzione classica, esistono altre pratiche per fare inferenza.
@@ -305,7 +305,7 @@ Le implicazioni ricavate sulla base di ciò che è definito nel dizionario, dal 
 
 L'inferenza ha come obiettivi il ridurre la complessità del sistema trovando un modo per ottenere informazioni velocemente ed il aumentare la flessibilità dello schema per poter essere aggiornato in tempo reale con le modifiche dell'ambiente.
 
-\subsection{Schema dell'ontologia.}
+\subsection{Schema dell'ontologia}
 Lo schema prescrive come deve essere organizzato il dato per entrare nel database; tuttavia i dati sono flessibili per loro stessa natura, dunque l'operazione non è immediata.
 È necessario definire uno schema per dare una struttura ai dati: non è lecito usare nell'approccio semantico un database NoSQL troppo flessibile.
 
@@ -315,7 +315,7 @@ Lo schema quindi è flessibile e disaccoppia lo schema dai dati (ovvero lo schem
 
 Potendo esserci contraddizione nei dati, si sono costruiti linguaggi come RDF Schapes e SHACL che permettono una validazione dei dati attraverso la definizione di vincoli.
 
-\section{\textit{Reasoning}.}
+\section{\textit{Reasoning}}
 I linguaggi RDFS e OWL permettono l'operazione di \textit{reasoning}, ovvero l'inferenza di nuova conoscenza a partire da più ontologie esistenti.
 % il prof sembra che faccia rap col braccio e il microfono
 Oltre ad avere sistemi deduttivi, la logica proposizionale su cui sono basati garantisce che l'algoritmo termini (sia, cioè, \textit{decidibile}: ovvero date le premesse è sempre possibile stabilire se una FBF - Formula Ben Formata - è vera o meno), mentre la logica del primo ordine è solo semi-decidibile.
@@ -520,55 +520,109 @@ Tra i reasoner più conosciuti vi sono:
 \end{itemize}
 
 \part{Problemi di matching ed integrazione semantica}
-\section{Integrazione di grafi di conoscenza.}
-L'integrazione virtuale (l'uso di predicati \verb|sameAs| e simili) non scala bene con grossi database: per fare questo è necessario effettuare un'integazione in altro modo (\textit{data integration}).
-Prima di iniziare è necessario definire dei \textit{mapping} a livello di schema, oppure integrare le istanze tramite \textit{entity co-resolution} (\verb|sameAs|), \textit{link discovery} o \textit{instance matching} (o \textit{record linkage}).
+\section{Integrazione di grafi di conoscenza}
+L'integrazione virtuale (l'uso di predicati \verb|sameAs| e simili) non è una funzione particolarmente scalabile con grossi database: per fare questo è necessario effettuare un'integrazione in altro modo (\textit{data integration}).
+La \textit{data integration} nel caso dei grafi di conoscenza parte da una base di diversi oggetti, nel caso più semplice una \textit{source} ed un \textit{target}, che è necessario unire per aumentare il potere informativo creando un unica base di conoscenza più ampia e completa. Per effettuare con successo questa operazione è però necessario usare dei \textit{mapping}.
 
-Quando si costruisce un grafo di conoscenza (soprattutto verticale, ovvero su un solo tema ma in modo approfondito), si parte generalmente da dati strutturati (tabelle o database relazionali).
-Si può effettuare una traduzione semantica della tabella (\textit{mapping}) per convertire una tabella in formato RDF, però facendo questo si trascurano le relazioni e le loro proprietà e non si ha controllo sugli elementi duplicati.
-Per rispondere a queste problematiche, si possono usare strumenti quali R2ML per annotare le tuple del database relazionale e mappandole con programmi scritti \textit{ad hoc}.
-Gli strumenti di \textit{semantic table annotation and integration} tentano di stabilire quali entità esistono in un database e aiutano nella costruzione di un grafo di conoscenza.
+L'operazione di \textit{linking data} avviene a due livelli distinti:
+\begin{itemize}
+\item A livello di schema: effettuando un \textit{mapping} tra concetti e proprietà (anche detto \textit{ontology mapping}); \item A livello di istanze: ovvero effettuando un \textit{mappping} tra entità descrittive in sorgenti eterogenee. Ciò può avvenire tramite \textit{entity co-resolution} (\verb|sameAs|), \textit{link discovery}, \textit{instance matching} o \textit{record linkage}).
+\end{itemize}
+Quando si costruisce un grafo di conoscenza (soprattutto verticale, ovvero su un solo tema ma in modo approfondito), si parte innanzitutto da un'operazione di \textit{data ingestion}. 
 
-Un altro modo per accrescere un grafo di conoscenza è quello di processare testi (prendento informazioni dall'abstract di \url{wikidata.org}, per esempio): strutturare informazioni in formato tabellare è un processo lungo e costoso, dunque è indispensabile sfruttare tecniche di \textit{Natural Language Processing} (NLP); tuttavia l'uso di abbreviazioni o espressioni gergali rende difficile un processo automatico del testo.
+Generalmente questa operazione avviene da fonti di dati strutturate o semi-strutturate come tabelle o database relazionali.
+Si può effettuare una traduzione semantica della tabella (\textit{mapping}) per convertire una tabella in formato RDF, però facendo questo si trascurano le relazioni e le loro proprietà e non si ha controllo sugli elementi duplicati. Un tool molto usato per assolvere a questo compito di conversione da formato tabellare ad RDF è \textbf{DataGraft}.
+
+La trasformazione da tabelle a \textit{Knowledge Graph} può presentare una serie di criticità che occorre affrontare predendo determinati accorgimenti:
+\begin{itemize}
+\item Normalizzare la tabella;
+\item Annotare i diversi componenti della tabella con i componenti del \textit{KG}, sia a livello di schema assegnando concetti e proprietà alle colonne, sia a livello di istanze assegnando entità ai valori della tabella;
+\item Si possono usare strumenti quali R2ML per annotare le tuple del database relazionale e mappandole con programmi scritti \textit{ad hoc}. Questo avviene per operazioni di \textit{mapping} particolarmente complesse. Gli strumenti di \textit{semantic table annotation and integration} tentano di stabilire quali entità esistono in un database e aiutano nella costruzione di un grafo di conoscenza;
+\item Solo dopo questi accorgimenti e passaggi è possibile eseguire il \textit{mapping} finale e rappresentare il contenuto della tabella come \textit{KG}.
+\end{itemize}
+Un altro modo per accrescere un grafo di conoscenza è quello di processare testi (prendento informazioni dall'abstract di \url{wikidata.org}, per esempio): strutturare informazioni in formato tabellare è un processo lungo e costoso, dunque è indispensabile sfruttare tecniche di \textit{Natural Language Processing} (NLP) per estrarre informazioni direttamente da testi, tweet, abstract; tuttavia l'uso di abbreviazioni o espressioni gergali rende difficile un processo automatico del testo.
 Da una parte il problema è strutturare informazioni da un testo (\textit{information extraction}), tipico caso di studio di intelligenze artificiali e semantica computazionale, mentre dall'altra è difficile rendere utile l'informazione estratta integrandola all'interno della base di conoscenza.
 Gli obiettivi dell'estrazione delle informazioni sono la \textit{named entity recognition} e la \textit{relation extraction}: la prima serve per riconoscere un'entità di un testo, mentre la seconda tenta di stabilire le relazioni tra queste entità.
 Per integrare le entità in un grafo di conoscenza, si effettua un'opearazione di \textit{entity linking}.
 
-\subsection{\textit{Matching}.}
-Per prima cosa, un'oprazione di \textit{matching} deve tener conto della similarità tra due entità appartenenti a fonti diverse tramite un opportuno indice; il problema (nei sistemi classici) tuttavia è trovare un criterio di similarità e di combinare i risultati nel modo ottimale: ogni indice si sofferma su un aspetto diverso del problema e devono essere combinati in modo opportuno.
+\subsection{Matching}
+L'operazione di matching può risultare molto complessa a seconda del caso specifico e necessita di una serie di passaggi:
+\begin{itemize}
+\item Per prima cosa, occorre valutare la \textit{similarità} tra due entità appartenenti a fonti diverse tramite un opportuno indice; il problema (nei sistemi classici) tuttavia è trovare un criterio di similarità opportuno poichè a seconda del problema specifico la misuradi similarità più opportuna potrebbe variare.
+\item Successivamente occorre combinare i risultati in modo ottimale: ogni indice si sofferma su un aspetto diverso del problema e devono essere combinati in modo opportuno.
 Questo processo è fondamentale per interrogare diverse basi di dati con una sola query.
 Di fatto quest ultimo problema è risolto tramite tecniche di apprendimento automatico (\textit{machine learning} o \textit{deep learning}), che ricavano una funzione di sintesi in modo automatico.
-
-Combinati i valori, si ha comunque un problema di decisione (cosa includere nel grafo di conoscenza), introducendo un valore di soglia o tramite tecniche di ottimizzazione, o ancora tramite tecniche di apprendimento automatico.
+\item Combinati i valori, si ha comunque un problema di decisione (cosa includere nel grafo di conoscenza), introducendo un valore di soglia o tramite tecniche di ottimizzazione, o ancora tramite tecniche di apprendimento automatico.
+\end{itemize}
 In rarissimi casi tuttavia un algoritmo riuscirebbe a ottenere prestazioni pari a quelle umane: integrando grandi quantità di dati l'automatizzazione è necessaria ma situazioni critiche richiedono l'intervento umano.
-Si deve quindi trovare un compromesso tra automatizzazione e intervento umano grazie all'interattività, soprattutto in caso di risultato incerto.
+Si deve quindi trovare un compromesso tra automatizzazione e intervento umano grazie all'\textit{interattività}, soprattutto in caso di risultato incerto. 
+
+Oltre tutto ciò occorre anche definire che tipo di similarità stiamo ricercando, poichè ne esistono di diveri tipi:
+\begin{itemize}
+\item Similarità sintattica, per cui si ricerca un'uguaglianza tra due parole che hanno la stessa forma, ma questo presta il fianco alla possibilità di effettuare un matching errato assumendo che due parole uguali rappresentino sicuramente la stessa cosa;
+\item Similarità lessicale, basata sui sinonimi, che però rischia di creare molta ambiguità;
+\item Similarità strutturale, che tiene conto di come gli oggetti che intendiamo matchare siano inseriti nelle rispettive strutture, ma a seconda delle basi di dati potremmo trovare strutture completamente differenti e, a quel punto, questo particolare tipo di similarità provocherebbe molti problemi.
+\end{itemize}
 L'approccio \textit{pay as you go} tenta di integrare dando una priorità ai dati, che nel tempo saranno consolidati e modificati: così facendo si possono automatizzare dei processi, offrendo un risultato sporco, in attesa di una rifinitura umana.
 
-La \textit{similarità lessicale} è la prossimità tra il significato di due parole; si usano anche sistemi basati sull'analisi di dati.
-Due proprità possono anche essere simili perchè collegano entità dello stesso tipo (stesso range e stesso dominio).
-Tuttavia si hanno delle difficoltà dovute alla polisemia dei termini: proprio per questo, il problema non è trovare l'algoritmo perfetto ma trovare la combinazione migliore tra più criteri.
-
+%La \textit{similarità lessicale} è la prossimità tra il significato di due parole; si usano anche sistemi basati sull'analisi di dati.
+%Due proprità possono anche essere simili perchè collegano entità dello stesso tipo (stesso range e stesso dominio).
+%Tuttavia si hanno delle difficoltà dovute alla polisemia dei termini: proprio per questo, il problema non è trovare l'algoritmo perfetto ma trovare la combinazione migliore tra più criteri.
 Si tenta di sfruttare le stesse ontologie per fonti diverse, nonostante questo non sia sempre possibile (perchè di fatto possono essere preferiti linguaggi propri anche con \textit{open data}).
 
-\subsection{\textit{Agreement Maker Lite}.}
-Si tratta di un \textit{tool} per aiutare esperti di dominio nel processo di \textit{ontology matching}: è considerato uno dei migliori esistenti a livello internazionale.
+\subsection{Ontology matching: \textit{Agreement Maker Lite}}
+Si tratta di un \textit{tool} per aiutare esperti di dominio nel processo di \textit{ontology matching} (ovvero matching a livello di schema): è considerato uno dei migliori esistenti a livello internazionale.
+
 Si tenta quindi di costruire delle corrispondenze tra termini appartenenti a ontologie diverse: la prima si chiama \textit{source ontology} che si allinea alla \textit{target ontology}.
 Mappando la \textit{source ontology} si calcola un valore di confidenza per il processo di matching; inoltre si può stabilire la cardinalità tra sorgente e obiettivo: una cardinalità \verb|1:1| stabilisce una relazione unica tra due entità, così come \verb|1:n| stabilisce un rapporto per cui ad un'entità della fonte ne corrispondono più nell'obiettivo.
 
+I metodi utilizzati dal software possono essere diversi:
+\begin{itemize}
+\item \textit{Concept based}
+\item \textit{Structure based}
+\item \textit{Instance based}
+\end{itemize}
+In sostanza il software esegue la definizione dei matching seguendo dei passaggi precisi:
+\begin{enumerate}
+\item Prende in input la \textit{source ontology} e la \textit{target ontology};
+\item Effettua il calcolo della misura di similarità scelta;
+\item Costruisce una matrice di similarità;
+\item Applica i vincoli di cardinalità;
+\item Infine definisce i matching risultanti.
+\end{enumerate}
 Il software nella versione normale calcola una matrice di similarità di dimensioni $N \times M$ (dove $N$ ed $M$ sono le cardinalità delle due ontologie) usata per individuare relazioni di equivalenza.
 Si effettua un \textit{match} solamente sugli elementi che superano una certa soglia.
 Le dimensioni della matrice però degenerano velocemente e quindi la gestione della memoria è ardua: la versione \textit{lite} tuttavia conserva in memoria solamente i valori superiori alla soglia, così da ridurre la memoria utilizzata.
 
-Gli indici utilizzati sono la \textit{precision} $p$, la \textit{recall} $r$ e la loro media armonica \textit{F-measure} $F$.
-Sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico.
-Un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la similarità coseno usando le frasi come vettori.
+Gli indici utilizzati sono:
+\begin{itemize}
+\item La \textit{precision} 
+\begin{equation*}
+P = \frac{TP}{TP+FP};
+\end{equation*}
+\item La \textit{recall} 
+\begin{equation*}
+R = \frac{TP}{TP+FN}; 
+\end{equation*}
+\item La loro media armonica \textit{F-measure}
+\begin{equation*}
+F =2\times \frac{P\times R}{P+R}
+\end{equation*}
+\end{itemize}
+Queste misure sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico.
 
+Un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la \textit{cosine similarity} usando le frasi come vettori:
+\begin{equation*}
+\cos(\theta) = \frac{A \cdot B}{\vert\vert A \vert\vert \cdot \vert\vert B \vert\vert}
+\end{equation*}
 La similarità è ereditabile e può anche essere comparata tra nodi fratelli.
+
 L'indice $DSI \in [0; +1]$ misura la similarità tenendo conto della similarità dei nodi ascendenti.
 \begin{equation*}
   DSI = MPC \cdot bas\_sim(C, C^*) + \frac{2(1 - MCP)}{n \cdot (n + 1)} \sum_{i=1}^n(n + 1 - i) \cdot base\_sim(parent_{C_i}, parent_{C^*_i})
 \end{equation*}
 Dove la similarità base $bas\_sim$ empiricamente è un valore intorno a $0.75$ in quanto la similarità dei nodi ascendenti tende a $0.25$. \newline
+
 L'indice SSC invece considera la similarità tra i nodi fratelli:
 \begin{equation*}
   SSC = MCP \cdot bas\_sim(C, C^*) + \frac{1-MCP}{n}\sum_{i=1}^n{\max\{base\_sim(S_i, S_1) ... base\_sim(S_i, S_m)\}}
