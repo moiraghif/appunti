@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 
+\usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage[italian]{babel}
 \usepackage{amsmath}
@@ -7,7 +8,16 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage[margin=1.2in]{geometry}
-\usepackage[utf8]{inputenc}
+
+\usepackage{xcolor}
+
+\lstdefinelanguage{sparql}{
+  morecomment=[l][\color{purple}]{\#},
+  morestring=[b][\color{blue}]\",
+  morekeywords={SELECT,CONSTRUCT,DESCRIBE,ASK,WHERE,FROM,NAMED,PREFIX,BASE,OPTIONAL,FILTER,ORDER,BY,GRAPH,LIMIT,OFFSET,SERVICE,UNION,EXISTS,NOT,BINDINGS,MINUS,a},
+  sensitive=true
+}
+
 \counterwithin*{section}{part}
 \graphicspath{ {./img/} }
 
@@ -157,23 +167,24 @@ Introdotto come linguaggio per interrogare \textit{linked data}, è un linguaggi
 \end{itemize}
 Permette di interrogare (query), modificare (update) e integrare database (effettuare cioè federated query) composti da triple. Il principio di SPARQL è quello di \textit{pattern matching}, ovvero le query descrivono sottografi del grafo principale e quelli che matchano rappresentano i risultati.
 Si definisce il concetto di \textit{triple pattern}: si sostituiscono uno o più elementi di una tripla con una variabile.
-\begin{verbatim}
-dbpedia:The_Beatles foaf:name "The Beatles" . # importante il punto alla fine
+\begin{lstlisting}[language=sparql]
+                             # importante il punto alla fine
+dbpedia:The_Beatles foaf:name "The Beatles" .
 dbpedia:The_Beatles foaf:name ?album .
 ?album mo:track ?track .
 ?album ?p ?o .
-\end{verbatim}
+\end{lstlisting}
 % musicbrainz.org
 
 Si possono così costruire query strutturate.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 # prologo: si definiscono le fonti
 PREFIX dbpedia:<http://dbpedia.org/resource/>
 PREFIX foaf:<http://xmlns.com/foaf/0.1/>
 ...
-\end{verbatim}
+\end{lstlisting}
 Esistono diversi tipi di query effettuabili in SPARQL:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 # ASK | SELECT | DESCRIBE | CONSTRUCT
 # Query di tipo SELECT
   SELECT ?album
@@ -186,36 +197,38 @@ Esistono diversi tipi di query effettuabili in SPARQL:
            dc:title ?title .
          }
 ORDER BY ?title
-\end{verbatim}
+\end{lstlisting}
 
 \verb|ASK| ritorna \verb|true|/\verb|false| se esiste una soluzione alla query:
-\begin{verbatim}
+\begin{lstlisting}[langauge=sparql]
   ASK
 WHERE {
         dbpedia:The_Beatles mo:member .
         dbpedia:Paul_McCartney .
       }
-
-=> true
-\end{verbatim}
+\end{lstlisting}
+\verb|=> true| \newline
 \verb|SELECT| ritorna una lista di elementi che hanno corrispondenza nel grafo:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 SELECT ?album_name ?track_title
        ?date       ?album       .
  WHERE {
-         dbpedia:The_Beatles foaf:name ?album .             # tutti gli album
-                                                            # dei Beatles
+         # tutti gli album dei Beatles
+         dbpedia:The_Beatles foaf:name ?album .
+
+         # tutte le tracce degli album
          ?album              dc:title  ?album;
-         mo:track ?track .                                  # tutte le tracce
-                                                            # degli album
+         mo:track ?track .
          ?track            dc:title  ?track_title;
+
+         # filtra per durata
          mo:duration ?duration .
-         FILTER (?duration > 300000 && ?duration < 400000)  # filtra per durata
+         FILTER (?duration > 300000 && ?duration < 400000)
        }
-\end{verbatim}
+\end{lstlisting}
 
 \verb|CONSTRUCT| è simile a \verb|SELECT| ma ritorna un grafo e non una lista:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 CONSTRUCT {
             # riscrive con nuova terminologia
             ?album dc:creator dbpedia:The_Beatles
@@ -225,7 +238,7 @@ CONSTRUCT {
             dbpedia:The_Beatles foaf:made   ?album;
             ?album              mo:track    ?track .
           }
-\end{verbatim}
+\end{lstlisting}
   
 Le basi di conoscenza sono interrogate grazie ai vocabolari (anche detti \textit{ontologie}), che permettono quindi la costruzione di query. Le ontologie ci permettono di conoscere la struttura del \textit{Knowledge Graph} così da poter effettuare interrogazioni più o meno precise. I diversi \textit{Knowledge Graph} sono integrati grazie a predicati come ad esempio (\verb|same as|) che indicano quali entità si riferiscono allo stesso oggetto reale nelle varie fonti.
 
@@ -242,7 +255,7 @@ Per definire un vocabolario si definiscono prima le classi (ovvero i tipi di dat
 Uno dei vocabolari più importanti (perché introdotto da tempo) è \textbf{FOAF} (\textit{Friend of a Friend}); si ricordano anche \textbf{DC} (\textit{Dubling Core}), che specifica una serie di predicati per rappresentare i documenti come \textit{titolo, autore} ad esempio, e \textbf{SKOS} (\textit{Simple Knowledge Organizating System}).
 Più vocabolari possono riferirsi allo stesso oggetto e per definizione non è lecito unificare i vocabolari in quanto dovrebbero adattarsi alla specificità del dominio. C'è quindi una certa libertà nel descrivere gli oggetti perchè ognuno può usare vocabolari differenti, portando ad un certo equilibrio nell'entropia del \textit{semantic web}.
 
-Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \textbf{schema.org}, molto utilizzato nel web e in continua evoluzione per dati strutturati. Sul sito di \textbf{schema.org} sono raccolte tutte le classi disponibili in questo vocabolario e per ogni classe restituisce la specifica delle proprietà per descriverla, oltre a fornirci anche gli \textit{expected type} per i valori di queste proprietà; un concetto, questo, molto importante nella definizione dei vocabolari. 
+Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \url{schema.org}, molto utilizzato nel web e in continua evoluzione per dati strutturati. Sul sito di \url{schema.org} sono raccolte tutte le classi disponibili in questo vocabolario e per ogni classe restituisce la specifica delle proprietà per descriverla, oltre a fornirci anche gli \textit{expected type} per i valori di queste proprietà; un concetto, questo, molto importante nella definizione dei vocabolari. 
 
 Dipendentemente dal task occorre sempre trovare il vocabolario più semplice per coprire tutti i nostri bisogni ed eventualmente, nel caso si rivelasse insufficiente, espanderlo all'occorrenza, piuttosto che crearne uno nuovo dal nulla.
 Si possono unire più vocabolari grazie a collegamenti, a livello di istanza o di schema. Un computer ha bisogno di definire un sistema per attribuire un significato al significante.
@@ -288,7 +301,7 @@ Le caratteristiche fondamentali di un ontologia sono che essa sia:
 \item Concettuale: deve cioè esserre un modello astratto di un certo fenomeno del mondo reale attraverso l'identificazione dei concetti rilevanti che lo caratterizzano;
 \item Esplicita: i concetti, le proprietà ed i vincoli che caratterizzano un fenomeno devono essere esplicitamente definiti;
 \item Formale: deve cioè essere machine-readable, escludendo l'uso del linguaggio naturale. Il ragionamento automatico è infatti fondamentale per assicurarsi qualità di un'ontologia a design-time, ovvero verificare che i concetti non siano contraddittori ed estrarre conoscenza implicita, e per sfruttare la semantica con lo scopo di inferire conoscenza in fase di ricerca delle informazioni;
-\item \textit{Condivisa}: è infatti fondamentale che le descrizioni siano condivise tra individui di un gruppo (\textbf{schema.org} è un esempio di questo principio).
+\item \textit{Condivisa}: è infatti fondamentale che le descrizioni siano condivise tra individui di un gruppo (\url{schema.org} è un esempio di questo principio).
 \end{itemize}
 Componenti principali dell'ontologia assiomatica sono:
 \begin{itemize}
@@ -404,9 +417,9 @@ OWL2 è diviso in tre progetti:
 
 Rispetto a RDFS si introduce l'equivalenza tra classi con \verb|owl:equivalentClass| e tra individui con \verb|owl:sameAs|, tuttavia il loro uso ha delle implicazioni semantiche molto importanti tra le quali:
 \begin{itemize}
-\item Riflessività;
-\item Transitività;
-\item Simmetria.
+  \item Riflessività;
+  \item Transitività;
+  \item Simmetria.
 \end{itemize}
 Inoltre l'equivalenza può essere fatta anche a livello di proprietà con \verb|owl:equivalentProperty|.
 Si può anche specificare la disgiunzione tra due elementi con \verb|owl:differentFrom|, in opposizione alla UNI (\textit{Unique Name Assumption}), secondo cui oggetti con nomi diversi sono necessariamente distinti.
@@ -414,18 +427,19 @@ Le proprietà possono essere disgiunte con \verb|owl:propertyDisjointWith|.
 
 Le proprietà di OWL sono distinte in due categorie:
 \begin{itemize}
-\item \textbf{ObjectProperties}: la proprietà è una risorsa; \item \textbf{DatatypeProperties}: la proprietà è un letterale. 
+  \item \textit{Object Properties}: la proprietà è una risorsa;
+  \item \textit{Datatype Properties}: la proprietà è un letterale. 
 \end{itemize}
 Questa distinzione facilita la costruzione di grafi specificando quali proprietà sono utilizzabili per attraversare il grafo stesso.
 La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamento parziale: si può costruire un reticolo finito (quindi con limite superiore e inferiore, rispettivamente uguali all'insieme \textit{universo} e all'insieme \textit{vuoto}).
 
 Una relazione in OWL può possedere determinate proprietà:
 \begin{itemize}
-\item \textbf{Simmetria};
-\item \textbf{Transitività};
-\item \textbf{Transitività inversa};
-\item \textbf{Funzionalità}: ovvero si ha al più un valore per un argomento permettendo l'uso di identificativi e di funzioni inverse;
-\item \textbf{Funzionalità inversa}: quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
+  \item \textbf{Simmetria};
+  \item \textbf{Transitività};
+  \item \textbf{Transitività inversa};
+  \item \textbf{Funzionalità}: ovvero si ha al più un valore per un argomento permettendo l'uso di identificativi e di funzioni inverse;
+  \item \textbf{Funzionalità inversa}: quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.
 \end{itemize}
 %ha le proprietà di simmetria e di transitività; inoltre matematicamente è una funzione (ovvero si ha al più un valore per un argomento), permettendo l'uso di identificativi e di funzioni inverse.%
 %Quest'ultima proprietà è fondamentale nelle fasi di \textit{Record Linkage} o \textit{Deduplication}.%
@@ -446,13 +460,40 @@ Nelle logiche descrittive la difficoltà risiede nel costruire classi complesse 
 \end{center}
 Una classe può quindi essere definita basandosi su più classi tramite una serie di operatori logici.
 La semantica dunque si definisce ricorsivamente dagli elementi più semplici ai più complessi.
-\begin{center}
-\includegraphics[scale=0.6]{IMG2.png}
-\end{center}
+
+\begin{tabular}{l|cl|l} \newline \newline
+  Costructor & Sintassi DL & Esempio & Sintassi modale \\ \hline
+  intersectionOf & $C_1 \sqcap \ldots \sqcap C_n$  & Human $\sqcap$ Male & $C_1 \wedge \ldots \wedge C_n$ \\
+  unionOf & $C_1 \sqcup \ldots \sqcup C_n$ & Doctor $\sqcup$ Lawyer & $C_1 \vee \ldots \vee C_n$ \\
+  complementOf & $\neg C$ & $\neg$ Male & $\neg{C}$ \\
+  oneOf & $\{x_1\} \sqcup \ldots \sqcup \{x_n\}$ & $\{$ John $\} \sqcup \{$ Mary $\}$ & $x_1 \vee \ldots \vee x_n$ \\
+  allVeluesFrom & $\forall P.C$ & $\forall$ hasChild.Doctor & $[P]C$ \\
+  someValuesFrom & $\exists P.C$ & $\exists$ hasChild.Doctor & $(P)C$ \\
+  maxCardinality & $\leq nP$ & $\leq 1$ hasChild & $[P]_n + 1$ \\
+  minCardinality & $\geq nP$ & $\geq 2$ hasChild & $(P)_n$ \\
+\end{tabular} \newline \newline
+Dove $C$ è un concetto, $P$ una proprietà e $x$ un individuo. \newline
+%\begin{center}
+%\includegraphics[scale=0.6]{IMG2.png}
+%\end{center}
 L'\textit{interpretazione} dei costrutti è di natura insiemistica:
 \begin{center}
-\includegraphics[scale=0.6]{IMG3.png}
+\begin{tabular}{rcl} \newline \newline
+  $(C \sqcap D)^I$ & $=$ & $C^I \sqcap D^I$ \\
+  $(C \sqcup D)^I$ & $=$ & $C^I \sqcup D^I$ \\
+  $(\neg{C})^I$ & $=$ & $\Delta^I \backslash C^I$ \\
+  $\{x\}^I$ & $=$ & $\{x^I\}$ \\
+  $(\exists R.C)^I$ &$=$& $\{x | \exists y.<x,y> \in R^I \wedge y \in C^I\}$ \\
+  $(\forall R.C)^I$ &$=$& $\{x | \forall y.(x,y) \in R^I \Rightarrow y \in C^I\}$ \\
+  $(\leq R)^I$ &$=$& $\{x | \# \{y | <x,y> \in R^I\} \leq n\}$ \\
+  $(\geq R)^I$ &$=$& $\{x | \# \{y | <x,y> \in R^I\} \geq n\}$ \\
+  $(R^-)^I$ &$=$& $\{(x,y) | (y,x) \in R^I\}$
+\end{tabular} \newline \newline
 \end{center}
+Dove $\Box^I$ indica l'interpretazione di $\Box$ secondo la funzione $I$. \newline
+%\begin{center}
+%\includegraphics[scale=0.6]{IMG3.png}
+%\end{center}
 Gli assiomi usati in queste logiche sono estremamente semplici ma si applicano ugualmente anche a classi più complesse. Avendo infatti complicato le classi (ovvero avendo definito alcune classi come risultati di costruzioni sfruttando classi più basilari), possiamo ottenere assiomi più \textit{semplici}:
 \begin{center}
 \includegraphics[scale=0.6]{IMG4.png}
@@ -489,10 +530,15 @@ In proposito ad OWL \textit{DL} occorre specificare una distinzione molto netta 
 \item Assuzione del \textit{mondo aperto}, tipica di ontologie e logiche descrittive, per cui tutto ciò che è fuori \textit{potrebbe} essere vero tanto quanto ciò che è dentro.
 \end{itemize}
 Inoltre sempre riguardo OWL, in quanto base di conoscenza, occorre fare riferimento all'assuzione denominata \textbf{Unique Name Assumption}, che in OWL appunto non ha valore, poichè due oggetti con lo stesso nome possono indicare due cose distinte, non necessariamente essere la stessa cosa.
+
 \subsection{Rule based reasoning}
 I rules-based reasoning, a differenza dell'OWL reasoning permettono di definire delle funzioni al loro interno in grado ad esempio di effettuare ragionamenti di natura quantitativa. 
 
-SWRL (Semantic Web Rule Language) è un linguaggio rules-based che combina OWL con RuleML, ma non è \textbf{decidibile}. Alternativo a SWRL in questo aspetto è DLP, un linguaggio che permette di instaurare delle relazioni d'ordine per gli oggetti, come ad esempio \textit{antenato-genitore}. RuleML (Rule Markup Language) è una famiglia di linguaggi sviluppati per esprimere sia regole \textit{forward} che \textit{backward} in XML per effettuare deduzioni ed operazioni inferenziali.
+SWRL (Semantic Web Rule Language) è un linguaggio rules-based che combina OWL con RuleML, ma non è \textbf{decidibile}.
+Alternativo a SWRL in questo aspetto è DLP, un linguaggio che permette di instaurare delle relazioni d'ordine per gli oggetti, come ad esempio \textit{antenato-genitore}.
+RuleML (Rule Markup Language) è una famiglia di linguaggi sviluppati per esprimere sia regole \textit{forward} che \textit{backward} in XML per effettuare deduzioni ed operazioni inferenziali.
+
+
 \section{\textit{Search Engine} semantici}
 Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
 Per la gestione di pattern di architettura ci sono tre possibili approcci:
@@ -519,6 +565,7 @@ Tra i reasoner più conosciuti vi sono:
 \item Reasoner nativi di Jena, GraphDB8 e AllegroGraph.
 \end{itemize}
 
+\newpage
 \part{Problemi di matching ed integrazione semantica}
 \section{Integrazione di grafi di conoscenza}
 L'integrazione virtuale (l'uso di predicati \verb|sameAs| e simili) non è una funzione particolarmente scalabile con grossi database: per fare questo è necessario effettuare un'integrazione in altro modo (\textit{data integration}).
@@ -596,20 +643,18 @@ Le dimensioni della matrice però degenerano velocemente e quindi la gestione de
 
 Gli indici utilizzati sono:
 \begin{itemize}
-\item La \textit{precision} 
-\begin{equation*}
-P = \frac{TP}{TP+FP};
-\end{equation*}
-\item La \textit{recall} 
-\begin{equation*}
-R = \frac{TP}{TP+FN}; 
-\end{equation*}
-\item La loro media armonica \textit{F-measure}
-\begin{equation*}
-F =2\times \frac{P\times R}{P+R}
-\end{equation*}
+\item La \textit{precision} $P = \frac{TP}{TP+FP}$ (dove $TP$ sono i valori classificati correttamente come positivi e $FP$ i valori classificati scorrettamente come positivi);
+\item La \textit{recall} $R = \frac{TP}{TP+FN}$ (dove $FN$ sono i valori classificati scorrettamente come negativi);
+\item La loro media armonica \textit{F-measure} $F =2 \frac{P \cdot R}{P+R}$
 \end{itemize}
-Queste misure sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico.
+Queste misure sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico, se è noto un \textit{gold standard} (ovvero un esempio i cui risultati sono già noti).
+
+Un buon \textit{matcher} dovrebbe dare un'alta affidabilità a pochi collegamenti, e dovrebbe restituire un'affidabilità nulla in caso di elementi non compresi nell'ontologia.
+Inoltre, può capitare che certi concetti siano identificati meglio di altri: si calcola così il livello di confidenza locale
+\begin{equation*}
+  LC_M(c) = \frac{\sum_{c' \in m_M(c)}sim_M(c, c')}{|m_M(c)|} - \frac{\sum_{c' \in (T - m_M(c))}sim_M(c, c')}{|T - m_M(c)|}
+\end{equation*}
+
 
 Un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la \textit{cosine similarity} usando le frasi come vettori:
 \begin{equation*}
@@ -628,12 +673,18 @@ L'indice SSC invece considera la similarità tra i nodi fratelli:
   SSC = MCP \cdot bas\_sim(C, C^*) + \frac{1-MCP}{n}\sum_{i=1}^n{\max\{base\_sim(S_i, S_1) ... base\_sim(S_i, S_m)\}}
 \end{equation*}
 
-\newpage
-\part{Esercitazioni.}
+Il sisterma \textit{greedy} tuttavia massimizza solamente il match del singolo elemento e non complessivamente: si tratta di un problema di \textit{assegnamento}, risolvibile tramite metodi combinatori (\textit{Hungarian Method}, di complessità cubica) ma molto pesanti computazionalmente.
+Approccio ottimale per risolvere il problema è selezionare solamente i match che superano una certa soglia e utilizzare l'algoritmo \textit{maximum matching}, che ha complessità quadratica (e quindi computazionalmente più efficiente).
+Proprio per questo motivo, Agreement Maker nella sua versione Lite conserva una matrice di similarità sparsa.
 
-\section{SPARQL.}
+Grazie a tecniche di \textit{machine learning} si possono calcolare soglie, combinazioni lineari tra i \textit{matcher} o ancora costruire \textit{matcher} nuovi (nonostante sia richiesta una gran quantità di esempi).
+
+\newpage
+\part{Esercitazioni}
+
+\section{SPARQL}
 Si interroga \url{https://dbpedia.org} per ottenere una lista di vulcani:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
@@ -643,12 +694,12 @@ SELECT distinct ?v
          ?v rdf:type dbo:Volcano .
        }
  LIMIT 100
-\end{verbatim}
+\end{lstlisting}
 I prefissi si aggiungono inserendo l'url tra simboli \verb|<| e \verb|>|.
 \verb|rdf:type| può essere sostituito da una \verb|a|:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 ?v a dbo:Volcano .
-\end{verbatim}
+\end{lstlisting}
 
 Una query SPARQL è strutturata specificando:
 \begin{itemize}
@@ -660,9 +711,9 @@ Una query SPARQL è strutturata specificando:
 \end{itemize}
 Le specifiche SPARQL possono essere ottenute all'indirizzo \url{https://www.w3.org/TR/rdf-sparql-query/}
 
-\subsection*{Esercizio 1.}
+\subsection*{Esercizio 1}
 Si tenta di trovare il numero di dipendenti Google dalla pagina \url{http://dbpedia.org/page/Google}:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 PREFIX res: <http://dbpedia.org/resource/>
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
@@ -672,28 +723,28 @@ SELECT ?num
          res:Google dbo:numberOfEmployees ?num .
        }
 
-# o più semplicemente:
+# o piu` semplicemente:
 SELECT ?num
   FROM <http://dbpedia.org>
  WHERE {
          dbr:Google dbo:numberOfEmployees ?num .
        }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 2.}
+\subsection*{Esercizio 2}
 Si cerca di ottenere una lista di trombettisti leader di band:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 SELECT ?person
  WHERE {
-       # soggetto   proprietà       oggetto
+       # soggetto   proprieta`      oggetto
          ?person    dbo:instrument  dbr:Trumpet .
          ?person    dbo:occupation  dbr:Bandleader .
        }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 3.}
+\subsection*{Esercizio 3}
 Si cercano i Paesi con più di due grotte:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   SELECT ?country
    WHERE {
            ?cave     rdf:type      dbo:Cave .
@@ -702,11 +753,11 @@ Si cercano i Paesi con più di due grotte:
          }
 GROUP BY ?country
   HAVING (COUNT(?cave) > 2)
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 4.}
+\subsection*{Esercizio 4}
 Si vogliono trovare tutti i software sviluppati da società californiane.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 SELECT DISTINCT ?software
  WHERE {
          ?company rdf:type dbo:Organisation .
@@ -718,76 +769,76 @@ SELECT DISTINCT ?software
          ?software rdf:type dbo:Software .
          ?company dbo:foundationPlace dbr:California .
        }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 5.}
+\subsection*{Esercizio 5}
 Verificare se Natalie Portman è nata negli Stati Uniti:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   ASK
 WHERE {
         dbr:Natalie_Portman dbo:birthPlace ?city .
         ?city dbo:Country dbr:United_States .
       }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 6.}
+\subsection*{Esercizio 6}
 Verificare se Roma è la capitale d'Italia:
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   ASK 
 WHERE {
         dbr:Italy dbo:capital dbr:Rome .
       }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 7.}
+\subsection*{Esercizio 7}
 Verificare se è disponibile la data di nascita di Elizabeth Taylor.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   ASK
 WHERE {
         dbr:Elizabeth_Taylor dbo:birthDate ?_ .
       }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 8.}
+\subsection*{Esercizio 8}
 Verificare se Milano è in Germania.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   ASK
 WHERE {
         dbr:Germany dbo:city dbr:Miland .
       }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 9.}
+\subsection*{Esercizio 9}
 Verificare se Michelle Obama è sposata con Barack Obama.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
   ASK
 WHERE {
         dbr:Michelle_Obama dbo:spouse dbr:Barack_Obama .
       }
-\end{verbatim}
+\end{lstlisting}
 
-\subsection*{Esercizio 10.}
+\subsection*{Esercizio 10}
 Si cercano i giocatori di Football americano che pesano più di 100kg.
-\begin{verbatim}
+\begin{lstlisting}[language=sparql]
 CONSTRUCT {
             ?x rdf:type dbo:AmericanFootballPlayer .
           }
-i    WHERE {
+    WHERE {
             ?x dbo:weight ?kg .
             FILTER(?kg > 1000000000)
           }
-\end{verbatim}
+\end{lstlisting}
 
 
-\section{Protégé.}
+\section{Protégé}
 Progetto \textit{Open Source} per gestire ontologie, permette di caricare direttamente l'ontologia di \url{dbpedia.org} o di \url{schema.org}.
 DBPedia usa più di $400$ classi, usandone anche di \textit{sporche} (ovvero ripetute o poco utili).
 Usando il \textit{reasoner}, sono evidenziate le incongruenze (ovvero classi inconsistenti), che non possono avere dunque istanze.
 
-\subsection*{Costruzione di un'ontologia.}
+\subsection*{Costruzione di un'ontologia}
 Si costruisce una semplice ontologia per la costruzione di un semplice domino geografico.
 \begin{verbatim}
-City  <  Region  <  Country  <  Continent
+                  City  <  Region  <  Country  <  Continent
 \end{verbatim}
 In Protégé, si definisce una nuova ontologia con \verb|File > New| e inserendo poi sottoclassi di \verb|owl:Thing|.
 Popolata l'ontologia con delle istanze arbitrarie, si definiscono le proprietà.
