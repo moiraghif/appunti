@@ -700,7 +700,7 @@ Proprio per questo motivo, Agreement Maker nella sua versione Lite conserva una 
 
 Grazie a tecniche di \textit{machine learning} si possono calcolare soglie, combinazioni lineari tra i \textit{matcher} o ancora costruire \textit{matcher} nuovi (nonostante sia richiesta una gran quantità di esempi).
 
-Un approccio molto diffuso per rendere il matching più affidabile e snello è quello della combinazione di metodi di matching basata sulla qualità del matching stesso. Un esempio di misura di qualità, se è noto, è un \textit{gold standard} (ovvero un esempio i cui risultati sono già noti). Molto raramente si presenta questa possibilità ed è quindi necessario ricorrere a misure di qualità differenti:
+Un approccio molto diffuso, alternativo alla semplice combinazione dei risultati dei diversi matcher, per rendere il matching più affidabile e snello è quello della combinazione dei risultati dei matcher basata però sulla qualità del matching stesso. Un esempio di misura di qualità, se è noto, è un \textit{gold standard} (ovvero un esempio i cui risultati sono già noti). Molto raramente si presenta questa possibilità ed è quindi necessario ricorrere a misure di qualità differenti:
 \begin{itemize}
 \item A livello globale abbiamo più che delle misure, delle vere e proprie euristiche: quella di conservazione della distanza che si basa sul fatto che un match \textit{F} tra due concetti in due ontologie non dovrebbe distorcere la distanza che c'è tra i concetti stessi e quella di conservazione dell'ordine che afferma la stessa cosa ma in merito all'ordine che i concetti possiedono all'interno delle rispettive ontologie;
 \item A livello locale con il calcolo di una vera e propria misura di confidenza.
@@ -710,7 +710,7 @@ Inoltre, può capitare che certi concetti siano identificati meglio di altri: si
 \begin{equation*}
   LC_M(c) = \frac{\sum_{c' \in m_M(c)}sim_M(c, c')}{|m_M(c)|} - \frac{\sum_{c' \in (T - m_M(c))}sim_M(c, c')}{|T - m_M(c)|}
 \end{equation*}
-Il livello di confidenza così calcolato a livello locale ci permette, quindi, di definire dei pesi basati sulla qualità dei matching dei singoli matcher e, una volta definiti i pesi, di utilizzarli per combinare i risultati dei diversi matcher in una vera e propria media pesata.
+Il livello di confidenza così calcolato a livello locale ci permette di definire dei pesi basati sulla qualità dei matching dei singoli matcher e, una volta definiti i pesi, di utilizzarli per combinare i risultati dei diversi matcher in una vera e propria media pesata \textit{LWC}. A questo punto, sulla scia di quanto detto in precedenza, si può procedere a calcolare i diversi indici già noti, come il \textit{DSI}. In sostanza l'approccio basato sulla qualità ha lo scopo primario di dare un peso diverso all'apporto di ogni matcher sul risultato finale basandosi sulla qualità del matcher misurata \textit{localmente}.
 \newline
 \newline
 Quanto detto finora vale soprattutto per il matching e la valutazione di ontologie reali molto grandi ma esistono tutta una serie di task analoghi che presentano ancora molte criticità e sfide:
