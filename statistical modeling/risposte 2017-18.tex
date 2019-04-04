@@ -1,13 +1,15 @@
 \documentclass[a4page, 11pt]{article} %this is behaving like \documentclass[11pt]{article}
+% sì, a4page è sottinteso
 
 %\documentclass[a4paper, 11pt]{article} %maybe you want this?
 
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{xfrac}
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1.3in]{geometry}
+\usepackage[margin=1.2in]{geometry}
 \usepackage{cancel}
 
 
@@ -17,6 +19,9 @@
 \usepackage{enumitem} %resuming enumerations
 \usepackage{hyperref} %clickable TOC
 
+\def\dep{\not\!\perp\!\!\!\perp}
+\def\indep{\perp \!\!\! \perp }
+
 \title{Statistical Modeling}
 \author{}
 \date{}
@@ -25,80 +30,91 @@
 
 \begin{document}
 \maketitle
-%\tableofcontents
-%\newpage
+\tableofcontents % magari risulta più facile da consultare per ripassi... @momo
+\newpage
 
 \section{Errori eteroschedastici}
-Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
-In virtù del fatto che ogni errore $\varepsilon_i$ è a media nulla $E(\varepsilon_i) = 0$ vale la relazione $E(\varepsilon_i^2)$ = Var$(\varepsilon_i) = \sigma^2$, e quindi gli errori sono detti omoschedastici quando la loro varianza è costante al variare del valore dei regressori.
-Se ciò non accade gli errori si dicono eteroschedastici Var$(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza (Vedi Appendice per una dimostrazione) %Linkare le due cose dopo
-(lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator). 
-Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
-Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono. 
-Per individuare questa caratteristica, che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici), lo stesso ragionamento vale anche per la F di Snedcor sui singoli parametri.
+Per ottenere stime efficienti per i parametri del modello lineare classico, gli errori devono essere \textit{omoschedastici}: la varianza degli errori $\varepsilon_i$ è costante $Var(\varepsilon_i) = E(\varepsilon_i^2) = \sigma^2$ e non dipende dal valore delle variabili indipendenti $E(\varepsilon_i) = E(\varepsilon_i | x_i)$.
+Questo si verifica dal momento che il valore atteso del singolo errore è nulla $E(\varepsilon_i) = 0$.
+Quando ciò non avviene, si è in presenza di errori \textit{eteroschedastici}: $Var(\varepsilon_i) = \sigma_i^2$; in tal caso il vettore $b$ dei parametri perde in efficienza\footnote{Si veda dimostrazione in appendice.} (non è più BLUE (\textit{Best Linear Unbiased Estimator}).
 
-Per quanto riguarda i metodi grafici:
+% Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
+% In virtù del fatto che ogni errore $\varepsilon_i$ è a media nulla ($E(\varepsilon_i) = 0$) vale la relazione $E(\varepsilon_i^2) = Var(\varepsilon_i) = \sigma^2$, e quindi gli errori sono detti \textit{omoschedastici} quando la loro varianza è costante al variare del valore dei regressori.
+% Se ciò non accade gli errori si dicono \textit{eteroschedastici} $Var(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza\footnote{Vedi Appendice per la dimostrazione}.
+% (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator).
+Inoltre, la stima campionaria $s^2$ di $\sigma^2$ tende a sottostimare il vero valore della distribuzione, dato che non si è più in presenza di una sola variabile casuale ma di molteplici.
+Ne consegue che il test $T$ di Student ritorna valori erroneamente elevati, e quindi gli intervalli di confidenza risultano essere più stretti del reale, e i test di significatività sui parametri $b_j$ risultano più permissivi del dovuto.
+Discorso analogo vale per i test basati sulla distribuzione $F$ di Snedcor.
 
-\begin{enumerate}[noitemsep]
-\item Scatter plot dei valori osservati della variabile target $(y)$ contro le variabili esplicative $x_j$. Ovviamente bisognerà effettuare uno scatterplot per ogni variabile $x_j$;
-\item Scatter plot dei valori predetti ($\hat{y}$) contro i residui stimati ($y - \hat{y} = \varepsilon$);
-\item Scatter plot dei residui al quadrato ($\varepsilon^2$) contro i valori predetti di y ($\hat{y}$);
-\item Scatter plot dei valori osservati ($y$) contro quelli predetti ($\hat{y}$);
-\item Scatter plot dei residui ($\varepsilon$) contro le variabili esplicative $x_j$. Ovviamente bisognerà effettuare un grafico per ogni variabile esplicativa.
-\end{enumerate}
-Possiamo ricorrere anche ad alcuni test (metodo analitico):
-\begin{itemize}
-\item \textbf{Test di White}: questo test si basa sull’assunzione di omoschedasticità dei residui; viene perciò definita l’ipotesi nulla come $H_0:$ Var$(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H_1:$ Var$(\varepsilon_i ) = ( \sigma^2_i )$.
-Il test sfrutta la regressione $OLS$ del quadrato dei residui $\varepsilon_i^2$ sui regressori $x_j$, i regressori al quadrato $x_j^2$ e le loro interazioni.
-Attraverso l'indice di determinazione $R^{2}$ di tale regressione, ricavato dal rapporto tra la variabilità spiegata dalla regressione $\bigl(SSE = \sum_{i}(\hat{y_i} - \bar{y})^2\bigr)$ e la variabilità totale $\bigl(TSS = \sum_{i} (y_i - \bar{y})^2\bigr)$, si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori $n$. L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^{2}$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
+% Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
+% Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono.
+% Per individuare questa caratteristica, che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici).
+%Per quanto riguarda i metodi grafici:
+Si può verificare se una distribuzione è o eteroschedastica (o omoschedastica) tramite diversi metodi grafici:
+\begin{itemize}[noitemsep]
+  \item scatter plot della variabile risposta vs esplicative $y \sim x_j$ (da effettuare per ogni $x_j$);
+    % della variabile target $(y)$ contro le variabili esplicative $x_j$. Ovviamente bisognerà effettuare uno scatterplot per ogni variabile $x_j$;
+  \item scatter plot dei valori stimati vs residui $\hat{y} \sim \varepsilon$;
+%  \item Scatter plot dei valori predetti ($\hat{y}$) contro i residui stimati ($y - \hat{y} = \varepsilon$);
+  \item scatter plot dei residui al quadrato vs i valori predetti $\varepsilon^2 \sim \hat{y}$;
+  \item scatter plot dei valori osservati vs predetti $y \sim \hat{y}$;
+  \item scatter plot dei residui vs variabili esplicative $\varepsilon \sim x_j$ (da effettuare per ogni $x_j$).
+\end{itemize}
+Esistono inoltre una serie di test statistici che offrono risultati numerici e meno interpretativi per verificare l'eteroschedasticità degli errori.
+% Possiamo ricorrere anche ad alcuni test (metodo analitico):
+
+%\begin{itemize}
+\paragraph{Testi di White. } Si basa sull’assunzione di omoschedasticità dei residui ($H_0: Var(\varepsilon_i) = \sigma^2$ contro $H_1: Var(\varepsilon_i) \neq \sigma^2$). % non è = \sigma_i perché è un'affermazione più forte: White l'ipotesi alternativa dice solamente che non è vera la nulla - @momo
+%; viene perciò definita l’ipotesi nulla come $H_0:$ Var$(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H_1:$ Var$(\varepsilon_i ) = ( \sigma^2_i )$.
+Il test sfrutta la regressione $OLS$ del quadrato dei residui con le variabili esplicative, il loro quadrato e tutte le possibili interazioni $\varepsilon^2 \sim x_j, x_ix_j \hspace{5pt} \forall i, j < k$. %, i regressori al quadrato $x_j^2$ e le loro interazioni.
+Attraverso l'indice di determinazione $R^2$ di tale regressione, ricavato dal rapporto tra la variabilità spiegata dalla regressione e la variabilità totale $R^2 = \frac{SSE}{TSS} = \frac{\sum(\hat{y}_i - y_i)^2}{\sum(y_i - \overline{y})^2}$, si calcola la statistica $LM = n R^2 \sim \chi^2_{k-1}$.
+L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^2$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
 %@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
-infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
+infatti se $R^2$ è maggiore di un certo valore soglia significa che le variabili esplicative sono realmente significative nello spiegare la variabilità dei residui.
+% , ovvero che i residui al quadrato dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
+% secondo me è più chiara, ma la seconda parte mi sembra ridondante
 
-\item \textbf{Test di Breusch-Pagan}: anche in questo test l’ipotesi nulla è quella di omoschedasticità $\bigl(H_0$: Var($\varepsilon_i$) = ($\sigma^2)\bigr)$.
-Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale alla sommatoria degli errori al quadrato diviso n $(\sum_{i}\varepsilon_i^2 / n)$. La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
-Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
-\end{itemize}
+\paragraph{Test di Breusch-Pagan.} Anche in questo test, l’ipotesi nulla è quella di omoschedasticità ($H_0: Var(\varepsilon_i) = \sigma^2$).
+Il test si basa su una regressione di $\sfrac{\varepsilon^2_i}{s^2}$ (dove $s^2 = \frac{1}{n}\sum{\varepsilon_i^2}$).
+Essendo  $\varepsilon$ distribuita (sotto $H_0$) come una normale $N(0, \sigma^2)$, $\varepsilon^2 \sim \chi^2_{k-1}$; inoltre essendo già $s^2 \sim \chi^2_{n-k-1}$ (perché anch'esso somma di normali al quadrato) e $\varepsilon \indep X$ (sempre sotto $H_0$), $\sfrac{\varepsilon^2}{s^2}$ si distribuisce come un rapporto di $\chi^2$ indipendenti tra di loro, ovvero come una $F_{(k-1, n-k-1)}$ di Snedecor.
+% La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$.
+Si procede quindi effettuando un semplice test $F$ per l'accettazione di $H_0$.
+%L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
+%Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
+%\end{itemize}
 
 \section{Errori autocorrelati}
-
-Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori non siano correlati tra di loro.
+Per garantire stime efficienti del modello, bisogna verificare che gli errori $\varepsilon$ non siano tra di loro correlati, cioè non siano \textit{autocorrelati}.
+% Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori non siano correlati tra di loro.
 Accade spesso infatti, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
-Gli errori correlati si possono scindere in due componenti: $\rho \varepsilon_{i-1}^{\#}$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici IID, ovvero indipendentemente ed identicamente distribuiti in modo normale).
-Si nota infatti che l’errore è legato al suo valore ritardato.
-Possiamo classificare l’autocorrelazione in base al suo \textit{grado}: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di $i$-esimo grado quando gli errori sono correlati con il loro valore ritardato di $i$ gradi. Gli errori autocorrelati non incidono sulle proprietà di correttezza e consistenza degli stimatori OLS (analogamente agli errori eteroschedastici), ma solo sull’efficienza (non sono più BLUE). Come nel caso dell’eteroschedasticità la stima della varianza dei parametri e la relativa inferenza non sono più corretti e affidabili (la statistica T di Student ottiene dei valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti e l'area di rifiuto del test anomalamente più ampia).
-Per individuare la caratteristica di autocorrelazione si può ricorrere a rappresentazioni grafiche o a metodi analitici.
+Gli errori correlati si possono scindere in due componenti: %$\varrho \cdot
+$\varepsilon_{i.-1}^\#$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici IID, ovvero indipendentemente ed identicamente distribuiti in modo normale).
+Una parte dell'errore è legata al suo valore ritardato, mentre l'altra è indipendente.
+% Si nota infatti che l’errore è legato al suo valore ritardato.
+Possiamo classificare l’autocorrelazione in base al suo \textit{grado}: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di $i$-esimo grado quando gli errori sono correlati con il loro valore ritardato di $i$ gradi ($\varrho_{-i}$).
+Gli errori autocorrelati non incidono sulle proprietà di linearità, correttezza e consistenza degli stimatori OLS (analogamente agli errori eteroschedastici), ma solo sull’efficienza (non sono più BLUE).
+Come nel caso dell’eteroschedasticità, la stima della varianza dei parametri e relative inferenze non sono più corrette e affidabili (la statistica $T$ di Student ottiene valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti e l'area di rifiuto del test anomalamente più ampia).
 
-Per quanto riguarda le rappresentazioni grafiche:
-\begin{enumerate}[noitemsep]
-\item Scatter plot dei valori osservati ($y_i$) sui valori delle variabili esplicative ($x_j$). Ovviamente si costruiranno tanti scatter plot quante sono le variabili esplicative;
-\item Scatter plot dei residui ($\varepsilon_i$) sulle variabili esplicative ($x_j$), ovviamente si costruiranno tanti scatter plot quante sono le variabili esplicative;
-\item Scatter plot dei residui ($\varepsilon_i$) sui residui ritardati ($\varepsilon_{i-1}$) (a seconda del grado);
-\item Correlogramma: in questo grafico vengono mostrate le correlazioni a diversi gradi con relativa barra di confidenza; analizzando acf (funzione di autocorrelazione dei residui) e pacf si riesce a determinare il tipo di modello autoregressivo.\end{enumerate}
-
-Per quanto riguarda i test invece:
-\newline
-\textbf{Test di Durbin-Watson}: questo test si può effettuare per verificare la presenza di autocorrelazione a diversi gradi. 
-Prendiamo in esame il test per il primo grado. Esso si basa sull’assunzione di non correlazione degli errori: l’ipotesi nulla è quindi \begin{equation*}
-H_0:  \rho = Corr( \varepsilon_i  ;\varepsilon_{i-1} )=0
-\end{equation*}
-contro l’ipotesi alternativa di autocorrelazione degli errori che può essere:
-\begin{enumerate}[noitemsep]
-\item Unidirezionale destra
-\item Unidirezionale sinistra
-\item Bidirezionale	
-\end{enumerate}
-
-La statistica $DW$ per l'autocorrelazione dei residui è definita come $DW=\dfrac{\sum_{i} (\varepsilon_i - \varepsilon_{i-1})^2}{\sum_{i} \varepsilon_i^2}$, si dimostra sotto ipotesi di omoschedaticità di $\varepsilon$ che $DW = 2(1-\rho)$. Si può notare che: 
+Per individuare la caratteristica di autocorrelazione esistono diversi sistemi grafici:
 \begin{itemize}[noitemsep]
-\item La distribuzione di $DW$ è centrata su $2$: se infatti $DW$ è uguale a $2$ gli errori sono incorrelati poichè $\rho = 0$; 
-\item $DW$ tende a $0$ quando i residui sono correlati positivamente dato che $\rho = 1$;
-\item $DW$ tende a $4$ quando i residui sono correlati negativamente con $\rho = -1$; 
-\item I valori critici cambiano di caso in caso ma convenzionalmente se non specificati sono $1$ e $3$. 
-
+  \item scatter plot della variabile risposta vs esplicative $y \sim x_j$ (da effettuare per ogni $x_j$);
+  \item scatter plot dei residui vs variabili esplicative $\varepsilon \sim x_j$ (da effettuare per ogni $x_j$);
+  \item scatter plot dei residui vs ritardati $\varepsilon \sim \varepsilon_{-1}$;
+  \item correlogramma: è un grafico imn cui sono mostrate le correlazioni a diversi gradi; analizzando l'$acf$ (la funzione di autocorrelazione dei residui) e $pacf$ si determina il tipo di modello autoregressivo.
 \end{itemize}
-Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore GLS è efficiente in quanto caratterizzato dalla minima varianza. 
-%Nel caso in cui ci sia autocorrelazione lo stimatore più efficiente è il $GLS$.
+
+Il test di Durbin-Watson invece offre uno strumento analitico per verificare la presenza di autocorrelazione a diversi gradi.
+La sua ipotesi nulla è la mancanza di autocorrelazione: $H_0: \varrho_{-i} = 0$; mentre l'ipotesi alternativa può essere verificata su entrambe le code della distribuzione (bidirezionale) $H_1: \varrho_{-i} \neq 0$ o su una coda sola (unidirezionale destra o sinistra) $H_1: \varrho{_{-i}} ^>_< 0$.
+La statistica $DW$ per l'autocorrelazione dei residui è definita come:
+\begin{equation*}
+  DW = \frac{\sum{(\varepsilon_i - \varepsilon_{i-1})^2}}{\sum{ \varepsilon_i^2}} \in [0, 4]
+\end{equation*}
+si dimostra inoltre che sotto ipotesi di omoschedasticità di $\varepsilon$, $DW = 2(1 - \varrho_{-i})$.
+Il valore tende a $2$ in caso di mancanza di autocorrelazione, a $0$ in caso di massima autocorrelazione negativa ($DW = 0 \Leftrightarrow \varrho_{-i} = -1$) e $4$ positiva ($DW = 4 \Leftrightarrow \varrho_{-i} = +1$).
+Convenzionalmente i valori critici per definire se l'autocorrelazione è significativa o meno sono $1$ e $3$ (è considerata significativa se $DW < 1 \lor DW > 3$).
+
+Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore GLS è il più efficiente, ovvero è quello caratterizzato dalla minor varianza.
 
 
 \section{Metodo di stima WLS; per soluzioni correlate, GLS }
@@ -1000,11 +1016,11 @@ H_0 : \beta_1 = \beta_2 = \dots = 0
 si può pensare a ragion veduta di operare un confronto fra due modelli: l’empty-model e il modello ipotizzato. 
 Questo test può essere applicato sia alla parte fissa sia a quella random del modello.
 \newpage
-\section{Appendice}
-\subsection{Dimostrazione Non Efficienza in Errori Eteroschedastici}
+\part*{Dimostrazioni}
+\section*{Non Efficienza con Errori Eteroschedastici}
 Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. $ \hfill \square$
 
-\subsection{Non collinarietà dopo la trasformazione ritardata}
+\section*{Non collinarietà dopo la trasformazione ritardata}
 Il modello trasformato è 
 \[y^{\#}_t = \beta_{0} + \beta_1x_t^{\#} + w_t \] 
 quindi abbiamo che 
