@@ -617,11 +617,8 @@ L'approccio \textit{pay as you go} tenta di integrare dando una priorità ai dat
 %Tuttavia si hanno delle difficoltà dovute alla polisemia dei termini: proprio per questo, il problema non è trovare l'algoritmo perfetto ma trovare la combinazione migliore tra più criteri.
 Si tenta di sfruttare le stesse ontologie per fonti diverse, nonostante questo non sia sempre possibile (perchè di fatto possono essere preferiti linguaggi propri anche con \textit{open data}).
 
-\subsection{Ontology matching: \textit{Agreement Maker Lite}}
-Si tratta di un \textit{tool} per aiutare esperti di dominio nel processo di \textit{ontology matching} (ovvero matching a livello di schema): è considerato uno dei migliori esistenti a livello internazionale.
-
-Si tenta quindi di costruire delle corrispondenze tra termini appartenenti a ontologie diverse: la prima si chiama \textit{source ontology} che si allinea alla \textit{target ontology}.
-Mappando la \textit{source ontology} si calcola un valore di confidenza per il processo di matching; inoltre si può stabilire la cardinalità tra sorgente e obiettivo: una cardinalità \verb|1:1| stabilisce una relazione unica tra due entità, così come \verb|1:n| stabilisce un rapporto per cui ad un'entità della fonte ne corrispondono più nell'obiettivo.
+\subsection{Ontology matching: \textit{Agreement Maker}}
+Come già detto, l'\textit{ontology matching} è il task che ha l'obiettivo di troavare corrispondenze tra entità appartenenti ad ontologie differenti. A questo proposito \textit{Agreement Maker} è un \textit{tool} per aiutare esperti di dominio proprio nel processo di \textit{ontology matching} (ovvero matching a livello di schema): è considerato uno dei migliori esistenti a livello internazionale.
 
 I metodi utilizzati dal software possono essere diversi:
 \begin{itemize}
@@ -629,6 +626,9 @@ I metodi utilizzati dal software possono essere diversi:
 \item \textit{Structure based}
 \item \textit{Instance based}
 \end{itemize}
+Si tenta quindi di costruire delle corrispondenze tra termini appartenenti a ontologie diverse: la prima si chiama \textit{source ontology} che si allinea alla \textit{target ontology}.
+Mappando la \textit{source ontology} si calcola un valore di confidenza per il processo di matching; inoltre si può stabilire la cardinalità tra sorgente e obiettivo: una cardinalità \verb|1:1| stabilisce una relazione unica tra due entità, così come \verb|1:n| stabilisce un rapporto per cui ad un'entità della fonte ne corrispondono più nell'obiettivo.
+
 In sostanza il software esegue la definizione dei matching seguendo dei passaggi precisi:
 \begin{enumerate}
 \item Prende in input la \textit{source ontology} e la \textit{target ontology};
@@ -637,6 +637,9 @@ In sostanza il software esegue la definizione dei matching seguendo dei passaggi
 \item Applica i vincoli di cardinalità;
 \item Infine definisce i matching risultanti.
 \end{enumerate}
+\begin{center}
+\includegraphics[scale=0.7]{IMG6.png}
+\end{center}
 Il software nella versione normale calcola una matrice di similarità di dimensioni $N \times M$ (dove $N$ ed $M$ sono le cardinalità delle due ontologie) usata per individuare relazioni di equivalenza.
 Si effettua un \textit{match} solamente sugli elementi che superano una certa soglia.
 Le dimensioni della matrice però degenerano velocemente e quindi la gestione della memoria è ardua: la versione \textit{lite} tuttavia conserva in memoria solamente i valori superiori alla soglia, così da ridurre la memoria utilizzata.
@@ -647,38 +650,77 @@ Gli indici utilizzati sono:
 \item La \textit{recall} $R = \frac{TP}{TP+FN}$ (dove $FN$ sono i valori classificati scorrettamente come negativi);
 \item La loro media armonica \textit{F-measure} $F =2 \frac{P \cdot R}{P+R}$
 \end{itemize}
-Queste misure sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico, se è noto un \textit{gold standard} (ovvero un esempio i cui risultati sono già noti).
+Queste misure sono usate in \textit{machine learning} per misurare la bontà di adattamento di un classificatore generico. 
 
-Un buon \textit{matcher} dovrebbe dare un'alta affidabilità a pochi collegamenti, e dovrebbe restituire un'affidabilità nulla in caso di elementi non compresi nell'ontologia.
-Inoltre, può capitare che certi concetti siano identificati meglio di altri: si calcola così il livello di confidenza locale
-\begin{equation*}
-  LC_M(c) = \frac{\sum_{c' \in m_M(c)}sim_M(c, c')}{|m_M(c)|} - \frac{\sum_{c' \in (T - m_M(c))}sim_M(c, c')}{|T - m_M(c)|}
-\end{equation*}
-
-
-Un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la \textit{cosine similarity} usando le frasi come vettori:
+Il processo attraverso cui Agreement Maker (come altri tool) sottopone i dati si articola su 3 livelli, che a loro volta si articolano nell'utilizzo e nella combinazione dei risultati di più matcher basati su aspetti differenti tra loro:
+\begin{itemize}
+\item \textbf{First layer}: concettuale
+\begin{itemize}
+\item BSM Base Similarity Matcher
+\item PSM Parametric String-based Matcher
+\item VMM Vector-based Multi-term Matcher
+\end{itemize}
+\item \textbf{Second layer}: strutturale
+\begin{itemize}
+\item DSI Descendant's Similarity Inheritance
+\item SSC Sibling's Similarity Contribution
+\end{itemize}
+\item \textbf{Third layer}
+\begin{itemize}
+\item LWC Linear Weighted Combination
+\end{itemize}
+\end{itemize}
+Con particolare riferimento al \textbf{VMM}, un testo è riassunto come insieme di termini, costruendo documenti virtuali per gli oggetti da comparare con pesi preimpostati: si calcola quindi la \textit{cosine similarity} usando le frasi come vettori:
 \begin{equation*}
 \cos(\theta) = \frac{A \cdot B}{\vert\vert A \vert\vert \cdot \vert\vert B \vert\vert}
 \end{equation*}
-La similarità è ereditabile e può anche essere comparata tra nodi fratelli.
+Al secondo livello, prendendo in input i risultati dei matcher precedenti e basandosi sul principio che la similarità è ereditabile e può anche essere comparata tra nodi fratelli, si possono calcolare indici come il \textbf{DSI} ed il \textbf{SSC}, entrambi basati sul prendere in input i risultati del \textbf{BSM}.
 
-L'indice $DSI \in [0; +1]$ misura la similarità tenendo conto della similarità dei nodi ascendenti.
+L'indice $DSI \in [0; +1]$ modifica la similarità base tenendo conto della similarità dei nodi ascendenti.
 \begin{equation*}
-  DSI = MPC \cdot bas\_sim(C, C^*) + \frac{2(1 - MCP)}{n \cdot (n + 1)} \sum_{i=1}^n(n + 1 - i) \cdot base\_sim(parent_{C_i}, parent_{C^*_i})
+  DSI = MCP \cdot bas\_sim(C, C^*) + \frac{2(1 - MCP)}{n \cdot (n + 1)} \sum_{i=1}^n(n + 1 - i) \cdot base\_sim(parent_{C_i}, parent_{C^*_i})
 \end{equation*}
-Dove la similarità base $bas\_sim$ empiricamente è un valore intorno a $0.75$ in quanto la similarità dei nodi ascendenti tende a $0.25$. \newline
+Dove \textit{MCP}, il \textit{main contribution percentage}, empiricamente è un valore intorno a $0.75$ in quanto la similarità dei nodi ascendenti tende a $0.25$. \newline
 
-L'indice SSC invece considera la similarità tra i nodi fratelli:
+L'indice SSC invece modifica la similarità base considerando la similarità tra i nodi fratelli:
 \begin{equation*}
   SSC = MCP \cdot bas\_sim(C, C^*) + \frac{1-MCP}{n}\sum_{i=1}^n{\max\{base\_sim(S_i, S_1) ... base\_sim(S_i, S_m)\}}
 \end{equation*}
+Sia in riferimento ai valori di misure come \textit{Precision} e \textit{Recall}, che in merito a tempi di esecuzione, l'indice \textit{DSI} si dimostra spesso il migliore.
 
-Il sisterma \textit{greedy} tuttavia massimizza solamente il match del singolo elemento e non complessivamente: si tratta di un problema di \textit{assegnamento}, risolvibile tramite metodi combinatori (\textit{Hungarian Method}, di complessità cubica) ma molto pesanti computazionalmente.
+Una volta superata la fase di calcolo della similarità e di creazione della corrispondente matrice occorre passare attraverso la fase di \textit{selezione} dei mappings che prende in input:
+\begin{itemize}
+\item Matrice di similarità;
+\item Un valore soglia definito dall'utente;
+\item Una cardinalità per le corrispondenze tra source e target.
+\end{itemize}
+Per assolvere a questo scopo, con particolare riferimento a relazioni di cardinalità 1:1, è spesso utilizzato il sisterma \textit{greedy}: tuttavia questo massimizza solamente il match del singolo elemento e non complessivamente; si tratta di un problema di \textit{assegnamento}, risolvibile tramite metodi combinatori (\textit{Hungarian Method}, di complessità cubica) ma molto pesanti computazionalmente.
 Approccio ottimale per risolvere il problema è selezionare solamente i match che superano una certa soglia e utilizzare l'algoritmo \textit{maximum matching}, che ha complessità quadratica (e quindi computazionalmente più efficiente).
 Proprio per questo motivo, Agreement Maker nella sua versione Lite conserva una matrice di similarità sparsa.
 
 Grazie a tecniche di \textit{machine learning} si possono calcolare soglie, combinazioni lineari tra i \textit{matcher} o ancora costruire \textit{matcher} nuovi (nonostante sia richiesta una gran quantità di esempi).
 
+Un approccio molto diffuso per rendere il matching più affidabile e snello è quello della combinazione di metodi di matching basata sulla qualità del matching stesso. Un esempio di misura di qualità, se è noto, è un \textit{gold standard} (ovvero un esempio i cui risultati sono già noti). Molto raramente si presenta questa possibilità ed è quindi necessario ricorrere a misure di qualità differenti:
+\begin{itemize}
+\item A livello globale abbiamo più che delle misure, delle vere e proprie euristiche: quella di conservazione della distanza che si basa sul fatto che un match \textit{F} tra due concetti in due ontologie non dovrebbe distorcere la distanza che c'è tra i concetti stessi e quella di conservazione dell'ordine che afferma la stessa cosa ma in merito all'ordine che i concetti possiedono all'interno delle rispettive ontologie;
+\item A livello locale con il calcolo di una vera e propria misura di confidenza.
+\end{itemize}
+Un buon \textit{matcher} dovrebbe dare un'alta affidabilità a pochi collegamenti, e dovrebbe restituire un'affidabilità nulla in caso di elementi non compresi nell'ontologia.
+Inoltre, può capitare che certi concetti siano identificati meglio di altri: si calcola così il livello di confidenza locale
+\begin{equation*}
+  LC_M(c) = \frac{\sum_{c' \in m_M(c)}sim_M(c, c')}{|m_M(c)|} - \frac{\sum_{c' \in (T - m_M(c))}sim_M(c, c')}{|T - m_M(c)|}
+\end{equation*}
+Il livello di confidenza così calcolato a livello locale ci permette, quindi, di definire dei pesi basati sulla qualità dei matching dei singoli matcher e, una volta definiti i pesi, di utilizzarli per combinare i risultati dei diversi matcher in una vera e propria media pesata.
+\newline
+\newline
+Quanto detto finora vale soprattutto per il matching e la valutazione di ontologie reali molto grandi ma esistono tutta una serie di task analoghi che presentano ancora molte criticità e sfide:
+\begin{itemize}
+\item Per le ontologie \textit{linked open data} le cose sono più complesse;
+\item Cross-lingual ontology matching;
+\item Metodi di matching interattivi;
+\item Semantic table annotation.
+\end{itemize} 
+%ho aggiunto quest'ultima parte anche se il professore non sembrava particolarmente interessato ad approfondirla, ma magari più avanti la riprenderà.
 \newpage
 \part{Esercitazioni}
 
