@@ -19,8 +19,8 @@
 \usepackage{enumitem} %resuming enumerations
 \usepackage{hyperref} %clickable TOC
 
-\def\dep{\not\!\perp\!\!\!\perp}  % simbolo di dipendenza
-\def\indep{\perp \!\!\! \perp }   % simbolo di indipendenza
+\def\dep{\not\!\perp\!\!\!\perp}
+\def\indep{\perp \!\!\! \perp }
 
 \title{Statistical Modeling}
 \author{}
@@ -190,11 +190,11 @@ con
 Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correlati si utilizzano gli stimatori dei minimi quadrati generalizzati ($GLS$) interpretabili in modo analogo al modello classico in quanto stimatori $OLS$ basati su variabili trasformate per mezzo delle proprietà degli autovettori e autovalori ricavati dalla matrice dei residui $\Sigma_\varepsilon$.
 Nello specifico si procede ad effettuare una \textit{decomposizione spettrale} della matrice degli errori:
 \begin{equation*}
-  \Sigma_\varepsilon = \sigma^2 V V^\prime
+  \Sigma_\varepsilon = \sigma^2 VV'
 \end{equation*}
 con
 \begin{equation*}
-V = \sigma (\sqrt{AL})A^\prime
+V = \sigma (\sqrt{AL})A'
 \end{equation*}
 dove $A$ è la \textit{matrice degli autovettori} e $L$ è la matrice diagonale degli autovalori di $\Sigma_\varepsilon$.
 A questo punto premoltiplicando per $V^{-1}$ le componenti del modello si ottiene una nuova funzione con variabili trasformate e $\Sigma_{\varepsilon^\circ}$ omoschedastica ed incorrelata:
@@ -204,7 +204,7 @@ A questo punto premoltiplicando per $V^{-1}$ le componenti del modello si ottien
   V^{-1}X &= X^\circ \\
   y^\circ &= X^\circ \beta^\circ + \varepsilon
 \end{align*}
-Lo stimatore $b^\circ$ risulta godere delle proprietà di correttezza e consistenza; inoltre secondo il Teorema di Aitken è lo stimatore più efficiente per il modello \textit{generalizzato} (nonostante abbia una varianza maggiore rispetto al metodo OLS $\sigma^2 (X^{\circ \prime} X^\circ)^{-1} > \sigma^2 (X^\prime X)^{-1}$).
+Lo stimatore $b^\circ$ risulta godere delle proprietà di correttezza e consistenza; inoltre secondo il Teorema di Aitken è lo stimatore più efficiente per il modello \textit{generalizzato} (nonostante abbia una varianza maggiore rispetto al metodo OLS $\sigma^2 (X'^{\circ} X^{\circ})^{-1} > \sigma^2 (X'X)^{-1}$).
 % \begin{enumerate}[noitemsep]
 % \item Correttezza;
 % \item Consistenza;
@@ -220,58 +220,50 @@ A questo punto si possono utilizzare gli stimatori FGLS (\textit{Feasible Genera
 Spesso la soluzione di applicare i FGLS viene intrapresa anche in caso di semplice eteroschedasticità o semplice autocorrelazione, o sospette tali, poiché vige il principio di precauzione.
 
 \section{Multicollinearità }
-Se la matrice $(X^\prime X)$ non è invertibile o ha determinante prossimo allo 0, le stime non possono essere calcolate (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono affidabili (coefficienti empiricamente sotto identificati).
+Se la matrice $(X^{\prime} X)$ non è invertibile oppure ha determinante prossimo allo 0 le stime non esistono (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono stabili (coefficienti empiricamente sotto identificati).
 
-Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre: si ha quindi multicollinearità.
-In questo caso la matrice $(X^\prime X)$ è detta singolare e l'inversa $(X^\prime X)^{-1}$ non è unica. 
+Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre e quindi si ha multicollinearità. In questo caso la matrice $(X^{\prime} X)$ è detta singolare e le soluzioni non sono uniche. 
 
 Esistono due tipi di collinearità:
-\begin{itemize}[noitemsep]
-  \item \textbf{perfetta}: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre: questa viola le proprietà del modello lineare classico; solitamente ciò si verifica per un errore nella definizione dei regressori o per la presenza di due variabili direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio});
-  \item \textbf{imperfetta}: sussiste in caso di forte correlazione tra i regressori e dunque il determinante della matrice dei coefficienti tende a $0$; ciò non rende impossibilità la stima dei coefficienti ma da origine a stime fortemente distorte e caratterizzate da un'alta varianza.
-\end{itemize}
+\begin{enumerate}[noitemsep]
+\item \textbf{Perfetta}: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre. Essa viola le proprietà del modello lineare classico. Solitamente ciò si verifica per un errore nella definizione dei regressori o per una stranezza nei dati o ancora per la presenza di due variabili che sono direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio}).
+\item \textbf{Imperfetta}: sussiste quando $2$ o più regressori sono fortemente correlati e il determinante della matrice dei coefficienti tende a $0$. Questa condizione non provoca l'impossibilità della stima dei coefficienti come per la collinearità perfetta ma dà origine a coefficienti fortemente distorti e caratterizzati da una varianza molto alta.
+\end{enumerate}
+Le principali conseguenze sono:
+\begin{enumerate}[noitemsep]
+\item Un aumento della varianza delle stime dei coefficienti $\hat{\beta}$;
+\item Gli intervalli di confidenza al cui interno sta il valore vero del parametro con \textit{confidenza} $1-\alpha$ risultano essere più grandi di quanto non siano in realtà mentre la regione di accettazione del test si amplia notevolmente, ciò implica che i parametri vengano ritenuti non significativi anche quando in realtà lo sarebbero;
+\item Con due variabili fortemente correlate se aggiungo la seconda, l’incremento di $R^{2}$ è inferiore all’incremento che avrei aggiungendo una seconda variabile debolmente correlata con la prima. Quindi, siccome le due variabili hanno molta varianza in comune, non posso dire quale delle due è più influente rispetto all’outcome.
+\end{enumerate}
+Esistono tre metodi analitici per verificare la presenza di multicollinearità:
+\begin{enumerate}[noitemsep]
+\item \textbf{Indice di tolleranza} che misura il grado di interrelazione di una variabile indipendente rispetto alle altre. Nella pratica, $TOL = 1 - R^{2}_j$ dove $R^{2}_j$ è calcolato dalla regressione della variabile esplicativa $X_j$ (usata come risposta) in funzione di tutte le altre esplicative. Per questo può assumere valori compresi tra $0$ (che indica la massima \textit{collinearità}) e $1$ (che indica la massima \textit{indipendenza} tra le variabili);
 
-L'errore di stima provoca un aumento della varianza dello stimatore dei coefficienti $b$, da cui deriva una sovrastima delle dimensioni degli intervalli di confidenza (che risultano più ampi del dovuto) e una maggiore zona di accettazione nei test statistici di quanto sarebbe corretto.
-Inoltre, l'aggiunta di una variabile fortemente correlata ad una già presente nel modello aggiunge poca informazione (sarebbe opportuno calcolare la correlazione \textit{spuria}).
+\item \textbf{Varianza multifattoriale} o \textbf{VIF}, ovvero il reciproco della tolleranza. 
+Valori di tale indice variano tra $0$ e $\infty$ perciò se superiori a $20$ indicano uno stretto rapporto tra la variabile considerata e le altre ovvero un eccessivo grado di \textit{multicollinearità}. Vanno considerate con attenzione anche quelle variabili con valori di VIF maggiori di $10$;
 
-Per individuare fenomeni di multicollinearità, è buona norma, in prima istanza, generare una \textit{matrice di correlazione} tra tutte le variabili così da identificare rapidamente possibili variabili collineari.
-Auspicabilmente infatti è preferibile avere forte correlazione tra $y$ e i regressori $x_j$, e bassa correlazione tra questi ultimi.
-Esistono inoltre metodi analitici:
-
-\paragraph{Indice di tolleranza.} Misura il grado di interrelazione di una variabile indipendente rispetto alle altre.
-Si calcola come $TOL = 1 - R^2 \in [0, 1]$ dove $R^2$ è il coefficiente di correlazione della regressione di una variabile esplicativa $x_j$ (usata come risposta) in funzione delle altre.
-Valori alti indicano una bassa multicollinearità tra la singola variabile $x_j$ e le altre.
-
-\paragraph{Varianza multifattoriale (o VIF).} È il reciproco della tolleranza $VIF = TOL^{-1}$.
-Valori di tale indice variano tra $0$ e $\infty$, ma si considera significativo già se superiore a $20$ ($TOL = 0.05$) indicando uno stretto rapporto tra la variabile considerata e le altre del modello, ovvero un eccessivo grado di \textit{multicollinearità}.
-Vanno considerate con attenzione anche quelle variabili con valori di VIF maggiori di $10$ ($TOL = 0.1$);
-
-\paragraph{L'indice di condizione.} È dato dalla radice del rapporto tra l’autovalore massimo della matrice $(X^\prime X)$ e gli altri autovalori.
-Quando risulta essere maggiore di $30$ si considera significativa la presenza di \textit{multicollinearità}.
-Tale convinzione viene rafforzata se un autovalore con \textit{condition index} maggiore di $30$ contribuisce a spiegare elevate quote di varianza di due o più variabili.
-
+\item \textbf{L'indice di condizione} è dato dalla radice del rapporto tra l’autovalore massimo della matrice $(X^{\prime}X)$ e ogni autovalore. Quando risulta essere maggiore di $30$ si ritiene esistere \textit{collinearità}. Tale convinzione viene rafforzata se un autovalore con condition index maggiore di $30$ contribuisce a spiegare elevate quote di varianza di due o più variabili.
+\end{enumerate}
+Oltre all'utilizzo di queste misure analitiche è buona norma, in prima istanza, generare una \textit{matrice di correlazione} tra tutte le variabili così da identificare rapidamente possibili variabili collineari. Auspicabilmente infatti vorremmo forte correlazione tra $y$ e le singole $x_j$ con bassa correlazione tra la singole $x_j$.
 \section{Linearità}
+
 La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo: $y = f (x)$, con $f$ lineare.
 
 L'approssimazione lineare non è sempre la migliore.
 Per validare la presenza di ciascun regressore all’interno dei diversi modelli dobbiamo quindi verificare la linearità di tale relazione.
 Dunque, la variabile risposta deve essere una combinazione lineare di variabili esplicative e di parametri lineari.
 
-Se una relazione tra $y$ e $X$ non è lineare, allora l’effetto su $y$ ($\Delta y$)  di una variazione in $X$ ($\Delta X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
+Se una relazione tra $y$ e $X$ è non lineare, allora l’effetto su $y$ ($\Delta y$)  di una variazione in $X$ ($\Delta X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
 
 In questo caso, una regressione lineare è mal specificata: la forma funzionale è errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. 
 Può capitare ad esempio che l'indice $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
 
 Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcuni grafici: 
-\begin{itemize}[noitemsep]
-\item scatter plot della variabile risposta vs esplicative $y \sim x_j$ (da effettuare per ogni $x_j$);
-\item scatter plot dei residui vs la variabile risposta $\varepsilon \sim y$ (non deve presentare andamenti sistematici);
-  \item scatter plot dei residui vs valori previsti $\varepsilon \sim \hat{y}$ (l'andamento deve essere regolare).
-% \item Scatter plot della  variabile risposta ($y_i$) in funzione di ogni esplicativa ($x_j$) presente nel modello;
-% \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori osservati ($y_i$) della variabile dipendente; non deve essere un andamento sistematico;
-% \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori previsti ($\hat{y_i}$); deve esserci un andamento regolare.
-\end{itemize}
-  
+\begin{enumerate}[noitemsep]
+\item Scatter plot della  variabile risposta ($y_i$) in funzione di ogni esplicativa ($x_j$) presente nel modello;
+\item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori osservati ($y_i$) della variabile dipendente; non deve essere un andamento sistematico;
+\item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori previsti ($\hat{y_i}$); deve esserci un andamento regolare.
+\end{enumerate}
 È da notare che la non linearità potrebbe dipendere anche solo da una o da alcune variabili esplicative e non necessariamente da tutte.
 Quando è presente non linearità dei parametri, potrebbe esistere una trasformazione che li renda lineari (caso linearizzabile) oppure che questi siano espressi in una forma intrinsecamente non lineare.
 
@@ -284,13 +276,12 @@ Tra le funzioni non lineari le più utilizzate sono le polinomiali e le trasform
 %Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. %Superfluo?
 
 Tra la trasformazioni logaritmiche esistono tre modelli principali: 
-\begin{itemize}[noitemsep]
+\begin{enumerate}[noitemsep]
 \item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale %lineare?
  $\beta$ della variabile dipendente.
 \item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale $\beta$ della risposta.
 \item \textbf{Log-log}, in cui entrambi gli incrementi sono percentuali.
-\end{itemize}
-Tuttavia la trasformazione di una variabile, eccettuando casi particolari in cui il dominio lo permette (la trasformata $log$-$log$ in un grafico quantità-prezzo indica l'\textit{elasticità}) , rende di difficile interpretazione il modello.
+\end{enumerate}
 
 \section{Non normalità}
 
