@@ -58,7 +58,7 @@ SSE = \sum_{i}(\hat{y_i} - \bar{y})^2
 \[ 
 TSS = \sum_{i} (y_i - \bar{y})^2
 \]
-si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale al numero di regressori $n$. L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^{2}$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
+si calcola la statistica $LM=n R^{2}$ che si distribuisce come una $\chi^{2}$ con gradi di libertà uguale a $k - 1$ ($k$ è il numero di regressori). L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^{2}$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
 %@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
 %io avrei messo:
 infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare la variabilità dei residui, ovvero che i residui (al quadrato) dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
@@ -68,7 +68,7 @@ Si basa su una regressione di $\varepsilon^{2}_i$/$s^{2}$ dove $s^{2}$ è uguale
 \[
 \sum_{i}\frac{\varepsilon_i^2}{n}
 \] 
-La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rapporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
+La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2_{k-1}$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2_{n-k-1}$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor (con $k-1$ gdl al numeratore e $n-k-1$ al denominatore), in quanto rapporto tra due $\chi^2$. L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 \end{itemize}
 Per risolvere il problema di eteroschedasticità si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 
