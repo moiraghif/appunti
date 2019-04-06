@@ -80,8 +80,7 @@ infatti se $R^2$ è maggiore di un certo valore soglia significa che le variabil
 \end{equation*}
 
 \paragraph{Test di Breusch-Pagan.} Anche in questo test, l’ipotesi nulla è quella di omoschedasticità ($H_0: Var(\varepsilon_i) = \sigma^2$).
-Il test si basa sulla regressione di $\sfrac{\varepsilon^2_i}{s^2}$ (dove $s^2 = \frac{1}{n}\sum{\varepsilon_i^2}$) con le variabili esplicative.
-Della regressione si calcola poi il coefficiente $R^2$ analogamente al test di White.
+Il test si basa su una regressione di $\sfrac{\varepsilon^2_i}{s^2}$ (dove $s^2 = \frac{1}{n}\sum{\varepsilon_i^2}$).
 Essendo  $\varepsilon$ distribuita (sotto $H_0$) come una normale $N(0, \sigma^2)$, $\varepsilon^2 \sim \chi^2_{k-1}$; inoltre essendo già $s^2 \sim \chi^2_{n-k-1}$ (perché anch'esso somma di normali al quadrato) e $\varepsilon \indep X$ (sempre sotto $H_0$), $\sfrac{\varepsilon^2}{s^2}$ si distribuisce come un rapporto di $\chi^2$ indipendenti tra di loro, ovvero come una $F_{k-1, n-k-1}$ di Snedecor.
 % La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$.
 Si procede quindi effettuando un semplice test $F$ per l'accettazione di $H_0$.
@@ -89,14 +88,14 @@ Si procede quindi effettuando un semplice test $F$ per l'accettazione di $H_0$.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
 % \end{itemize}
 \begin{equation*}
-  BP = nR^2 \sim F_{k-1, n-k-1}
+  BP = \frac{\varepsilon_i^2}{s^2} = \frac{\varepsilon_i^2}{\frac{1}{n}\sum{\varepsilon_i^2}} \sim F_{k-1, n-k-1}
 \end{equation*}
 
 \section{Errori autocorrelati}
 Per garantire stime efficienti del modello, bisogna verificare che gli errori $\varepsilon$ non siano tra di loro correlati, cioè non siano \textit{autocorrelati}.
 Nel modello lineare classico si ipotizza infatti che:
 \begin{equation*}
-  Cov(\varepsilon_i, \varepsilon_j) = E(\varepsilon_i \varepsilon_j) = 0 \hspace{15pt} i \neq j
+  Cov(\varepsilon_i, \varepsilon_j) = E(\varepsilon_i, \varepsilon_j) = 0 \hspace{15pt} i \neq j
 \end{equation*}
 % Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori non siano correlati tra di loro.
 Tuttavia accade spesso, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
@@ -129,97 +128,90 @@ Convenzionalmente i valori critici per definire se l'autocorrelazione è signifi
 Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore GLS è il più efficiente, ovvero è quello caratterizzato dalla minor varianza.
 
 \section{Metodo di stima WLS, per soluzioni correlate, GLS }
-\subsection*{Errori eteroschedastici e incorrelati: modello WLS}
-Per errori eteroschedastici si intende quando la varianza dell’errore non è costante e il valore dipende dalle variabili esplicative ($\varepsilon \dep X$), violando quindi una delle ipotesi della regressione lineare classica.
-Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori Weighted Least Squares (WLS) che permettono di stimare la varianza delle singole componenti erratiche $\varepsilon_i$ condizionatamente al vettore dei dati $x_i$.
-Si esegue quindi una trasformazione della variabile risposta $y \rightarrow y^*$ e della matrice del disegno $X \rightarrow X^*$ per riportare la varianza degli errori ad una costante: si divide infatti ogni variabile per la radice di $h(i)$ (la varianza di $\varepsilon^*$, l'errore eteroschedastico).
-La componente erratica dunque ha valore costante e il modello assume la forma:
-% Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrispondente alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
-% Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*b$ riportando così la varianza degli errori ad una costante ottenendo la forma: 
-\begin{equation*}
-y^* = X^*\beta + \varepsilon
-\end{equation*}
-permettendo una stima $b$ dei parametri $\beta$ tramite il metodo OLS.
 
-\subsection*{Errori omoschedastici e correlati: modello GLS}
-Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini.
-Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno opposto (autocorrelazione \textit{negativa}), oltre un certo intervallo di confidenza.
-Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin).
-Bisogna innanzitutto stimare il coefficiente di autocorrelazione di $i$-esimo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t$ e come esplicative quelle già considerate più l’errore ritardato di $i$ tempi $\varepsilon_{t-i}$ e procedere alla stima del coefficiente di correlazione $\varrho$.
-Vale infatti:
-\begin{equation*}
-  \varepsilon_t = \varrho \varepsilon_{t-i} - \delta_t
-\end{equation*}
-dove $\delta$ è la componente erratica che segue le ipotesi classiche.
-Si moltiplica dunque ogni elemento dell'equazione ritardata per $\varrho$.
-% Una volta ottenuta la stima di $\varrho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\varrho$ stesso: 
-\begin{equation*}
-  \varrho y_{t-i} = \varrho X_{t-i} \beta + \varrho \varepsilon_{t-i}
-  % \varrho y_{t-1} = \varrho\beta_0 + \varrho\beta_1 x_{t-1} +\varrho\varepsilon_{t-1}^\#
-\end{equation*}
-Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\varrho$ all'equazione nella forma normale $y_t - \varrho y_{t-i}$ ottenendo un modello OLS per i parametri trasformati: 
-\begin{alignat*}{6}
-  &y_t^\# &&= &&X_t^\# &&\beta + &&\varepsilon_t^\# \\
-  (y_t &- \varrho y_{t-i}) &&= (X_t &&- \varrho X_{t-i}) &&\beta + (\varepsilon_t &&- \varrho \varepsilon_{t-i})
-  % y_t^\# &= \beta_0^\# + \beta_1 x_t^\# + w_t \\
-\end{alignat*} 
-% dove
-% \begin{equation*}
-% \begin{matrix}
-% y_t^\# = y_t - \rho y_{t-1}\\
-% \beta_0^\# = \beta_0(1 -\rho)\\
-% x_t^\# = x_t - \rho x_{t-1}\\
-% w_t =\varepsilon_t^\# - \rho \varepsilon_{t-1}^\# 
-% \end{matrix}
-% \end{equation*}
-Il modello rispetta tutte le proprietà classiche di correttezza, consistenza ed efficienza. 
+\begin{itshape}
+Errori eteroschedastici e incorrelati: modello WLS
+\end{itshape}%FIX: structure
 
-In alternativa è possibile utilizzare un modello \textit{autoregressivo} che inserisce nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di $i$-esimo ordine:
+Per errori eteroschedastici si intende quando la varianza dell’errore non rimane costante al variare del valore delle variabili esplicative, violando quindi una delle ipotesi della regressione lineare classica. Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori Weighted Least Squares (WLS) che permettono di stimare un modello per la varianza degli errori condizionata ai regressori. 
+Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrispondente alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
+Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*B$ riportando così la varianza degli errori ad una costante ottenendo la forma 
+\[
+y^* = X^*B + \varepsilon
+\]
+\begin{itshape}
+Errori omoschedastici e correlati: modello GLS
+\end{itshape}
+
+Nel caso invece ci si trovi davanti ad errori autocorrelati come accade in serie storiche e territoriali è ragionevole ipotizzare che esista correlazione fra errori in momenti successivi o territori vicini. Si parla di autocorrelazione se al variare di $X$ c'è fluttuazione dei valori di $Y$ con lo stesso segno (autocorrelazione \textit{positiva}), o segno alternato (autocorrelazione \textit{negativa}) oltre un certo intervallo di confidenza. Si possono ricavare stime per errori correlati in modo più semplice tramite una stima dei parametri in una equazione che tenga conto della struttura di autocorrelazione seriale (metodo proposto da Durbin). 
+Bisogna innanzitutto stimare il coefficiente di autocorrelazione di primo ordine attraverso un modello avente come variabile risposta gli errori $\varepsilon_t^\#$ e come esplicative quelle già considerate più l’errore ritardato di un tempo $\varepsilon_{t-1}^\#$ e procedere alla stima del coefficiente di correlazione $\rho$. Una volta ottenuta la stima di $\rho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\rho$ stesso: 
 \begin{equation*}
-  y = X \beta + AR_i + \varepsilon
-  % y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
+\rho y_{t-1} = \rho\beta_0 + \rho\beta_1 x_{t-1} +\rho\varepsilon_{t-1}^\# \ .
+\end{equation*}
+Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\rho$ all'equazione nella forma normale $y_t - \rho y_{t-1}$ ottenendo un modello OLS per i parametri trasformati 
+\begin{equation*}
+y_t^\# = \beta_0^\# + \beta_1 x_t^\# + w_t
+\end{equation*} 
+dove
+\begin{equation*}
+\begin{matrix}
+y_t^\# = y_t - \rho y_{t-1}\\
+\beta_0^\# = \beta_0(1 -\rho)\\
+x_t^\# = x_t - \rho x_{t-1}\\
+w_t =\varepsilon_t^\# - \rho \varepsilon_{t-1}^\# 
+\end{matrix}
+\end{equation*}
+che rispetta tutte le classiche proprietà di correttezza, consistenza ed efficienza. 
+
+In alternativa è possibile utilizzare un modello \textit{autoregressivo} (proprio del software SAS) per inserire nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di ordine 1 (o anche ordini superiori): 
+\begin{equation*}
+y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
 con 
 \begin{align*}
-  AR_i + \varepsilon &= v \\
-  Corr(v_j,v_k) &= 0 \hspace{15pt} j \neq k
+AR1 + \varepsilon_i = v_i \\
+Corr(v_i,v_j) = 0
 \end{align*}
+\begin{itshape}
+Errori eteroschedastici e correlati: stimatore GLS
+\end{itshape}
 
-
-\subsection*{Errori eteroschedastici e correlati: stimatore GLS}
 Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correlati si utilizzano gli stimatori dei minimi quadrati generalizzati ($GLS$) interpretabili in modo analogo al modello classico in quanto stimatori $OLS$ basati su variabili trasformate per mezzo delle proprietà degli autovettori e autovalori ricavati dalla matrice dei residui $\Sigma_\varepsilon$.
-Nello specifico si procede ad effettuare una \textit{decomposizione spettrale} della matrice degli errori:
-\begin{equation*}
-  \Sigma_\varepsilon = \sigma^2 VV'
-\end{equation*}
+Nello specifico si procede ad effettuare una \textit{decomposizione spettrale della matrice degli errori} 
+\[
+\Sigma_\varepsilon = \sigma^2 VV'
+\]
 con
-\begin{equation*}
+\[
 V = \sigma (\sqrt{AL})A'
-\end{equation*}
+\]
 dove $A$ è la \textit{matrice degli autovettori} e $L$ è la matrice diagonale degli autovalori di $\Sigma_\varepsilon$.
-A questo punto premoltiplicando per $V^{-1}$ le componenti del modello si ottiene una nuova funzione con variabili trasformate e $\Sigma_{\varepsilon^\circ}$ omoschedastica ed incorrelata:
-\begin{align*}
-  V^{-1}y &= y^\circ \\
-  % V^{-1}X\beta + V^{-1}\varepsilon^\circ = X^\circ\beta^\circ + \varepsilon \\
-  V^{-1}X &= X^\circ \\
-  y^\circ &= X^\circ \beta^\circ + \varepsilon
-\end{align*}
-Lo stimatore $b^\circ$ risulta godere delle proprietà di correttezza e consistenza; inoltre secondo il Teorema di Aitken è lo stimatore più efficiente per il modello \textit{generalizzato} (nonostante abbia una varianza maggiore rispetto al metodo OLS $\sigma^2 (X'^{\circ} X^{\circ})^{-1} > \sigma^2 (X'X)^{-1}$).
-% \begin{enumerate}[noitemsep]
-% \item Correttezza;
-% \item Consistenza;
-% \item Efficienza in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore $GLS$ è caratterizzato dalla minima varianza, che risulta comunque maggiore di quella ottenuta attraverso il modello $OLS$ per i modelli lineari ma, condizionatamente ai modelli lineari generalizzati è il migliore. Infatti $\sigma^2 (X^{\circ '}X^{\circ})^{-1} >\sigma^2 (X'X)^{-1}$, e la differenza tra le due risulta essere una matrice semidefinita \textit{positiva};
-% \item Lo stimatore assegna un peso maggiore alle osservazioni caratterizzate da una minore varianza da considerarsi più ``affidabili''.
-% \end{enumerate}
-Tuttavia la stima GLS necessita di assumere come nota la matrice di varianze e covarianze dei residui $\Sigma_\varepsilon$, o almeno poter calcolare una sua stima, a patto però che sia consistente al limite:
-% Nel caso in cui questa non fosse nota allora è possibile ricorrere alla matrice campionaria $S_\varepsilon$ in modo che rispetti la condizione 
+
+A questo punto moltiplicando per $V^{-1}$ il modello si ottiene un nuovo modello nelle variabili trasformate ottenendo $\Sigma_\varepsilon$ omoschedastica ed incorrelata:
 \begin{equation*}
-  \lim_{n\to \infty} S_\varepsilon = \Sigma_\varepsilon
+V^{-1}y = y^\circ \\
 \end{equation*}
-A questo punto si possono utilizzare gli stimatori FGLS (\textit{Feasible Generalized Least Squares}).
-Spesso la soluzione di applicare i FGLS viene intrapresa anche in caso di semplice eteroschedasticità o semplice autocorrelazione, o sospette tali, poiché vige il principio di precauzione.
+\begin{equation*}
+V^{-1}X\beta + V^{-1}\varepsilon^\circ = X^\circ\beta^\circ + \varepsilon
+\end{equation*}
+\begin{equation*}
+y^\circ = \beta^\circ X^\circ + \varepsilon
+\end{equation*}
+Lo stimatore risulta godere delle tre proprietà:
+\begin{enumerate}[noitemsep]
+\item Correttezza;
+\item Consistenza;
+\item Efficienza in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore $GLS$ è caratterizzato dalla minima varianza, che risulta comunque maggiore di quella ottenuta attraverso il modello $OLS$ per i modelli lineari ma, condizionatamente ai modelli lineari generalizzati è il migliore. Infatti $\sigma^2 (X^{\circ '}X^{\circ})^{-1} >\sigma^2 (X'X)^{-1}$, e la differenza tra le due risulta essere una matrice semidefinita \textit{positiva};
+\item Lo stimatore assegna un peso maggiore alle osservazioni caratterizzate da una minore varianza da considerarsi più ``affidabili''.
+\end{enumerate}
+Tutto questo è possibile assumendo come nota la matrice di varianze e covarianze dei residui $\Sigma_\varepsilon$. Nel caso in cui questa non fosse conosciuta allora è possibile ricorrere alla matrice campionaria $S_\varepsilon$ in modo che rispetti la condizione 
+\[
+\lim_{n\to \infty}{S_\varepsilon = \Sigma_\varepsilon}
+\]
+ A questo punto si possono utilizzare gli stimatori FGLS (Feasible Generalized Least Squares). Spesso la soluzione di applicare i FGLS viene intrapresa anche in caso di semplice eteroschedasticità o semplice autocorrelazione, o sospette tali, poichè vige il principio di precauzione.
 
 \section{Multicollinearità }
+
 Se la matrice $(X^{\prime} X)$ non è invertibile oppure ha determinante prossimo allo 0 le stime non esistono (coefficienti sotto identificati, poiché non si dispone di sufficiente informazione per stimarli) o non sono stabili (coefficienti empiricamente sotto identificati).
 
 Tale problema si verifica quando almeno una delle variabili è correlata linearmente alle altre e quindi si ha multicollinearità. In questo caso la matrice $(X^{\prime} X)$ è detta singolare e le soluzioni non sono uniche. 
