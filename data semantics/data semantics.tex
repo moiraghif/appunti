@@ -8,6 +8,10 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage[margin=1.2in]{geometry}
+\usepackage{enumitem}
+
+\usepackage[autostyle=false]{csquotes}
+\MakeOuterQuote{"} 
 
 \usepackage{xcolor}
 
@@ -18,7 +22,7 @@
   sensitive=true
 }
 
-\counterwithin*{section}{part}
+%\counterwithin*{section}{part}
 \graphicspath{ {./img/} }
 
 % lunedì        10:30-12:30 U14/T024 (U14/1)
@@ -27,6 +31,7 @@
 
 % Semantic Web, tra Tecnologie e Open Data, Di Noia, De Virgilio, Di Sciascio, Donin, Apogeo, 2013
 % Linked Data
+
 
 \title{\textbf{Data Semantics}}
 \author{}
@@ -67,16 +72,21 @@ In particolare è così possibile effettuare compiti particolarmente ardui per u
 
 Esistono inoltre grafi di conoscenza \textit{open}, quali DBpedia, Yago o Wikidata, ma alcune aziende private, oppure anche organizzazioni ed istituzioni, sviluppano il proprio grafo per facilitare l'attività imprenditoriale o di gestione del proprio DB.
 \newline
-\newline
+
 \begin{itshape}
 \textbf{Introduzione al principio matematico: Lo spazio vettoriale}
 \end{itshape}
 
 In un grafo di conoscenza, query e documenti sono interpretabili come vettori (in un sistema tradizionale di information retrieval si agisce attraverso un modello matematico, il \textit{term document matrix} in cui ogni cella ci dice se le parole ricorrono o meno nel documento): è possibile calcolare misure di distanza come la \textit{distanza euclidea} oppure calcolare misure di similarità come la \textit{distanza coseno}.
-\begin{align*}
-  sim(r, u) &= cos(\theta) \\
-            &= \frac{u q}{|u| |q|}
-  \end{align*}
+%\begin{align*}
+%  sim(r, u) &= cos(\theta) \\
+%            &= \frac{u q}{|u| |q|}
+%  \end{align*}
+%why art thou making thinks complicated? ^^ 
+\begin{equation*}
+  sim(r, u) = cos(\theta)= \frac{u q}{|u| |q|}
+\end{equation*}
+
 La rappresentazione vettoriale è \textit{alla base} dell'analisi testuale.
 Mentre in passato si sfruttavano sistemi basati essenzialmente sulla presenza-assenza di una parola e quindi sui valori $0$ e $1$ oggi si usa un sistema di pesi più sofisticato per valutare diversamente l'importanza di una parola all'interno di un documento, quindi con valori \textit{compresi} tra $0$ e $1$.
 Una parola è tanto più importante nel documento quante più ricorrenze ci sono nel documento e meno per quante ricorrenze ha negli altri documenti (in percentuale).
@@ -84,13 +94,13 @@ Una parola è tanto più importante nel documento quante più ricorrenze ci sono
   tf_{i, j} &= \frac{n_{i,j}}{|d_j|} \\
   idf_i &= \log{\frac{|D|}{|\{d : i \in d\}|}} \\
   tfidf_{i, j} &= tf_{i, j} \times idf_i
-\end{align*}
+\end{align*} 
 
 Le entità, le loro proprietà e i collegamenti tra di loro sono iscritti nel grafo di conoscenza. I grafi di conoscenza sono basi di conoscenza che suppportano task di data analytics perchè possiedono un contesto ricco, servizi di collegamento e supportano accesso via web; inoltre rappresentano l'astrazione più importante per la data semantics.
 Esistono linguaggi formali, definiti a inizio '900, che permettono di dichiarare relazioni tra entità ma che non sono leggibili da una macchina.
 Inoltre si possono usare assiomi logici per definire le ricorrenze nel testo.
 \newline
-\newline
+
 \begin{itshape}
 \textbf{Linking Data}
 \end{itshape}
@@ -246,19 +256,21 @@ SPARQL 1.1, inoltre, permette di integrare un sistema di ragionamento automatico
 
 \section{Vocabolari (i.e. Ontologie)}
 In RDF si ha un modello dei dati che prevede di utilizzare URI per rappresentare sia le risorse sia le proprietà.
-L'uso di URI per specificare proprietà e relazioni definiscono separatamente l'insieme di proprietà e tipi usati per descrivere un dominio: si definisce così un vocabolario per descrivere i dati, che permettono una standardizzazione della tipizzazione del dato.
+L'uso di URI per specificare proprietà e relazioni definiscono separatamente l'insieme di proprietà e tipi usati per descrivere un dominio: si definisce così un vocabolario per descrivere i dati, permettendo una standardizzazione della tipizzazione del dato.
 
 Un esempio di ciò è il predicato \verb|rdf:type| che introduce un vocabolario che permette di catalogare risorse definendo i tipi di variabile.
 Si definiscono quindi ontologie comuni sfruttabili da più \textit{data provider} per uniformare la rappresentazione dei dati. A tutti gli effetti un vocabolario è riconducibile allo schema dei RDBMS, dato che lo scopo di un'ontologia, semplificando, è proprio quello di definire lo schema dei dati.
 Per definire un vocabolario si definiscono prima le classi (ovvero i tipi di dato) con proprietà, eventualmente diverse (ovvero usando certe proprietà solo su certe classi).
 
 Uno dei vocabolari più importanti (perché introdotto da tempo) è \textbf{FOAF} (\textit{Friend of a Friend}); si ricordano anche \textbf{DC} (\textit{Dubling Core}), che specifica una serie di predicati per rappresentare i documenti come \textit{titolo, autore} ad esempio, e \textbf{SKOS} (\textit{Simple Knowledge Organizating System}).
-Più vocabolari possono riferirsi allo stesso oggetto e per definizione non è lecito unificare i vocabolari in quanto dovrebbero adattarsi alla specificità del dominio. C'è quindi una certa libertà nel descrivere gli oggetti perchè ognuno può usare vocabolari differenti, portando ad un certo equilibrio nell'entropia del \textit{semantic web}.
+Più vocabolari possono riferirsi allo stesso oggetto e per definizione non è lecito unificare i vocabolari in quanto dovrebbero adattarsi alla specificità del dominio. 
+C'è quindi una certa libertà nel descrivere gli oggetti perchè ognuno può usare vocabolari differenti. % portando ad un certo equilibrio nell'entropia del \textit{semantic web}. 
 
-Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \url{schema.org}, molto utilizzato nel web e in continua evoluzione per dati strutturati. Sul sito di \url{schema.org} sono raccolte tutte le classi disponibili in questo vocabolario e per ogni classe restituisce la specifica delle proprietà per descriverla, oltre a fornirci anche gli \textit{expected type} per i valori di queste proprietà; un concetto, questo, molto importante nella definizione dei vocabolari. 
+Alcuni dei più grandi provider internet hanno però unificato vocabolari col progetto \url{schema.org}, molto utilizzato nel web e in continua evoluzione per dati strutturati. Su tale sito sono raccolte tutte le classi disponibili in questo vocabolario e per ogni classe sono specificate alcune proprietà per descriverla, oltre a fornirci anche gli \textit{expected type} di queste proprietà (questo concetto risulta molto importante nella definizione dei vocabolari). 
 
-Dipendentemente dal task occorre sempre trovare il vocabolario più semplice per coprire tutti i nostri bisogni ed eventualmente, nel caso si rivelasse insufficiente, espanderlo all'occorrenza, piuttosto che crearne uno nuovo dal nulla.
-Si possono unire più vocabolari grazie a collegamenti, a livello di istanza o di schema. Un computer ha bisogno di definire un sistema per attribuire un significato al significante.
+A seconda del task occorre sempre trovare il vocabolario più semplice per coprire tutti i nostri bisogni e, nel caso si rivelasse insufficiente, è consigliabile espanderlo all'occorrenza, piuttosto che crearne uno nuovo dal nulla.
+Si possono unire più vocabolari grazie a collegamenti, a livello di istanza o di schema.
+Un computer ha bisogno di definire un sistema per attribuire un significato al significante.
 
 Si possono definire tre\footnote{Esiste un quarto metodo che sarà approfondito più avanti.} sistemi per definire un'ontologia, ovvero uno schema per definire gli oggetti esistenti. L'uso di sistemi diversi rende complicata l'integrazione di più fonti.
 
@@ -285,7 +297,7 @@ Alcuni esempi di ontologie lessicali sono:
 \end{itemize}
 \subsection{Tassonomia}
 Si definisce tassonomia un grafo di classificazione gerarchica dei concetti, generalmente con struttura ad albero.
-Le tassonomie sono strutture usate in informatica e nello specifico in Data Science, prese in prestito dalla biologia (per classificare le forme viventi), in cui tuttavia sono presenti dibattiti.
+Le tassonomie sono strutture usate in informatica e nello specifico in Data Science e Software Engineering, prese in prestito dalla biologia (per classificare le forme viventi), sulle quali tuttavia sono presenti dibattiti.
 La valenza può anche non essere perfetta ma ha grande importanza in ambito scientifico ed economico.
 Si usa una forma ad albero (per facilitare la condivisione tra varie fonti) i cui nodi sono concetti (ogni nodo può avere un solo padre e uno o più figli).
 
@@ -298,25 +310,26 @@ Nelle ontologie assiomatiche il significato è attribuito attraverso una serie d
 
 Le caratteristiche fondamentali di un ontologia sono che essa sia:
 \begin{itemize}
-\item Concettuale: deve cioè esserre un modello astratto di un certo fenomeno del mondo reale attraverso l'identificazione dei concetti rilevanti che lo caratterizzano;
+\item Concettuale: deve cioè essere un modello astratto di un certo fenomeno del mondo reale attraverso l'identificazione dei concetti rilevanti che lo caratterizzano;
 \item Esplicita: i concetti, le proprietà ed i vincoli che caratterizzano un fenomeno devono essere esplicitamente definiti;
-\item Formale: deve cioè essere machine-readable, escludendo l'uso del linguaggio naturale. Il ragionamento automatico è infatti fondamentale per assicurarsi qualità di un'ontologia a design-time, ovvero verificare che i concetti non siano contraddittori ed estrarre conoscenza implicita, e per sfruttare la semantica con lo scopo di inferire conoscenza in fase di ricerca delle informazioni;
-\item \textit{Condivisa}: è infatti fondamentale che le descrizioni siano condivise tra individui di un gruppo (\url{schema.org} è un esempio di questo principio).
+\item Formale: deve cioè essere \textit{machine-readable}, escludendo l'uso del linguaggio naturale. Il ragionamento automatico è infatti fondamentale per assicurare la qualità di un'ontologia a design-time, ovvero verificare che i concetti non siano contraddittori ed estrarre conoscenza implicita, e per sfruttare la semantica con lo scopo di inferire conoscenza in fase di ricerca delle informazioni;
+\item Condivisa: è infatti fondamentale che le descrizioni siano condivise tra individui di un gruppo (\url{schema.org} è un esempio di questo principio).
 \end{itemize}
 Componenti principali dell'ontologia assiomatica sono:
 \begin{itemize}
 \item \textbf{Concetti o classi}: un concetto può rappresentare un oggetto, una nozione o un'idea. I concetti possono essere astratti o concreti, elementari o composti, reali o fittizi. Un concetto può essere qualsiasi cosa su cui si può dire qualcosa e, perciò, può anche essere la descrizione di un task, una funzione, un'azione, una strategia, un processo di ragionamento;
 \item \textbf{Assiomi}: sono affermazioni, \textit{sempre vere}, sul modello definito dall'ontologia e servono per specificare la semantica dei concetti. Generalmente specificano il modo in cui il vocabolario concettuale (concetti e relazioni) può essere usato.
+\item Istanze: le componenti base ( "ground level" ) che popolano l'ontologia.
 \end{itemize}
 Si definisce quindi un linguaggio $L$ di assiomi logici con una semantica formale che determina il significato in modo univoco.
 
 \section{Inferenza nell'ontologia}
-Definendo un oggetto, si hanno sempre delle implicazioni: è necessario quindi fare inferenza, ovvero procedere con un procedimento deduttivo per rendere esplicita la conoscenza implicita. L'inferenza (un meccanismo fondamentale della semantica) nasce infatti dal ragionamento su delle premesse, con l'obiettivo di estrarre \textit{conoscenza vera} da \textit{premesse vere}, effettuando una generalizzazione con un certo margine di errore.
-Dal principio dell'informatica, l'uso della logica (proposizionale e del primo ordine) permette la deduzione da parte di calcolatori.
+L'esistenza (la definizione) di un oggetto nella realtà porta naturalmente con sè delle implicazioni: è necessario quindi fare inferenza, ovvero mettere in atto un processo deduttivo per rendere esplicita la conoscenza implicita. L'inferenza (un meccanismo fondamentale della semantica) nasce infatti dal ragionamento su delle premesse, con l'obiettivo di estrarre \textit{conoscenza vera} da \textit{premesse vere}, effettuando una generalizzazione con un certo margine di errore.
+Dal punto di vista dell'informatica, l'uso della logica (proposizionale e del primo ordine) permette la deduzione da parte di calcolatori.
 Oltre all'induzione classica, esistono altre pratiche per fare inferenza.
 Le implicazioni ricavate sulla base di ciò che è definito nel dizionario, dal punto di vista inferenziale, sono la semantica reale delle informazioni.
 
-L'inferenza ha come obiettivi il ridurre la complessità del sistema trovando un modo per ottenere informazioni velocemente ed il aumentare la flessibilità dello schema per poter essere aggiornato in tempo reale con le modifiche dell'ambiente.
+L'inferenza ha come obiettivi la riduzione della complessità del sistema trovando un modo per ottenere informazioni velocemente ed l'aumento della flessibilità dello schema (ad esempio per poter essere aggiornato in tempo reale con le modifiche dell'ambiente).
 
 \subsection{Schema dell'ontologia}
 Lo schema prescrive come deve essere organizzato il dato per entrare nel database; tuttavia i dati sono flessibili per loro stessa natura, dunque l'operazione non è immediata.
@@ -324,14 +337,15 @@ Lo schema prescrive come deve essere organizzato il dato per entrare nel databas
 
 Dall'altro lato però, rispetto all'approccio relazionale, lo schema semantico è più flessibile: SQL non permette di modificare la struttura una volta dichiarata, usa cioè un approccio \textit{prescrittivo}.
 Quello del \textit{semantic web} è invece un approccio \textit{deduttivo}: ovvero non ci dice come devono essere strutturati i dati per essere inseriti, ma quali informazioni possiamo estrarne (validazione indiretta); in sintesi tiene conto del fatto che i dati, nel tempo, possano cambiare.
-Lo schema quindi è flessibile e disaccoppia lo schema dai dati (ovvero lo schema può essere modificato successivamente e ciò potrebbe provocare anche incoerenze nel breve periodo).
+Questo approccio è quindi flessibile e disaccoppia lo schema dai dati (ovvero lo schema può essere modificato successivamente e ciò potrebbe provocare anche incoerenze nel breve periodo).
 
-Potendo esserci contraddizione nei dati, si sono costruiti linguaggi come RDF Schapes e SHACL che permettono una validazione dei dati attraverso la definizione di vincoli.
+Potendo esserci contraddizione nei dati, si sono costruiti linguaggi come RDF Schapes e SHACL che permettono una validazione delle informazioni (estratte per mezzo di inferenza) attraverso la definizione di vincoli.
 
-\section{\textit{Reasoning}}
+%\section{\textit{Reasoning}}
+\section{Reasoning}
 I linguaggi RDFS e OWL permettono l'operazione di \textit{reasoning}, ovvero l'inferenza di nuova conoscenza a partire da più ontologie esistenti.
 % il prof sembra che faccia rap col braccio e il microfono
-Oltre ad avere sistemi deduttivi, la logica proposizionale su cui sono basati garantisce che l'algoritmo termini (sia, cioè, \textit{decidibile}: ovvero date le premesse è sempre possibile stabilire se una FBF - Formula Ben Formata - è vera o meno), mentre la logica del primo ordine è solo semi-decidibile.
+Oltre ad avere sistemi deduttivi, la logica proposizionale su cui sono basati garantisce che l'algoritmo termini (sia, cioè, \textit{decidibile}: ovvero date le premesse è sempre possibile stabilire in un tempo finito se una FBF - Formula Ben Formata - è vera o meno), mentre la logica del primo ordine è solo semi-decidibile.
 
 Anche una procedura che termini e confermi la verità di una formula, però, non è utile in pratica: il tempo impiegato potrebbe essere particolarmente lungo e quindi rendere inutile il programma.
 In caso di linguaggi non decidibili, occorre semplificare il linguaggio per trovare un compromesso tra tempo impiegato ed espressività: l'esistenza di più linguaggi è dovuta al fatto che il compromesso può essere trovato in modo diverso.
@@ -339,13 +353,13 @@ In caso di linguaggi non decidibili, occorre semplificare il linguaggio per trov
 Inoltre esistono altri linguaggi \textit{a regole} (rules-based), ovvero linguaggi non puramente logici, ma che vi si ispirano, utilizzabili per fare deduzioni su RDF, che risultano più efficienti per certi tipi di operazioni.
 
 \subsection{RDFS (RDF-Schema)}
-RDFS parte con l'idea di costruire un vero e proprio \textit{reticolo} che parte da un nodo e garantisce ereditarietà (anche multipla) delle classi: è costruito, cioè, un \textit{ordine parziale}.
+L'idea alla base di RDFS è di costruire un vero e proprio \textit{reticolo} che parte da un nodo e garantisce ereditarietà (anche multipla) delle classi: viene definito, cioè, un \textit{ordine parziale}.
 
-RDFS introduce inoltre implicazioni sul tipo di dato: si introduce un approccio secondo cui il mondo è composto da \textit{classi} e \textit{individui}; quindi si hanno insiemi ed elementi degli insiemi.
+RDFS introduce inoltre implicazioni sul tipo di dato: si delinea un approccio secondo cui il mondo è composto da \textit{classi} e \textit{individui}; quindi si hanno insiemi ed elementi degli insiemi.
 Una classe è composta da individui i quali, tramite \textit{proprietà}, entrano in relazione tra di loro; inoltre le relazioni \textit{tra classi} comportano vincoli sulle relazioni tra individui, data l'appartenenza di questi ultimi alle classi.
 Questo approccio è coerente con il modello relazionale, e caratterizza in modo molto forte la semantica dei dati strutturati.
 
-Il concetto di classe vincola l'uso del tipo: una classe non può essere del tipo di un'altra classe. I letterali sono divisi esplicitamente dagli URI.
+Il concetto di classe vincola l'uso del tipo: una classe non può essere del tipo di un'altra classe. I letterali vengono esplicitamente distinti dagli URI.
 
 Con RDFS si possono rappresentare e vincolare relazioni tra classi, organizzandole in vere e proprie gerarchie: si organizzano così tassonomie che garantiscono \textit{nativamente} inferenze semplici (dotate, cioè, di proprietà transitiva).
 Anche le proprietà possono essere organizzate gerarchicamente, con proprietà che derivano da altre (come ad esempio: \verb|figlioDi| è sotto-proprietà di \verb|parenteDi|).
@@ -367,9 +381,9 @@ allora [x subClassOf di z] (proprietà transitiva)
 
 se [x a y]
 e  [a subPropertyOf di b]
-allora [x b y] (i precedenti esempi 
-                valgono anche per le proprietà)
-                
+allora [x b y] 
+(i precedenti esempi valgono anche per le proprietà)
+
 se [a subPropertyOf di b]
 e  [b subPropertyOf di c]
 allora [a subPropertyOf di c]
@@ -396,7 +410,7 @@ Nonostante tutti i pregi, RDFS presenta alcuni svantaggi:
 \item Non permette i disjoint;
 \item Non permette combinazioni booleane delle classi.
 \end{itemize}
-OWL è stato introdotto per colmare queste lacune.
+OWL è stato introdotto per colmare alcune di queste lacune.
 
 
 \subsubsection{SPARQL 1.1}
@@ -407,16 +421,16 @@ I risultati possono essere esportati come \verb|.xml|, \verb|.csv| o \verb|.tsv|
 È un motore inferenziale composto da più sotto-linguaggi, con l'obiettivo di ridurre la confusione lasciata da RDFS; tuttavia ne aumenta la complessità computazionale.
 È un linguaggio \textit{formale} (è un linguaggio logico processabile da elaboratori), \textit{esplicito} (non ambiguo) e \textit{condiviso}; gode perciò di tutte le caratteristiche chiave di un'ontologia assiomatica.
 
-OWL2 è diviso in tre progetti:
+OWL2 comprende tre "sottoinsiemi" disponibili anche singolarmente:
 \begin{itemize}
   \item OWL 2 EL: limitato a classificazioni di base, ma la complessità è polinomiale;
   \item OWL 2 QL: che usa una sintassi simile a SQL;
-  \item OWL 2 RL: è usato per  essere implementato efficientemente in sistemi \textit{rules-based}.
+  \item OWL 2 RL: è usato per  essere implementato efficientemente in sistemi \textit{rule-based}.
 \end{itemize}
 È frequente definire ontologie senza usare tutta la capacità espressiva di OWL, ma utilizzando in equilibrio con RDFS per arricchirlo.
 
 Rispetto a RDFS si introduce l'equivalenza tra classi con \verb|owl:equivalentClass| e tra individui con \verb|owl:sameAs|, tuttavia il loro uso ha delle implicazioni semantiche molto importanti tra le quali:
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item Riflessività;
   \item Transitività;
   \item Simmetria.
@@ -434,7 +448,7 @@ Questa distinzione facilita la costruzione di grafi specificando quali propriet�
 La relazione tra classi e sottoclassi è, matematicamente parlando, un ordinamento parziale: si può costruire un reticolo finito (quindi con limite superiore e inferiore, rispettivamente uguali all'insieme \textit{universo} e all'insieme \textit{vuoto}).
 
 Una relazione in OWL può possedere determinate proprietà:
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item \textbf{Simmetria};
   \item \textbf{Transitività};
   \item \textbf{Transitività inversa};
@@ -539,7 +553,8 @@ Alternativo a SWRL in questo aspetto è DLP, un linguaggio che permette di insta
 RuleML (Rule Markup Language) è una famiglia di linguaggi sviluppati per esprimere sia regole \textit{forward} che \textit{backward} in XML per effettuare deduzioni ed operazioni inferenziali.
 
 
-\section{\textit{Search Engine} semantici}
+%\section{\textit{Search Engine} semantici}
+\section{Search Engine semantici}
 Un \textit{search engine} semantico sfrutta una base di conoscenza per effettuare delle query più mirate.
 Per la gestione di pattern di architettura ci sono tre possibili approcci:
 \begin{itemize}
@@ -549,7 +564,9 @@ Per la gestione di pattern di architettura ci sono tre possibili approcci:
 \end{itemize}
 Anche per il \textit{reasoner} ci sono strategie diverse.
 
-\section{\textit{Semantic Framework}}
+%\section{\textit{Semantic Framework}}
+\section{Semantic Framework}
+
 Si usano dei framework per archiviare i dati in grafi per la facilità della gestione delle relazioni (si interroga per ottenere nuova conoscenza):
 \begin{itemize}
 \item \textbf{RDF4J} è un framework per Java per gestire, archiviare (in diversi modi) e interrogare documenti RDF, organizzando tramite un paradigma ad oggetti;
