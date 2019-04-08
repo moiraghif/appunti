@@ -510,8 +510,27 @@ Dove $\Box^I$ indica l'interpretazione di $\Box$ secondo la funzione $I$. \newli
 %\end{center}
 Gli assiomi usati in queste logiche sono estremamente semplici ma si applicano ugualmente anche a classi più complesse. Avendo infatti complicato le classi (ovvero avendo definito alcune classi come risultati di costruzioni sfruttando classi più basilari), possiamo ottenere assiomi più \textit{semplici}:
 \begin{center}
-\includegraphics[scale=0.6]{IMG4.png}
+  \begin{tabular}{l|c|l}
+    Sintassi OWL & Sintassi DL & Esempio \\ \hline
+    subClassOf & $C_1 \sqsubseteq C_2$ & Human $\sqsubseteq$ Animal $\sqcap$ Biped \\
+    equivalentClass & $C_1 \equiv C_2$ & Man $\equiv$ Human $\sqcap$ Male \\
+    subPropertryOf & $P_1 \sqsubseteq P_2$ & hasDaughter $\sqsubseteq$ hasChild \\
+    equivalentProperty & $P_1 \equiv P_2$ & cost $\equiv$ price \\
+    trnasitiveProperty & $P^+ \sqsubseteq P$ & $\text{ancestor}^+ \sqsubseteq$ ancestor
+  \end{tabular}
+  \begin{itemize}
+  \item Sono sottintese le equivalenze FO/Modali come $DL: C \sqsubseteq D \hspace{10pt} FOL: \forall x C(x) \hspace{10pt} ML: C \rightarrow D$
+  \item Si distinguono due tipi di assiomi delle TBox:
+    \begin{itemize}
+    \item Definizioni: $C \sqsubseteq D$ o $C \equiv D$ (dove $C$ è un concetto)
+      \item GCIs (\textit{General Concept Inclusion axioms}: dove $C$ può essere complesso
+    \end{itemize}
+  \end{itemize}
 \end{center}
+% \begin{center}
+% \includegraphics[scale=0.6]{IMG4.png}
+% \end{center}
+
 Possiamo dunque definire un'\textit{interpretazione} anche per gli assiomi oltre che per le classi.
 L'interpretazione $I$ di un assioma soddisfa l'assioma A ($I \models A$) solamente se sono rispettate alcune regole: con una teoria logica composta da assiomi, se ne possono avere un'infinità di interpretazioni, ma ogni assioma riduce l'insieme di interpretazioni possibili, poichè ogni assioma aggiuntivo rappresenta un'ulteriore vincolo sull'ontolgia.
 
@@ -904,4 +923,18 @@ Popolata l'ontologia con delle istanze arbitrarie, si definiscono le proprietà.
 Si cerca di ridurre al minimo il numero di relazioni (si ha un'intuizione della definizione di contenimento), ma non è possibile tentando di ridurre al minimo le classi.
 Nel menù \verb|Object properties| è possibile definire nuove proprietà e definire dominio e immagine; si attribuiscono poi le proprietà alle istanze andando su \verb|Entities > Individuals| e cliccando su \verb|Object properties assertions| (a destra).
 
+\section{\textit{Ontology matching}}
+Si tenta di fare prima dei \textit{match} a mano tramite un'analisi esplorativa, eliminando entità troppo specifiche e selezionando le corrispondenti.
+Questo approccio è estremamente lento e dispendioso, per cui si tenta di automatizzarlo.
+Si introducono degli operatori di \textit{matching} per indicare il rapporto tra le relazioni: \newline
+\begin{center}
+\begin{tabular}{cl}
+  $a = b$ & $a$ corrisponde a $b$ \\
+  $a \leq b$ & $a$ è più specifico di $b$ \\
+  $a \geq b$ & $a$ è meno specifico di $b$
+\end{tabular}
+\end{center}
+
+Si indica con $\Box^*$ se la relazione non è certa ma solamente ipotizzata.
+In SKOS sono presenti tutte le relazioni, con proprietà di transitività e associatività.
 \end{document}
