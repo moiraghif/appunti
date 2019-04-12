@@ -6,16 +6,13 @@
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathdots}
 \usepackage{xfrac}
 \usepackage{enumitem}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1.2in]{geometry}
 \usepackage{cancel}
-
-
-\usepackage{amsthm}
-\newtheorem*{remark}{Osservazione}
-
 \usepackage{enumitem} %resuming enumerations
 \usepackage{hyperref} %clickable TOC
 
@@ -25,7 +22,6 @@
 \title{Statistical Modeling}
 \author{}
 \date{}
-
 
 
 \begin{document}
@@ -126,7 +122,7 @@ si dimostra inoltre che sotto ipotesi di omoschedasticità di $\varepsilon$, $DW
 Il valore tende a $2$ in caso di mancanza di autocorrelazione, a $0$ in caso di massima autocorrelazione negativa ($DW = 0 \Leftrightarrow \varrho_{-i} = -1$) e $4$ positiva ($DW = 4 \Leftrightarrow \varrho_{-i} = +1$).
 Convenzionalmente i valori critici per definire se l'autocorrelazione è significativa o meno sono $1$ e $3$ (è considerata significativa se $DW < 1 \lor DW > 3$).
 
-Nel caso di autocorrelazione, il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore GLS è il più efficiente, ovvero è quello caratterizzato dalla minor varianza.
+Nel caso di autocorrelazione, il Teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore GLS è il più efficiente, ovvero è quello caratterizzato dalla minor varianza.
 
 \section{Metodo di stima WLS, per soluzioni correlate, GLS }
 \subsection*{Errori eteroschedastici e incorrelati: modello WLS}
@@ -295,7 +291,7 @@ Tuttavia la trasformazione di una variabile, eccettuando casi particolari in cui
 \section{Non normalità}
 
 Quando gli errori $\varepsilon_i$ sono indipendenti e identicamente distribuiti come $N(0,\sigma^{2})$ si possono ricavare la distribuzione degli stimatori, i test statistici, gli intervalli di confidenza e le proprietà ottimali (inoltre stima di massima verosimiglianza $ML$ coincide con stima dei minimi quadrati $OLS$). 
-Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il \textbf{teorema del limite centrale} la distribuzione degli errori tende \textit{asintoticamente} alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
+Nel caso in cui gli errori non siano normali, se tuttavia i campioni sono sufficientemente larghi per il Teorema del limite centrale, la distribuzione degli errori tende \textit{asintoticamente} alla normalità. Se ciò non accade non è possibile applicare test e intervalli di confidenza perchè essi sono basati tutti sull’ipotesi di normalità degli errori.
 %till here @Dario
 
 Conseguenze della violazione della normalità:
@@ -303,289 +299,277 @@ Conseguenze della violazione della normalità:
 \item I parametri $\beta$ possono essere espressi come combinazione lineare degli errori, per cui se gli errori non sono normali anch’essi non sono più normali;
 \item Non è più possibile ricavare test basati sulla normale standardizzata;
 \item Non è più possibile ricavare intervalli di confidenza per i parametri basati sulla normale standardizzata;
-\item Le stime OLS non coincidono con le stime ML ottenute attraverso il metodo della massima verosimiglianza, quindi gli stimatori OLS non sono più gli stimatori corretti a minima varianza \textit{fra tutti gli stimatori corretti} cioè non sono più \textbf{VUE}. Il fatto che le stime ML ed OLS non coincidano più rende meno affidabili le stime attraverso software statistici, che comunemente effettuano la stima attraverso il metodo della massima verosimiglianza. Nonostante gli stimatori OLS non siano più \textbf{VUE}, conservano le proprietà di correttezza, consistenza ed efficienza condizionatamente ai dati. Essendo i dati affetti da un bias sulla distribuzione dei residui $\varepsilon$ anche le stime OLS erediteranno tale bias ma, proprio in virtù di ciò, possono essere ancora considerati gli stimatori a minima varianza \textit{tra tutti gli stimatori lineari} e perciò sono considerati \textbf{BLUE}.
+\item Le stime OLS non coincidono con le stime ML ottenute attraverso il metodo della massima verosimiglianza, quindi non sono i più efficienti tra tutti gli stimatori corretti (non sono più VUE), ma rimangono corretti e consistenti, e i più efficienti tra tutti gli stimatori lineari (sono ancora BLUE).
 \end{enumerate}
+Non coincidendo più le stime OLS ed ML, alcuni software statistici potrebbero fornire stime non attendibili.
+
 Per individuare casi di non normalità è opportuno:
 \begin{itemize}[noitemsep]
 \item Osservare indici descrittivi;
 \item Effettuare rappresentazioni grafiche;
 \item Effettuare test non parametrici (ovvero realizzati con lo scopo di testare la distribuzione del parametro sotto osservazione).
 \end{itemize}
-Tra gli indici descrittivi possiamo, in prima istanza, osservare indicatori quali \textbf{moda}, \textbf{media} e \textbf{mediana}. Banalmente quando queste corrispondono possiamo affermare che la distribuzione dei residui $\varepsilon_i$ è normale. Questi indicatori sono anche visualizzabili in maniera diretta utilizzando un box-plot.
-
-Tra la rappresentazioni grafiche utili rientrano:
+Tra gli indici descrittivi possiamo, in prima istanza, osservare indicatori quali moda, media e mediana dei residui $\varepsilon$: quando questi coincidono, si può supporre che la distribuzione sia normale; questa operazione può essere effettuata rapidamente utilizzando un box-plot.
+Si possono usare comunque altre distribuzioni grafiche, quali:
 \begin{itemize}[noitemsep]
-\item Plot della distribuzione dei residui, per cui se la media risulta maggiore della mediana allora sarà possibile visualizzare una distribuzione caratterizzata da asimmetria \textit{positiva}(a destra), mentre in caso di media inferiore alla mediana sarà possibile visualizzare una distribuzione affetta da asimmetria \textit{negativa}(a sinistra).
-\item Plot della distribuzione cumulata dei residui, che è possibile ispezionare alla ricerca di evidenti irregolarità.
-\item P-P plot che mette a confronto la distribuzione cumulata dei residui (sulle ascisse) con la distribuzione cumulata della normale (sulle ordinate). Il risultato di ciò è che in caso di distribuzione normale allora i punti si distribuiranno in modo ordinato lungo la \textit{bisettrice}. 
-\item Q-Q plot, molto simile al precedente, mette a confronto i quantili della distribuzione normale (sulle ascisse) con i residui $\varepsilon$ (sulle ordinate). Anche in questo caso la distribuzione dei punti lungo la \textit{bisettrice} indica il soddisfacimento dell'assunzione di normalità dei residui. La diversa forma assunta dai punti sulla bisettrice può inoltre indicare una distribuzione leptocurtica, platicurtica oppure asimmetrica (a destra o a sinistra a seconda della forma assunta).
+  \item istogramma della distribuzione dei residui $\varepsilon$;
+% \item Plot della distribuzione dei residui, per cui se la media risulta maggiore della mediana allora sarà possibile visualizzare una distribuzione caratterizzata da asimmetria \textit{positiva}(a destra), mentre in caso di media inferiore alla mediana sarà possibile visualizzare una distribuzione affetta da asimmetria \textit{negativa}(a sinistra).
+  \item plot della distribuzione cumulata dei residui, alla ricerca di evidenti irregolarità;
+  \item qq-plot (quantile vs quantile) della distribuzione dei residui $\varepsilon$ vs la normale standard (i punti si dovrebbero disporre sulla bisettrice);
+  \item pp-plot (probability vs probability) della distribuzione cumulata dei residui $\varepsilon$ vs la cumulata della normale standard. 
+%  \item P-P plot che mette a confronto la distribuzione cumulata dei residui (sulle ascisse) con la distribuzione cumulata della normale (sulle ordinate). Il risultato di ciò è che in caso di distribuzione normale allora i punti si distribuiranno in modo ordinato lungo la \textit{bisettrice}. 
+%  \item Q-Q plot, molto simile al precedente, mette a confronto i quantili della distribuzione normale (sulle ascisse) con i residui $\varepsilon$ (sulle ordinate). Anche in questo caso la distribuzione dei punti lungo la \textit{bisettrice} indica il soddisfacimento dell'assunzione di normalità dei residui. La diversa forma assunta dai punti sulla bisettrice può inoltre indicare una distribuzione leptocurtica, platicurtica oppure asimmetrica (a destra o a sinistra a seconda della forma assunta).
 \end{itemize}
 Esistono, infine, alcuni test non parametrici che non si basano su ipotesi sulla distribuzione ma che sono appunto detti non parametrici poichè testano la distribuzione dei parametri. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
-\begin{enumerate}
-\item \textbf{Test di Shapiro-Wilk}, che assume valori compresi tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità. Il test parte dell'ipotesi $H_0$ : $\varepsilon\sim N(0,\sigma^2)$. In ogni caso, il test $W$ essendo caratterizzato da una forte asimmetria  potrebbe comunque portare ad un rifiuto dell'ipotesi di normalità.
-\begin{equation*}
-W = \sum_{i}\frac{(\beta_i \varepsilon_i)^2}{ 			\varepsilon_i^2}
-\end{equation*}
-\item \textbf{Test di Kolmogorov Smirnov}, in cui $H_0$ : $\varepsilon\sim N(0,\sigma^2)$ e si basa sul calcolo della statistica test $D$ come la somma in valore assoluto della differenza tra le frequenze cumulate della distribuzione empirica da testare e quelle della normale, una volta definite delle classi di eguale ampiezza. $D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata) ed in caso di superamento del valore critico in base al livello di significativà scelto comporterà il rifiuto o l'accettazione di $H_0$;
-\item \textbf{Skewness test} (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando $H_0$ si rigetta la normalità, non rigettandola, invece, si dice solo che la distribuzione è simmetrica, ma non per forza normale.
-\begin{equation*}
-S = \frac{(E[X-\mu]^3)^2}{(E[X-\mu]^2)^3}
-\end{equation*}
-Sinteticamente si tratta di mettere a rapporto il quadrato del momento terzo intorno alla media di $X$ con il cubo della varianza.
-\newline
-Quando l'ipotesi di normalità è rispettata allora $E(S) = 0$;
-\item \textbf{Test della Kurtosis}, simile nella forma a quello per l'asimmetria
-\begin{equation*}
-K = \frac{E(X-\mu)^4}{(E[X-\mu]^2)^2}
-\end{equation*}
-Anche in questo caso sinteticamente si tratta di mettere a rapporto il momento quarto intorno alla media di $X$ con il quadrato della varianza.
-\newline
-Sotto l'ipotesi di normalità $E(K-3) = 0$, poichè la curtosi della normale è appunto uguale a 3.
-\end{enumerate}
-I problemi di non normalità possono essere risolti usando una \textit{trasformazione} della variabile dipendente $Y$. La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
 
-Tra le trasformazioni disponibili vi sono:
+\paragraph{Test di Shapiro-Wilk.} L'ipotesi nulla $H_0 : \varepsilon \sim N(0, \sigma^2)$ è accettata con valori alti dell'indice $W$; tuttavia essendo caratterizzato da una forte asimmetria può portare a un rifiuto dell'ipotesi nulla anche in presenza di distribuzione normale.
+\begin{equation*}
+W = \frac{\sum(a_i \varepsilon_{(i)})^2}{\sum\varepsilon_i^2} \in [0, 1]
+\end{equation*}
 
-\begin{itemize}
-\item \textit{log(Y)} quando $S_\varepsilon$ cresce con $y$ o quando la distribuzione dell'errore ha asimmetria \textit{positiva};
-\item \textit{$Y^2$} quando $S_\varepsilon$ è proporzionale a $E(y)$ o quando la distribuzione dell'errore ha asimmetria \textit{negativa};
-\item \textit{$\sqrt{Y}$} quando $S_\varepsilon$ è proporzionale a $E(y)$;
-\item \textit{$Y^{-1}$} quando $S_\varepsilon$ cresce significativamente al crescere di $y$.
+\paragraph{Test di Kolmogorov Smirnov.} Anche qui $H_0 : \varepsilon \sim N(0, \sigma^2)$, ma si basa sul calcolo della statistica test $D$, calcolato come somma in valore assoluto della differenza tra le frequenze cumulate della distribuzione empirica da testare e quelle della normale, una volta definite delle classi di eguale ampiezza.
+$D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata), ed in caso di superamento del valore critico in base al livello di significatività scelto comporterà il rifiuto o l'accettazione di $H_0$.
+
+\paragraph{Skewness test.} È un test di asimmetria ($H_0 : \varepsilon : P(e < 0) = P(e > 0) \forall e$) ma rigettando $H_0$ si rigetta l'ipotesi di normalità della distribuzione; l'accettazione dell'ipotesi nulla tuttavia non fornisce indicazioni sulla reale distribuzione.
+\begin{equation*}
+  S = \frac{\frac{1}{n}\sum\varepsilon_i^3}{\sigma^3} \in (-\infty, +\infty)
+\end{equation*}
+La distribuzione è considerata simmetrica con $-1 < S < +1$.
+% Sinteticamente si tratta di mettere a rapporto il quadrato del momento terzo intorno alla media di $X$ con il cubo della varianza.
+\paragraph{Kurtosis test.} Simile a quello per l'asimmetria, fornisce solamente informazioni sulla curtosi della distribuzione:
+\begin{equation*}
+  K = \frac{\frac{1}{n}\sum\varepsilon_i^4}{(\frac{1}{n}\sum\varepsilon_i^2)^2} = \frac{\frac{1}{n}\sum\varepsilon_i^4}{\sigma^4} \in (-\infty, +\infty)
+\end{equation*}
+% Anche in questo caso sinteticamente si tratta di mettere a rapporto il momento quarto intorno alla media di $X$ con il quadrato della varianza.
+% \newline
+La distribuzione normale ha curtosi pari a $3$, quindi il test è considerato significativo per valori prossimi. \newline
+
+I problemi di non normalità possono essere risolti usando una trasformata della variabile dipendente $y$.
+La trasformazione può migliorare la relazione lineare tra la variabile dipendente e le variabili indipendenti.
+Le trasformazioni più diffuse sono:
+\begin{itemize}[noitemsep]
+  \item $\log(y)$: quando $\sigma^2_\varepsilon \dep y$ o la distribuzione dell'errore ha asimmetria \textit{positiva};
+  \item $y^2$ quando $\sigma^2_\varepsilon$ è proporzionale a $\overline{y}$ o quando la distribuzione dell'errore ha asimmetria \textit{negativa};
+  \item $\sqrt{Y}$ quando $\sigma^2_\varepsilon$ è proporzionale a $\overline{y}$;
+  \item $Y^{-1}$ quando $\sigma^2_\varepsilon$ cresce significativamente al crescere di $y$.
 \end{itemize}
 
 \section{Outlier}
-I valori cosiddetti \textbf{outlier} possono essere distinti in:
-\begin{enumerate}[noitemsep]
-\item Valori anomali: valori che si discostano in modo rilevante dall’andamento generale.
-\item Punti influenti: punti che influenzano in misura rilevante le stime.
-\end{enumerate}
-Non sempre un valore anomalo è anche influente; per contro esistono punti non anomali che influiscono in misura rilevante sul risultato.
+I valori cosiddetti \textit{outlier} possono essere distinti in valori anomali (che si discostano in modo rilevante dall’andamento generale) e punti influenti (che influenzano in misura rilevante le stime).
+Un'osservazione può appartenere a entrambe le categorie o a una sola in modo del tutto casuale.
 
-Come identificare gli outlier:
-\begin{itemize}[noitemsep]
-\item Rappresentazioni grafiche per mezzo di box-plot e scatter-plot.
-\item Indicatori
-\end{itemize}
-Tra questi \textbf{indicatori} è possibile distinguere tra:
-\begin{enumerate}
-\item \textbf{Leverage values}: Definita $H = X(X'X)^{-1}X'$, nota come matrice di proiezione, gli elementi $h_{ii}$ sulla diagonale, chiamati leverage, possono essere usati per verificare l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
+Gli outliers possono essere identificati visivamente tramite rappresentazioni grafiche (box-plot e scatter-plot) su distribuzioni a due dimensioni; all'aumentare del numero di dimensioni si perde la possibilità di individuarli in modo grafico e sono necessari indici numerici.
+
+\paragraph{\textit{Leverage values}.} Definendo la matrice di proiezione $H = X(X^{\prime}X)^{-1}X^\prime$, si considerano gli elementi $h_{i.i}$ sulla diagonale principale (chiamati \textit{leverage}) che rappresentano l'impatto dell'osservazione $i$-esima sulla capacità del modello di predire tutti i casi.
 
 Si dimostra che il valor medio del leverage è:
-%just per coerenza
 \begin{equation*} 
-\frac{(k-1)}{n}
+\overline{h} = \frac{k - 1}{n}
 \end{equation*}
-con $k = n^\circ$ variabili esplicative ed $n = n^\circ$ osservazioni.
-
-Può dunque essere considerato 
+con $k$ che rappresenta il numero di variabili esplicative e $n$ il numero di osservazioni.
+Un valore \textit{leverage} si considera significativamente alto se supera $2$ o $3$ volte (scelto in modo arbitrario) il suo valore medio:
 \begin{equation*}
-h_{ii} > \frac{2(k-1)}{n}
+h_{i.i} > 2\frac{k - 1}{n}
 \end{equation*}
-come valore soglia per individuare osservazioni potenzialmente anomale con un'eccessiva influenza sulla stima complessiva di tutte le osservazioni 
-\item \textbf{Residui standardizzati}: Assumendo per i residui $\varepsilon$
+
+\paragraph{Residui standardizzati.} I residui $\varepsilon$ possono essere calcolati come:
 \begin{equation*}
 \varepsilon = (I-H)y
 \end{equation*}
-allora è possibile scrivere la varianza esplicitata come
+È dunque possibile scrivere la loro varianza come:
 \begin{equation*}
-Var(\varepsilon_i) = (1-h_{ii})\sigma^2
+Var(\varepsilon_i) = (1 - h_{i.i})\sigma^2
 \end{equation*}
-Come conseguenza di ciò i residui \textit{standardizzati} sono definiti come
+Si possono quindi calcolare i residui \textit{standardizzati} grazie alla formula:
 \begin{equation*}
-\varepsilon_i^* = \frac{\varepsilon_i}{\sigma \sqrt{(1-h_{ii})}}
+\varepsilon_i^* = \frac{\varepsilon_i}{\sigma \sqrt{(1-h_{i.i})}} \sim N(0, 1)
 \end{equation*}
-In un campione distribuito normalmente il $95\%$ dei valori dei residui standradizzati $\varepsilon_i^*$ dovrebbe assumere valori compresi tra $-2$ e $+2$ mentre il $99\%$ dovrebbe assumere valori compresi tra $-2.5$ e $+2.5$; nel caso in cui il valore del residuo standardizzato fosse maggiore di $3$ probabilmente l’osservazione corrispondente sarà un outlier.
-\item \textbf{Residui studentizzati}: è la versione dei residui standardizzati ma relativamente al campione.
-Di conseguenza le forme analitiche saranno le medesime facendo però riferimento non alla varianza $\sigma^2$ ma alla varianza campionaria $s^2$.
+Si usano quindi le tavole della normale per verificare la presenza di \textit{outliers}: il $95\%$ della popolazione assume valori compresi tra $-2 < \varepsilon_i^* < +2$, e così via.
+Si considera \textit{outlier} un valore il cui valore assoluto $|\varepsilon_i^*| > 3$ (dato che la probabilità che si verifichi casualmente è particolarmente bassa).
+
+\paragraph{Residui studentizzati.} Concettualmente identico ai residui standardizzati, però con varianza campionaria $s^2$ (formule e test sono i medesimi).
+La formula è la medesima ma con lo stimatore $s^2$ al posto del valore reale $\sigma^2$.
+
+\paragraph{Residui \textit{jack-knife}.} Usati con campioni di numerosità non elevata, nei residui \textit{jack-knife} la varianza $s^2_i$ è calcolata eliminando momentaneamente la $i$-esima variabile dal modello e stimando nuovamente i parametri.
+
+\paragraph{Covrati.} Misura la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione.
+Eliminando infatti il valore $i$-esimo si provoca una variazione nel determinante che vado a quantificare.
 \begin{equation*}
-\varepsilon_i^* = \frac{\varepsilon_i}{s_{\varepsilon i} \sqrt{(1-h_{ii})}}
+\text{COVRATIO}_i = \frac{det(\Sigma_i)}{det(\Sigma)} = \frac{det(\frac{1}{n - 1}\tilde{X}^{\prime}_i\tilde{X}_i)}{\det(\frac{1}{n}\tilde{X}^{\prime}\tilde{X})}
 \end{equation*}
-Sono utilizzati per verificare la presenza di osservazioni anomale in campioni di non elevata numerosità. La versione dei residui studentizzati cosiddetta \textit{jacknife} è ricavata calcolando il rapporto dei residui sulla deviazione standard dei residui ottenuta eliminando dal dataset l'$i$-esima osservazione, così per ogni residuo studentizzato.
-\item \textbf{Covrati}: indica la variazione nel determinante della matrice delle covarianze delle stime eliminando la $i$-esima osservazione. Eliminando infatti il valore $i$-esimo provoco una variazione nel determinante che vado a quantificare.
+Si considera significativo se supera la soglia:
 \begin{equation*}
-\mathrm{COVRATIO} = \frac{(det(\sigma_i X_i'X_i^{-1}))}{det(\sigma^2(X_i'X_i)^{-1}))}
+1 \pm 3 \  \sqrt{\frac{k + 1}{n}}
 \end{equation*}
-Il valore di soglia è determinato da
+
+\paragraph{Dfitts.} Misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, calcolandolo sul valore stimato della variabile risposta $y$.
 \begin{equation*}
-1\pm 3 \  \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\text{DFITTS}_i = \frac{\hat{y} - \hat{y}_i}{s_i\sqrt{h_{i.i}}}
 \end{equation*}
-\item \textbf{Dfitts}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione e sulla loro varianza, eliminandola dal dataset. Osservazioni con valori elevati di Dfitts sono associati a punti influenti. Con $\hat{y} - \hat{y}_{(i)}$ verifico infatti l'impatto che la rimozione dell'$i$-esima osservazione ha sul valore finale dell'output del modello.
+Si considera significativo se supera il valore soglia:
 \begin{equation*}
-\mathrm{DFITTS} = \frac{\hat{y} - \hat{y}_{(i)}}{S_{e(i)}\sqrt{h_{ii}}}
+\pm 2 \sqrt{\frac{k+1}{n}}
 \end{equation*}
-con valore soglia
+
+\paragraph{Dfbetas.} Misura l’influenza dell'$i$-esima osservazione sulle stime dei coefficienti di regressione (considerandoli singolarmente).
+Valori elevati indicano che l'osservazione influisce molto sulla stima dei parametri.
 \begin{equation*}
-\pm 2 \ \sqrt{\biggl(\frac{(k+1)}{n}\biggr)}
+\text{DFBETAS}_i = \beta - \beta_i = X_i(X^{\prime}X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
 \end{equation*}
-\item \textbf{Dfbetas}: misura l’influenza dell'$i$-esima osservazione sulle stime di ogni coefficiente di regressione separatamente, eliminandola dal dataset. Ancora una volta valori elevati indicano che l'osservazione influisce molto sulla stima dei parametri. Per questo indice infatti un valore è ritenuto anomalo non se cambia il valore previsto ma se cambia anche solo uno dei coefficienti, per sua natura è quindi un indice molto più stringente rispetto al precedente.
+Si considera significativo se è superato il valore $2$ (o $2 \sqrt{n}$) per almeno un parametro $\beta$: risulta essere un indice più stringente dei precedenti.
+
+\paragraph{Distanza di Cook.} Misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione nel loro complesso.
 \begin{equation*}
-\mathrm{DFBETAS} = \beta - \beta_{(i)} = X_{(i)}(X'X)^{-1}\frac{\varepsilon_i}{1-h_{ii}}
+D_i = \frac{\sum(\hat{y}_j - \hat{y}_{j.i})^2}{k s^2} \sim F_{(k, n-k)}
 \end{equation*}
-con valore soglia $2$ oppure $2\sqrt{n}$ in caso si voglia tenere conto della numerosità delle osservazioni.
-\item \textbf{Distanza di Cook}: misura l’influenza dell'$i$-esima osservazione sulla stima dei coefficienti di regressione \textit{nel loro complesso}, in termini di capacità del modello di predire tutti i casi quando la singola osservazione viene rimossa dal dataset, per questo motivo è molto simile al Dfitts. Valori superiori a 1 ( o eventualmente a $4/n$, essendo $n$ il numero di osservazioni) indicano che il punto è influente.
-\begin{equation*}
-D_i = \frac{(\beta - \beta_{(i)})(X'X)(\beta - \beta_{(i)})}{k\sigma_{(i)}^2}
-\end{equation*}
-\end{enumerate}
+Si considerano significative le distanze che superano il valore soglia $1$ o $^4/_n$.
+
 
 \section{Modello lineare classico multivariato}
+Si intende con modello lineare classico \textit{multivariato} l'estensione del modello classico multiplo a $m$ variabili risposta $y_j$; ogni variabile risposta è legata alle stesse variabili esplicative.
 
-Consideriamo l’estensione multivariata (con più di una variabile dipendente) della regressione lineare multipla (con più di un regressore) che modella la relazione fra un insieme di $r$ variabili esplicative $z_1$,..,$z_r$, ed $m$ variabili dipendenti $y_1$,..,$y_m$. Ognuna delle $m$ variabili dipendenti è legata a una particolare regressione multipla. 
-
-Per l'$i$-esimo individuo abbiamo:
+Per l'$i$-esimo individuo si ha:
 \begin{align*}
-y_i = [y_{i1},...,y_{ij},...,y_{im}]\\
-z_i = [1,z_{i1},...,z_{ik},...,z_{ir}]\\
-\varepsilon_i = [\varepsilon_{i1},...,\varepsilon_{ij},...,\varepsilon_{im}]
+y_i &= [y_{i.1} \ldots y_{i.j} \ldots y_{i.m}]\\
+z_i &= [1, z_{i.1} \ldots z_{i.k} \ldots z_{i.r}]\\
+\varepsilon_i &= [\varepsilon_{i.1} \ldots \varepsilon_{i.j} \ldots \varepsilon_{i.m}]
 \end{align*}
-Mentre la matrice dei parametri $\beta$ (m, r+1) per le m equazioni è:
-\[
+
+Mentre la matrice dei parametri $\beta$, di dimensioni $m \times r+1$, diventa:
+\begin{equation*}
 \beta =
 \begin{bmatrix}
-\beta_{10} & \dots & \beta_{1k} & \dots & \beta_{1r} \\
-\vdots& \ddots & \vdots& \vdots & \vdots \\
-\beta_{j0} & \dots & \beta_{jk} & \dots & \beta_{jr} \\
-\vdots& \vdots& \vdots &\ddots & \vdots \\
-\beta_{m0} & \dots & \beta_{mk} & \dots & \beta_{mr} 
+   \beta_{1.0} & \cdots & \beta_{1.k} & \cdots & \beta_{1.r} \\
+   \vdots      & \ddots & \vdots      & \iddots & \vdots \\
+   \beta_{j.0} & \cdots & \beta_{j.k} & \cdots & \beta_{j.r} \\
+   \vdots      & \iddots& \vdots      & \ddots & \vdots \\
+   \beta_{m.0} & \cdots & \beta_{m.k} & \cdots & \beta_{m.r} 
 \end{bmatrix}
-\]
-In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce ad una variabile risposta $y_{1,...,m}$ mentre ogni colonna si riferisce ad una variabile esplicativa $z_{1,...,r}$. 
+\end{equation*}
+In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce ad una variabile risposta $y_{1 \dots m}$ mentre ogni colonna si riferisce ad una variabile esplicativa $z_{1 \dots r}$. 
 \newline
 %Ciò implica che anche riferendosi ad una singola $y_i$, comunque la stima avviene nel complesso, con il prodotto tra la matrice delle variabili esplicative $Z$ e appunto $\beta$ che comprende al suo interno però \textbf{tutti} i parametri stimati riguardanti l'insieme delle variabili dipendenti $y_{1,...,m}$, rendendo di fatto i parametri che stimano le diverse variabili dipendenti $y$ influenzati gli dagli altri. In questo particolare aspetto risiede infatti la differenza tra un modello multivariato su $m$ variabili dipendenti $y$ ed $m$ modelli univariati, ognuno con una specifica $y$ come variabile dipendente.%
-Nel suo complesso perciò il modello multivariato appare come 
-\[ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,m)} + E_{(m,n)} \quad \text{ ovvero}\]
-\[ \forall j \in [1,m] \quad y_j= \beta_{j0} + \beta_{j1}z_1 + \dots + \beta_{jr}z_r + \varepsilon_j \]
-Con il contenuto della matrice delle variabili dipendenti interpretabile come:
-\begin{itemize}[noitemsep]
-\item Ogni colonna rappresenta un individuo con i valori assunti dalle $y_m$ variabili dipendenti per quell'individuo.
-\item Ogni riga rappresenta il valore assunto dalla singola variabile dipendente $y_i$ su tutti gli individui.
-\end{itemize}
-Le ipotesi del modello sono analoghe a quelle formulate per il modello univariato ma, essendo applicate su più variabili dipendenti risultano molto più stringenti:
-\begin{enumerate}[noitemsep]
-\item Parametri lineari;
-\item Valori attesi degli errori casuali sono nulli $E(\varepsilon_{ij}) = 0$;
-\item Gli errori casuali all’interno gli ogni equazione e \textit{anche tra diverse equazioni} sono omoschedastici e incorrelati.  La matrice di varianze e covarianze dei residui assume infatti la forma
-\[ \Sigma_{E} = 
-\begin{bmatrix}
-\sigma^2 I_n & 0 & \dots & \dots & 0 \\
-0 & \sigma^2 I_n & \dots & \dots &  0 \\
-\dots&\dots&\dots&\dots&\dots \\
-\dots&\dots&\dots&\dots&\dots \\
-0 & 0 & \dots & \dots & \sigma^2 I_n
-\end{bmatrix}
-\]
-Con dimensione $(nm,nm)$ poichè ogni matrice $\Sigma_\varepsilon$ relativa ad ogni singola equazione è di dimensione $(n,n)$ ed essendo $m$ il numero di variabili dipendenti $y$ otteniamo appunto una matrice di varianze e covarianze di questa dimensionalità. Mentre gli elementi diagonali di questa matrice rappresentano gli errori relativi alla medesima equazione, le matrici $0$ che non si trovano sulla diagonale, racchiudono le correlazioni fra gli errori relativi ad equazioni diverse. Per le matrici $0$ infatti abbiamo sulla diagonale la correlazione di \textit{ogni individuo} con sè stesso relativamente alle diverse variabili dipendenti $y$ (ovvero le scelte dell'$i$-esimo individuo riguardo una determinata $y_i$ non influenzerebbero le scelte dello stesso individuo riguardo un altra $y_j$, ipotesi molto forte) mentre per gli elementi non diagonali abbiamo la correlazione di ogni individuo \textit{con un altro} (questa ipotesi molto meno forte rispetto alla precedente) ;
-\item Le  variabili esplicative $Z$ sono non stocastiche: per ogni osservazione, il valore delle $Z$ è una costante mentre il corrispondente valore di ogni $y$ è una variabile casuale influenzata dagli errori casuali;
-\item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$), contrariamente la matrice $Z'Z$ non sarebbe invertibile e non sarebbe calcolabile lo stimatore dei minimi quadrati;
-\item La numerosità della popolazione $n$ è maggiore del numero degli $r$ parametri stimati più l'intercetta ($n > r+1$) per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
+Nel suo complesso perciò il modello multivariato appare come:
 \begin{equation*}
-\hat{\beta} = y_j Z'(Z'Z)^{-1}
+  Y_{m \times n} = B_{m \times r + 1} Z_{r+1 \times n} + E_{m \times n}
 \end{equation*}
-Di conseguenza \textbf{nel modello multivariato classico calcolare le soluzioni per ogni variabile dipendente $y$ singolarmente oppure tutte insieme, dal punto di vista descrittivo, è identico}.
+o altrimenti scritto come:
+\begin{equation*}
+  y_j = \beta_j Z + \varepsilon_j \hspace{15pt} \forall j \in [1, m]
+\end{equation*}
+Ogni colonna della matrice $Y$ rappresenta un carattere, mentre ogni riga rappresenta i valori dei caratteri per un singolo individuo.
+
+Le ipotesi del modello sono analoghe a quelle formulate per il modello univariato ma, essendo applicate su più variabili dipendenti, risultano molto più stringenti.
+\begin{itemize}[noitemsep]
+\item I parametri sono lineari.
+\item I valori attesi degli errori casuali sono nulli: $E(\varepsilon_{i.j}) = 0$.
+\item Gli errori casuali all’interno gli ogni equazione e \textit{anche tra diverse equazioni} sono omoschedastici e incorrelati.
+  La matrice di varianze e covarianze dei residui assume infatti la forma:
+\begin{equation*}
+  \Sigma_E =
+  \begin{bmatrix}
+    \sigma^2 I_n   & \cdots  & 0_{n \times n} & \cdots  & 0_{n \times n} \\
+    \vdots         & \ddots  & \vdots         & \iddots & \vdots \\
+    0_{n \times n} & \cdots  & \sigma^2 I_n   & \cdots  & 0_{n \times n} \\
+    \vdots         & \iddots & \vdots         & \ddots  & \vdots \\
+    0_{n \times n} & \cdots  & 0_{n \times n} & \cdots  & \sigma^2 I_n 
+  \end{bmatrix}
+\end{equation*}
+Con dimensione $nm \times nm$ poiché ognuna delle $m$ matrici $\Sigma_{\varepsilon_j}$ relativa ad ogni singola equazione $j$ è di dimensione $n \times n$; mentre le matrici sulla diagonale principale rappresentano gli errori relativi alla medesima equazione, le matrici $0$ racchiudono le correlazioni fra gli errori relativi ad equazioni diverse.
+Infatti le variabili risposta si presume siano indipendenti le une dalle altre sia per lo stesso individuo ($y_{i.j} \indep y_{i.k} \hspace{5pt} \forall j, k : i \ne k$, sulla diagonale della matrice) che per individui diversi; eventuali correlazioni sono da considerarsi \textit{spurie} data la correlazione alle stesse variabili esplicative.
+\item Le  variabili esplicative sono non stocastiche: per ogni osservazione $i$, i valori $z_{i.k}$ sono costanti, mentre il corrispondente valore di ogni $y_{i.j}$ è una variabile casuale influenzata dagli errori casuali.
+\item La matrice $Z$ ha rango pieno $rk(Z) = r + 1$, ciò vuol dire che nessuna variabile esplicativa è una combinazione lineare delle altre; contrariamente la matrice $Z^{\prime}Z$ non sarebbe invertibile e non si potrebbe calcolare lo stimatore dei minimi quadrati.
+\item La numerosità della popolazione $n$ è maggiore del numero dei parametri stimati più l'intercetta $n > r + 1$, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
+\begin{equation*}
+  \hat{\beta} = (Z^{\prime}Z)^{-1} Z^{\prime} y_j
+\end{equation*}
+Di conseguenza, nel modello multivariato classico calcolare le soluzioni per ogni variabile dipendente $y$ singolarmente o in gruppo è identico.
 \item Gli errori $E$ si distribuiscono come una normale multivariata:
 \begin{equation*}
 E \sim N(0,s^2 I_{nm})
 \end{equation*}
-con $0$ vettore delle medie  e $s^2 I_{nm}$ matrice di varianze e covarianze della variabile casuale multivariata $E$. Permane la condizione di ortogonalità poichè i residui sono incorrelati sia con le variabili esplicative $Z$ che con i valori predetti della variabile dipendente $\hat{Y}$.
-\end{enumerate}
-Inoltre poichè
-\begin{equation*}
-Y = \hat{Y} + \hat{E}
-\end{equation*}
-abbiamo che
-\begin{equation*}
-(\Sigma_Y = YY') = (\hat{H}=\hat{B}ZZ'\hat{B}')+(\hat{\Sigma}_E=\hat{E}\hat{E}')
-\end{equation*}
-Con $\Sigma_Y$ matrice di varianze e covariante di $Y$, $\hat{H}$ matrice di varianze e covariante \textit{spiegate} e $\Sigma_E$ matrice di varianze e covariante \textit{residue}.
+Permane la condizione di ortogonalità poiché i residui sono incorrelati sia con le variabili esplicative $Z$ che con i valori predetti della variabile dipendente $\hat{Y}$.
+\end{itemize}
 
-La grossa differenza tra soluzione univariata e multivariata, però, sta nelle \textit{covarianze}, poichè a differenza della soluzione univariata, varianze spiegate e residue non sono scalari ma, appunto, matrici; occorre quindi tenere conto delle correlazioni tra le soluzioni.
+Inoltre poiché $Y = \hat{Y} + \hat{E}$, si ha che:
+\begin{alignat*}{5}
+  Y&Y^{\prime} &&= \hat{B}Z&&Z^{\prime}\hat{B^\prime} &&+  \hat{E}&&\hat{E^\prime} \\
+  &\Sigma_Y &&= &&\hat{H} &&+ &&\hat{\Sigma_E}
+\end{alignat*}
+Con $\Sigma_Y$ matrice di varianze e covariante di $Y$, $\hat{H}$ matrice di varianze e covariante spiegate e $\Sigma_E$ matrice di varianze e covariante residue.
+
+La grossa differenza tra la soluzione univariata e multivariata, però, sta nelle \textit{covarianze}, poiché varianze spiegate e residue non sono scalari ma matrici; occorre quindi tenere conto delle correlazioni tra le soluzioni.
 
 Nel caso multivariato classico infatti le parti diagonali di $ \Sigma_E$ e $\hat{H}$ sono \textit{identiche}.
-\begin{equation*}
-(\Sigma_Y = YY') = (\hat{H}=\hat{B}ZZ'\hat{B}')+\sigma^2 I_{nm}
-\end{equation*}
-L’$R^{2}$ in quest'ottica è una media pesata degli $R^{2}$ delle singole equazioni (sempre tenendo conto della numerosità dei casi che per tipo di rilevazione e missing value può non essere uguale nelle diverse equazioni).
+\begin{alignat*}{5}
+  Y&Y^{\prime} &&= \hat{B}Z&&Z^{\prime}\hat{B^\prime} &&+ \sigma^2I_{nm} \\
+  &\Sigma_Y &&= &&\hat{H} &&+ \sigma^2I_{nm}
+\end{alignat*}
+L’$R^2$ complessivo del modello è una media degli $R^2$ delle singole equazioni pesata per la numerosità dei casi (che può mutare a causa dei valori nulli).
 
-\begin{remark}[]\ \\
-\begin{itemize}
-\item La dipendenza della variabile dipendente $y_j$ da $Z$ \textbf{non influenza} la dipendenza delle altre variabili $y_m$.
-\item Abbiamo le \textbf{stesse} variabili esplicative in tutte le equazioni del sistema.
-\item La correlazione simultanea tra i disturbi è \textbf{costante} nel tempo.
-\end{itemize}
-\end{remark}
+
 \section{Inferenza nella Regressione Multivariata}
-Gli stimatori OLS sono corretti ed efficienti, poichè il teorema di Gauss-Markov vale anche per il caso multivariato. Infatti nell'ambito degli stimatori lineari e corretti del vettore dei parametri, lo stimatore $\beta$ dei minimi quadrati è quello a \textit{varianza minore}. Inoltre per il modello di regressione multivariata con rango pieno con errori $E$ normalmente distribuiti anche le $m$ variabili dipendenti $Y$ sono distribuite secondo una normale multivariata $$Y \sim N(BZ, \Sigma_Y)$$ come anche i parametri stimati $\beta$ $$\beta \sim N(B,\hat{H})$$ con $\hat{H}$ matrice di varianze e covarianze spiegate della popolazione, positiva definita ed efficiente, e che si dimostra essere distribuita in modo indipendente da $E$ matrice degli errori.
-\'{E} però il caso di notare che sia $\Sigma_Y$ che $\hat{H}$ sono entrambi matrici di varianza e covarianza \textit{non diagonali} e, di conseguenza, sono influenzate dalle correlazioni.
+Gli stimatori OLS sono corretti ed efficienti, poiché il Teorema di Gauss-Markov vale anche per il caso multivariato.
+Infatti nell'ambito degli stimatori lineari e corretti del vettore dei parametri, lo stimatore $b$ dei minimi quadrati è quello a \textit{varianza minore}.
+Inoltre, per il modello di regressione multivariata con rango pieno ed errori $E$ normalmente distribuiti anche le $m$ variabili dipendenti $Y$ sono distribuite secondo una normale multivariata come anche i parametri stimati $b$
+\begin{align*}
+  Y &\sim N(BZ, \Sigma_Y) \\
+  b & \sim N(\beta, \hat{H})
+\end{align*}
+con $\hat{H}$ matrice di varianze e covarianze spiegate della popolazione, positiva definita ed efficiente, e che si dimostra essere distribuita in modo indipendente da $E$ matrice degli errori.
+È però il caso di notare che $\Sigma_Y$ e $\hat{H}$ sono entrambe matrici di varianza e covarianza non diagonali e, di conseguenza, sono influenzate dalle correlazioni.
 
-Si definisce invece \textit{varianza generalizzata} di $\hat{H}$ il suo determinante. Decidiamo di utilizzare la varianza generalizzata di $\hat{H}$ perchè ci è impossibile usare sia $t$ che $F$ in quanto misure univariate. A proposito di quanto detto riguardo la non diagonalità di $\hat{H}$, la sua varianza generalizzata è proprio una misura di variabilità che considera la correlazione tra le variabili. 
-
-La varianza generalizzata si dimostra infatti uguale a $0$ in caso di presenza di:
+Si definisce invece \textit{varianza generalizzata} di $\hat{H}$ il suo determinante $det(\hat{H})$; per le distribuzioni multivariate si usa questo indice di variabilità in quanto ha il vantaggio di essere univariato e permette quindi di costruire facilmente test $t$ ed $F$.
+La varianza generalizzata inoltre considera la correlazione delle variabili, e si  dimostra infatti uguale a $0$ in caso di presenza di:
 \begin{itemize}[noitemsep]
 \item variabile costante nelle unità statistiche;
-\item variabile perfettamente correlata con un'altra;
+\item variabile perfettamente correlata con un'altra (rango non pieno);
 \item variabile combinazione lineare di altre variabili.
 \end{itemize}
-Analogamente si definisce \textit{varianza generalizzata} di $\Sigma_E$ il determinante della matrice di varianza-covarianza residua. 
-\newline
-\newline
-Considerando che $\hat{H}$ si distribuisce come una variabile casuale di \textbf{Wishart} con $r$ \textit{gradi di libertà} e $\Sigma_E$ sempre come una Wishart con $(r-n)$ \textit{gradi di libertà} e considerando la Wishart una generalizzazione multivariata di $F$ possiamo quindi definire come \textbf{test del rapporto di verosimiglianza Lambda di Wilks}: \begin{equation*}
-\wedge= \frac{|\Sigma_E|}{|\Sigma_E + \hat{H}|} 
-\end{equation*}
-Che si distribuisce \textit{asintoticamente} come una $\chi^2$ con $mr$ \textit{gradi di libertà}. \\
-Sempre da $\wedge$, inoltre, si ricava una distribuzione asintotica di $F$
+Analogamente si definisce \textit{varianza generalizzata} di $\Sigma_E$ il determinante della matrice di varianza-covarianza residua. \newline
+
+Considerando che $\hat{H}$ si distribuisce come $\hat{H} \sim W_r$ (variabile casuale di Wishart, una generalizzazione multivariata della $\Gamma$) e $\Sigma_E \sim W_{r - n}$ (e inoltre $\hat{H} \indep \Sigma_E$), si può quindi definire il loro rapporto come test di verosimiglianza Lambda di Wilks:
 \begin{equation*}
-F = \frac{(1-\wedge)}{\wedge}
+  \Lambda = \frac{det(\Sigma_E)}{det(\Sigma_E + \hat{H})}
 \end{equation*}
-che nel caso sia rispettata l'ipotesì di normalità dei residui
+Che si distribuisce \textit{asintoticamente} come una $\chi^2_{mr}$.
+Sempre da $\Lambda$, inoltre, si ricava una distribuzione asintotica di $F$
+\begin{equation*}
+F = \frac{1 - \Lambda}{\Lambda}
+\end{equation*}
+che nel caso sia rispettata l'ipotesi di normalità dei residui
 \begin{equation*}
 E \sim N(0,\sigma^2 I_{nm})
 \end{equation*}
-permette di costruire \textit{test multivariati} per i parametri  del modello analoghi a quelli costruiti utilizzando $F$ nel caso univariato.\\
+permette di costruire \textit{test multivariati} per i parametri  del modello analoghi a quelli costruiti utilizzando $F$ nel caso univariato.
 Il test del rapporto di verosimiglianza Lambda di Wilks assume come ipotesi nulla: 
 \begin{equation*}
-H_0:\hat{B} = 0 
+H_0 : \hat{B} = 0 
 \end{equation*} 
-per cui nel caso $H_0$ si rivelasse vera allora $\wedge$ tenderebbe ad 1 per la struttura stessa di $F$. \\
-Se infatti $H_0$ è vera il numeratore e il denominatore di $\wedge$ tenderanno a coincidere poichè $\hat{H}$ tenderà a $0$. Perciò la regione di accettazione di $H_0$ (nullità dei parametri $\hat{B}$) è per valori di $\wedge$ vicini all’$1$. Tenendo quindi conto di queste circostanze e per la struttura di $F$, per $\hat{H}$ che tende a $0$ anche $F$ tenderà a $0$, cadendo così nella \textit{regione di accettazione} del test.
+per cui sotto $H_0$, $\Lambda \to 1$ dato che numeratore e denominatore tenderebbero a coincidere, mentre $F \to 0$.
+Analogamente si possono costruire intervalli di confidenza per i parametri e per i valori predetti delle $Y$.
 
-La regione di rifiuto di $H_0$ è per valori di $\wedge$ più piccoli di $1$, in cui il numeratore è più piccolo del denominatore per la presenza di $\hat{H}$.
-Data la struttura della $F$, al crescere di $\wedge$ decresce il numeratore e cresce il denominatore. In sintesi, quindi, se $H_0$ falsa allora $\hat{H}$ diventa più grande ed $F$ tende ad infinito cadendo nella \textit{regione di rifiuto} del test.
-\newline
-\newline
-Perciò per il test basato su $F$ asintotica:
-regione di accettazione di $H_0$ è per $p-value$ superiori ad $1-\alpha$;
-regione di rifiuto di $H_0$ per $p-value$ inferiori ad $1-\alpha$;
-analogamente si costruiscono intervalli di confidenza per i parametri e per i valori predetti delle $Y$.
-
-Esistono inoltre altri test che possiedono la stessa distribuzione, impalcature ed $H_0$ della Lambda di Wilks:
+Esistono inoltre altri test che possiedono la stessa distribuzione, implicazioni e ipotesi $H_0$ della $\Lambda$ di Wilks:
 \begin{itemize}[noitemsep]
 \item \textbf{Traccia di Lawney-Hotelling}
 \begin{equation*}
-LH = \frac{|\hat{H|}}{|\Sigma_E|}
+LH = \frac{det(\hat{H})}{det(\Sigma_E)}
 \end{equation*}
 \item \textbf{Traccia di Pillai}
 \begin{equation*}
-P = \frac{|\hat{H}|}{|\hat{H}+\Sigma_E|}
+P = \frac{det(\hat{H})}{det(\hat{H} + \Sigma_E)}
 \end{equation*}
 \item \textbf{Massimo autovalore di Roy}
 \begin{equation*}
-\mathrm{Max \ autovalore\  di \ } \frac{|\hat{H}|}{|\hat{H}+\Sigma_E|}
+\max(\lambda_i) \hspace{15pt} \text{con $\lambda$ autovettore di} \frac{\hat{H}}{\hat{H} + \Sigma_E}
 \end{equation*}
 \end{itemize}
-In modo analogo ad $F$, si possono costruire altri test con $H_0$ particolari:
+
+In modo analogo, si possono costruire altri test con altre ipotesi nulle $H_0$:
 \begin{itemize}[noitemsep]
-\item Test sulla non significatività di un gruppo di variabili esplicative rispetto a tutte le variabili dipendenti.
-\begin{equation*}
-H_0 : \hat{B} = 0
-\end{equation*}
-\item Test sull’uguaglianza dei parametri relativi a diversi gruppi di variabili esplicative nelle singole equazioni.
-\begin{equation*}
-H_0 : B_{kj} = B_{gj} 
-\end{equation*}
-\item Test sull'uguaglianza dei parametri relativi alle stesse variabili in coppie di diverse equazioni.
-\begin{equation*}
-H_0 : B_{cA} = B_{vA}
-\end{equation*}
+\item Test sulla non significatività di un gruppo di variabili esplicative rispetto a tutte le variabili dipendenti $H_0 : \hat{B} = 0$);
+\item Test sull’uguaglianza dei parametri relativi a diversi gruppi di variabili esplicative nelle singole equazioni $H_0 : B_{kj} = B_{gj}$;
+\item Test sull'uguaglianza dei parametri relativi alle stesse variabili in coppie di diverse equazioni $H_0 : B_{cA} = B_{vA}$
 \end{itemize}
 
 
