@@ -757,6 +757,55 @@ Quanto detto finora vale soprattutto per il matching e la valutazione di ontolog
 \item Semantic table annotation.
 \end{itemize} 
 %ho aggiunto quest'ultima parte anche se il professore non sembrava particolarmente interessato ad approfondirla, ma magari più avanti la riprenderà.
+
+\subsection{\textit{Instance matching}}
+È un problema relativo alle basi di dati: si tratta di effettuare un \textit{record linkage} (se fatto su due dataset diversi) o \textit{deduplication} (se fatto sullo stesso dataset).
+% Batini, Information Qualtiy, Springer
+Lo stesso oggetto del mondo reale può corrispondere a più oggetti in un database, e servono tecniche per identificare le corrispondenze; inoltre i valori possono essere comunque diversi; tra due database diversi persino l'identificativo può non corrispondere, complicando il processo.
+Ci possono essere persino errori voluti: in piattaforme di compravendita, il criterio più usato per ordinare è per prezzo crescente, quindi venditori di accessori possono dichiarare di vendere il prodotto per salire più in alto nella lista.
+
+La tecnica più diffusa di matching prevede che siano dati per corretti link con valore superiore ad una certa soglia, e incerti se superiori ad un'altra soglia più bassa (tecnica della doppia soglia), che saranno poi confermati dall'utente.
+
+Le tecniche si dividono in varie categorie.
+
+\paragraph{Empirico.}
+È un sistema che calcola la similitudine tra due tuple considerando solo la prossimità ortografica (tenendo anche conto della distanza dei tasti sulla tastiera).
+È usato per migliorare il matching dopo l'uso di altre tecniche.
+
+\paragraph{Probabilistico.}
+Usa delle tecniche probabilistiche per calcolare la distanza tra due tuple.
+
+% manca uno
+% \paragraph{}
+
+\paragraph{Misti.}
+Mischia le ultime due tecniche per effettuare un match migliore.
+\newline
+
+Le dimensioni delle ontologie possono essere problematiche dato che le comparazioni da effettuare sono $n_1 \times n_2$, il prodotto cartesiano tra i due dataset.
+Si usano quindi tecniche di \textit{blocking} per ridurre il numero di comparazioni e quindi lo spazio della ricerca.
+Anche in database a grafo e rappresentazioni RDF si hanno problemi simili con delle differenze minime.
+Ridotto lo spazio di ricerca, si applica un modello che distingua tra \textit{match}, \textit{possible match} o \textit{not match}.
+
+L'approccio probabilistico usa tecniche di \textit{machine learning} per identificare i \textit{match}, generando un algoritmo proprio.
+L'algoritmo sceglie una funzione di distanza (o una combinazione di più funzioni) e valori soglia in modo automatico.
+
+\paragraph{\textit{Preprocessing}.}
+Per prima cosa i dati devono essere normalizzati eliminando variazioni sintattiche o armonizzando gli standard.
+Inoltre si tenta già di filtrare (tramite \textit{parsing} o \textit{machine learning}) i dati in modo da estrarre entità dal dato.
+
+\paragraph{\textit{Blocking}.}
+Per ridurre il numero di comparazioni da effettuare, si cerca una chiave su cui ordinare i record in entrambe le tabelle; si usa quindi una finestra mobile per cercare collegamenti in posizioni simili.
+La complessità passa da $O(n^2)$ a $O(\frac{m^2n}{m})$ (dove $m$ è la dimensione della finestra).
+
+\paragraph{Distanza.}
+La distanza tra due tuple è l'elemento su cui è effettuata l'indagine statistica: minore è la distanza, maggiore è la percentuale di \textit{match}; altro punto cruciale è la scelta della soglia.
+Il valore deve dare delle buone prestazioni ma allo stesso tempo ridurre il numero di richieste fatte all'utente.
+\newline
+
+Il processo è effettuato su un campione di dati di una certa dimensione; per migliorare ulteriormente la qualità dell'algoritmo si possono anche usare tecniche di \textit{active learning} usando solamente osservazioni critiche per costruire il campione.
+
+
 \newpage
 \part{Esercitazioni}
 
