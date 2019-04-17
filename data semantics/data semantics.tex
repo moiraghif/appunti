@@ -801,10 +801,62 @@ La complessità passa da $O(n^2)$ a $O(\frac{m^2n}{m})$ (dove $m$ è la dimensio
 \paragraph{Distanza.}
 La distanza tra due tuple è l'elemento su cui è effettuata l'indagine statistica: minore è la distanza, maggiore è la percentuale di \textit{match}; altro punto cruciale è la scelta della soglia.
 Il valore deve dare delle buone prestazioni ma allo stesso tempo ridurre il numero di richieste fatte all'utente.
+Si considerano analoghe due tuple con distanza minore della soglia.
 \newline
 
 Il processo è effettuato su un campione di dati di una certa dimensione; per migliorare ulteriormente la qualità dell'algoritmo si possono anche usare tecniche di \textit{active learning} usando solamente osservazioni critiche per costruire il campione.
 
+\subsection{\textit{Pay as you go}.}
+Si usa l'approccio \textit{pay as you go} per aggiungere osservazioni da analizzare in modo automatico e quindi migliorare la classificazione in momenti successivi alla pubblicazione dell'algoritmo.
+
+\subsection{Gestione dei conflitti con la textit{data fusion}.}
+La gestione dei conflitti può essere fatta rimuovendo il match, aggiungendo metadati per far sì che la scelta rimanga all'utente o impostare una gerarchia tra le osservazioni (come far prevalere la più recente).
+Questi tuttavia non sono metodi finali di risoluzione ma solamente sistemi di ausilio.
+
+\section{Analisi del testo.}
+Si usano tecniche di analisi testuale per processare i testi:
+
+\paragraph{\textit{Stop words}.}
+Si eliminano le parole più diffuse che non alterano il senso principale della frase (nell'analisi), come congiunzioni o articoli.
+
+\paragraph{Tokenizzazione.}
+Si regolarizzano i nomi eliminando la punteggiatura.
+
+\paragraph{Lemmatizzazione.}
+Si riconduce una parola alla sua radice, in modo da estrapolare più facilmente il significato; tuttavia si rischia di sottovalutare l'ambiguità sintattica.
+
+\paragraph{Streming.}
+TO DO.
+% to do
+\newline
+
+Si usano quindi misure di similarità sulla tupla processata per eseguire i match.
+Questi comparano i singoli elementi della tupla, quindi il risultato delle funzioni sopracitate.
+La similarità deve essere $sim(x, y) = 1$ in caso di corrispondenza perfetta.
+
+Si parla anche di \textit{metrica} di dimensionalità, se sono rispettate certe caratteristiche:
+\begin{align*}
+  dist(x, x) &= 0 \\
+  dist(x, y) &\ge 0 \\
+  dist(x, y) &= dist(y, x) \\
+  dist(x, y) &\le dist(x, z) + dist(y, x)
+\end{align*}
+Le ultime due proprietà tuttavia non sono sempre rispettate da tutti gli indici.
+
+Esiste una funzione di \textit{edit distance} chiamata Levenshtein, dove ogni modifica (inserimento, cancellazione o sostituzione di caratteri) che deve essere apportata per passare da una stringa $v_1$ a una stringa $v_2$: non misura una distanza ma informa quanto il primo valore è accurato rispetto al secondo.
+Tuttavia la sostituzione in caso di errori di battitura è più importante di sostituzioni casuali, e l'inserimento di spazi o altri segni di punteggiatura è eseguito in modo casuale, inoltre la modifica di cifre latine è particolarmente significativo; sono quindi calcolati pesi per le singole sostituzioni, eseguiti in modo automatico.
+
+Altra tecnica di analisi è processare le stringhe in sottostringhe di lunghezza definita ($n$-grammi): si calcola poi una distanza considerando le tuple di $n$-grammi; questo indice è robusto rispetto agli errori di battitura ma poco rispetto alle sostituzioni (al contrario dell'indice di Jaccard).
+
+\section{Grafo di vicinato.}
+Si considera \textit{grafo di vicinato} il sottografo comprendente gli elementi raggiungibili in $h$ passi da un nodo $i$.
+Si comparano i grafi grazie a misure di similarità su grafi, che però sono costose: si preferisce stabilire uno spazio di \textit{features} di dimensione pari al numero di entità nel grafo, così che ogni entità abbia un suo peso.
+Così si può attribuire un peso proporzionale alla distanza o al numero di relazioni che un'entità ha con le altre.
+
+\section{\textit{Matching cross language}.}
+Si possono cercare match tra più lingue diverse rappresentando ogni parola come un vettore di concetti pesato.
+Si cerca quindi un sistema di disambiguazione leggera: si calcola il vettore centroide (ovvero medio) tra le due stringhe per calcolare la distanza.
+Questo sistema funziona bene per testi brevi, ma la complessità degenera con la lunghezza del documento.
 
 \newpage
 \part{Esercitazioni}
