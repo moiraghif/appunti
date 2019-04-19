@@ -806,14 +806,14 @@ Si considerano analoghe due tuple con distanza minore della soglia.
 
 Il processo è effettuato su un campione di dati di una certa dimensione; per migliorare ulteriormente la qualità dell'algoritmo si possono anche usare tecniche di \textit{active learning} usando solamente osservazioni critiche per costruire il campione.
 
-\subsection{\textit{Pay as you go}.}
+\subsection{\textit{Pay as you go}}
 Si usa l'approccio \textit{pay as you go} per aggiungere osservazioni da analizzare in modo automatico e quindi migliorare la classificazione in momenti successivi alla pubblicazione dell'algoritmo.
 
-\subsection{Gestione dei conflitti con la textit{data fusion}.}
+\subsection{Gestione dei conflitti con la textit{data fusion}}
 La gestione dei conflitti può essere fatta rimuovendo il match, aggiungendo metadati per far sì che la scelta rimanga all'utente o impostare una gerarchia tra le osservazioni (come far prevalere la più recente).
 Questi tuttavia non sono metodi finali di risoluzione ma solamente sistemi di ausilio.
 
-\section{Analisi del testo.}
+\section{Analisi del testo}
 Si usano tecniche di analisi testuale per processare i testi:
 
 \paragraph{\textit{Stop words}.}
@@ -848,15 +848,44 @@ Tuttavia la sostituzione in caso di errori di battitura è più importante di so
 
 Altra tecnica di analisi è processare le stringhe in sottostringhe di lunghezza definita ($n$-grammi): si calcola poi una distanza considerando le tuple di $n$-grammi; questo indice è robusto rispetto agli errori di battitura ma poco rispetto alle sostituzioni (al contrario dell'indice di Jaccard).
 
-\section{Grafo di vicinato.}
+\section{Grafo di vicinato}
 Si considera \textit{grafo di vicinato} il sottografo comprendente gli elementi raggiungibili in $h$ passi da un nodo $i$.
 Si comparano i grafi grazie a misure di similarità su grafi, che però sono costose: si preferisce stabilire uno spazio di \textit{features} di dimensione pari al numero di entità nel grafo, così che ogni entità abbia un suo peso.
 Così si può attribuire un peso proporzionale alla distanza o al numero di relazioni che un'entità ha con le altre.
 
-\section{\textit{Matching cross language}.}
+\section{\textit{Matching cross language}}
 Si possono cercare match tra più lingue diverse rappresentando ogni parola come un vettore di concetti pesato.
 Si cerca quindi un sistema di disambiguazione leggera: si calcola il vettore centroide (ovvero medio) tra le due stringhe per calcolare la distanza.
 Questo sistema funziona bene per testi brevi, ma la complessità degenera con la lunghezza del documento.
+
+\section{Estrazione di informazioni in formato tabellare}
+Il web è pieno di dati in formato tabellare difficili da elaborare in modo adeguato.
+% se questa mi tira ancora la coda addosso gliela taglio
+Le problematiche riguardano la struttura delle tabelle (che possono anche non seguire il modello relazionale) o il significato semantico dell'\textit{header}.
+Spesso le tabelle processate sono il risultato di \textit{denormalizzazione} dei dati, ovvero in cui sono esplicitate relazioni interne ai dati.
+Si possono usare tecniche automatiche o \textit{tools} che processano le tabelle in modo automatico.
+
+Generalmente la prima riga (l'\textit{header}) contiene indicazioni sulla struttura della tabella; inoltre si può ipotizzare una colonna implicita con informazioni aggiuntive ricavabili solamente dal contesto.
+Una tabella è processata costruendo un grafo \textit{a stella} il cui nodo principale è il \textit{soggetto} e i restanti sono le relazioni; il soggetto si intende a livello semantico, e risulta essere un oggetto in RDF (deve però essere un URI); le altre colonne sono annotate come proprietà.
+Si possono definire classi proprie, o usare una o più ontologie per integrare i dati, determinando vari livelli di approfondimento.
+Così facendo si mappa lo schema per ottenere un grafo di conoscenza.
+
+Esistono modelli più complicati, per adattare i dati allo schema (eseguendo anche operazioni di \textit{preprocessing}), come OpenRefine, sviluppato da Google e poi reso \textit{open source}.
+Altri strumenti ipotizzano strutture dai dati tabellari grazie ad algoritmi di \textit{machine learning} per automatizzare il processo.
+ASIA (\textit{Assisted Semantic Interpretation and Annotation of tabular data}) aiuta a trasformare dati tabellari in grafi RDF e permette inoltre di aggiungere annotazioni a livello di schema o di singola istanza.
+Applica inoltre tecniche di \textit{record linkage} per integrare dati tabellari in un grafo RDF già esistente.
+
+\section{Estrazione di informazioni in formato non strutturato}
+Per \textit{formato non strutturato} si intendono testi in linguaggio naturale e documenti audiovisivi (audio, video o immagini).
+
+Per i testi in linguaggio naturale, esistono plugin\footnote{Clear Forest Gnosis Mozilla Plugin.} (NER, \textit{Named Entity Recognition}) che estraggono informazioni in automatico da pagine web, identificando la loro natura.
+Inoltre si possono costruire modelli di estrazione di relazioni, che collegano oggetti appartenenti allo stesso documento identificando il rapporto che le lega.
+Generalmente queste due tecniche sono usate assieme per analizzare un testo.
+
+Esistono tecniche di \textit{natural language processing} che effettuano \textit{deep parsing}, ovvero l'analisi grammaticale del testo e la successiva analisi logica, usano \textit{machine learning} o sfruttano vocabolari interni.
+Gli algoritmi statistici (\textit{deep learning}) hanno suscitato forti dibattiti in ambito accademico dato che non sono interpretabili in nessun modo dagli esperti di dominio.
+Spesso però manca la quantità sufficiente di dati per poter eseguire tecniche statistiche.
+
 
 \newpage
 \part{Esercitazioni}
