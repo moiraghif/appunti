@@ -1,7 +1,5 @@
-\documentclass[a4page, 11pt]{article} %this is behaving like \documentclass[11pt]{article}
+\documentclass[a4page, 11pt]{article} %this is behaving like 
 % sì, a4page è sottinteso
-
-%\documentclass[a4paper, 11pt]{article} %maybe you want this?
 
 \usepackage[italian]{babel}
 \usepackage{amsmath}
@@ -35,42 +33,26 @@ Questo si verifica dal momento che il valore atteso del singolo errore è nulla 
 Quando ciò non avviene, si è in presenza di errori \textit{eteroschedastici}: $Var(\varepsilon_i) = \sigma_i^2$; in tal caso il vettore $b$ dei parametri perde in efficienza\footnote{Si veda dimostrazione in appendice.} (non è più BLUE (\textit{Best Linear Unbiased Estimator}).
 In forma matriciale, questo significa che si passa da una matrice diagonale con un valore costante a un'altra matrice diagonale i cui valori possono differire.
 
-% Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori siano omoschedastici. 
-% In virtù del fatto che ogni errore $\varepsilon_i$ è a media nulla ($E(\varepsilon_i) = 0$) vale la relazione $E(\varepsilon_i^2) = Var(\varepsilon_i) = \sigma^2$, e quindi gli errori sono detti \textit{omoschedastici} quando la loro varianza è costante al variare del valore dei regressori.
-% Se ciò non accade gli errori si dicono \textit{eteroschedastici} $Var(\varepsilon_i) = \sigma_i^2$; questo incide sulle proprietà degli stimatori OLS: in particolare continuano a valere correttezza e consistenza ma viene meno l’efficienza\footnote{Vedi Appendice per la dimostrazione}.
-% (lo stimatore non è più \textbf{BLUE}, \textbf{B}est \textbf{L}inear \textbf{U}nbiased \textbf{E}stimator).
 Inoltre, la stima campionaria $s^2$ di $\sigma^2$ tende a sottostimare il vero valore della distribuzione, dato che non si è più in presenza di una sola variabile casuale ma di molteplici.
 Ne consegue che il test $T$ di Student ritorna valori erroneamente elevati, e quindi gli intervalli di confidenza risultano essere più stretti del reale, e i test di significatività sui parametri $b_j$ risultano più permissivi del dovuto.
 Discorso analogo vale per i test basati sulla distribuzione $F$ di Snedcor.
 
-% Inoltre le stime campionarie tendono a sottostimare il vero valore della varianza e non esiste più un’unica varianza, ma ce ne sono molteplici. 
-% Come conseguenza la statistica T di Student ha valori erroneamente elevati ed anche i relativi intervalli di confidenza risulteranno più stretti mentre la regione di rifiuto del test T risulterà erroneamente più ampia; verranno quindi ritenuti significativi i parametri anche quando in realtà non lo sono.
-% Per individuare questa caratteristica, che ci porta ad un’inaffidabilità delle stime, possiamo ricorrere a diversi metodi (grafici o analitici).
-%Per quanto riguarda i metodi grafici:
 Si può verificare se una distribuzione è o eteroschedastica (o omoschedastica) tramite diversi metodi grafici:
 \begin{itemize}[noitemsep]
   \item scatter plot della variabile risposta vs esplicative $y \sim x_j$ (da effettuare per ogni $x_j$);
-    % della variabile target $(y)$ contro le variabili esplicative $x_j$. Ovviamente bisognerà effettuare uno scatterplot per ogni variabile $x_j$;
   \item scatter plot dei valori stimati vs residui $\hat{y} \sim \varepsilon$;
-%  \item Scatter plot dei valori predetti ($\hat{y}$) contro i residui stimati ($y - \hat{y} = \varepsilon$);
   \item scatter plot dei residui al quadrato vs i valori predetti $\varepsilon^2 \sim \hat{y}$;
   \item scatter plot dei valori osservati vs predetti $y \sim \hat{y}$;
   \item scatter plot dei residui vs variabili esplicative $\varepsilon \sim x_j$ (da effettuare per ogni $x_j$).
 \end{itemize}
 Esistono inoltre una serie di test statistici che offrono risultati numerici e meno interpretativi per verificare l'eteroschedasticità degli errori.
-% Possiamo ricorrere anche ad alcuni test (metodo analitico):
 
-%\begin{itemize}
 \paragraph{Testi di White. } Si basa sull’assunzione di omoschedasticità dei residui ($H_0: Var(\varepsilon_i) = \sigma^2$ contro $H_1: Var(\varepsilon_i) \neq \sigma^2$). % non è = \sigma_i perché è un'affermazione più forte: White l'ipotesi alternativa dice solamente che non è vera la nulla - @momo
 %; viene perciò definita l’ipotesi nulla come $H_0:$ Var$(\varepsilon_i) = (\sigma^2)$ e l’ipotesi alternativa come $H_1:$ Var$(\varepsilon_i ) = ( \sigma^2_i )$.
 Il test sfrutta la regressione $OLS$ del quadrato dei residui con le variabili esplicative, il loro quadrato e tutte le possibili interazioni $\varepsilon^2 \sim x_j, x_ix_j \hspace{5pt} \forall i, j < k$. %, i regressori al quadrato $x_j^2$ e le loro interazioni.
 Attraverso l'indice di determinazione $R^2$ di tale regressione, ricavato dal rapporto tra la variabilità spiegata dalla regressione e la variabilità totale $R^2 = \frac{SSE}{TSS} = \frac{\sum(\hat{y}_i - y_i)^2}{\sum(y_i - \overline{y})^2}$, si calcola la statistica $LM = n R^2 \sim \chi^2_{k-1}$.
-L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^2$ (ovvero con p-value basso); %infatti se $R^{2}$ è oltre ad un certo valore significa che le variabili esplicative sono ancora significative nello spiegare i residui al quadrato e quindi che gli errori sono omoschedastici.
-%@Dario: E` giusta l'ultima frase? Forse sono io che non capisco, oppure è di dubbia interpretazione: la parte "sono ancora significative nello spiegare..." vuole dire che effettivamente spiegano o il contrario?
-%io avrei messo:
+L’ipotesi nulla verrà rigettata se $LM$ risulterà maggiore del valore soglia della distribuzione $\chi^2$ (ovvero con p-value basso);
 infatti se $R^2$ è maggiore di un certo valore soglia significa che le variabili esplicative sono realmente significative nello spiegare la variabilità dei residui.
-% , ovvero che i residui al quadrato dipendono dai valori delle variabili esplicative $x_j$, come accade tipicamente in presenza di eteroschedasticità.
-% secondo me è più chiara, ma la seconda parte mi sembra ridondante
 \begin{equation*}
   LM = nR^2 = n\frac{\sum(\hat{y}_i - y_i)^2}{\sum(y_i - \overline{y})^2} \sim \chi^2_{k-1}
 \end{equation*}
@@ -79,11 +61,8 @@ infatti se $R^2$ è maggiore di un certo valore soglia significa che le variabil
 Il test si basa sulla regressione di $\sfrac{\varepsilon^2_i}{s^2}$ (dove $s^2 = \frac{1}{n}\sum{\varepsilon_i^2}$) con le variabili esplicative.
 Della regressione si calcola poi il coefficiente $R^2$ analogamente al test di White.
 Essendo  $\varepsilon$ distribuita (sotto $H_0$) come una normale $N(0, \sigma^2)$, $\varepsilon^2 \sim \chi^2_{k-1}$; inoltre essendo già $s^2 \sim \chi^2_{n-k-1}$ (perché anch'esso somma di normali al quadrato) e $\varepsilon \indep X$ (sempre sotto $H_0$), $\sfrac{\varepsilon^2}{s^2}$ si distribuisce come un rapporto di $\chi^2$ indipendenti tra di loro, ovvero come una $F_{k-1, n-k-1}$ di Snedecor.
-% La somma dei quadrati dei regressori e quella degli scarti si distribuiscono come $\chi^{2}$ indipendenti. Essendo $\varepsilon$ distribuita normalmente, la sua versione al quadrato $\varepsilon_i^2$ si distribuisce come una $\chi^2$; $s^2$ allo stesso modo in quanto somma di normali al quadrato assume una distribuzione $\chi^2$. A questo punto il loro rapporto si distribuisce quindi come una $F$ di Snedecor, in quanto rappporto tra due $\chi^2$.
 Si procede quindi effettuando un semplice test $F$ per l'accettazione di $H_0$.
-%L’ipotesi nulla verrà rigettata quando la statistica $F$ è superiore ad un valore soglia.
 Per risolvere tale problema si può procedere attraverso il metodo di stima $WLS$ (Weighted Least Squares).
-% \end{itemize}
 \begin{equation*}
   BP = nR^2 \sim F_{k-1, n-k-1}
 \end{equation*}
@@ -94,12 +73,10 @@ Nel modello lineare classico si ipotizza infatti che:
 \begin{equation*}
   Cov(\varepsilon_i, \varepsilon_j) = E(\varepsilon_i \varepsilon_j) = 0 \hspace{15pt} i \neq j
 \end{equation*}
-% Affinché il nostro modello lineare classico ottenga delle stime efficienti abbiamo bisogno di verificare che gli errori non siano correlati tra di loro.
 Tuttavia accade spesso, soprattutto in serie storiche o territoriali, che esista una correlazione tra errori in momenti successivi o territori vicini.
-Gli errori correlati si possono scindere in due componenti: %$\varrho \cdot
+Gli errori correlati si possono scindere in due componenti:
 $\varepsilon_{i.-1}^\#$ (errore ritardato di un tempo) e $\eta_i$ (errori omoschedastici IID, ovvero indipendentemente ed identicamente distribuiti in modo normale).
 Una parte dell'errore è legata al suo valore ritardato, mentre l'altra è indipendente.
-% Si nota infatti che l’errore è legato al suo valore ritardato.
 Possiamo classificare l’autocorrelazione in base al suo \textit{grado}: si dice autocorrelazione di primo grado quando gli errori sono correlati con il loro valore ritardato di un tempo; allo stesso modo si dice autocorrelazione di $i$-esimo grado quando gli errori sono correlati con il loro valore ritardato di $i$ gradi ($\varrho_{-i}$).
 Gli errori autocorrelati non incidono sulle proprietà di linearità, correttezza e consistenza degli stimatori OLS (analogamente agli errori eteroschedastici), ma solo sull’efficienza (non sono più BLUE).
 Come nel caso dell’eteroschedasticità, la stima della varianza dei parametri e relative inferenze non sono più corrette e affidabili (la statistica $T$ di Student ottiene valori erroneamente più elevati; gli intervalli di confidenza tendono ad essere più stretti e l'area di rifiuto del test anomalamente più ampia).
@@ -130,8 +107,6 @@ Per errori eteroschedastici si intende quando la varianza dell’errore non è c
 Per tale motivo gli stimatori OLS non possono essere usati (in quanto non più efficienti); al contrario si possono utilizzare gli stimatori Weighted Least Squares (WLS) che permettono di stimare la varianza delle singole componenti erratiche $\varepsilon_i$ condizionatamente al vettore dei dati $x_i$.
 Si esegue quindi una trasformazione della variabile risposta $y \rightarrow y^*$ e della matrice del disegno $X \rightarrow X^*$ per riportare la varianza degli errori ad una costante: si divide infatti ogni variabile per la radice di $h(i)$ (la varianza di $\varepsilon^*$, l'errore eteroschedastico).
 La componente erratica dunque ha valore costante e il modello assume la forma:
-% Si tratta di definire le seguenti nuove variabili che danno luogo al modello trasformato dividendo ogni variabile contenuta nel modello di partenza per la radice di $h(i)$ (corrispondente alla varianza di $\varepsilon$*, ovvero l'errore eteroschedastico). 
-% Infatti si tratta di stimare i parametri del modello trasformato con il metodo OLS regredendo $y^*$ su $X^*b$ riportando così la varianza degli errori ad una costante ottenendo la forma: 
 \begin{equation*}
 y^* = X^*\beta + \varepsilon
 \end{equation*}
@@ -148,32 +123,19 @@ Vale infatti:
 \end{equation*}
 dove $\delta$ è la componente erratica che segue le ipotesi classiche.
 Si moltiplica dunque ogni elemento dell'equazione ritardata per $\varrho$.
-% Una volta ottenuta la stima di $\varrho$ si procede a moltiplicare ogni elemento dell'equazione ritardata per $\varrho$ stesso: 
 \begin{equation*}
   \varrho y_{t-i} = \varrho X_{t-i} \beta + \varrho \varepsilon_{t-i}
-  % \varrho y_{t-1} = \varrho\beta_0 + \varrho\beta_1 x_{t-1} +\varrho\varepsilon_{t-1}^\#
 \end{equation*}
 Infine si procede a sottrarre l'equazione ritardata moltiplicata per $\varrho$ all'equazione nella forma normale $y_t - \varrho y_{t-i}$ ottenendo un modello OLS per i parametri trasformati: 
 \begin{alignat*}{6}
   &y_t^\# &&= &&X_t^\# &&\beta + &&\varepsilon_t^\# \\
   (y_t &- \varrho y_{t-i}) &&= (X_t &&- \varrho X_{t-i}) &&\beta + (\varepsilon_t &&- \varrho \varepsilon_{t-i})
-  % y_t^\# &= \beta_0^\# + \beta_1 x_t^\# + w_t \\
 \end{alignat*} 
-% dove
-% \begin{equation*}
-% \begin{matrix}
-% y_t^\# = y_t - \rho y_{t-1}\\
-% \beta_0^\# = \beta_0(1 -\rho)\\
-% x_t^\# = x_t - \rho x_{t-1}\\
-% w_t =\varepsilon_t^\# - \rho \varepsilon_{t-1}^\# 
-% \end{matrix}
-% \end{equation*}
 Il modello rispetta tutte le proprietà classiche di correttezza, consistenza ed efficienza. 
 
 In alternativa è possibile utilizzare un modello \textit{autoregressivo} che inserisce nell’equazione iniziale un errore ritardato che tenga conto dell’autocorrelazione di $i$-esimo ordine:
 \begin{equation*}
   y = X \beta + AR_i + \varepsilon
-  % y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i. 
 \end{equation*}
 con 
 \begin{align*}
@@ -196,19 +158,11 @@ dove $A$ è la \textit{matrice degli autovettori} e $L$ è la matrice diagonale 
 A questo punto premoltiplicando per $V^{-1}$ le componenti del modello si ottiene una nuova funzione con variabili trasformate e $\Sigma_{\varepsilon^\circ}$ omoschedastica ed incorrelata:
 \begin{align*}
   V^{-1}y &= y^\circ \\
-  % V^{-1}X\beta + V^{-1}\varepsilon^\circ = X^\circ\beta^\circ + \varepsilon \\
   V^{-1}X &= X^\circ \\
   y^\circ &= X^\circ \beta^\circ + \varepsilon
 \end{align*}
 Lo stimatore $b^\circ$ risulta godere delle proprietà di correttezza e consistenza; inoltre secondo il Teorema di Aitken è lo stimatore più efficiente per il modello \textit{generalizzato} (nonostante abbia una varianza maggiore rispetto al metodo OLS $\sigma^2 (X^{\circ \prime} X^\circ)^{-1} > \sigma^2 (X^\prime X)^{-1}$).
-% \begin{enumerate}[noitemsep]
-% \item Correttezza;
-% \item Consistenza;
-% \item Efficienza in quanto il teorema di Aitken stabilisce che nella classe degli stimatori lineari per il modello di regressione \textit{generalizzato} lo stimatore $GLS$ è caratterizzato dalla minima varianza, che risulta comunque maggiore di quella ottenuta attraverso il modello $OLS$ per i modelli lineari ma, condizionatamente ai modelli lineari generalizzati è il migliore. Infatti $\sigma^2 (X^{\circ '}X^{\circ})^{-1} >\sigma^2 (X'X)^{-1}$, e la differenza tra le due risulta essere una matrice semidefinita \textit{positiva};
-% \item Lo stimatore assegna un peso maggiore alle osservazioni caratterizzate da una minore varianza da considerarsi più ``affidabili''.
-% \end{enumerate}
 Tuttavia la stima GLS necessita di assumere come nota la matrice di varianze e covarianze dei residui $\Sigma_\varepsilon$, o almeno poter calcolare una sua stima, a patto però che sia consistente al limite:
-% Nel caso in cui questa non fosse nota allora è possibile ricorrere alla matrice campionaria $S_\varepsilon$ in modo che rispetti la condizione 
 \begin{equation*}
   \lim_{n\to \infty} S_\varepsilon = \Sigma_\varepsilon
 \end{equation*}
@@ -223,8 +177,8 @@ In questo caso la matrice $(X^\prime X)$ è detta singolare e l'inversa $(X^\pri
 
 Esistono due tipi di collinearità:
 \begin{itemize}[noitemsep]
-  \item \textbf{perfetta}: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre: questa viola le proprietà del modello lineare classico; solitamente ciò si verifica per un errore nella definizione dei regressori o per la presenza di due variabili direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio});
-  \item \textbf{imperfetta}: sussiste in caso di forte correlazione tra i regressori e dunque il determinante della matrice dei coefficienti tende a $0$; ciò non rende impossibilità la stima dei coefficienti ma da origine a stime fortemente distorte e caratterizzate da un'alta varianza.
+  \item perfetta: sussiste quando almeno una variabile esplicativa è una combinazione lineare perfetta delle altre: questa viola le proprietà del modello lineare classico; solitamente ciò si verifica per un errore nella definizione dei regressori o per la presenza di due variabili direttamente dipendenti una dall'altra (ad esempio \textit{titolo di studio} e \textit{anni di studio});
+  \item imperfetta: sussiste in caso di forte correlazione tra i regressori e dunque il determinante della matrice dei coefficienti tende a $0$; ciò non rende impossibilità la stima dei coefficienti ma da origine a stime fortemente distorte e caratterizzate da un'alta varianza.
 \end{itemize}
 
 L'errore di stima provoca un aumento della varianza dello stimatore dei coefficienti $b$, da cui deriva una sovrastima delle dimensioni degli intervalli di confidenza (che risultano più ampi del dovuto) e una maggiore zona di accettazione nei test statistici di quanto sarebbe corretto.
@@ -247,13 +201,13 @@ Quando risulta essere maggiore di $30$ si considera significativa la presenza di
 Tale convinzione viene rafforzata se un autovalore con \textit{condition index} maggiore di $30$ contribuisce a spiegare elevate quote di varianza di due o più variabili.
 
 \section{Linearità}
-La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo: $y = f (x)$, con $f$ lineare.
+La relazione ipotizzata tra la nostra variabile dipendente $y$ e le singole variabili esplicative $x$ è di tipo: $y = f(x)$, con $f$ lineare.
 
 L'approssimazione lineare non è sempre la migliore.
 Per validare la presenza di ciascun regressore all’interno dei diversi modelli dobbiamo quindi verificare la linearità di tale relazione.
 Dunque, la variabile risposta deve essere una combinazione lineare di variabili esplicative e di parametri lineari.
 
-Se una relazione tra $y$ e $X$ non è lineare, allora l’effetto su $y$ ($\Delta y$)  di una variazione in $X$ ($\Delta X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
+Se una relazione tra $y$ e $X$ non è lineare, allora l’effetto su $y$ ($\partial y$)  di una variazione in $X$ ($\partial X$) dipende puntualmente dal valore di $X$ poiché l’effetto marginale di $X$ non è costante. 
 
 In questo caso, una regressione lineare è mal specificata: la forma funzionale è errata e lo stimatore dell’effetto su $y$ di $X$ non è corretto nemmeno sulla media. 
 Può capitare ad esempio che l'indice $R^{2}$ sia elevato ma che non ci sia linearità perchè c'è sia una componente lineare sia una non lineare. 
@@ -263,9 +217,6 @@ Per verificare la presenza (o meno) di linearità è possibile ricorrere ad alcu
 \item scatter plot della variabile risposta vs esplicative $y \sim x_j$ (da effettuare per ogni $x_j$);
 \item scatter plot dei residui vs la variabile risposta $\varepsilon \sim y$ (non deve presentare andamenti sistematici);
   \item scatter plot dei residui vs valori previsti $\varepsilon \sim \hat{y}$ (l'andamento deve essere regolare).
-% \item Scatter plot della  variabile risposta ($y_i$) in funzione di ogni esplicativa ($x_j$) presente nel modello;
-% \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori osservati ($y_i$) della variabile dipendente; non deve essere un andamento sistematico;
-% \item Scatter plot dei residui ($\varepsilon_i$) in funzione dei valori previsti ($\hat{y_i}$); deve esserci un andamento regolare.
 \end{itemize}
   
 È da notare che la non linearità potrebbe dipendere anche solo da una o da alcune variabili esplicative e non necessariamente da tutte.
@@ -277,14 +228,12 @@ Nel caso invece di componenti intrinsecamente non lineari si procede allora alla
 Volendo utilizzare funzioni di variabili indipendenti non lineari in X possiamo riformulare una vasta famiglia di funzioni di regressione lineare come regressioni multiple.
 
 Tra le funzioni non lineari le più utilizzate sono le polinomiali e le trasformazioni logaritmiche. 
-%Queste ultime in particolare possono essere applicate alle variabili esplicative, a quella dipendente o ad entrambe le tipologie. %Superfluo?
 
 Tra la trasformazioni logaritmiche esistono tre modelli principali: 
 \begin{itemize}[noitemsep]
-\item \textbf{Linear-log}, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale %lineare?
- $\beta$ della variabile dipendente.
-\item \textbf{Log-linear}, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale $\beta$ della risposta.
-\item \textbf{Log-log}, in cui entrambi gli incrementi sono percentuali.
+\item Linear-Log, in cui ad un incremento percentuale della variabile indipendente corrisponde un incremento nominale lineare della variabile dipendente;
+\item Log-Linear, in cui ad un incremento nominale dell’esplicativa corrisponde un incremento percentuale della risposta;
+\item Log-Log, in cui entrambi gli incrementi sono percentuali.
 \end{itemize}
 Tuttavia la trasformazione di una variabile, eccettuando casi particolari in cui il dominio lo permette (la trasformata $log$-$log$ in un grafico quantità-prezzo indica l'\textit{elasticità}) , rende di difficile interpretazione il modello.
 
@@ -313,12 +262,9 @@ Tra gli indici descrittivi possiamo, in prima istanza, osservare indicatori qual
 Si possono usare comunque altre distribuzioni grafiche, quali:
 \begin{itemize}[noitemsep]
   \item istogramma della distribuzione dei residui $\varepsilon$;
-% \item Plot della distribuzione dei residui, per cui se la media risulta maggiore della mediana allora sarà possibile visualizzare una distribuzione caratterizzata da asimmetria \textit{positiva}(a destra), mentre in caso di media inferiore alla mediana sarà possibile visualizzare una distribuzione affetta da asimmetria \textit{negativa}(a sinistra).
   \item plot della distribuzione cumulata dei residui, alla ricerca di evidenti irregolarità;
   \item qq-plot (quantile vs quantile) della distribuzione dei residui $\varepsilon$ vs la normale standard (i punti si dovrebbero disporre sulla bisettrice);
   \item pp-plot (probability vs probability) della distribuzione cumulata dei residui $\varepsilon$ vs la cumulata della normale standard. 
-%  \item P-P plot che mette a confronto la distribuzione cumulata dei residui (sulle ascisse) con la distribuzione cumulata della normale (sulle ordinate). Il risultato di ciò è che in caso di distribuzione normale allora i punti si distribuiranno in modo ordinato lungo la \textit{bisettrice}. 
-%  \item Q-Q plot, molto simile al precedente, mette a confronto i quantili della distribuzione normale (sulle ascisse) con i residui $\varepsilon$ (sulle ordinate). Anche in questo caso la distribuzione dei punti lungo la \textit{bisettrice} indica il soddisfacimento dell'assunzione di normalità dei residui. La diversa forma assunta dai punti sulla bisettrice può inoltre indicare una distribuzione leptocurtica, platicurtica oppure asimmetrica (a destra o a sinistra a seconda della forma assunta).
 \end{itemize}
 Esistono, infine, alcuni test non parametrici che non si basano su ipotesi sulla distribuzione ma che sono appunto detti non parametrici poichè testano la distribuzione dei parametri. Per questo motivo sono molto utili per analizzare problemi di normalità dei residui.
 
@@ -330,18 +276,15 @@ W = \frac{\sum(a_i \varepsilon_{(i)})^2}{\sum\varepsilon_i^2} \in [0, 1]
 \paragraph{Test di Kolmogorov Smirnov.} Anche qui $H_0 : \varepsilon \sim N(0, \sigma^2)$, ma si basa sul calcolo della statistica test $D$, calcolato come somma in valore assoluto della differenza tra le frequenze cumulate della distribuzione empirica da testare e quelle della normale, una volta definite delle classi di eguale ampiezza.
 $D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata), ed in caso di superamento del valore critico in base al livello di significatività scelto comporterà il rifiuto o l'accettazione di $H_0$.
 
-\paragraph{Skewness test.} È un test di asimmetria ($H_0 : \varepsilon : P(e < 0) = P(e > 0) \forall e$) ma rigettando $H_0$ si rigetta l'ipotesi di normalità della distribuzione; l'accettazione dell'ipotesi nulla tuttavia non fornisce indicazioni sulla reale distribuzione.
+\paragraph{Skewness test.} È un test di asimmetria ($H_0 : \varepsilon : P(\varepsilon_i < 0) = P(\varepsilon_i > 0) \forall i$) ma rigettando $H_0$ si rigetta l'ipotesi di normalità della distribuzione; l'accettazione dell'ipotesi nulla tuttavia non fornisce indicazioni sulla reale distribuzione.
 \begin{equation*}
   S = \frac{\frac{1}{n}\sum\varepsilon_i^3}{\sigma^3} \in (-\infty, +\infty)
 \end{equation*}
 La distribuzione è considerata simmetrica con $-1 < S < +1$.
-% Sinteticamente si tratta di mettere a rapporto il quadrato del momento terzo intorno alla media di $X$ con il cubo della varianza.
 \paragraph{Kurtosis test.} Simile a quello per l'asimmetria, fornisce solamente informazioni sulla curtosi della distribuzione:
 \begin{equation*}
   K = \frac{\frac{1}{n}\sum\varepsilon_i^4}{(\frac{1}{n}\sum\varepsilon_i^2)^2} = \frac{\frac{1}{n}\sum\varepsilon_i^4}{\sigma^4} \in (-\infty, +\infty)
 \end{equation*}
-% Anche in questo caso sinteticamente si tratta di mettere a rapporto il momento quarto intorno alla media di $X$ con il quadrato della varianza.
-% \newline
 La distribuzione normale ha curtosi pari a $3$, quindi il test è considerato significativo per valori prossimi. \newline
 
 I problemi di non normalità possono essere risolti usando una trasformata della variabile dipendente $y$.
@@ -430,9 +373,9 @@ Si intende con modello lineare classico \textit{multivariato} l'estensione del m
 
 Per l'$i$-esimo individuo si ha:
 \begin{align*}
-y_i &= [y_{i.1} \ldots y_{i.j} \ldots y_{i.m}]\\
-z_i &= [1, z_{i.1} \ldots z_{i.k} \ldots z_{i.r}]\\
-\varepsilon_i &= [\varepsilon_{i.1} \ldots \varepsilon_{i.j} \ldots \varepsilon_{i.m}]
+y_i &= [y_{i.1} \hspace{5pt} \dots \hspace{5pt} y_{i.j} \hspace{5pt} \dots \hspace{5pt} y_{i.m}]\\
+z_i &= [1, z_{i.1} \hspace{5pt} \dots \hspace{5pt} z_{i.k} \hspace{5pt} \dots \hspace{5pt} z_{i.r}]\\
+\varepsilon_i &= [\varepsilon_{i.1} \hspace{5pt} \dots \hspace{5pt} \varepsilon_{i.j} \hspace{5pt} \dots \hspace{5pt} \varepsilon_{i.m}]
 \end{align*}
 
 Mentre la matrice dei parametri $\beta$, di dimensioni $m \times r+1$, diventa:
@@ -448,14 +391,13 @@ Mentre la matrice dei parametri $\beta$, di dimensioni $m \times r+1$, diventa:
 \end{equation*}
 In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce ad una variabile risposta $y_{1 \dots m}$ mentre ogni colonna si riferisce ad una variabile esplicativa $z_{1 \dots r}$. 
 \newline
-%Ciò implica che anche riferendosi ad una singola $y_i$, comunque la stima avviene nel complesso, con il prodotto tra la matrice delle variabili esplicative $Z$ e appunto $\beta$ che comprende al suo interno però \textbf{tutti} i parametri stimati riguardanti l'insieme delle variabili dipendenti $y_{1,...,m}$, rendendo di fatto i parametri che stimano le diverse variabili dipendenti $y$ influenzati gli dagli altri. In questo particolare aspetto risiede infatti la differenza tra un modello multivariato su $m$ variabili dipendenti $y$ ed $m$ modelli univariati, ognuno con una specifica $y$ come variabile dipendente.%
 Nel suo complesso perciò il modello multivariato appare come:
 \begin{equation*}
   Y_{m \times n} = B_{m \times r + 1} Z_{r+1 \times n} + E_{m \times n}
 \end{equation*}
 o altrimenti scritto come:
 \begin{equation*}
-  y_j = \beta_j Z + \varepsilon_j \hspace{15pt} \forall j \in [1, m]
+  y_j = \beta_j Z + \varepsilon_j \hspace{15pt} j = 1 \dots m
 \end{equation*}
 Ogni colonna della matrice $Y$ rappresenta un carattere, mentre ogni riga rappresenta i valori dei caratteri per un singolo individuo.
 
@@ -476,7 +418,7 @@ Le ipotesi del modello sono analoghe a quelle formulate per il modello univariat
   \end{bmatrix}
 \end{equation*}
 Con dimensione $nm \times nm$ poiché ognuna delle $m$ matrici $\Sigma_{\varepsilon_j}$ relativa ad ogni singola equazione $j$ è di dimensione $n \times n$; mentre le matrici sulla diagonale principale rappresentano gli errori relativi alla medesima equazione, le matrici $0$ racchiudono le correlazioni fra gli errori relativi ad equazioni diverse.
-Infatti le variabili risposta si presume siano indipendenti le une dalle altre sia per lo stesso individuo ($y_{i.j} \indep y_{i.k} \hspace{5pt} \forall j, k : i \ne k$, sulla diagonale della matrice) che per individui diversi; eventuali correlazioni sono da considerarsi \textit{spurie} data la correlazione alle stesse variabili esplicative.
+Infatti le variabili risposta si presume siano indipendenti le une dalle altre sia per lo stesso individuo ($y_{i.j} \indep y_{i.k} \hspace{5pt} \forall j, k : k \ne i$, sulla diagonale della matrice) che per individui diversi; eventuali correlazioni sono da considerarsi \textit{spurie} data la correlazione alle stesse variabili esplicative.
 \item Le  variabili esplicative sono non stocastiche: per ogni osservazione $i$, i valori $z_{i.k}$ sono costanti, mentre il corrispondente valore di ogni $y_{i.j}$ è una variabile casuale influenzata dagli errori casuali.
 \item La matrice $Z$ ha rango pieno $rk(Z) = r + 1$, ciò vuol dire che nessuna variabile esplicativa è una combinazione lineare delle altre; contrariamente la matrice $Z^{\prime}Z$ non sarebbe invertibile e non si potrebbe calcolare lo stimatore dei minimi quadrati.
 \item La numerosità della popolazione $n$ è maggiore del numero dei parametri stimati più l'intercetta $n > r + 1$, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
@@ -551,15 +493,15 @@ Analogamente si possono costruire intervalli di confidenza per i parametri e per
 
 Esistono inoltre altri test che possiedono la stessa distribuzione, implicazioni e ipotesi $H_0$ della $\Lambda$ di Wilks:
 \begin{itemize}[noitemsep]
-\item \textbf{Traccia di Lawney-Hotelling}
+\item Traccia di Lawney-Hotelling:
 \begin{equation*}
 LH = \frac{det(\hat{H})}{det(\Sigma_E)}
 \end{equation*}
-\item \textbf{Traccia di Pillai}
+\item Traccia di Pillai:
 \begin{equation*}
 P = \frac{det(\hat{H})}{det(\hat{H} + \Sigma_E)}
 \end{equation*}
-\item \textbf{Massimo autovalore di Roy}
+\item Massimo autovalore di Roy:
 \begin{equation*}
 \max(\lambda_i) \hspace{15pt} \text{con $\lambda$ autovettore di} \frac{\hat{H}}{\hat{H} + \Sigma_E}
 \end{equation*}
@@ -574,424 +516,302 @@ In modo analogo, si possono costruire altri test con altre ipotesi nulle $H_0$:
 
 
 \section{Modello lineare generalizzato}
-Il modello lineare multivariato generalizzato supera le ipotesi, molto stringenti, del modello lineare multivariato classico.
-Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $$Y = BZ+E$$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
+Il modello lineare multivariato generalizzato supera le ipotesi, molto stringenti, del modello lineare multivariato classico, rimuovendo le ipotesi sugli errori.
+La formula diventa
+\begin{equation*}
+  Y = BZ+E
+\end{equation*}
+in cui la matrice di covarianza degli errori $E$ non è più necessariamente diagonale e gli errori possono essere eteroschedastici. 
 
-Nell’ipotesi \emph{classica} infatti abbiamo che:
-
-\begin{enumerate}[noitemsep]
-\item Gli errori sono \textbf{omoschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale;
-\item Gli errori sono \textbf{omoschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è uguale;
-\item Gli errori sono \textbf{incorrelati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui;
-\item Gli errori sono \textbf{incorrelati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti non è legato al proprio e a quello degli altri individui.
-\end{enumerate}
-Infatti ipotizzando 3 variabili dipendenti:
+Nell’ipotesi \textit{classica} si ipotizza che gli errori siano:
 \begin{itemize}[noitemsep]
-\item Spesa viaggi
-\item Spesa partite
-\item Spesa concerti
+\item omoschedastici e incorrelati all’interno delle stesse equazioni: in ogni equazione, la varianza spiegata è uguale per ogni individuo e non si hanno correlazioni tra gli errori ($E_{i \cdot} = \sigma^2 I_m$);
+\item omoschedastici e incorrelati tra equazioni diverse: discorso analogo per le diverse equazioni ($E_{\cdot j} = \sigma^2I_n$);
 \end{itemize}
-La parte di variabilità non spiegata dalle variabili esplicative ($\Sigma_{E}$) è identica per tutti gli individui, per ognuna delle 3  variabili dipendenti (omoschedasticità). Inoltre la stessa $\Sigma_E$ per l’individuo \textit{i}-esimo non è influenzata dall’individuo \textit{k}-esimo per ogni variabile dipendente. La parte non spiegata dalle variabili esplicative dell’individuo \textit{i}-esimo rispetto alla spesa viaggi (ad esempio) non è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto alla spesa partite (incorrelazione).
 
+Con le ipotesi classiche, costruire un modello lineare generalizzato equivale a costruire $m$ modelli lineari, uno per variabile risposta, indipendenti tra di loro: la varianza residua (ovvero la componente erratica) non è influenzata dal risultato degli altri individui né delle altre variabili risposta.
 
-Nell’ipotesi \emph{intermedia}, invece:
-\begin{enumerate}[noitemsep]
-
-\item Gli errori sono \textbf{omoschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è uguale;
-\item Gli errori sono \textbf{eteroschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa;
-\item Gli errori sono \textbf{incorrelati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente non è legato a quello degli altri individui;
-\item Gli errori sono \textbf{correlati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
-\end{enumerate}
-Infatti facendo riferimento all'esempio precedente potremmo dire che:
+Si ipotizza un modello intermedio in cui gli errori sono:
 \begin{itemize}[noitemsep]
-\item La parte di variabilità non spiegata dalle variabili esplicative è identica per tutti gli individui per spesa viaggi ad esempio (omoschedasticità nella stessa equazione);
-\item La parte di variabilità non spiegata dalle variabili esplicative per tutti gli individui è diversa  per spesa viaggi, partite, concerti (eteroschedasticità fra diverse equazioni);
-\item La parte non spiegata dalle variabili esplicative per l’individuo \textit{i} non è influenzata da quella dell'individuo \textit{k} per ogni variabile dipendente e per le varie voci di spesa (incorrelazione fra individui diversi);
-\item La parte non spiegata dalle variabili esplicative dell’individuo \textit{i} rispetto alla spesa  è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto alla spesa partite ad esempio (correlazione per medesimo individuo).
+\item omoschedastici e incorrelati all’interno delle stesse equazioni, come nel modello classico;
+\item eteroschedastici e correlati tra equazioni diverse: la varianza spiegata è unica per ogni individuo e il valore di una variabile dipendente può influenzare gli altri dello stesso individuo ($E_{\cdot.j} \ne \sigma^2 I_n$);
 \end{itemize}
-Nell’ipotesi \emph{estrema}:
-\begin{enumerate}[noitemsep]
+A differenza del modello precedente, il valore di una variabile risposta influenza le altre dello stesso individuo e si 
 
-\item Gli errori sono \textbf{eteroschedastici} all’interno delle stesse equazioni: per ogni individuo rispetto alla medesima variabile dipendente la parte spiegata è diversa;
-\item Gli errori sono \textbf{eteroschedastici} tra equazioni diverse: per ogni individuo rispetto alle diverse variabili dipendenti la parte spiegata è diversa;
-\item Gli errori sono \textbf{correlati} all’interno delle stesse equazioni: il comportamento di ogni individuo rispetto alla medesima variabile dipendente è legato a quello degli altri individui;
-\item Gli errori sono \textbf{correlati} fra equazioni diverse: il comportamento di ogni individuo rispetto a diverse variabili dipendenti è legato al proprio e a quello degli altri individui.
-\end{enumerate}
-Continuando l'esempio precedente avremo quindi tutto l'opposto dell'ipotesi classica:
+Facendo cadere le ultime ipotesi, si ottiene il modello lineare \textit{generalizzato}, in cui gli errori sono:
 \begin{itemize}[noitemsep]
-\item La parte di variabilità non spiegata dalle variabili esplicative è diversa per tutti gli individui per spesa viaggi ad esempio (eteroschedasticità nella stessa equazione);
-\item La parte di variabilità non spiegata dalle variabili esplicative per tutti gli individui è diversa  per spesa viaggi, partite, concerti (eteroschedasticità fra diverse equazioni);
-\item La parte non spiegata dalle variabili esplicative per l'individuo \textit{i} è influenzata dall’individuo \textit{k} per ogni variabile dipendente come ad esempio fra spesa viaggi e spesa partite (correlazione fra individui diversi);
-\item La parte non spiegata dalle variabili esplicative dell’individuo \textit{i} rispetto alla spesa  è influenzata dalla parte non spiegata dalle variabili esplicative per lo stesso individuo \textit{i} rispetto ad esempio alla spesa partite (correlazione per medesimo individuo)
+\item eteroschedastici e correlati all'interno delle stesse equazioni: il comportamento di un individuo può influenzare gli altri, e ogni individuo ha una varianza unica ($E_{i \cdot} \ne \sigma^2 I_m$);
+  \item eteroschedastici e correlati tra equazioni diverse: come nel modello intermedio.
 \end{itemize}
-Quindi occorre usare non le singoli sottomatrici di correlazione degli errori $\Sigma_{E(i)}$, ma la matrice $\Sigma_E$ relativa all’intero modello.
+Si ha quindi l'opposto dell'ipotesi classica: ogni osservazione influenza le altre e ogni variabile dipendente è influenzata dalle altre.
+
+Occorre quindi usare non le singoli sottomatrici di correlazione degli errori $\Sigma_{E_i}$, ma la matrice $\Sigma_E$ relativa all’intero modello.
 
 \section{Modello SURE}
 
-Nel modello \textbf{S}eemengly \textbf{U}ncorrelated \textbf{R}egression \textbf{E}quation, anche detto \textbf{SURE}, si segue un approccio più realistico: degli $r$ regressori si usano solo i regressori effettivamente legati alle diverse variabili dipendenti, che potrebbero anche essere tutti, come nel caso classico del modello lineare multivariato, ma che in caso di non significatività potrebbero portare ad una differenziazione delle diverse equazioni. Inoltre questo modello permette di risolvere anche il problema di una numerosità diversa delle osservazioni tra le diverse equazioni.
-\newline
-In altre parole nel modello SURE abbiamo regressori diversi per ogni equazione all’interno dell’insieme complessivo dei regressori per l’insieme delle equazioni del modello. 
-\newline
+Nel modello SURE (\textit{Seemengly Uncorrelated Regression Equation}) si modifica il modello lineare generalizzato rendendolo più realistico: degli $r$ regressori si usano solo quelli effettivamente legati alle diverse variabili dipendenti, rendendo diversi i regressori tra le varie equazioni.
+Inoltre questo modello potrebbe facilitare la gestione dei valori mancanti eliminando regressori poco significativi per alcune variabili.
 Quindi la somma di tutti i regressori nelle diverse equazioni è uguale a
 \begin{equation*}
 \sum_{j=1}^n r_j
 \end{equation*}
 Data $n_j$ come la numerosità delle osservazioni per l’equazione $j$-esima allora il complesso delle numerosità è dato da 
 \begin{equation*}
-\sum_{j=1}^m n_j
+n = \sum_{j=1}^m n_j
 \end{equation*}
-La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza: 
-\begin{itemize}
-\item Il modello è caratterizzato dalla presenza delle variabili esplicative $Z_A$, $Z_B$, $Z_C$ diverse da equazione ed equazione.
-\item Gli errori sono:
-	\begin{itemize}[noitemsep]
-	\item omoschedastici e incorrelati nella stessa equazione;
-	\item eteroschedastici fra diverse equazioni;
-	\item correlati per lo stesso individuo e incorrelati tra individui diversi fra diverse equazioni.
-	\end{itemize}
+La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza perché il modello è caratterizzato dalla presenza di variabili esplicative diverse da equazione ed equazione.
+Gli errori sono ipotizzati essere:
+\begin{itemize}[noitemsep]
+\item omoschedastici e incorrelati nella stessa equazione;
+\item eteroschedastici fra diverse equazioni;
+\item correlati per lo stesso individuo e incorrelati tra individui diversi fra diverse equazioni.
 \end{itemize}
-Considerando $B^*$ come stimatore dei coefficienti del modello OLS e $\hat{B}^*$ come lo stimatore del modello SURE, possiamo affermare che i due risultano identici ma per la costruzione del modello SURE $\hat{B}^*$ possiede dei parametri uguali a zero proprio per permettere di ottenere equazioni differenziate nel numero delle variabili esplicative. La possibilità di differenziare il numero di covariate risiede infatti nel porre uguale a zero il valore della variabile non presente nell'equazione $x$ così che questa, moltiplicata per il rispettivo coefficiente $B$ generi un influenza nulla sulla stima di $Y$. 
-\newline
-\newline
-\textbf{NB}: Quando si omettono delle variabili, essendo i coefficienti di regressione parziali (influenzati, cioè, dalle altre variabili esplicative poichè stimati sulla totalità di esse) cambiano tutti i coefficienti di regressione in base all'equazione di riferimento. Infatti ipotizzando di avere una variabile $X_j$ presente in 2 equazioni distinte il coefficiente $\beta$ corrispondente sarà diverso proprio in virtù del fatto che le stime sono influenzate le une dalle altre.
+Rispetto al metodo OLS, lo stimatore dei parametri SURE presenta valori nulli, per eliminare i regressori poco significativi.
+La rimozione di variabili esplicative influisce anche sugli altri parametri del modello, quindi $b_{i.j} \ne b_{k.j} \hspace{10pt} i \ne k$.
 
 \section{Il problema dei dati gerarchici e uso di Regressione multilevel}
+I modelli statistici, di solito, si basano sull'assunzione di indipendenza delle osservazioni, ottenuta per mezzo di un \textit{campionamento casuale}.
+In questo caso si dice che le osservazioni si distribuiscono come una variabile casuale e che sono \textit{iid}, ovvero \textit{identicamente ed indipendentemente distribuite}.
 
-I modelli statistici, di solito, si basano sull'assunzione di indipendenza delle osservazioni, ottenuta per mezzo di un \textit{campionamento casuale semplice} da popolazione infinita o finita con reinserimento. In questo caso si dice che le osservazioni si distribuiscono come una variabile casuale e che sono \textbf{IID}, ovvero \textbf{I}denticamente ed \textbf{I}ndipendentemente \textbf{D}istribuite.
- 
-In molti casi, però i dati risultano essere raggruppati in cluster ovvero presentano una struttura gerarchica come ad esempio:
-\begin{itemize}
-\item  Ospedale - Pazienti;
-\item  Classi - Studenti;
-\item Imprese - Impiegati.
+In molti casi, però i dati risultano essere raggruppati in cluster naturali ovvero si distribuiscono naturalmente in una struttura gerarchica come ad esempio:
+\begin{itemize}[noitemsep]
+\item  i pazienti negli ospedali;
+\item  gli studenti nelle classi;
+\item gli impiegati nelle aziende.
 \end{itemize}
- In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un \textit{campionamento a più stadi} perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento diversi (livelli gerarchici della struttura dei dati). Questo tipo di campionamento implica infatti \textbf{dipendenza} tra le osservazioni appartenenti allo stesso gruppo. Ad esempio gli studenti appartenenti alla stessa scuola condividono stesso ambiente, stessi insegnanti, stesso quartiere di provenienza oltre a scambi e comunicazioni tra essi.
+In tali casi il campionamento casuale semplice non risulta efficiente, ma appare preferibile effettuare un \textit{campionamento a più stadi} perché si desidera analizzare le relazioni tra le variabili che possono essere misurate a livelli di raggruppamento diversi (livelli gerarchici della struttura dei dati).
+Questo tipo di campionamento implica infatti una dipendenza tra le osservazioni appartenenti allo stesso gruppo (ad esempio gli studenti appartenenti alla stessa scuola condividono lo stesso ambiente, gli stessi insegnanti, lo stesso quartiere di provenienza e interagiscono tra di loro).
 
-Quando i dati possiedono una struttura gerarchica significa che possono essere scomposti in dati \textit{dell'unità} e dati \textit{del gruppo}. La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
+Quando i dati possiedono una struttura gerarchica significa che possono essere scomposti in dati \textit{dell'unità} e dati \textit{del gruppo}.
+La dipendenza tra le unità di primo livello (micro) appartenenti alla stessa unità di secondo livello (macro) è cruciale per l’analisi.
 \newline
-Cosa succede se si ignora la struttura gerarchica dei dati?
+Ignorando la struttura naturale dei dati si cadrebbe nel paradosso di Simpson, secondo cui i valori osservati su una variabile dipendono dal raggruppamento effettuato sui dati.
+Infatti ignorando la struttura naturale dei dati si può perdere informazione in due modi:
 \begin{enumerate}[noitemsep]
-\item Potrei \textbf{aggregare} i dati micro (le unità) a livello macro (le sovrastrutture), ad esempio le condizioni di lavoro degli impiegati di un'azienda non possono essere attribuite ai singoli impiegati, così facendo si andrebbe incontro a quella che è definita \textbf{fallacia ecologica}: se vi è correlazione tra variabili a livello \textit{macro} non può essere usata per fare asserzioni a livello \textit{micro}.
-\item Potrei \textbf{disaggregare}, ovvero utilizzare i dati \textit{macro} a livello \textit{micro} ignorando la variabilità tra i gruppi (ad esempio, le caratteristiche degli studenti non possono dire nulla sulla scuola se non è messa in luce esplicitamente la loro appartenenza all'una o all'altra scuola), andando incontro a quella che è definita \textbf{fallacia atomistica}: se vi è correlazione tra variabili a livello \textit{micro} non può essere usata per fare asserzioni a livello \textit{macro}.
+\item aggregando i dati micro (le unità) a livello macro (le sovrastrutture), andando incontro a quella che è definita \textit{fallacia ecologica}: se vi è correlazione tra variabili macro non può essere usata per fare asserzioni a livello micro.
+\item disaggregando i dati ignorando la variabilità tra i gruppi, andando incontro a quella che è definita \textit{fallacia atomistica}: se vi è correlazione tra variabili a livello \textit{micro} non può essere usata per fare asserzioni a livello \textit{macro}.
 \end{enumerate}
-Ipotizzando una \textbf{regressione Multilevel}, in cui la regressione di $Y$ su $X$ è la funzione lineare di $x$ che meglio spiega $y$ ed ipotizzando che i dati abbiano struttura ad un livello, nulla cambia rispetto al Modello lineare classico univariato, singolare o multiplo, infatti assume forma:
+
+Ipotizzando una \textit{regressione Multilevel} ed ipotizzando che i dati abbiano struttura ad un livello, nulla cambia rispetto al Modello lineare classico univariato, singolare o multiplo, infatti la formula multilevel assume la forma:
 \begin{equation*}
-y = \beta_0 + \beta_1 x + r
+y = X \beta + r
 \end{equation*}
-Ipotizzando invece una struttura a più livelli con:
-\begin{itemize}
-\item $j$ identificativo del gruppo;
-\item $i$ identificativo dell'unità entro il gruppo;
-\item $x_{ij}$ ed $y_{ij}$ osservazioni di $X$ e $Y$ sulle unità micro del gruppo $j$;
-\item $\bar{x}_{.j}$ e $\bar{y}_{.j}$ medie di gruppo $j$ per $X$ e $Y$.
-\end{itemize}
-ad esempio il soggetto 1 del primo gruppo sarà diverso dal soggetto 1 del secondo gruppo. \\
-In questo contesto la variabile dipendente $Y$, quindi, ha sia un aspetto individuale sia uno di gruppo; la variabile $X$ pur essendo misurata a livello individuale contiene anche una quota di variabilità imputabile al gruppo, infatti la media di $X$ in un gruppo può essere diversa dalla media di $X$ in un altro gruppo poiché la composizione della $X$ nei gruppi può essere diversa.
-\newline
-Le regressioni a livello \textit{macro} considerano i dati aggregati dati dalla media di $X$ ed $Y$ $$\bar{y}_{.j} = \beta_0 + \beta_1\bar{x}_{.j}+ r_{.j}$$ e sono quindi diverse dalle regressioni a livello \textit{micro} tra $X$ ed $Y$ $$y_{ij} + \bar{y}_{.j} = \alpha_1 (x_{ij} - \bar{x}_{.j})+r$$
-L’analisi delle relazioni entro i gruppi può portare a risultati molto diversi da quelli ottenuti considerando le relazioni tra i gruppi. In altri termini la struttura dei dati ed il loro raggruppamento può avere effetto anche in un altro modo: facendo variare i coefficienti della regressione da gruppo a gruppo
+
+Con un raggruppamento, si possono effettuare regressioni a livello macro sulla media delle osservazioni:
 \begin{equation*}
-Y_{ij} = \beta_{0j} + \beta_{ij} x_{ij} + r_{ij}
+  \bar{y} = \bar{x} \beta + r
 \end{equation*}
-con diverse intercette $\beta_{0j}$ e coefficienti di regressione $\beta_{ij}$ per ciascun gruppo:
-\begin{itemize}	
-\item Se i coefficienti $\beta_{0j}$ e $\beta_{ij}$ sono entrambi costanti allora la struttura
-gerarchica non ha effetto, ovvero non vi è differenza con una regressione OLS;
-\item Se i due coefficienti dipendono entrambe da $j$, ovvero dal gruppo di cui sono espressione, allora la regressione OLS
-non può essere utilizzata.
-\end{itemize}
-Nello specifico riguardo quest'ultimo punto:
-	\begin{enumerate}
-	\item Se varia solo $\beta_{0j}$ con $j$ allora si ha un modello \textbf{Random Intercept};
- 	\item Se anche $\beta_{ij}$ varia con $j$ allora il modello è detto \textbf{Random Coefficient}.
-	\end{enumerate}
-Ci sono diversi modi di approcciare lo studio della relazione tra $Y$ ed $X$:
-\begin{itemize}
-\item \textbf{Relazione diseggregata}: è una relazione in cui il raggruppamento delle unità (ovvero la sovrastruttura) viene ignorato
+dove ogni osservazione $j$ del vettore dei dati corrisponde alla media del $j$-esimo gruppo.
+
+Si possono inoltre effettuare delle regressioni a livello micro, per ogni gruppo $j$:
 \begin{equation*}
-y_{ij} = \beta_0 + \beta_1 x_{ij} +r_{ij} 
+  y_j - \bar{y}_j = X_j \alpha + r_j
 \end{equation*}
-\item \textbf{Relazione aggregata fra i gruppi}: si può infatti essere interessati alla relazione aggregata, ovvero a livello macro, fra i gruppi, quindi alla relazione tra $\bar{x}_{.j}$ e $\bar{y}_{.j}$
+Con $\tilde{X}_j$ matrice dei dati per il $j$-esimo gruppo centrato sulla sua media $\bar{x}_j$ e $\alpha$ costante per tutti i gruppi: si tenta di identificare dei coefficienti comuni indipendenti dal partizionamento.
+Si può effettuare la stessa analisi con una mera regressione che permetta ai coefficienti $\beta$ di variare tra i gruppi:
 \begin{equation*}
-\bar{y}_{.j} = \beta_0 + \beta_1 \bar{x}_{.j} + r_j
+  y_j = X_j \beta_j + r_j
 \end{equation*}
-\item \textbf{Relazione entro ciascun gruppo}: poichè si può essere interessati alla relazione tra $x_{ij}$ ed $y_{ij}$ entro ciascun gruppo $j$, ovvero a livello micro. Questo avviene assumendo $\alpha_1$ costante entro ciascun gruppo
+Se il vettore $\beta_j$ ha valori costanti per ogni gruppo $j$, allora la struttura gerarchica dei dati non è significativa e non c'è differenza con una semplice regressione OLS.
+Al contrario, se il partizionamento è significativo, al variare dell'intercetta si ha un modello \textit{random intercept}, mentre al variare degli altri coefficienti si ha un modello \textit{random coefficient}.
+
+Inoltre si può effettuare una regressione \textit{multilevel}:
 \begin{equation*}
-y_{ij} - \bar{y}_{.j} = \alpha_1(x_{ij} - \bar{x}_{.j}) + r
+  y_j = \bar{x}_j \beta_j + X_j \alpha + r_j
 \end{equation*}
-\item \textbf{Relazione Multilevel}: data la struttura dei dati, si può pensare di porre assieme la \textit{regressione tra i gruppi} e la \textit{regressione entro i gruppi} per cui $y_{ij}$ sarebbe funzione sia delle relazioni \textbf{entro} i gruppi, sia di quelle \textbf{tra} i gruppi.
-\begin{equation*}
-y_{ij} = \beta_0 + \beta_1 \bar{x}_{.j} +\alpha_1(x_{ij} - \bar{x}_{.j}) + r
-\end{equation*} 
-\end{itemize}
+con $\alpha$ costante.
+Questa formula, che è la somma delle due precedenti, tiene conto sia della varianza nei gruppi che della varianza fra i gruppi.
+
 
 \section{Modello Multilevel: definizione e significato}
-Per effettuare l'analisi della \textbf{covarianza} (\textbf{ANCOVA}) occorre prima di tutto partire da quello che è definito modello \textbf{ANOVA}, ovvero il modello di analisi della varianza:
+Per effettuare l'analisi della \textit{covarianza} (ANCOVA) occorre prima di tutto partire dall'analisi della varianza (ANOVA):
 \begin{equation*}
-y_{ij} = \gamma_{00} + u_j +r_{ij}
+y_{j} = \gamma + u_j + r \hspace{15pt} j = 1 \dots p
 \end{equation*}
-con:
-\begin{itemize}
-\item $u_j$ uguale all'effetto dell'unità macro $j$, ovvero la differenza tra la media generale e la media del gruppo $j$;
-\item $r_{ij}$ residuo relativo all'unità micro $i$ appartenente al gruppo $j$;
-\item $\gamma_{00}+u_j$ media relativa al gruppo $j$;
-\item $\gamma_{00}$ media di $y$ relativa all'intera popolazione.
-\end{itemize}
-Il modello di analisi della varianza ANOVA cerca di spiegare in che misura la variabilità della variabile dipendente $y$ è dovuta a differenze delle medie fra i gruppi. E' infatti il modello utilizzato in caso di stima di $y$ con sole covariate $x_j$ di tipo qualitativo.
+dove $\gamma$ rappresenta la media delle medie dei gruppi, $u_j = \overline{y}_j - \gamma$ la differenza tra la media del gruppo e la media complessiva $\gamma$ ($\gamma + u_j$ quindi rappresenta la media del $j$-esimo gruppo) e $r$ la componente erratica individuale.
+Il modello ANOVA tenta di spiegare quanto la variabilità di $y_j$ è dovuta alle differenze delle medie fra i gruppi $u_j$.
+Questo modello infatti è utilizzato nel caso in cui le covariate $x_j$ siano tutte qualitative.
 
-Nel complesso dato:
-\begin{center}
-$y_{(1,n)} = [y_{1(1,n)},\dots,y_{p(1,n_p)}]$ \\
-$r_{(1,n)}=[r_1,\dots,r_p)$ \\
-con \  $(n_1+\dots+n_p) = n$
-\end{center}
-e costruendo $A$ matrice \textit{presenza-assenza}, composta solo di $0$ e $1$
-\[A_{p,n}=
+Dati:
+\begin{align*}
+y &= [y_1,\hspace{5pt} \dots \hspace{5pt} ,y_p] \\
+r &=[r_1, \hspace{5pt} \dots \hspace{5pt}, r_p] 
+\end{align*}
+dove $y_j$ e $r_j$ sono vettori di lunghezza pari a quella del proprio gruppo $n_j$, costruendo la matrice di \textit{presenza-assenza} $A$, composta solo da vettori $0$ e $1$ (della medesima lunghezza $n_j$)
+\begin{equation*}
+  A=
 \begin{bmatrix}
-1_{(n_{1},1)} & 0&0 \\
-0&1_{(n_{2},1)}&0 \\
-0&0&1_{(n_{p},1)}
+  1_{n_1 \times 1} & \cdots & 0_{n_j \times 1} & \cdots & 0_{n_p \times 1} \\
+  \vdots & \ddots & \vdots & \iddots & \vdots \\
+  0_{n_1 \times 1} & \cdots & 1_{n_j \times 1} & \cdots & 0_{n_p \times 1} \\
+  \vdots & \iddots & \vdots & \ddots & \vdots \\
+  0_{n_1 \times 1} & \cdots  & 0_{n_j \times 1} & \cdots & 1_{n_p \times 1}
 \end{bmatrix}
-\]
-possiamo procedere a calcolare
-\begin{center}
-$u_1= u_1 A_1$ \\
-$u_2 = u_2 A_2$ \\
-$\dots \ \dots \ \dots$ \\
-$u_p = u_p A_p$
-\end{center}
-ottenendo cosi per il gruppo $j$-esimo
-\begin{equation*}
-y_{j_{(1,n)}} -\gamma_{00_{(1,p)}} = u_{j_{(p,n)}} + r_{j_{(1,n)}}
 \end{equation*}
-\begin{equation*}
-(y-\gamma_{00})(y-\gamma_{00})' = [uA-e][uA-e]' = uAAu'+rr'
-\end{equation*}
-Per avere un'idea della variabilità nei gruppi, su tutti i gruppi $j$ si considerano le devianze intra gruppo e, nell'ipotesi di omoschedasticità, essendo la varianza di ogni errore pari a $\sigma^2$ otteniamo che la devianza residua totale $SSR = n\sigma^2$.
-\newline
-\newline
-Allo stesso modo la devianza tra i gruppi corrisponde alla devianza delle medie di gruppo perciò $SSE = \sum^p_{j=1} (u_j A_j)^2$.
-\newline
-\newline
-Da cui devianza totale $SST = SSE + SSR$.
-\newline
-\newline
-Definendo a questo punto
-\begin{equation*}
-\tau^2 = \frac{uAA'u'}{n}
-\end{equation*}
-\begin{equation*}
-\sigma^2 = \frac{rr'}{n}
-\end{equation*}
-Otteniamo il \textbf{coefficiente di correlazione intraclasse} $\rho$
-\begin{equation*}
-\rho = \frac{\tau^2}{\tau^2 + \sigma^2}
-\end{equation*}
-ovvero il rapporto tra \textbf{devianze tra i gruppi} e \textbf{devianza complessiva}.
+si calcola la devianza della variabile risposta per il $j$-esimo gruppo considerando solamente la variazione del livello:
+\begin{align*}
+  Dev(y_j) &= (y_j - \gamma)^\prime (y_j - \gamma) \\
+           &= (u_j A_{j.j} + r_j)^\prime (u_j A_{j.j} + r_j) \\
+           &= n_j \cdot u_j^2 + r_j^\prime r_j
+\end{align*}
 
-Questa struttura è fondamentale per ricondurre il modello ANOVA alla struttura del modello lineare con $$u = \beta$$ $$A = X$$ $$y-\gamma_{00}=y$$ $$r = \varepsilon$$
+Siccome la devianza interna ai gruppi $r_j$, ipotizzando omoschedasticità, è pari a $n_j \cdot \sigma^2$ e la devianza tra i gruppi corrisponde alla devianza delle medie di gruppo $n_j \cdot u_j^2$, si può quindi calcolare la devianza totale
+\begin{align*}
+  SST &= SSE + SSR \\
+      &= n_j \cdot u_j^2 + n_j \cdot \sigma^2 = n_j(u_j^2 + \sigma^2)
+\end{align*}
+Distinguendo quindi la varianza spiegata $u_j^2$ dalla residua $\sigma^2$ (con ipotesi di omoschedasticità), si può calcolare il coefficiente di correlazione intraclasse $\varrho$:
+\begin{equation*}
+\varrho = \frac{u^2}{u^2 + \sigma^2} \in [-1, +1]
+\end{equation*}
 
-Il \textbf{modello ANCOVA} è un modello di analisi della \textbf{covarianza}: se infatti le caratteristiche $x$ delle osservazioni appartenenti ai diversi gruppi sono differenti tra gruppo e gruppo l'analisi della varianza viene distorta e si attribuiscono alla varianza fra i gruppi effetti che dipedono da tali caratteristiche. Occorre quindi prima di tutto eliminare l'effetto di queste caratteristiche sulla variabile dipendente attraverso regressione OLS e, successivamente, effettuare l'analisi della varianza depurata.
+Si riconduce il modello ANOVA al modello lineare generalizzato ponendo:
+\begin{align*}
+  \beta &= u \\
+  X &= A \\
+  y &= y - \gamma \\
+  \varepsilon &= r
+\end{align*}
 
-Ciò avviene attraverso 4 fasi:
-\begin{enumerate}
-\item Prima si procede al calcolo della devianza totale di $Y$;
-\item Si stimano i coefficienti di regressione;
-\item Si calcola la devianza spiegata di $X$ (SSE);
-\item Infine si stima la devianza residua corretta di $y$ uguale a $SSR_{yc}=SST_y - SSE_x$.
+Il modello ANOVA però presuppone che le variabili indipendenti non influenzino la risposta $y_j \indep X_j$.
+Per ovviare a questo problema si usa il metodo di analisi della covarianza ANCOVA, che tenta di eliminare l'effetto della dipendenza per poi procedere con l'analisi della varianza vera e propria.
+Si procede quindi con $4$ fasi di preparazione:
+\begin{enumerate}[noitemsep]
+\item si calcola la devianza totale di $Y$;
+\item si stimano i coefficienti di regressione;
+\item si calcola la devianza spiegata di $X$ ($SSE$);
+\item si stima la devianza residua corretta di $y$ uguale a $\widehat{SSR}_{y}=SST_y - SSE_x$.
 \end{enumerate}
-Successivamente, \textbf{l’analisi della varianza} (ANOVA) cattura la relazione aggregata fra i gruppi e quindi descrive la \textbf{varianza fra gruppi}.
+Successivamente l’analisi della varianza ANOVA cattura la relazione aggregata fra i gruppi descrivendone la varianza.
+Effettuata l'analisi della varianza su $\widehat{SSR}_{y}$, si calcola al devianza spiegata dal \textit{fattore sperimentale} corretta per la dipendenza tra la matrice del disegno $X_j$ e la variabile risposta $y$.
+Si ha quindi:
+\begin{align*}
+  SST_y &= SSE_x + \widehat{SST}_y \\
+        &= SSE_x + \widehat{SSE}_y + \widehat{SSR}_y
+\end{align*}
 
-Ciò avviene in 3 fasi:
-\begin{enumerate}
-\item Si effettua l'analisi della varianza su $SSR_{yc}$;
-\item Si calcola la devianza spiegata del \textbf{fattore sperimentale} corretta per l'effetto della covariata $X$, ottenuta come $SSE_{yc} = SST_{yc}-SSR_{yc}$;
-\item Nel complesso quindi si ottiene
-\begin{equation*}
-SST_y = SSE_x + SST_{yc} = SSE_x + SSE_{yc} + SSR_{yc}
-\end{equation*}
-\end{enumerate}
-Questo modello quindi spezza in due l’analisi mettendo insieme la covarianza:
-\begin{enumerate}
-\item Elimina gli aspetti individuali; 
-\item Analizza gli effetti di gruppo;
-\item Attribuisce la varianza al gruppo di appartenenza.
-\end{enumerate}
-Il modello ANOVA è specificabile anche in una versione ad \textit{effetti casuali}, per cui abbiamo la stessa struttura citata in precedenza ma con $U_j$ ipotizzata variabile casuale con distribuzione $N(0, \tau^2)$ di cui $u_j$ è una particolare manifestazione e $E_{ij}$ un'altra variabile casuale con distribuzione $N(0,\sigma^2)$. In questo caso il modello è definito ad \textit{effetti misti}. 
-Mentre quindi non cambia la forma, cambia la sostanza. 
-Sotto il profilo interpretativo significa infatti che le medie parziali $u_j$ sono determinazioni di una variabile casuale $U_j$. In questo caso il Test F serve a verificare $H_0$ che le medie parziali ottenute dal campione possano essere ritenute nel complesso equivalenti, ma per confrontare tra loro le strutture di secondo livello, non si utilizzano più i valori delle medie campionarie, ma i loro intervalli di confidenza; ciò significa probabilizzare la gerarchia.
+Questo modello elimina gli aspetti individuali concentrando l'analisi sugli aspetti di gruppo e sulla varianza dei gruppi.
 
-Nel caso si consideri l'intera popolazione, oppure $U_j$ ed $E_j$ abbiano distribuzione non normale è meglio utilizzare l'analisi della varianza ad effetti fissi.
-\newline
-\newline
-Per concludere, dopo le lunghe premesse, il modello ANCOVA ad effetti variabili è appunto definito \textbf{modello Multilevel}: restando valide tutte le considerazioni riguardo il modello ANOVA ad effetti casuali in prima istanza la \textbf{regressione lineare} (OLS) cattura la relazione disaggregata tra i dati, così da eliminare l'effetto distorsivo sulla varianza tra i gruppi e ricavare la varianza nei gruppi, mentre l'analisi della varianza cattura la relazione aggregata fra i gruppi e descrive quindi la varianza fra  gruppi.
+Il modello ANOVA è specificabile anche in una versione a \textit{effetti casuali} (e una \textit{a effetti misti}), per cui si hanno le stesse strutture ma con $u_j$ manifestazione della variabile casuale $\upsilon_j \sim N_{n_j}(0, u^2)$ e $E_j \sim N_{n_j}(0, \sigma^2)$.
+In questo caso il Test $F$ serve a verificare ($H_0$) che le medie parziali ottenute dal campione possano essere ritenute tra di loro uguali, confrontando gli intervalli di confidenza.
 
-In un primo tipo di modelli (\textbf{Mixed Models}) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi e la varianza fra gruppi sono descritte come variabili casuali.
+Nel caso si consideri l'intera popolazione, o anche se $\upsilon_j$ ed $E_j$ abbiano distribuzione non normale, è meglio utilizzare l'analisi della varianza ad effetti fissi.
+Il modello ANCOVA ad effetti casuali è definito \textit{modello Multilevel}: restando valide tutte le considerazioni fatte fin ora, la regressione lineare (OLS) cattura la relazione disaggregata tra i dati dei vari gruppi, così da eliminare l'effetto distorsivo e ricavare la varianza nei gruppi; mentre l'analisi della covarianza ANCOVA cattura la relazione aggregata fra i gruppi e descrive quindi la varianza fra i gruppi.
 
-In un secondo tipo di modelli (\textbf{Random Models}) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
+In un primo tipo di modelli (\textit{Mixed Models}) la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte mediante parametri fissi mentre la relazione aggregata fra i gruppi e la varianza fra gruppi sono descritte come variabili casuali.
 
-I modelli finora studiati possono essere visti come sottocasi del modello Multilevel:
-\begin{enumerate}
-\item Per $u_j=0$ e nessuna gerarchia dei dati, abbiamo un  \textbf{modello Lineare}: 
+In un secondo tipo di modelli (\textit{Random Models}) anche la relazione disaggregata tra i dati e la varianza nei gruppi sono descritte come variabili casuali.
+
+Tutti i modelli lineari possono essere riassunti come casi particolari del modello \textit{Multilevel}:
+\begin{itemize}
+\item Senza nessuna gerarchia nei dati si ha un modello lineare: 
 \begin{equation*}
-y_i= \gamma_{00}+\sum_k \beta_k(x_{ik}-\bar{x}_{.k}) + \varepsilon_i \ ;
+y = X \beta + \varepsilon
 \end{equation*}
-\item Per $u_j=0$ otteniamo una \textbf{regressione Multilevel}: 
+\item Con gerarchia nei dati si ha una regressione Multilevel: 
 \begin{equation*}
-y_{ij} = \gamma_{00} + \sum_k \beta_k(x_{ijk}-\bar{x}_{.k}) + \varepsilon_{ij};
+y_j = X_j \beta_j + \varepsilon_j
 \end{equation*}
-\item Per $\sum_k \beta_k (x_{ik} - \bar{x}_{.k}) = 0$ e $u_j$ fisso abbiamo un'\textbf{ANOVA}: 
+\item Per $SSE = 0$ e $\beta_j$ stocastico si ha un'analisi della varianza ANOVA: 
 \begin{equation*}
-y_{ij} = \gamma_{00}+ u_j + \varepsilon_{ij};
+y_j = \overline{y} + \beta_j + \varepsilon_j
 \end{equation*}
-\item Per $\sum_k\beta_k(x_{ik}- \bar{x}_{.k}) = 0$ e $u_j$ stocastico otteniamo un'\textbf{ANOVA ad effetti casuali}: 
+\item Per $SSE = 0$ e $\beta_j$ variabile casuale si ha un'ANOVA a effetti casuali: 
 \begin{equation*}
-y_{ij} = \gamma_{00} + u_j + \varepsilon_{ij}.
+y_j = \overline{y} + \beta_j + \varepsilon_j.
 \end{equation*}
-\end{enumerate}
+\end{itemize}
+
+
 \section{Modello Multilevel: OLS, Empty, Mixed, Total Effects}
-
 La stima del modello Multilevel si compone di 4 step:
 \begin{enumerate}[noitemsep]
-\item Si stima innanzitutto il modello lineare solitamente con il metodo di stima OLS;
-\item Si propone poi l'Empty model ( anche detto \textbf{Unconditional means model UMM}) vale a dire l’analisi della varianza a effetti casuali.
-\item Random intercepts model (RIM) cioè l’analisi della covarianza a effetti casuali per l’analisi della varianza.
+\item si stima innanzitutto il modello lineare, solitamente con il metodo di stima OLS;
+\item si propone poi l'\textit{Empty model} (anche detto \textit{Unconditional means model UMM}) ovvero l’analisi della varianza a effetti casuali;
+\item si propone il \textit{random intercepts model} (RIM), ovvero l’analisi della covarianza a effetti casuali per l’analisi della varianza.
 \item Random slopes and intercepts model (UGM) analisi della covarianza a effetti casuali sia per il modello lineare che per l’analisi della varianza.
 \end{enumerate}
+
 \subsection*{1. Stima modello lineare con metodo di stima OLS}
-Si consideri un modello Multilevel in cui appare solo la parte del modello Lineare che viene stimata mediante metodo OLS con una sola variabile e ipotizzando che le variabili $X$ e $Y$ siano centrate
+Si consideri un modello Multilevel in cui compare solamente la parte stimata mediante metodo OLS:
 \begin{equation*}
-y_{ij}= \beta_0+\sum_{jk} \beta_k x_{ijk}+\varepsilon_{ij}
+  y_j = X_j \beta + \varepsilon_j
 \end{equation*}
-In questo modo si vede quale sia l’effetto delle variabili esplicative sulla variabile dipendente se i dati non fossero centrati. Naturalmente gli errori si distribuiscono come una normale.
+con gli errori $\varepsilon_j \sim N(0, \sigma^2)$.
+Si ha così un modello in cui è ignorata la struttura gerarchica dei dati.
 
-Si possono proporre anche regressioni Multilevel introducendo variabili esplicative $Z$ misurate sui gruppi, e quindi rappresentanti il livello 2, invece che sugli individui. Questo aspetto inoltre può essere esteso anche all'interazione \textit{cross-level}, ciò significa che nel modello si possono introdurre variabili prodotto originate dall'interazione tra variabili misurate sull'individuo e misurate sui gruppi cui gli individui appartengono $z_w x_k$. Per risolvere la regressione multilevel si può scomporre il coefficiente di regressione in parte \textit{between} e parte \textit{within}. 
+Si possono proporre anche regressioni Multilevel introducendo variabili esplicative $Z$ misurate sui gruppi, invece che sugli individui, e quindi rappresentanti il livello 2.
+Questo aspetto inoltre può essere esteso anche all'interazione \textit{cross-level}, ciò significa che nel modello si possono introdurre variabili prodotto originate dall'interazione tra variabili misurate sull'individuo e misurate sui gruppi cui gli individui appartengono.
+Per risolvere la regressione multilevel si può scomporre il coefficiente di regressione in parte \textit{between} e parte \textit{within}: 
+\begin{equation*}
+y_j = X_j \beta_{within} +\overline{x}_j\beta_{between} +\varepsilon
+\end{equation*}
 
-Il \textbf{modello di Cronbach} fa esattamente questo
-\begin{equation*}
-y_{ij} = \alpha +\beta_{within}(x_{ij}-\bar{x}_{.j}) +\beta_{between}\bar{x}_{.j}+\varepsilon
-\end{equation*}
-dove il \textit{contextual effect} $\delta$ è l'effetto della media dei gruppi che non è contemplato dal valore individuato
-\begin{equation*}
-\delta = \beta_{between}-\beta_{within}
-\end{equation*}
-dove $\beta_{between}-\beta_{within}$ sono gli effetti dovuti alla sovrastruttura al netto degli effetti individuali. 
+si calcola il \textit{contextual effect} $\delta = \beta_{between} - \beta_{within}$ che rappresenta l'effetto della media dei gruppi.
+
 \subsection*{2. Empty model}
-Nel modello ANOVA ad effetti casuali detto anche \textbf{Empty model} si ha che
+Nel modello ANOVA ad effetti casuali detto anche \textit{Empty Model} si ha che
 \begin{equation*}
-y_{ij}=v_j+r_{ij}
+y_j = v_j + r_j = (\gamma + u_j) + r_j
 \end{equation*}
-In questo caso la variabile dipendente $y$ dipende dagli effetti casuali:
-\begin{itemize}
-\item a livello di gruppo, $V_j$, distribuiti in modo normale $N(\gamma_{00}, \tau^2)$
-\item a livello individuale, dai residui $R_{ij}$, distribuiti in modo normale $N(0, \sigma^2)$ 
-\end{itemize}
-con $V_j$ ed $R_{ij}$ \textbf{indipendenti} e \textbf{mutualmente incorrelati}. \\
+In questo caso la variabile dipendente $y_j$ dipende dalla media di gruppo $v_j \sim N(\gamma, \tau^2)$ e da una componente residuale $r_j \sim N(0, \sigma^2)$ con $v_j$ ed $r_j$ indipendenti e mutualmente incorrelati.
 La variabilità all’interno di ogni gruppo è quindi dovuta solamente alla distribuzione casuale della variabile dipendente.
 
-L’intercetta casuale a livello di gruppo può essere scomposta in due parti: l’intercetta fissa media tra tutti i gruppi $\gamma_{00}$ e la misura della sua deviazione attorno alla media tra i gruppi di tipo casuale $u_j$
+La variabilità totale di $y$ può essere scomposta nella fra i gruppi $\tau^2$ e varianza nei gruppi $\sigma^2$:
 \begin{equation*}
-v_j=\gamma_{00}+u_j
+Var(y) = Var(u)+Var(r_j) = \tau^2 + \sigma^2
 \end{equation*}
-Possiamo a questo punto riscrivere il modello nel seguente modo: 
+Si può quindi definire il \textit{coefficiente di correlazione intraclasse}:
 \begin{equation*}
-y_{ij}=\gamma_{00}+u_{j}+r_{ij}
+\varrho = \frac{\tau^2}{\tau^2 + \sigma^2} \in [0, +1]
 \end{equation*}
-In questo modello quindi la variabilità totale di $y$ può essere scomposta nella somma delle varianze ai due livelli, varianza fra i gruppi e varianza nei gruppi
+che misura la quota di varianza di $y$ spiegata dall’appartenenza ai gruppi dei singoli individui.
+Se $\varrho = 0$, ovvero tutti gli $u_j$ sono nulli (o i $v_j$ sono uguali tra di loro e a $\gamma$), allora il raggruppamento non è significativo ed è inutile utilizzare modelli più complessi del lineare semplice.
+Nel caso invece $\rho$ fosse positivo, è necessario considerare un modello di tipo gerarchico.
+Per verificare questa condizione, non si confrontano i singoli valori $u_j$ ma i loro intervalli di confidenza: due valori si considerano statisticamente uguali se il loro intervallo di confidenza ha punti in comune.
+Si può effettuare un test $F$ per verificare l'ipotesi complessiva $H_0 : u_j = 0, \hspace{5pt} j = 1 \dots m$:
 \begin{equation*}
-Var(y)=Var(U_j)+Var(R_{ij})=\tau^2+\sigma^2
+  \frac{^{SSF}/_{p - 1}}{^{SSE}/_{n - p}} \sim F_{p - 1, n - p}
 \end{equation*}
-Si può quindi definire il coefficiente di correlazione intraclasse, come visto in precedenza
-\begin{equation*}
-\rho = \frac{\tau^2}{\tau^2+\sigma^2}
-\end{equation*} 
-Il coefficiente di correlazione intraclasse $\rho$ misura quindi la quota di varianza di $y$ spiegata dall’appartenenza ai gruppi dei singoli individui. Se $\rho = 0$, ovvero tutti gli $u_j$ sono nulli, allora il raggruppamento è irrilevante ed è inutile utilizzare altri modelli oltre il modello lineare semplice. Nel caso invece $\rho$ fosse positivo, è necessario considerare un modello di tipo gerarchico.
-
-Il Test $F$ come in ogni analisi della varianza può essere utilizzato per verificare in termini inferenziali l’ipotesi che le intercette casuali $u_j$ siano nel complesso tra loro equivalenti (nel caso non ci fosse differenza fra gruppi). In questo caso il Test $F$ serve per capire se nel complesso vale l’ipotesi nulla $H_0$ che le medie parziali ottenute nel campione possano essere ritenute nel complesso equivalenti. Per confrontare tra loro le strutture di secondo livello (ad esempio scuole, ospedali, università) come nell’analisi della varianza casuale non si utilizzano i valori delle medie campionarie, non informative del vero valore di $U_j$ ma i loro \textit{intervalli di confidenza} che comprendono con una probabilità del 90\%, 95\%, 99\% i valori veri ignoti di $U_j$.
-Ciò significa probabilizzare la gerarchia fra medie parziali in quanto, tanto più sono piccoli gli intervalli di confidenza, maggiore è la loro capacità di fornire informazioni sui valori veri ignoti di $U_j$. 
-\newline
-\newline
-\textbf{NB} A differenza dell’analisi della varianza casuale, nel Modello Multilevel che è, come ricordato, un’analisi della \textit{covarianza casuale}, tali intervalli di confidenza sono \textbf{al netto dell’influenza delle variabili $X$ del modello lineare}. Questa probabilizzazione della gerarchia influenza e rende più robusto il confronto fra strutture di secondo livello in quanto una media parziale $u_j$ di una struttura $J$ si considera superiore a un’altra media parziale $u_g$ di una struttura $G$ se e solo se l’estremo inferiore del suo intervallo di confidenza è più grande dell’estremo superiore dell’altra in quanto, solo in questo caso, con un elevato grado di probabilità, il valore vero di $J$ sarà più grande di $G$.
 
 \subsection*{3. Random intercept model}
-Se si inserisce nel modello Empty una variabile esplicativa $x_k$ il modello diventa il vero e proprio random intercept model (mixed model) 
+Considerando anche la variazione della variabile risposta in relazione ai dati del gruppo si ottiene il modello \textit{random intercept}:
 \begin{equation*}
-y_{ij}=\gamma_{00}+\beta_1 x_{ij}+ u_j + \varepsilon_{ij} 
+y_j = \gamma + u_j + X_j \beta + \varepsilon_j
 \end{equation*}
-dove $u_j$ è la determinazione della \textit{variabile casuale} $U_j$ distribuita normalmente $N(\gamma_{00}, \tau^2)$ a rappresentazione dei residui di secondo livello. Ess sono indipendenti e quindi incorrelati con i residui di primo livello $\varepsilon_{ij}$ determinazioni della variabile casuale normalmente distribuita $E_{ij} \sim N(0,\sigma^2)$
+dove $u_j \sim N(0, \tau^2)$ rappresenta i residui di secondo livello (ovvero di gruppo) non spiegabili da $X_j$ e sono incorrelati ai residui di primo livello $u_j \indep \varepsilon_j$.
+In questo caso la variabile dipendente $y$ dipende sia dai dati del $j$-esimo livello $X_j$, sia dall'effetto casuale dei residui di secondo livello $u_j$ sia da quelli di primo $\varepsilon_j$.
 
-In questo caso la variabile dipendente $y$ dipende:
-\begin{itemize}
-\item dalle variabili $X$ e dai relativi parametri fissi $\beta$;
-\item dall’effetto casuale a livello di gruppo $u_j$, che si distribuisce in modo normale  $N(\gamma_{00}, \tau^2)$;
-\item dall’effetto casuale a livello individuale $\varepsilon_{ij}$, che si distribuisce in modo normale $N(0,\sigma^2)$.
-\end{itemize}
-La correlazione intraclasse $\rho$ misura la quota di varianza di $y$ spiegata dall’appartenenza ai gruppi dei singoli individui, \textbf{al netto della quota di varianza spiegata da $x$} (a differenza del modello Empty, in questa circostanza ho $X$ che spiega una parte della variabilità non dovuta all’appartenenza a un gruppo di un individuo). Per questa ragione il suo valore può decrescere anche molto dal caso rispetto al caso del modello Empty. 
+Si può calcolare ancora la correlazione intraclasse $\varrho$, che rappresenta la quota di varianza di $y$ spiegata dall'appartenenza ai singoli gruppi rispetto, senza contare la quota spiegata dai dati $X_j$.
+Per questo motivo, il valore di $\varrho$ può essere minore rispetto a quello dell'\textit{empty model}.
 
-Il modello comprende 4 parametri da stimare:
-\begin{itemize}
-\item i coefficienti di regressione $\gamma_{00}$ e $\beta$; \item le componenti della varianza $\sigma^{2}$ e $\tau^{2}$.
-\end{itemize}
-Il coefficiente di regressione $\beta$ può essere interpretato come variazione di $Y$ corrispondente ad una variazione unitaria di $X$. In un modello di regressione semplice la variabilità di $Y$ non spiegata dalla regressione è semplicemente data dai residui $\varepsilon_{ij}$.
+Il modello prevede la stima di $\gamma$, $\beta$, $\sigma^2$ e $\tau^2$; resta inoltre valida l'interpretazione di $\beta$ come variazione di $y$ rispetto ad una variazione unitaria di $X$.
 
-La variabilità in un modello multilevel, invece, fa riferimento a più popolazioni:
-\begin{itemize}
-\item La v.c. $U_j$ può essere vista come le variabile casuale che descrive i residui a livello di gruppo, ovvero gli effetti di gruppo non spiegati da $X$;
-\item La v.c. $E_{ij}$ può essere vista come variabile casuale che descrive i residui a livello di individuo, ovvero gli effetti individuali non spiegati da $X$.
-\end{itemize}
-\subsubsection*{Rappresentazioni di un modello random intercept}
-\begin{itemize}
-\item Micro model: $y_{ij}=\beta_1 x_{ij}+R_{ij}$
-\item Macro model: $\beta_{0j}=\gamma_{00}+U_{0j}$
-\end{itemize}
-Come unica equazione multilevel
-\begin{equation*}
-y_{ij}=\gamma_{00}+\beta_1 x_{ij}+ U_{0j}+R_{ij}
-\end{equation*}
-Con
-\begin{itemize}
-\item parte fissa del modello $y_{ij}=\gamma_{00}+\beta_1 x_{ij}$
-\item parte casuale (random part) del modello $U_{0j}+ R_{ij}$
-\end{itemize}
-e come varianze e covarianze al primo livello $\sigma^2$, ed al secondo livello $\tau^2$.
-\newline
-\newline
-\textbf{NB} Variabili esplicative relative al secondo livello possono essere misurate direttamente sulle unità di secondo livello o derivate dalle misurazioni effettuate sulle unità di primo livello. Inoltre spesso la numerosità dei vari gruppi è diversa da gruppo a gruppo, questo però non rappresenta un problema grazie all'\textbf{effetto shrinkage}, che tiene conto della diversa numerosità dei gruppi facendo pesare di più per la stima complessiva, i gruppi più numerosi. 
+Non importa, ai fini statistici, se le variabili esplicative relative al secondo livello sono misurate sulle unità o sui gruppi; inoltre non è nemmeno necessario che tutti i gruppi abbiano la stessa numerosità dato l'\textit{effetto shrinkage}, che modifica i pesi dei gruppi.
+
 \subsection*{4. Random slopes and intercepts model} 
-La relazione tra variabile dipendente $Y$ e variabili esplicative $X_j$ può variare tra i gruppi in modi diversi: si può infatti avere un’eterogeneità delle regressioni tra i diversi gruppi (si parla anche di interazione gruppo – covariate). 
-
-Ad esempio nel caso dell’analisi delle performance degli studenti appartenenti alle scuole, si può assumere che l’effetto dello stato socio economico o dell’intelligenza individuale sulle performance possa essere diverso nelle singole scuole.
-
-La struttura dei dati ed il loro raggruppamento può essere spiegato quindi anche facendo variare i coefficienti della regressione da gruppo a gruppo.
+La relazione tra variabile dipendente $y$ e le variabili esplicative $X_j$ può variare tra i gruppi in modi diversi: si può infatti avere un’eterogeneità dei coefficienti di regressione $\beta$ tra i diversi gruppi (si parla anche di interazione gruppo - covariate).
+Si può quindi costruire un modello dove anche i coefficienti $\beta$ variano in base al gruppo:
 \begin{equation*}
-y_{ij}=\beta_{0j}+\beta_{1j} x_{ij}+ R_{ij}
+y_j = X_j \beta_j + r_j
 \end{equation*}
-A seconda del comportamento di $\beta_{0j}$ e $\beta_{1j}$ possiamo ottenere:
-\begin{itemize}
-\item Con diversi $\beta_{0j}$ in base ai gruppi otteniamo un  \textbf{modello Random Intercept};
-\item Con anche diversi $\beta_{1j}$ in base ai gruppi otteniamo un \textbf{modello Random Coefficient};
-\item Se i coefficienti $\beta_{0j}$ e $\beta_{1j}$ sono entrambi costanti la struttura gerarchica non ha effetto ed otteniamo un \textbf{modello OLS}.
+In base ai valori assunti dai singoli $\beta_j$ si possono ottenere diverse tipologie di modelli:
+\begin{itemize}[noitemsep]
+  \item se il vettore $\beta_j$ rimane costante in ogni modello, la struttura gerarchica non è statisticamente significativa e si ha un modello OLS;
+\item se l'intercetta cambia in ogni modello $j$, si ha un modello \textit{random intercept};
+\item se anche i coefficienti cambiano in ogni modello $j$, si ha un modello \textit{random coefficient}.
 \end{itemize}
-Considerando
+Il vettore $\beta_j$ può essere scomposto in due vettori rappresentanti uno la parte costante e uno la variabile:
 \begin{equation*}
-y_{ij} = \beta_{0j} + \beta_{1j} x_{ij} +R_{ij}
+  \beta_j = \gamma + u_j
 \end{equation*}
-con $\beta_{0j}$ e $\beta_{1j}$ variabili, ognuno può essere scomposto in parte costante e deviazione dalla media a livello di gruppo:
-\begin{center}
-$\beta_{0j} = \gamma_{00} + U_{0j}$ \\
-$\beta_{1j} = \gamma_{10} + U_{1j}$
-\end{center}
-ottenendo quindi l'equazione completa
-\begin{equation*}
-y_{ij} = \gamma_{00} + \gamma_{10} x_{ij} + U_{0j} + U_{1j} x_{ij} + R_{ij}
-\end{equation*}
-con effetti di gruppo dati da
-\begin{itemize}
-\item $U_{0j}$ intercetta random;
-\item $U_{1j} x_{ij}$ interazione random tra i gruppi e la variabile esplicativa $x_{ij}$;
-\item $\gamma_{00} + \gamma_{10} x_{ij}$ parte fissa del modello generale;
-\item $U_{0j} + U_{10} x_{ij} + R_{ij}$ parte random del modello generale.
-\end{itemize}
+dove  $\gamma$ rappresenta la parte fissa e $u_j$ gli effetti di gruppo.
+Il modello dunque diventa:
+\begin{align*}
+  y_j &= X (\gamma + u_j) + r_j \\
+      &= X_j \gamma + X_j u_j + r_j
+\end{align*}
+
 \section{Metodi di stima e verifica di ipotesi}
 \subsection*{Specificazione del modello e stima dei parametri}
 La specificazione del modello comporta la scelta del modello più soddisfacente. Nel caso di modelli lineari gerarchici tutto ciò implica:
@@ -1048,18 +868,18 @@ H_0 : \beta_1 = \beta_2 = \dots = 0
 \end{equation*}
 si può pensare a ragion veduta di operare un confronto fra due modelli: l’empty-model e il modello ipotizzato. 
 Questo test può essere applicato sia alla parte fissa sia a quella random del modello.
-\newpage
-\part*{Dimostrazioni}
-\section*{Non Efficienza con Errori Eteroschedastici}
-Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. $ \hfill \square$
+% \newpage
+% \part*{Dimostrazioni}
+% \section*{Non Efficienza con Errori Eteroschedastici}
+% Siano $\varepsilon^*$ gli errori eteroschedastici,  $E[b^*]=E[((X'X)^{-1}X'y-b)((X'X^{-1})X'y-b)'] =$\newline  $E[((X'X)^{-1}X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})((X'X^{-1})X'(X\bcancel{b}+\varepsilon^*)-\bcancel{b})'] = (X'X)^{-1}X'E[\varepsilon^* (\varepsilon^*)']((X'X)^{-1}X')' = \newline (X'X)^{-1}X' \Sigma_{\varepsilon^*}((X'X)^{-1}X')'$ e abbiamo che $\Sigma_{\varepsilon^*}$ varia al variare dell'indice. $ \hfill \square$
 
-\section*{Non collinarietà dopo la trasformazione ritardata}
-Il modello trasformato è 
-\[y^{\#}_t = \beta_{0} + \beta_1x_t^{\#} + w_t \] 
-quindi abbiamo che 
-\[ cov(w_t,w_{t-1}) = cov(\varepsilon_t^{\#} - \rho \varepsilon_{t-1}^\#, \varepsilon_{t-1}^\# - \rho \varepsilon_{t-2}^\#) =  \]
-\[ = cov(\varepsilon_{t}^\#,\varepsilon_{t-1}^\#) -\rho cov(\varepsilon_{t-1}^\#,\varepsilon_{t-1}^\#) - \rho cov(\varepsilon_{t}^\#,\varepsilon_{t-2}^\#) + \rho^2 cov(\varepsilon_{t-1}^\#,\varepsilon_{t-2}^\#) = \]
-\[ = \rho - \rho - \rho^3 + \rho^3  = 0 \]
-il risulta poteva anche essere intuitivo poiché ho eliminato la parte ritardata che era presente nella variabile e portava alla multicollinarietà. $\hfill \square$
+% \section*{Non collinarietà dopo la trasformazione ritardata}
+% Il modello trasformato è 
+% \[y^{\#}_t = \beta_{0} + \beta_1x_t^{\#} + w_t \] 
+% quindi abbiamo che 
+% \[ cov(w_t,w_{t-1}) = cov(\varepsilon_t^{\#} - \rho \varepsilon_{t-1}^\#, \varepsilon_{t-1}^\# - \rho \varepsilon_{t-2}^\#) =  \]
+% \[ = cov(\varepsilon_{t}^\#,\varepsilon_{t-1}^\#) -\rho cov(\varepsilon_{t-1}^\#,\varepsilon_{t-1}^\#) - \rho cov(\varepsilon_{t}^\#,\varepsilon_{t-2}^\#) + \rho^2 cov(\varepsilon_{t-1}^\#,\varepsilon_{t-2}^\#) = \]
+% \[ = \rho - \rho - \rho^3 + \rho^3  = 0 \]
+% il risulta poteva anche essere intuitivo poiché ho eliminato la parte ritardata che era presente nella variabile e portava alla multicollinarietà. $\hfill \square$
 
 \end{document}
