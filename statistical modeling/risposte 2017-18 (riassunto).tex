@@ -732,7 +732,7 @@ La stima del modello Multilevel si compone di 4 step:
 \item Random slopes and intercepts model (UGM) analisi della covarianza a effetti casuali sia per il modello lineare che per l’analisi della varianza.
 \end{enumerate}
 
-\subsection*{1. Stima modello lineare con metodo di stima OLS}
+\subsection*{Stima modello lineare con metodo di stima OLS}
 Si consideri un modello Multilevel in cui compare solamente la parte stimata mediante metodo OLS:
 \begin{equation*}
   y_j = X_j \beta + \varepsilon_j
@@ -749,7 +749,7 @@ y_j = X_j \beta_{within} +\overline{x}_j\beta_{between} +\varepsilon
 
 si calcola il \textit{contextual effect} $\delta = \beta_{between} - \beta_{within}$ che rappresenta l'effetto della media dei gruppi.
 
-\subsection*{2. Empty model}
+\subsection*{Empty model}
 Nel modello ANOVA ad effetti casuali detto anche \textit{Empty Model} si ha che
 \begin{equation*}
 y_j = v_j + r_j = (\gamma + u_j) + r_j
@@ -774,7 +774,7 @@ Si può effettuare un test $F$ per verificare l'ipotesi complessiva $H_0 : u_j =
   \frac{^{SSF}/_{p - 1}}{^{SSE}/_{n - p}} \sim F_{p - 1, n - p}
 \end{equation*}
 
-\subsection*{3. Random intercept model}
+\subsection*{Random intercept model}
 Considerando anche la variazione della variabile risposta in relazione ai dati del gruppo si ottiene il modello \textit{random intercept}:
 \begin{equation*}
 y_j = \gamma + u_j + X_j \beta + \varepsilon_j
@@ -789,7 +789,7 @@ Il modello prevede la stima di $\gamma$, $\beta$, $\sigma^2$ e $\tau^2$; resta i
 
 Non importa, ai fini statistici, se le variabili esplicative relative al secondo livello sono misurate sulle unità o sui gruppi; inoltre non è nemmeno necessario che tutti i gruppi abbiano la stessa numerosità dato l'\textit{effetto shrinkage}, che modifica i pesi dei gruppi.
 
-\subsection*{4. Random slopes and intercepts model} 
+\subsection*{Random slopes and intercepts model} 
 La relazione tra variabile dipendente $y$ e le variabili esplicative $X_j$ può variare tra i gruppi in modi diversi: si può infatti avere un’eterogeneità dei coefficienti di regressione $\beta$ tra i diversi gruppi (si parla anche di interazione gruppo - covariate).
 Si può quindi costruire un modello dove anche i coefficienti $\beta$ variano in base al gruppo:
 \begin{equation*}
@@ -814,60 +814,26 @@ Il modello dunque diventa:
 
 \section{Metodi di stima e verifica di ipotesi}
 \subsection*{Specificazione del modello e stima dei parametri}
-La specificazione del modello comporta la scelta del modello più soddisfacente. Nel caso di modelli lineari gerarchici tutto ciò implica:
-\begin{itemize}
-\item Scelta delle variabili esplicative $x_j$ e delle interazioni della parte fissa;
-\item Scelta dei coefficienti casuali con le strutture di covarianza per la parte random del modello.
-\end{itemize}
-I parametri da stimare nel modello random intercept sono:
-\begin{itemize}
-\item Coefficienti di regressione $\gamma_{00}$ e $\beta$;
-\item Componenti di varianza, $\sigma^2$ e $\tau^2$; 
-\item Gli effetti casuali $U_{0j}$ non sono parametri ma variabili casuali latenti, ovvero non direttamente osservabili. 
-\end{itemize}
-I metodi comunemente utilizzati per la stima dei parametri sotto l’assunzione che i residui $U_{0j}$ e $R_{ij}$ siano distribuiti normalmente sono il metodo del \textit{maximum likelihood} (ML) ed il \textit{restricted maximum likelihood} (REML).
+Per ottenere stime migliori è necessario specificare quali variabili $x_j$ includere nel modello.
+I coefficienti da stimare sono $\gamma$, $\beta$, $\sigma^2$ e $\tau^2$; mentre il vettore $u_j$ è una variabile casuale latente (cioè non direttamente misurabile).
 
-Il metodo REML massimizza la verosimiglianza (likelihood) dei residui osservati ottenendo le stime degli effetti fissi usando metodi «non likelihood-like» come \textit{ordinary least squares} (OLS) o \textit{generalized least squares} (GLS) e, successivamente usa queste per massimizzare la verosimiglianza dei residui (sottraendo gli effetti misti) per ottenere le stime dei parametri della varianza.
+I metodi usati per la stima sfruttano l'assunzione di normalità dei residui $u_j$ e $r_j$, e ricadono nelle famiglie dei metodi ML (\textit{maximum likelihood}) e REML (\textit{restricted maximum likelihood}).
+Quest'ultimo massimizza la verosimiglianza dei residui osservati tramite metodi alternativi quali OLS (\textit{ordinary least squares}) e GLS (\textit{generalized least squares}) ai quali sono sottratti gli effetti misti.
+
 \subsection*{Verifica di ipotesi}
-\subsubsection*{Test sui parametri fissi del modello}
-Per testare i parametri fissi del modello si utilizza la seguente ipotesi nulla (ipotesi di significatività) su ciascun parametro 
+Per testare i parametri fissi del modello si effettua un test $t$ \textit{alla Wald} ($H_0: \gamma_i = 0$)per ogni parametro $\gamma_i$:
 \begin{equation*}
-H_0: \gamma_h = 0
+  \frac{\hat{\gamma}_i}{\hat{s}_{\gamma_i}} \sim T_{n_{tot} - k}
 \end{equation*}
-\newline
-Questa ipotesi viene verificata con un Test t
+
+Per testare più parametri (fissi e casuali) del modello invece viene utilizzato il \textit{deviance test}: partendo dalla funzione di verosimiglianza $L$ ottenuta col metodo ML, si calcola
 \begin{equation*}
-\mathrm{T}(\gamma_h) = \frac{\hat{\gamma}_h}{\mathrm{s.e.(\hat{\gamma}_h)}}
+  D = -2 \cdot log(L) \sim \chi^2_k
 \end{equation*}
-noto come WALD TEST. 
+da interpretarsi in termini differenziali, cioè come confronto tra più modelli $D_{k_0} - D_{k_1} \sim \chi^2_{k_0 - k_1} $.
+Un modello è considerato migliore di un altro se il suo valore $D$ è maggiore (prossimo allo $0$).
+Generalmente il modello preso in considerazione è confrontato col modello vuoto (\textit{empty model}) per testare la significatività congiunta dei parametri, e col modello saturo (\textit{saturated model}).
 
-Sotto l’ipotesi nulla il test ha approssimativamente una distribuzione t con g.d.l. basati sulla struttura multilevel dell’analisi. 
-\subsubsection*{Test su più parametri della parte fissa del modello e parte random}
-Per testare più parametri (fissi e random) del modello invece viene utilizzato il deviance test. 
-
-Dalla stima del modello lineare con il metodo ML si ottiene la verosimiglianza del modello, da cui: 
-\begin{equation*}
-\mathrm{DEVIANCE} = -2 \cdot ln(\mathrm{Likelihood}) 
-\end{equation*}
-misura della bontà di adattamento ai dati del modello.
-
-Solitamente la deviance viene interpretata in termini differenziali, ovvero si calcola la differenza tra le deviance di modelli alternativi. 
-
-Si tratta di confrontare i valori osservati della variabile dipendente con i valori teorici di due modelli: 
-\begin{enumerate}[noitemsep]
-\item l'uno con le variabili esplicative di interesse e l’altro senza alcuna variabile (\textbf{empty-model}); 
-\item l'uno con le variabili esplicative di interesse e l’altro che contiene “tanti parametri quante sono le osservazioni” (\textbf{saturated model}).
-\end{enumerate}
-Il confronto si basa sulla funzione di log-verosimiglianza: perciò indicate rispettivamente con $D_0$, $D_{mod}$, $D_{sat}$ le devianze calcolate per il \textbf{modello vuoto} (empty-model), il \textbf{modello considerato} e il \textbf{modello saturo}, valori di $D_{mod}$ più prossimi a $0$ che non a $D_0$ faranno propendere per ritenere “buono” il modello considerato. 
-
-Ognuna delle devianze ha distribuzione asintotica $\chi^2$ (con $j$ gradi di libertà pari al numero delle variabili esplicative). Le loro differenze avranno distribuzione $\chi^2$ (con k gradi di libertà pari alla differenza del numero di variabili esplicative).
-
-Se l’obiettivo è quello di sottoporre a verifica l’ipotesi che riguarda la nullità congiunta di tutti i coefficienti (esclusa l’intercetta),
-\begin{equation*}
-H_0 : \beta_1 = \beta_2 = \dots = 0
-\end{equation*}
-si può pensare a ragion veduta di operare un confronto fra due modelli: l’empty-model e il modello ipotizzato. 
-Questo test può essere applicato sia alla parte fissa sia a quella random del modello.
 % \newpage
 % \part*{Dimostrazioni}
 % \section*{Non Efficienza con Errori Eteroschedastici}
