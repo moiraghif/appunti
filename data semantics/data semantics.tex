@@ -23,6 +23,7 @@
 }
 
 \counterwithin*{section}{part}
+\counterwithin*{footnote}{part}
 \graphicspath{ {./img/} }
 
 % lunedì        10:30-12:30 U14/T024 (U14/1)
@@ -886,6 +887,72 @@ Esistono tecniche di \textit{natural language processing} che effettuano \textit
 Gli algoritmi statistici (\textit{deep learning}) hanno suscitato forti dibattiti in ambito accademico dato che non sono interpretabili in nessun modo dagli esperti di dominio.
 Spesso però manca la quantità sufficiente di dati per poter eseguire tecniche statistiche.
 
+Le tecniche per l'analisi del testo cambiano in base alla qualità del testo stesso (in base al registro utilizzato); però nessuna tecnica ha una precisione perfetta.
+
+\section{Estrazione di relazioni}
+I metodi basati sul \textit{machine learning} non sono i migliori per gestire le relazioni (l'unico approccio che offre risultati soddisfacenti è il \textit{never ending learning}).
+L'approccio più competitivo usa delle regole linguistiche sulle triple RDF per trovare le relazioni tra le entità; tuttavia sono algoritmi estremamente costosi da implementare e come licenza software.
+
+\subsection{\textit{Name Identity Extraction} da Twitter}
+% cogito
+I \textit{social media} sono strumenti per estrarre informazioni non ufficiali; si hanno informazioni aggiornate e quindi nuova conoscenza.
+L'estrazione di informazioni da Twitter è però difficile a causa della presenza di \textit{hashtag} che non rispettano le regole grammaticali pur rappresentando entità.
+Delle entità si deve determinare il tipo (a causa della polisemia), discriminando anche se si tratta di entità reali o di finzione: si tratta di risolvere le disambuiguità.
+
+Le disambuiguità possono essere risolte a partire dal testo, ma in alcuni casi è necessario avere una conoscenza di dominio.
+Per ogni parola si possono avere più candidati: quella ritenuta corretta massimizza la somiglianza tra i membri della lista.
+Il \textit{bottleneck} è il riconoscimento delle entità all'interno del testo.
+
+In Twine, si effettua una prima fase di NER (con un algoritmo \textit{black box}) che estrae le \textit{surface form}, ovvero la stringa di caratteri che denota la menzione dell'entità del tweet, su cui è poi effettuato un match con distanza coseno; si considerano quindi i candidati migliori per poi analizzare dati di appoggio (si estrae l'\textit{abstract} per confrontarlo con il testo del tweet) ottenendo dei punteggi.
+Ordinati i candidati per punteggio, si tentano dei collegamenti tra le entità.
+Il \textit{Knowladge score} è calcolato come:
+\begin{equation*}
+  KB(e_j, c_k) = \alpha \cdot lex(e_j, I_{c_k}) + (1 - \alpha) \cdot cov(e_j, c_k)
+\end{equation*}
+che considera la similarità lessicale ($lex$) tra le entità e la \textit{coverage} ($cov$), basata sulla coerenza e sulla popolarità degli elementi: più un'entità è popolare, più probabile sarà il match.
+I componenti sono combinati linearmente con un parametro $\alpha$ con valore che ottimizza le prestazioni.
+L'indice $lex$ non è normalizzato in $[0;+1]$ e non può essere normalizzato.
+\begin{align*}
+  lex(e_j, I_{c_j}) &= les(e_j, I_{c_j}) + W_D \frac{JW(e_j, I_{c_j})}{W_D + 1} \\
+  JW(e_j, I_{c_j}) &= Jarov(e_j, I_{c_j}) + \frac{P^\prime}{10}(1 - Jarov(e_j, I_{c_j}))
+\end{align*}
+La \textit{jaro distance} è una misura di similarità (compresa in $[0; +1]$) dipendente dalla lunghezza di un prefisso comune a due stringhe.
+Si considera valido il match se la distanza non supera una certa soglia ($\frac{1}{2}\max(|x|, |y|) - 1$).
+Si considera inoltre il numero di trasposizioni $t$, ovvero i caratteri che non sono nella stessa posizione ma sono presenti in entrambe le stringhe.
+La formula quindi è:
+\begin{equation*}
+  sim_{jaro} = \frac{1}{3}(\frac{m}{|x|} + \frac{m}{|y|} + \frac{m-t}{m}) \in [0; +1]
+\end{equation*}
+Questa tecnica è usata per trovare corrispondenze tra tutte le permutazioni di nome-cognome di una persona e una stringa.
+
+La similarità di \textit{coverage} è definita come:
+\begin{equation*}
+  cov(e_j, I_{c_k}) = cos(e_j, a_{c_k}) + R(c_k)
+\end{equation*}
+dove $R(c_k)$ è il \textit{page rank} (ovvero la popolarità) della pagina twitter su cui è effettuato il match: non è però una misura normalizzata.
+
+L'algoritmo di disambiguazione non è particolarmente lento; tuttavia il sistema di \textit{name identity recognition} (effettuato tramite apprendimento automatico) è pesante; inoltre questi algoritmi sono allenati su testi vecchi ma il linguaggio dei social network è in continua evoluzione e quindi le prestazioni effettive sono minori di quelle attese.
+
+Si usa quindi un altro algoritmo di apprendimento (LearningToLink) che stabilisce quando effettuare il link tra elemento ed entità.
+L'algoritmo quindi è usato solamente per effettuare l'ottimizzazione: il \textit{machine learning} è fondamentale solamente in questa fase.
+
+TWINE si basa su kafka per ottenere informazioni in tempo reale e MongoDB per archiviare i dati; ma dalla versione 2 l'architettura è diventata più facile da scalare.
+
+\section{Visualizzazione di basi di dati}
+Nonostante la grande quantità di dati disponibili grazie ai \textit{linked open data}, questi non sono sufficienti a completare tutte le operazioni.
+Prima di effettuare una query, si effettua una ricerca esplorativa, per ottenere informazioni aggiuntive sul dominio; quindi si tenta di ridurre l'incertezza del processo decisionale con interrogazioni mirate e raffinate.
+La visualizzazione è di aiuto in fase esplorativa ma l'occhio umano non riesce a distinguere grosse quantità di informazioni.
+Si astrae quindi l'informazione riducendo la scala, e visualizzando solamente riassunti semplici di informazioni complesse.
+% wikigalaxy (https://wiki.polyfra.me)
+I \textit{linked data} non sono indicizzati per argomento: nonostante l'ontologia sia pubblica, non sempre questa coincide con lo schema (e non sempre sono accoppiati coi dati, essendo più prescrittivo che descrittivo).
+
+\subsection{ABSTAT}
+Si tratta di un software\footnote{Disponibile su \url{abstat.disco.unimib.it}.} di \textit{data profiling} (l'operazione che tenta di estrapolare il contenuto di un dataset) estraendo dalle triple da \url{dbpedia.org} con cardinalità e altre informazioni.
+
+\newpage
+\part{Sistemi di raccomandazione}
+Un \textit{sistema di raccomandazione} tenta di suggerire ad un utente degli oggetti simili a quelli da lui preferiti.
+Il concetto di \textit{rilevanza} è più rilassato di quello di similarità: sono delle relazioni empiriche che collegano più entità.
 
 \newpage
 \part{Esercitazioni}
