@@ -168,7 +168,7 @@ y_i=b_0 +b_1 x_i +AR1_i  + \varepsilon_i.
 con 
 \begin{align*}
 AR1 + \varepsilon_i = v_i \\
-Corr(v_i,v_j) = 0
+Corr(v_i,v_{i-1}) = 0
 \end{align*}
 \begin{itshape}
 Errori eteroschedastici e correlati: stimatore GLS
@@ -177,11 +177,11 @@ Errori eteroschedastici e correlati: stimatore GLS
 Nel caso in cui gli errori non siano sferici in quanto eteroschedastici e correlati si utilizzano gli stimatori dei minimi quadrati generalizzati ($GLS$) interpretabili in modo analogo al modello classico in quanto stimatori $OLS$ basati su variabili trasformate per mezzo delle proprietà degli autovettori e autovalori ricavati dalla matrice dei residui $\Sigma_\varepsilon$.
 Nello specifico si procede ad effettuare una \textit{decomposizione spettrale della matrice degli errori} 
 \[
-\Sigma_\varepsilon = \sigma^2 VV'
+\Sigma_\varepsilon = VV'
 \]
 con
 \[
-V = \sigma (\sqrt{AL})A'
+V = \sigma (A\sqrt{L})A'
 \]
 dove $A$ è la \textit{matrice degli autovettori} e $L$ è la matrice diagonale degli autovalori di $\Sigma_\varepsilon$.
 
@@ -305,7 +305,7 @@ Esistono, infine, alcuni test non parametrici che non si basano su ipotesi sulla
 \begin{enumerate}
 \item \textbf{Test di Shapiro-Wilk}, che assume valori compresi tra 0 e 1 e gli estremi corrispondono rispettivamente al rifiuto e all’accettazione dell’ipotesi di normalità. Il test parte dell'ipotesi $H_0$ : $\varepsilon\sim N(0,\sigma^2)$. In ogni caso, il test $W$ essendo caratterizzato da una forte asimmetria  potrebbe comunque portare ad un rifiuto dell'ipotesi di normalità.
 \begin{equation*}
-W = \sum_{i}\frac{(\beta_i \varepsilon_i)^2}{ 			\varepsilon_i^2}
+W = \frac{\sum_{i}(\beta_i \varepsilon_{(i)})^2}{ \sum_{i} \varepsilon_i^2}
 \end{equation*}
 \item \textbf{Test di Kolmogorov Smirnov}, in cui $H_0$ : $\varepsilon\sim N(0,\sigma^2)$ e si basa sul calcolo della statistica test $D$ come la somma in valore assoluto della differenza tra le frequenze cumulate della distribuzione empirica da testare e quelle della normale, una volta definite delle classi di eguale ampiezza. $D$ viene poi messa a confronto con le apposite tavole (essendo una statistica tabulata) ed in caso di superamento del valore critico in base al livello di significativà scelto comporterà il rifiuto o l'accettazione di $H_0$;
 \item \textbf{Skewness test} (test di asimmetria), ovvero un test direzionale basato sul fatto che la distribuzione della normale è simmetrica; si basa perciò su un indice di simmetria; rigettando $H_0$ si rigetta la normalità, non rigettandola, invece, si dice solo che la distribuzione è simmetrica, ma non per forza normale.
@@ -434,7 +434,7 @@ In sintesi ogni \textit{riga} della matrice dei parametri $\beta$ si riferisce a
 \newline
 %Ciò implica che anche riferendosi ad una singola $y_i$, comunque la stima avviene nel complesso, con il prodotto tra la matrice delle variabili esplicative $Z$ e appunto $\beta$ che comprende al suo interno però \textbf{tutti} i parametri stimati riguardanti l'insieme delle variabili dipendenti $y_{1,...,m}$, rendendo di fatto i parametri che stimano le diverse variabili dipendenti $y$ influenzati gli dagli altri. In questo particolare aspetto risiede infatti la differenza tra un modello multivariato su $m$ variabili dipendenti $y$ ed $m$ modelli univariati, ognuno con una specifica $y$ come variabile dipendente.%
 Nel suo complesso perciò il modello multivariato appare come 
-\[ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,m)} + E_{(m,n)} \quad \text{ ovvero}\]
+\[ Y_{(m,n)} = B_{(m,r+1)}Z_{(r+1,n)} + E_{(m,n)} \quad \text{ ovvero}\]
 \[ \forall j \in [1,m] \quad y_j= \beta_{j0} + \beta_{j1}z_1 + \dots + \beta_{jr}z_r + \varepsilon_j \]
 Con il contenuto della matrice delle variabili dipendenti interpretabile come:
 \begin{itemize}[noitemsep]
@@ -460,7 +460,7 @@ Con dimensione $(nm,nm)$ poichè ogni matrice $\Sigma_\varepsilon$ relativa ad o
 \item Le $Z$ variabili esplicative sono non collineari con rango ($z=r+1$), contrariamente la matrice $Z'Z$ non sarebbe invertibile e non sarebbe calcolabile lo stimatore dei minimi quadrati;
 \item La numerosità della popolazione $n$ è maggiore del numero degli $r$ parametri stimati più l'intercetta ($n > r+1$) per la stessa ragione, perciò per ogni equazione le stime dei minimi quadrati di $\hat{\beta}$ sono trovate in modo analogo al caso univariato:
 \begin{equation*}
-\hat{\beta} = y_j Z'(Z'Z)^{-1}
+\hat{\beta_j} = y_j Z'(ZZ')^{-1} \iff \hat{B} = YZ'(ZZ')^{-1}
 \end{equation*}
 Di conseguenza \textbf{nel modello multivariato classico calcolare le soluzioni per ogni variabile dipendente $y$ singolarmente oppure tutte insieme, dal punto di vista descrittivo, è identico}.
 \item Gli errori $E$ si distribuiscono come una normale multivariata:
@@ -481,7 +481,7 @@ Con $\Sigma_Y$ matrice di varianze e covariante di $Y$, $\hat{H}$ matrice di var
 
 La grossa differenza tra soluzione univariata e multivariata, però, sta nelle \textit{covarianze}, poichè a differenza della soluzione univariata, varianze spiegate e residue non sono scalari ma, appunto, matrici; occorre quindi tenere conto delle correlazioni tra le soluzioni.
 
-Nel caso multivariato classico infatti le parti diagonali di $ \Sigma_E$ e $\hat{H}$ sono \textit{identiche}.
+Nel caso multivariato classico infatti le parti non diagonali di $ \Sigma_Y$ e $\hat{H}$ sono \textit{identiche}.
 \begin{equation*}
 (\Sigma_Y = YY') = (\hat{H}=\hat{B}ZZ'\hat{B}')+\sigma^2 I_{nm}
 \end{equation*}
@@ -509,7 +509,7 @@ La varianza generalizzata si dimostra infatti uguale a $0$ in caso di presenza d
 Analogamente si definisce \textit{varianza generalizzata} di $\Sigma_E$ il determinante della matrice di varianza-covarianza residua. 
 \newline
 \newline
-Considerando che $\hat{H}$ si distribuisce come una variabile casuale di \textbf{Wishart} con $r$ \textit{gradi di libertà} e $\Sigma_E$ sempre come una Wishart con $(r-n)$ \textit{gradi di libertà} e considerando la Wishart una generalizzazione multivariata di $F$ possiamo quindi definire come \textbf{test del rapporto di verosimiglianza Lambda di Wilks}: \begin{equation*}
+Considerando che $\hat{H}$ si distribuisce come una variabile casuale di \textbf{Wishart} con $r$ \textit{gradi di libertà} e $\Sigma_E$ sempre come una Wishart con $(r-n)$ \textit{gradi di libertà} e considerando la Wishart una generalizzazione multivariata di $\chi^2$ possiamo quindi definire come \textbf{test del rapporto di verosimiglianza Lambda di Wilks}: \begin{equation*}
 \wedge= \frac{|\Sigma_E|}{|\Sigma_E + \hat{H}|} 
 \end{equation*}
 Che si distribuisce \textit{asintoticamente} come una $\chi^2$ con $mr$ \textit{gradi di libertà}. \\
@@ -572,7 +572,11 @@ H_0 : B_{cA} = B_{vA}
 
 \section{Modello lineare generalizzato}
 Il modello lineare multivariato generalizzato supera le ipotesi, molto stringenti, del modello lineare multivariato classico.
-Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $$Y = BZ+E$$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. 
+Quando cambiano le ipotesi sugli errori si ha il modello lineare generalizzato: $$Y = BZ+E$$ in cui la matrice di covarianza degli errori non è più necessariamente diagonale e gli errori potrebbero essere eteroschedastici. Quindi abbiamo che la stima diventa:
+
+\[
+\hat{\beta_j} = y_j \Sigma_E^{-1}Z'(Z\Sigma_E^{-1}Z')^{-1}
+\]
 
 Nell’ipotesi \emph{classica} infatti abbiamo che:
 
@@ -639,7 +643,9 @@ Data $n_j$ come la numerosità delle osservazioni per l’equazione $j$-esima al
 \end{equation*}
 La soluzione dei minimi quadrati per la stima dei coefficienti sembra simile a quella dei minimi quadrati generalizzati ma solo in apparenza: 
 \begin{itemize}
-\item Il modello è caratterizzato dalla presenza delle variabili esplicative $Z_A$, $Z_B$, $Z_C$ diverse da equazione ed equazione.
+\item Il modello è caratterizzato dalla presenza delle variabili esplicative 
+%$Z_A$, $Z_B$, $Z_C$ <--- Era solo un esempio non lo metterei così io 
+diverse da equazione ed equazione.
 \item Gli errori sono:
 	\begin{itemize}[noitemsep]
 	\item omoschedastici e incorrelati nella stessa equazione;
