@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 
+\usepackage{chngcntr}
 \usepackage[italian]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -850,25 +851,26 @@ Ma non solo è importante e complesso capire anche come la mente reagisce agli s
 \subsection{Comunicazione del valore e la creazione di una crescita a lungo termine}
 Il processo di OMD è come segue:
 \begin{verbatim}
-Comprendere
-/         \
-/           \
-/             \ 
+           Comprendere
+           /         \
+          /           \
+         /             \ 
 Capitalizzare       Progettare
-\             /
-\           /
-\         /
-Realizzare
+         \             /
+          \           /
+           \         /
+           Realizzare
 \end{verbatim}
 
 Diverso nella forma e nella terminologia ma analogo nel concetto è quello di Real World Communication Planning(Figure \ref{fig:RealWorld}).
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[scale=0.5]{IMAGE1.png}
-	\caption{Processo di Real World Communication Planning}
-	\label{fig:RealWorld}
-\end{figure}
+% ho perso l'immagine boh!?
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[scale=0.5]{IMAGE1.png}
+%	\caption{Processo di Real World Communication Planning}
+%	\label{fig:RealWorld}
+%\end{figure}
 
 Un'altra agenzia è MEC usa un percorso detto T5 simile al gioco di snake, rappresenta il percorso che un cliente fa. 
 Inoltre abbiamo un nastro trasportatore che rappresenta il ciclo tra Trigger e Purchase del cliente nella quale nella fase trigger abbiamo un desiderio, seguito da una fase attiva che porta all'acquisto (stadio purchase), dopo acquisto abbiamo una fase passiva dove il cliente non compra il prodotto.
@@ -887,5 +889,267 @@ In caso di mancanza di pubblicità si nota un calo di vendita ripido a differenz
 
 La fonte dei dati può essere First Party (proprio), Second Party (sfruttando sistemi semantici e i metadati ottenuti da pubblicità) o Third Party. 
 Tali dati vengono immagazzinati spesso usando sistemi di Data Lake per poi essere modellati ed elaborati.
+
+\section{Lezione 4 - Attilio - 27 marzo}
+
+Un modello trova relazioni tra variabili che tendenzialmente noi tenderemo ad non considerare. E servono per rispondere alle domande del marketing manager per giustificare le loro azioni.
+Il branded content è ad esempio la nissan che sponsorizza le gare sportive estreme oppure red bull che organizza le gare strane estreme ecc.
+
+Uno studio sulle branded content in TV dividendo in 5 gruppi 1500 mamme con figli tra 3 e 16 anni così composti:
+
+\begin{nosepitemize}
+	\item 300 che guardano pubblicità di 30 secondi
+	\item 300 che guardano pubblicità di 60 secondi
+	\item 300 che guardano pubblicità di 90 secondi
+	\item 300 a cui viene mostrato il banner
+	\item 300 che non vedono niente
+\end{nosepitemize}
+
+E si nota che la crescita significativa dell'awareness avviene a 90 secondi, che costa di più  ma si riesce a trasmettere il messaggio in maniera più significativa. 
+
+Un esempio simile è quello della campagna di Volswagen, ottenedo un successo maggiore dopo esposizione della propria marca con pubblicità sui micrositi.
+Inoltre si nota in altri studi che lo sponsorship è più effettivo rispetto a spot pubblicitario sulla TV.
+
+Ma ciò non significa che non si investe nella TV, perché l'audience delle sponsorship è limitato, mentre il TV posso espandere l'investimento a piacere raggiungendo praticamente tutta la popolazione.
+
+Il mercato Italiano nel 2017 ha circa la metà occupata dalla TV (pubblicità) mentre circa il 25\% dall'internet e la stampa occupa circa il 12\% ed è stimata una crescita di investimento nel digitale e in decrescita nella stampa.
+
+Il paese in cui crescono gli investimenti più rapidamente è India seguita da Cina e Russia con una buona fetta nell'investimento digitale.
+In realtà è un trend mondiale della crescita di investimenti nel digitali com'è giusto aspettarselo, visto l'aumento della popolazione che usa Internet, che può essere visto dal traffico globale dei dati e le Wearable device che aumentano sempre di più. Un altro ambito in aumento in questo momento è il social network.
+
+I paesi occidentali usano molto di più la TV rispetto ai paesi in via di sviluppo, che sembrano preferire il digitale. In Italia il 50\% della fetta pubblicità nella TV è occupata da Gruppo Mediaset seguito da Rai Pubblicità (20\%).
+
+Tante aziende comprano i fan ottendo una grande fan base, ma bisogna capire come usare questi fan, la cosa migiore è usare i social come canali di trasmissioni di messaggio a due via ottenendo feedback dai propri clienti.
+
+\section{Lezione 3 - Di Domenica - 29 marzo}
+
+Google Analytics è un servizio gratuito messo a disposizione da Google ed è il servizio più uitilizzato per le Web Statistics e permette di utilizzare le KPI (Key performing indices) e report e transazioni su un sito Web per conoscere la propria audience, vendere e convertire e agire sugli insights. In realtà esiste una versione commerciale che permette di agire su azioni singole.
+\newline
+Gli obiettivi (cosa posso fare di Google Analytics):
+\begin{nosepitemize}
+	\item Conoscere la propria Audience:
+	\begin{nosepitemize}
+		\item Segmentazione Avanzata: Isolare e analizzare subset di traffico, es. visite che conducono ad una vendita;
+		\item Analisi di performance dell'APP;
+		\item Audience Data and Reporting: focus specifici sulla Audience;
+		\item Dimensioni customizzabili: Focalizzarsi su metriche specifiche (data, attributi demografici, dati comportamentali)
+	\end{nosepitemize}
+	\item Tenere traccia dei percorsi:
+	\begin{nosepitemize}
+		\item Flow Visualization: Vedere le pagine visualizzate e percorsi di uscita dell'Audience
+		\item Map Overlay: mappe geografiche dei visitatori
+		\item Mobile Traffic
+		\item Social Reports: l'impatto dei social sul business
+		\item Sorgenti di traffico
+	\end{nosepitemize}
+	\item Comprendere le esigenze
+	\begin{nosepitemize}
+		\item Event Tracking: Iterazione dell'audience con le pagine;
+		\item In-Page Analytics: Iterazione in pagine specifiche
+		\item Real-Time Reporting
+		\item Site Search
+	\end{nosepitemize}
+\end{nosepitemize}
+
+Grazie a questi punti posso:
+\begin{nosepitemize}
+	\item Raggiungere obiettivi di performance: Sfruttando le advertising Reports capisco i risultati per il budget sostenuto, effettuare classificazioni Data-Driven, identificare i prodotti migliori e capire l'impatto di ciascuna azioni di Digital Marketing sulle vendite;
+	\item Raggiungere l'Audience corretta: Individuare i consumatori interessati per un prodotto;
+	\item Rendere efficiente il sito Web: Alert in variazioni di traffico e capire inefficienze tecninche nel sito.
+\end{nosepitemize}
+
+I skills necessari per digitalizzare la mia azienda, sfruttando Google Analytics sono:
+
+\begin{nosepitemize}
+	\item Digital marketing e digital advertising
+	\item Gestione affiliation and partnership
+	\item Creatività grafica e promozionale
+	\item Competenze tecniche per sviluppo e gestione del sito
+	\item Gestione dei contenuti
+	\item Logistica e Operazione per il magazzino
+	\item Customer Service
+	\item Gestione processo dall'inizio alla fine
+	\item Competenze legali e fiscali (per GDPR ecc.)
+	\item Skill relazionali e integrazione con altre funzioni aziendali
+\end{nosepitemize}
+
+La strategia sui social si basa prima di tutto chiedendosi il perché: che può essere per focalizzarsi sul cliente, massimizzando il coinvolgimento dei clienti e rendendo la customer experience unica e per focalizzarsi sull'azienda, riducendo i costi operativi e aumentando la ROI con le iniziative di marketing e stando attenti alla dispersione dei social media (in divisioni del business e aree geografiche).
+Poi segue il come: le domande di solito sono:
+\begin{nosepitemize}
+	\item come inglobare le funzionalità dei social nelle fuzioni aziendali?
+	\item come utilizzare i dati dei canali per la segmentazioni dei clienti?
+	\item come catturare la customer voice per sviluppo di prodotti innovativi?
+	\item come integrare i social media nelle attività di marketing per ricavare informazioni sui clienti?
+\end{nosepitemize}
+
+Gli indicatori principali per comprendere e definire gli investimenti legati al Social CRM sono:
+\begin{nosepitemize}
+	\item Acquisizioni e Retention dei clienti per aumentare i ricavi
+	\item Aumentare la Customer experience per aumentare il coinvolgimento dei clienti aumentando la loro fiducia, loyalty, soddisfazione e awareness
+	\item Customer Innovation per ampliare l'innovazione con nuove idee
+	\item e in tutte le aree l'azienda vorebbe diminuire i costi e i rischi
+\end{nosepitemize}
+
+Le skill necessarie per le varie fasi di Social Media sono: Pianificare, Ascoltare (Monitoro e analizzo), Coinvolgere(con Social media dentro la piattaforma[on board] e fuori dalla piattaforma[off board]) e Ottimizzare la ROI e integrazione CRM aumentando il valore dei Social Media, tutto questo per imparare, Reagire, Supportare, Guidare marketing e sales e infine Servire Cross Channel.
+
+Per sfruttare bene i Social Media (ad es. Twitter) posso: Creare Account Personalizzati per creare una comunità attiva, fare targeting con gli account sponsorizzati che permette di individuare target mirati in base a analogia di follower, parole chiavi nella cronologia, dispositivo usato, sesso, interessi, area geografica ecc. e infine posso usare tattiche promozionali ad esempio usando un approccio creativoper potenziare le vendite o crescere l'awareness del marchio. Attenzione la tattica è diversa da strategia, la strategia è per un periodo lungo mentre le tattiche sono per un periodo breve, quindi sfruttare:
+\begin{nosepitemize}
+	\item Eventi: settoriali (E3, GamesCom), stagionali (Mother's Day, Capodanno) e culturali (Oscar);
+	\item Lancio del Prodotto: Creo Hype, pianificando in anticipo e usando i Social Media e tenere traccia dei risultati ottenuti per amplificarne l'impatto;
+	\item Flock  2 Unlock: Usare un incentivo apprezzato creando delle esclusive per Twitter, creando aspettative twittando informazioni specifiche sulla campagna, interagendo con i follower, quando si raggiunge il numero di tweet definito offrire ai follower una ricompensa meritata e mantenere vivo l'interesse con la campagna che ha datto aumentare la visibiltà;
+	\item Twixclusive: Offrire ai follower sconti e promozioni, connettersi ai follower ospitando sessione Q\&A, interviste o chat e far saper a tutti la propria gratitudine.
+\end{nosepitemize}
+Per misurare l'impatto dei Social bisogna:
+\begin{nosepitemize}
+	\item Definire gli obiettivi e realizzarli
+	\item Non avere paura di chiedere cosa pensano dei Tweets e cercare di migliorare dai feedback
+	\item Definire delle metriche:
+	\begin{nosepitemize}
+		\item Aumento del numero dei follower
+		\item Qualità e iterazioni dei follower
+		\item Copertura: quante persone ritwittano o metteno like
+		\item Traffico: numero di utenti che visitano il sito
+		\item Conversione: quanti utenti si iscrivono o comprano il servizio
+	\end{nosepitemize}
+\end{nosepitemize}
+
+Lo stesso vale anche per Facebook, Facebook permette di definire campagna del tipo:
+\begin{nosepitemize}
+	\item Click to Website
+	\item Page Post Engagement
+	\item Page Likes
+	\item App Installs
+	\item App Engagement
+	\item Offer Claims
+	\item Event Responses
+\end{nosepitemize}
+Il target è scelto in base a posizioni, età, sesso, interessi precisi, categorie (più ampie dei interessi precisi) a cui sono interessati e connessioni (ad altre pagine ecc.)
+
+Il problema di Facebook è che non esistono delle API con cui posso connettermi con Facebook per avere informazioni sui miei clienti.
+Il costo della publicità dipende dalla dimensione del pubblico, si può scegliere un budget giornaliero oppure budget a vita (la vita della campagna se so quanto deve durare), il costo è basta sul numero di views oppure numero di click che sta sempre sotto il budget fissato.
+
+Dai Social media non bisogna avere paura per i feedback poiché forniscono spunti critici immediati all'azienda, bisogna rispondere ai feedback creando iterazione con il cliente che permette di comunicare, conoscere e convincere il cliente, e una volta ottenuti i feedback utilizzarli al meglio diffondendoli all'interno dell'azienda: nel Markiting, Sales, Customer Service e Communication division.
+
+Il Social Media Analytics consiste nel monitoraggio i Social e altri canali iterattivi allo scopo di rilevare menzioni alla marca e nella raccolta dei dati dei dati delle presenze sui social. 
+L'obiettivo strategico è gestire e migliorare il posizionamento aziendali sul web ed è uno strumento ideale per Pubblicizzare le attività, ampliare la rete di contatti, interagire e fidelizzare i clienti e effettuare comunicazioni non convenzionali.
+
+Riassumendo le applicazioni principali sono:
+\begin{nosepitemize}
+	\item la misurazioni del ricnoscimento del Brand tramite KPI
+	\item Monitoraggio della reputazioni
+	\item Customer Care e Employee Satisfaction
+	\item Analisi di contenuti e opinioni nei gruppi
+	\item Analisi delle azioni degli utenti (iterazioni e influenze)
+	\item Monitoraggio delle discussioni e opinioni dei clienti
+\end{nosepitemize} 
+e gli obiettivi sono:
+\begin{nosepitemize}
+	\item Conversione Rate
+	\item Aplification Rate
+	\item Applause Rate
+	\item Conversione Rate
+\end{nosepitemize}
+
+Esistono una marea di tool open Source per la gestione di Social Media Analysis: Lithium, Twitter Sentiment, Twitrratr, HootSuite, Blogmeter, Radian ecc.
+
+E gli elementi distintivi sono: la gestione dei Big Data, profondità di analisi e integrazione con strumenti di analisi evoluta, scalabilità, Data Factory, collegamento con i tool di Data Mining e Predictive Modelling.
+
+\section{Lezione 5 - Attilio - 03 aprile}
+
+L'ecosistema Pubblicitario in Europa consiste in:
+\begin{itemize}
+	\item Agency: Crea, pianifica e gestisce la pubblicità per i propri clienti, e l'evoluzione tecnologica molto simile a come era nel passato, è indipendente dai clienti e fornisce un punto di vista esterno per vedere la vendita dei prodotti dei propri clienti. Non comunicano direttamente con i clienti hanno a disposizione una piattaforma in comune per essere più effficienti possibile. Per gestire la parte digitale si affidano ai trading desk.
+	\item Agency Trading Desk: Mettono a disposizione la loro competenza per usare la buying technology. Sono brannche di un azienda più grossa e sono specializzate nello comprare e ottimizzare media e audiences, lavorano per advertisers e agencies, spesso anche in tempo reale su ad exchanges, ad networks e sell side platforms e alle varie tecnologie a cui sono connesse.
+	\item Buying Technologies: Connettono l'advertiser con le exchange e scelgono gli spazi che interessano all'advertisor. Prima quando uno comprava uno spazio all'interno di un giornale non aveva la possibilità di scegliere l'audience, tutti quelli che compravano il giornale vedevano la pubblicità, su digitale abbiamo un sacco di nuove informazioni sull'audience (es. info socio-demografiche e comportamentali dai cookie), le informazioni sono ricevute grazie ai data providers and technologies.
+	\item Data Providers and Technologies: Collezionano, compilano e vendono dati anonimi a un cliente, inoltre gestiscono, protteggono e collezioni informazioni da fonti diversi sia online che offline trasformandole in informazione su cui i buying e selling technologies possono agire. Spesso sono anche i delivery systems, tools, analytics, verification and privacy. es. Sizmek e Google
+	\item Delivery Systems, Tools, Analytics, Verification and Privacy: Leggono con la loro tecnologia cosa vi piace e nello spazio pubblicitario propongono contenuti che potrebbe interessarvi. Assicurano inoltre che diversi tipi di pubblicità vengano serviti, misurati e validati giustamente e offrono sicurezza e privacy ai advertisers e content provider.
+	\item Exchanges: E' dove le piattaforme delle Agency e i marketplace si incontrano per connetere la supply con la domanda, su un certo sito ci sono degli spazi (banner, spazio pubblicitario) es. Google, Amazon
+	\item Sales Houses and Ad Networks: Aiutano/Garantisce ad avere maggior fatturato, hanno spesso diversi campi di specializzazione (mobile, retargeting ecc.) e aiutano i content provider, agenzie e advertiser a promuovere i loro spazi nel mercato usando la loro connessione nei campi anche specifici per promuovere il servizio nel posto giusto. I Sales House lavorano spesso in maniera esclusiva per i content provider sia per pubblicità standard che customizzato e fanno i modo che la pubblicità sia vista e costruita nel modo giusto e massimizzi la resa.
+	\item Selling Technologies: automatizzano le vendite online in tempo reale e massimizzano i loro revenue, offrono inoltre metodi efficienti, automatici e sicuri per vedere le diverse sorgenti di domanda disponibili e offrono ingsights nei vari revenue streams e audiencies.
+	\item Independent Agencies: sono strutture che fanno più o meno le stesse cose dei Trading Desk ma non fanno parte dei gruppi più grandi, ciò sono specializzate nello comprare, ottimizzare media e audiences, lavorano per advertisers e agencies, spesso anche in tempo reale su ad exchanges, ad networks e sell side platforms e alle varie tecnologie a cui sono connesse.
+\end{itemize}
+
+\section{Lezione 4 - Di Domenica - 05 aprile}
+
+L'azienda vuole aumentare il valore e la soddisfazione del cliente proponendo la migliore azione durante ogni iterazione. I bisogni dei clienti sono:
+\begin{nosepitemize}
+	\item Interagire con Social Media
+	\item Avere un Contact Centre migliore
+	\item Utilizzare i canali Internet
+	\item Migliorare i servizi Negozio
+	\item Avere indipendenza con Self-service
+\end{nosepitemize}
+Mentre gli obiettivi del business sono:
+\begin{nosepitemize}
+	\item Attaccamento al marchio
+	\item Aumentare le vendite
+	\item Migliorare il caring verso il cliente
+	\item Mantenere il cliente senza che mi abbandoni
+	\item Raccogliere nuove informazione
+	\item Migliorare la conoscenza del cliente
+\end{nosepitemize}
+C'è bisogno di un naturale bilanciamento tra i bisogni dei clienti e obiettivi del business.
+
+Riusando uno dei modelli precendenti ho che ottenuti i dati necessari ottengo informazione necessaria per la next best action, una volta capito questo ho il design, disegnando, attraverso interfaccia grafica in modilità workflow, le logiche decisionali e impostare le decisioni basate sia su business rules che su processi analitici fatto in Real Time.
+Poi definisco delle logiche di prioritizzazione tra le azioni concorrenti, cioè quali azioni proporre al clienti in caso di sovrapposizioni,
+segue l'esecuzione in RT (Real Time) le logiche decisionali, integrare con altre applicazioni per raccogliere dati aggiuntivi e per comunicare della decisione.
+Infine c'è il controllo e monitoraggio attraverso report multidimensionali.
+
+Per determinare l'offerta più appropriata l'utente può utilizzare informazioni su:
+\begin{nosepitemize}
+	\item Il comportamento corrente sul sito
+	\item Il comportamento storico sul sito
+	\item Tutti i canali di contatto preferiti
+	\item I modelli predittivi per capirne il comportamento
+	\item Valutazione ed arbitraggio tra più offerte
+	\item Le regole del Business
+\end{nosepitemize}
+
+Un esempio: Il cliente naviga sul sito e in base di navigazione genera in trigger e il trigger fa partire le azioni e al cliente viene presentata una landing page personalizzata.
+Inolre sul sito si può determinare il pricing dinamico, determinzione della posizione creditizia online per la preaccettazione di richiesta di prestito/mutuo. \newline
+Un altro esempio è un'applicazione all'interno di uno store dove il cliente riceve un alert sul telofono con un'offerta mirata grazie alla valutazione della posizione del cliente, il suo profilo e eventuale informazione del suo carello in RT. Aggiornamento RT può essere effettuato su tutti i canali abilitati ai Web services.
+
+Il CRM nel Social Marketing è così composto:
+\begin{nosepitemize}
+	\item social media
+	\item Altri canali di ingaggio (sia online che offline)
+	\item Il sito web
+	\item Sale Transaction, che sono i dati offline che possiedo
+\end{nosepitemize}
+Posso utilizzare questi dati per analizzare l'influenza e le reazioni tra le transazione e come mi comporto sul web, analizzare il sentiment sui prodotti e servizi e infine posso fare Contextual Marketing (possibilmente in RT). Una volta eseguiti questi modelli posso fare data mining analitico, reporting e previsioni. 
+
+Il Real Time Decision manager consente nel comunicare in RT decisioni e proposte commerciali, basate su regole di business e conoscenza analistiche, che guidano ogni interazione con il cliente per aumentarne il profitto, crescita e fidelizzazione.
+
+Le caratteristiche principali sono:
+\begin{nosepitemize}
+	\item Interfaccia grafica che consente di creare i flussi decisionali in modo semplice ed intuitivo
+	\item Interfaccia web service standard per integrazione con tutti i canali (per i modelli predittivi ecc.)
+	\item Consente di eseguire lo scoring dei modelli in RT
+	\item Tutto in un'architettura scalabile che consente di distribuireun volume considerevole di decisioni alle applicazioni di front-end
+\end{nosepitemize}
+Un esempio di funzionamento delle interazione in RT:
+\begin{enumerate}[noitemsep,topsep=0ex]
+	\item Il Frontend/canale richiede una decisione in RT sui dati del cliente
+	\item Viene mandata una richiesta via web service al RT decision manager dove
+	\item Il RT Decision Manager esegue un processo decisionale con eventuale scoring on line usando il Database già esistente e RT data appena ricevuto
+	\item Restituisce la decisione/azione
+	\item La decisione viene rinviata alla applicazione Frontend via web service
+	\item L'applicazione riceve la decisione e esegue la proposta sul momento
+\end{enumerate} 
+
+Il flusso decisionale è costituito:
+\begin{nosepitemize}
+	\item Start Node: es. sul sito web viene compilato il form per la richiesta di un prestito
+	\item Estraggo le informazione finanziarie aggiornate del cliente con un altro nodo
+	\item si verifica se il cliente è esistente o nuovo e si procede in base a questa informazione
+	\item Un nodo che ricalcola il modello la propensione del rischio del cliente
+	\item Definsico con un nodo alcune classi di rischio mandando la richiesta (freccia) a un nodo basato sul rischio
+	\item infinte la risposta viene inviata al canale e viene aggiornato lo storico dei contatti
+\end{nosepitemize}
+Questo modello può prevedere l'implementazione delle regole del business relative ai clienti, determinazione dell'azione da fare sui clienti attraverso il canale, utilizzare i modelli predittivi e integrazione con altri sistemi es. web site.
+
+\section{Lezione 5 - Di Domenica - 12 aprile}
+
+
 
 \end{document}
