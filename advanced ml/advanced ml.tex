@@ -1,0 +1,43 @@
+\documentclass[11pt, a4page]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{enumitem}
+
+
+\title{\textbf{Advanced Machine Learning}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Il corso si concentra sull'uso di reti neurali (\textit{deep learning}).
+  L'esame consiste in un progetto finale di gruppo più la valutazione degli \textit{assignment} svolti singolarmente durante l'anno per i frequentanti, altrimenti in un esame orale.
+  Del progetto sarà valutata la relazione finale, in cui saranno specificati i compiti svolti dai singoli partecipanti, secondo delle specifiche definite.
+\end{abstract}
+\tableofcontents
+\newpage
+
+\section{Introduzione}
+L'operazione di \textit{learning} si effettua per ottimizzare le performance di un algoritmo basandosi su un criterio prestabilito e una serie di esempi passati (esperienza) tramite \textit{reverse engeniering}.
+Se l'operazione è definibile con un insieme di regole e la complessità non è particolarmente alta, non è richiesto l'uso del \textit{machine learning}; mentre quando le soluzioni cambiano (e il sistema si deve adattare) o la complessità è particolarmente alta, è necessario l'uso del \textit{machine learning}.
+
+Di ogni algoritmo di \textit{machine learning} è importante la rappresentazione, la valutazione e l'ottimizzazione.
+La scelta del criterio di valutazione è fondamentale perché impone la direzione in cui procedere nella fase di ottimizzazione per effettuare il processo di \textit{learning}; mentre l'algoritmo di ottimizzazione è scelto in base al compito che l'algoritmo deve svolgere. \newline
+
+Il \textit{deep learning} deve la sua importanza alla facilità con cui sono stimate funzioni non lineari: per ottenere prestazioni simili in passato si modificava lo spazio delle \textit{features} applicando trasformazioni quali \textit{kernel} o PCA.
+Questa sua caratteristica lo rende particolarmente adatto nell'analisi delle immagini, in cui sono usate più pezzi di immagine combinati tra di loro per effettuare l'analisi.
+Il problema delle reti neurali fino al primo 2000 era la complessità dell'algoritmo di \textit{learning} (\textit{back propagation}), soppiantato da una versione più efficiente.
+
+Suoi svantaggi d'altro canto sono la quantità di dati richiesta dal processo di apprendimento e dal costo dell'hardware richiesto (GPU e TPU).
+
+L'uso del \textit{deep learning} è usato inoltre nell'analisi del linguaggio naturale, data l'evoluzione nel tempo di questo e dalle sue sfumature.
+Altro successo è il \textit{reinfocement deep learning}, che suggerisce al computer come comportarsi in determinate circostanze in base all'evoluzione dell'ambiente e alle scelte pregresse.
+\end{document}
