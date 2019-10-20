@@ -213,20 +213,9 @@ Ci sono 3 modelli di servizio:
 \section{Cloud}
 Definizione ``vera'' del cloud da ricordare: è un tipo di servizio distribuito di sistemi interconnessi e computer virtualizzati dinamicamente provvisionati e presentati come un unica risorsa computazionale basato su service-level agreement.
 \\
-Sostanzialmente il cloud è la possibilità di avere accesso alle risorse computazionale attraverso la rete on-demand ed è composto da 5 punti chiave, 3 modelli di servizio e 4 modelli di deployement.\\
-\subsection{I 3 modelli del cloud}
-Iniziamo con i tre modelli del servizio del cloud sono:
-\begin{enumerate}[wide, topsep=0ex, noitemsep]
-	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato.
-	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere e eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppato perde meno tempo nella configurazione delle macchine.
-	\item \textbf{SaaS (Software as a Service)}: es. GMail quindi utente non può fare niente tranne usare il software.
-\end{enumerate}
+Sostanzialmente il cloud è la possibilità di avere accesso alle risorse computazionale attraverso la rete on-demand ed è composto da 5 punti chiave, 3 modelli di servizio e 4 modelli di deployement.
 
-In realtà il cloud vero è un po' più offuscato di quanto detto sopra, spesso non è facile collocare il modello di cloud di un'azienda esattamente in uno dei 3 modelli.\\
-Un aspetto molto importante da considerare è quello economico, cioè grazie al modello pay-as-you-go cloud il costo capitale (CAPEX) si trasforma in costo operazionale (OPEX), inoltre il rischio di errore nella scegliere le macchine sparisce, se ho bisogno di più potenza richiedo una macchina più forte e se ho bisogno di meno potenza abbasso la potenza e risparmio.
-Allo stesso momento i cloud service provider hanno diversi benefici: profitto sfruttando l'economia di scala (comprare un servo costa X, ma comprare N server non costa N*X), possono capitalizzare sui loro investimenti (amazon che vende la potenza residua) o possono sfruttarlo per promuovere un loro prodotto (es. per far usare .NET ai sviluppatori).
-
-\subsection{Le 5 proprietà del cloud}
+\subsection{The 5 Properties of cloud}
 Le 5 proprietà aggirano attorno ad una idea centrale del cloud: Utility Computing, SOA (Service Oriented Architecture) + SLA(Service Level Agrement).\\
 \textbf{Utility Computing} nel senso che il service provider fornisce le risorse computazionali e le infrastrutture che servono al cliente e li fa pagare in base all'utilizzo piuttosto che con un costo fisso, come i servizi on-demand per massimizzare l'uso efficiente, minimizzando i costi nella maniera meno trasparente possibile(Senza mostrare al cliente tutto ciò che si fa).\\
 \textbf{SOA (Service Oriented Architecture)}: è un insieme di servizio che comunicano tra di loro poiché non basta di solito un solo servizio per implementare un servizio web completo per utente.\\
@@ -254,34 +243,49 @@ Le 5 \textbf{proprietà/caratteristiche} che identificano il cloud sono:
 	\item \textbf{Disponibilità, Affidabilità}:
 	\begin{itemize}[noitemsep, topsep=0ex, leftmargin=*]
 		\item Availibility è il rapporto tra il up-time e tempo totale di esecuzione;
-		\item Affidabilità è la capacità di funzionare in situazioni particolari per un certo tempo.
+		\item Affidabilità è la capacità di funzionare in situazioni particolari (rottura di un nodo, attacco di hacker) per un certo tempo.
 	\end{itemize}
-	Questi punti possono essere ottenuti attraverso:
+	Questi punti possono essere ottenuti attraverso sistemi di:
 	\begin{itemize}[noitemsep, topsep=0ex, leftmargin=*]
-		\item Fault Tolerance
-		\item Resilience
-		La resilienza è l'abilità di ritornare allo stato di funzionamento dopo un caso di fallimento del sistema (ad es. viene a mancare l'elettricità).
-		Quindi i sistemi devono avere le policy e procedure per il recupero, ad es. Backup (dei dati off-site oppure di tutto il sistema) oppure preparazione per fault come un una corrente non-interrompibile (UPS) oppure insurghi di corrente.
+		\item Fault Tolerance è la capacità del sistema di continuare ad funzionare anche dopo un fallimento di uno dei suoi componenti, spesso il servizio viene degradato proporzionalmente alla gravità del fallimento ma il servizio continua ad funzionare.\\
+		Le caratteristiche principali sono che non ha un singolo punto di fallimento, la componente fallita viene individuata ed isolata per prevenire la propagazione del fallimento;
+		\item Resilience è l'abilità di offrire e mantenere un livello di servizio accettabile anche dopo un fallimento, essenzialmente ritornare allo stato di funzionamento dopo un caso di fallimento del sistema (ad es. viene a mancare l'elettricità).
+		Quindi i sistemi devono avere le policy e procedure per il recupero, ad es. Backup (dei dati off-site oppure di tutto il sistema) oppure preparazione contro fault come un una corrente non-interrompibile (UPS) oppure sbalzi di corrente/tensione.
 		\item Sicurezza
-		La sicurezza riguarda 
+		La sicurezza riguarda l'impiego di politiche e tecnologie e sistemi di controllo per protegge applicazioni e infrastrutture da accessi malevoli, quindi abbiamo il suo impiego in:
 		\begin{itemize}[noitemsep, topsep=0ex, leftmargin=*]
-			\item la protezione i dati, mantenendo l'accesso ai dati riservato solo in base ai privilegi
-			\item 
+			\item la protezione i dati, mantenendo l'accesso ai dati riservato solo in base ai privilegi;
+			\item Gestione dell'identità per garantire l'accesso alle risorse in base ai loro privilegi (protezione dei dati);
+			\item Sicurezza dell'applicazione riguarda la possibilità di blindare le nostre applicazioni per accessi malintenzionati;
+			\item Privacy per oscurare i dati in base alle leggi privacy e gestiti solo da utenti competenti.
 		\end{itemize}
 	\end{itemize}
 
 	\item \textbf{Gestibilità, Interoperabilità}:
-	La Gestbilità riguarda la gestione di questi sistemi mentre la interoperabilità è una proprietà di un prodotto o sistema per lavorare con altri prodotti.
-	Lo si ottiene attraverso system monitoring che è un processo che monitora lo stati dei hardware, metriche dei performance, i log dei sistemi, il pattern dei accessi alla rete ecc. Ed è importante anche il sistema Billing.
-	Il Load balancing è una tecnica per la distribuzione del workload su un sistema di computer, CPU, HD or altre risorse per ottenere l'utilizzo ottimale, migliorando così: l'utilizzo del sistema, la performance e l'efficienza energetica.
-	
+	La Gestbilità riguarda la gestione di questi sistemi attraverso un singolo punto di accesso mentre la interoperabilità è una proprietà di un prodotto o sistema per lavorare con altri prodotti/sistemi.
+	Lo si ottiene attraverso \textbf{System control automation} e \textbf{System State Monitoring} che è un processo che monitora lo stati dei hardware, metriche dei performance, i log dei sistemi, il pattern dei accessi alla rete ecc.
+	E' anche collegato al sistema di Billing, poiché gli utenti pagano ciò che usano e il cloud provider deve registrare le risorse/servizio usate da ciascun utente.\\
 	\item \textbf{Accessibilità, Portabilità}
 	
 	\item \textbf{Ottimizzazione, Performance}
+	Il \textbf{Load Balancing} è una tecnica per la distribuzione del workload su un sistema di più computer, CPU, HD ecc. per ottenere l'utilizzo ottimale, migliorando così: l'utilizzo del sistema, la performance e l'efficienza energetica riducendo overload.\\
+	Il \textbf{Job Scheduler} è un applicazione che ha il compito di eseguire i processi in background (chiamati anche processi batch).
+	Nel cloud i task intensivi computazionalmente o task che crescono dinamicamente vanno pianificato con Job Scheduler.
 \end{enumerate}
 Da un punto di vista dell'utente, lui non vuole sapere come e cosa viene fatto né chi gestisce il servizio, ma vuole solo un servizio funzionale.
 
-\section{Lezione 4 - 15/10}
+\subsection{The 3 Service Model of cloud}
+Iniziamo con i tre modelli del servizio del cloud sono:
+\begin{enumerate}[wide, topsep=0ex, noitemsep]
+	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato.
+	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere e eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppato perde meno tempo nella configurazione delle macchine.
+	\item \textbf{SaaS (Software as a Service)}: es. GMail quindi utente non può fare niente tranne usare il software.
+\end{enumerate}
+
+In realtà il cloud vero è un po' più offuscato di quanto detto sopra, spesso non è facile collocare il modello di cloud di un'azienda esattamente in uno dei 3 modelli.\\
+Un aspetto molto importante da considerare è quello economico, cioè grazie al modello pay-as-you-go cloud il costo capitale (CAPEX) si trasforma in costo operazionale (OPEX), inoltre il rischio di errore nella scegliere le macchine sparisce, se ho bisogno di più potenza richiedo una macchina più forte e se ho bisogno di meno potenza abbasso la potenza e risparmio.
+Allo stesso momento i cloud service provider hanno diversi benefici: profitto sfruttando l'economia di scala (comprare un servo costa X, ma comprare N server non costa N*X), possono capitalizzare sui loro investimenti (amazon che vende la potenza residua) o possono sfruttarlo per promuovere un loro prodotto (es. per far usare .NET ai sviluppatori).
+%CONTINUE FROM HERE Registration n 3 16:00 - slides 5.2
 IaaS fornisce automaticamente il processing, storage, network e altre risorse fondamentale per il computing, e l'utente può installare i software che sono per lui necessari.
 \\
 L'utente ha accesso a due interfacce:
