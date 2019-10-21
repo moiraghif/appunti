@@ -285,134 +285,200 @@ Iniziamo con i tre modelli del servizio del cloud sono:
 In realtà il cloud vero è un po' più offuscato di quanto detto sopra, spesso non è facile collocare il modello di cloud di un'azienda esattamente in uno dei 3 modelli.\\
 Un aspetto molto importante da considerare è quello economico, cioè grazie al modello pay-as-you-go cloud il costo capitale (CAPEX) si trasforma in costo operazionale (OPEX), inoltre il rischio di errore nella scegliere le macchine sparisce, se ho bisogno di più potenza richiedo una macchina più forte e se ho bisogno di meno potenza abbasso la potenza e risparmio.
 Allo stesso momento i cloud service provider hanno diversi benefici: profitto sfruttando l'economia di scala (comprare un servo costa X, ma comprare N server non costa N*X), possono capitalizzare sui loro investimenti (amazon che vende la potenza residua) o possono sfruttarlo per promuovere un loro prodotto (es. per far usare .NET ai sviluppatori).
-%CONTINUE FROM HERE Registration n 3 16:00 - slides 5.2
-IaaS fornisce automaticamente il processing, storage, network e altre risorse fondamentale per il computing, e l'utente può installare i software che sono per lui necessari.
-\\
-L'utente ha accesso a due interfacce:
-\begin{itemize}
-	\item Inerfaccia per gestione delle risorse, queste risorse sono:
-	\begin{itemize}
+
+\subsubsection{IaaS}
+IaaS fornisce automaticamente il processing, storage, network e altre risorse fondamentale per il computing, e l'utente può installare i software che sono per lui necessari.\\
+Lo IaaS supporta queste 3 caratteristiche del cloud:
+\begin{myitemize}
+	\item Gestibilità e Interoperabilità: Attraverso un interfaccia può gestire tutte le VM che vuole, le può pagare come vuole;
+	\item Disponibilità ed Affidabilità: gestita dal cloud provider attraverso le zone di disponibilità;
+	\item Scalabilità ed elasticità: Proprietà del sistema ma deve essere implementato dall'utente.
+\end{myitemize}
+L'architettura è composta dall'hardware seguita da un layer di virtualizzazione e l'utente ha accesso a due interfacce:
+\begin{myitemize}
+	\item Interfaccia per gestione delle risorse, queste risorse sono:
+	\begin{myitemize}
 		\item VM: creazione, cancellazione, gestione, sospensione delle VM 
-		\item Virtual Storage:
-		\item Virtual Network: gestione delle IP associate ecc.
-	\end{itemize}
-	\item Interfaccia del il monitoring del sistema: viene messa a disposizione da VIM: L'orchestrazione delle macchine su un server viene gestita dalla Virtual Infrastructure Mangaser(VIM), diverse metriche vengono usate per il monitoraggio es:
-	\begin{itemize}
-		\item VM: CPU usage, memory usage
-		\item Virtual Storage: utilizzo del disco
-		\item Virtual Network: L'uso della banda ecc.
-	\end{itemize}
-\end{itemize}
- 
-PaaS mette a disposizione all'utente i lunguaggi di programmazione e i tools (come IDE) supportati dal provider, ma il controllo sul deployement dell'applicazione non è in mani del consumer...
+		\item Virtual Storage: Allocare spazio, ridurre/aumentare del DB, scegliere servizi con velocità di lettura/scrittura diversi (per prezzo);
+		\item Virtual Network: gestione delle IP associate alle VM, registrazioni al dominio delle IP, scegliere la larghezza di banda.
+	\end{myitemize}
+	\item Interfaccia del il monitoring del sistema: viene messa a disposizione da VIM: L'orchestrazione delle macchine/risorse, in maniera rapida e dinamica, su un server viene gestita dalla Virtual Infrastructure Mangaser(VIM), diverse metriche vengono usate per il monitoraggio es:
+	\begin{myitemize}
+		\item VM: CPU usage, memory usage;
+		\item Virtual Storage: utilizzo del disco, livello di duplicazione dei dati e velocità di accesso al disco;
+		\item Virtual Network: L'uso della banda, lo stato di connettività e il bilanciamento sulla rete.
+	\end{myitemize}
+\end{myitemize}
+
+
+\subsubsection{PaaS}
+PaaS mette a disposizione all'utente i linguaggi di programmazione e i tools (come IDE) supportati dal provider, quindi il controllo sul deployement dell'applicazione è in mani del consumer ma il controllo sulle infrastrutture sottostante è gestita dal cloud provider.
 \\
-alla base vi è una archittettura come quella di IaaS, offrono i Programming IDE e le API supportati dall'ambiente, spesso hanno in comune le funzioni come: computation e lo storage.
-\\
-L'interfaccia messa a disposizione è quello per il controllo del sistema per:
+Alla base vi è una archittettura come quella di IaaS, vengono aggiunti i Runtime Environment e sopra questi ci sono i Programming IDE e le API/tools supportati dall'ambiente, spesso hanno in comune le funzioni come: computation e lo storage.\\
+Il Runtime Environment si riferisce a una collezione di software, implementati con una collezione di librerie, le proprietà fornite dal Runtime Environment sono:
+\begin{myitemize}
+	\item Gestibilità ed Interoperabilità
+	\item Performance ed Ottimizzazione
+	\item Disponibilità ed Affidabilità
+	\item Scalabilità ed Elasticità
+\end{myitemize}
+L'interfaccia messa a disposizione per il controllo del sistema mette a disposizione un set di azioni in base a:
 \begin{itemize}
 	\item Policy based control: le azioni seguono delle regole per prendere delle decisioni quindi azioni seguite con if <> then <>
 	\item Controllo del workflow: descrizione del flusso di installazione e configurazione delle risorse oppure dei daemon.
 \end{itemize}
 
-SaaS: vengono fornite al cliente applicazione del provider in cloud, l'utente non può gestire lo sviluppo dell'applicazione ma può interagire con esso attraverso ad es. portali web, che con introduzione del Web 2.0 ha potenziato l'iterabilità con l'applicazione in cloud, es: Facebook(Messenger), Office, Skype, sistema CRM, sistema medico nazionale, sistema di trasporto pubblico.
+\subsubsection{SaaS}
+SaaS: vengono fornite al cliente applicazione del provider in cloud, l'utente non può gestire o sviluppare l'applicazione o gestire l'architetture nel cloud ma può interagire con esso attraverso interfacce ad es. portali/applicazioni web, che con introduzione del Web 2.0 ha potenziato l'iterabilità con l'applicazione in cloud, es: Facebook(Messenger), Office, Skype, DropBox, sistema CRM, sistema medico nazionale, sistema di trasporto pubblico.\\
+Il punto fondamentale di questo tipo di cloud è l'Accessibilità e la portabilità.\\
+Oss: La differenza tra il portale web e una pagina web è che il portale permette l'integrazione di diverse pagine attraverso dei login.
 
-I 4 modelli primari di un modello cloud sono:
-\begin{itemize}
-	\item Public Cloud: L'infrastruttura viene messa a disposizione del pubblico or organizzazioni grandi attraverso pagamento per il suo uso, le caratteristiche sono:
-	\begin{itemize}
-		\item Infrastruttura omogenea per garantire le medesime prestazioni a due utenti che pur trovandosi in posti diversi usano lo stesso servizio
-		\item Policy customizzate
-		\item Risorse dedicate
-		\item In-house managed infrastructure? errore
-		\item End-to-end control? errore
-	\end{itemize} 
-	\item Private Cloud:
-	A differenza del public cloud l'hardware può essere eterogenea per via del costo e dal fatto che una azienda privata non butta via un hardware solo per averli omogenea.
-	\item Community Cloud: è una struttura gestita da diverse entità, in pratica più entità mettono insieme i loro cloud privati per generare un super cloud, ad esempio alcune università americane possono unire i loro cloud per qualche ricerca ecc.
-	\item Hybrid Cloud: è la comoposizioni di più tipi di cloud, ad esempio un azienda privata crea il suo cloud privato per la gestione di informazioni sensibili e usa l cloud pubblico per il resto, oppure per la scalabilità in caso i traffico aumentato.
-\end{itemize}
+\subsection{The 4 Cloud Deployement Models}
+I 4 modelli primari che differenziano un cloud, basati sulle possibilità di accesso, la dimensione e la proprietà dei servizi, sono:
+\begin{myitemize}
+	\item \textbf{Public Cloud} (o multi-tenant o external cloud): 
+	L'infrastruttura viene messa a disposizione del pubblico generale o almeno alle organizzazioni grandi attraverso pagamento per il suo uso, le caratteristiche sono:
+	\begin{myitemize}
+		\item Infrastruttura omogenea per garantire le medesime prestazioni a due utenti che pur trovandosi in posti diversi usano lo stesso servizio;
+		\item Policy comuni;
+		\item Risorse condivise;
+		\item Infrastrutture viene affittata;
+		\item Economia di Scala.
+	\end{myitemize} 
+	
+	\item \textbf{Private Cloud:} (o on-premise cloud o internal cloud)
+	Viene operato da un'unica organizzazione e può essere gestita dalla stessa o un'altra organizzazione, cioè la categoria di utenti è limitata. A differenza del public cloud le caratteristiche sono:
+	\begin{myitemize}
+		\item Infrastruttura eterogenea per via del costo e dal fatto che una azienda privata non butta via un hardware solo per averli omogeneità;
+		\item Policy customizzate ad-hoc per gli utenti;
+		\item Risorse dedicate;
+		\item Infrastrutture gestita da house;
+		\item End-to-end control sui processi.
+	\end{myitemize}
+	
+	\item \textbf{Community Cloud:} è una struttura gestita da diverse entità, in pratica più entità mettono insieme i loro cloud privati per generare un super cloud, ad esempio alcune università americane possono unire i loro cloud per qualche ricerca specifica ecc.
+	
+	\item \textbf{Hybrid Cloud:} è la comoposizioni di più tipi di cloud, ad esempio un azienda privata crea il suo cloud privato per la gestione di informazioni sensibili e usa il cloud pubblico per il resto, oppure lo usa per la scalabilità in caso di traffico aumentato.
+\end{myitemize}
 
-\subsection{Amazon ECOSYSTEM}
-Amazon Web Service sono creati per lavorare indipendentemente ma lavorano bene anche tra di loro: condividendo tra di loro le stesse convenzioni di nomi e autenticazione e minimizzando le connessioni interne.
+\section{Amazon ECOSYSTEM-IaaS}
+Amazon Web Service sono creati per lavorare indipendentemente ma possono interagire tra di loro, condividendo tra di loro le stesse convenzioni di nomi e autenticazione e minimizzando le connessioni interne.
 \\
-Amazon mette a disposizione il concetto di regione e di zona disponibile:
-\begin{itemize}
-	\item Ciascuna Availibility zone è un data center indipendente con la propria griglia di potenza e connessione della rete, le zone all'interno di una regione sono collegate tra di loro attraverso connessione a latenza bassa.
-	\item Regione è un cluster di data center localizzati in una area geografica. 
-	Le zone vengono create per la massima fault tolerance e stabilità.
+Amazon mette a disposizione il concetto di regione e di zona di disponibilità:
+\begin{itemize}[noitemsep, topsep=0ex, wide]
+	\item Ciascuna \textbf{Availibility Zone} è un data center indipendente con la propria griglia di potenza e connessione della rete, le zone all'interno di una regione sono collegate tra di loro attraverso connessione a latenza bassa. 
+	Il nome deriva dal fatto che sono zone ad alta disponibilità, quindi se una zona fallisce il suo effetto non viene notato dalle altre zone creando così una stabilità ed alta fault tolerance.
+	\item \textbf{Regione} è un cluster di Availibility Zone localizzati in una area geografica. 
+	Quando si crea una istanza Amazon ci dà la possibilità di scegliere una availability zone (o di default lo si lascia far scegliere ad Amazon) e all'interno della stesso regione è possibile distribuire la propria istanza su più availability zone, quindi se una zona fallisce l'altra (molto probabilmente) continua a funzionare.
+	Amazon non fa pagare i trasferimenti di dati all'interno della stessa regione, ma tra regioni le comunicazioni vengono fatte pagare.
 \end{itemize}
-Esiste AWS GovCloud che è una regione AWS isolata.\\
-Simple Storage Service (S3) è una storage object che è un sistema di archiviazione piatto cioè non è possibile creare cartelle al suo interno, i dati salvati su S3 vengono distribuite automaticamente. 
-S3 sta alla base fi tutta l'infrastruttura che sta alla base di amazon e-commerce.
-Oltre a S3 amazon fornisce anche un EBS (Elastic Block Store), questo disco può essere formattato, montato e usando come hard disk locale, è un volume che persiste indipendentemente dal resto.\\
+Esiste AWS GovCloud che è una regione AWS isolata e permette di gestire dati estremamente sensibili e può essere acceduta solo da cittadini Americani verificate dal governo Americano e sul suolo Americano.\\
+Uno dei servizi principali di AWS è \textbf{Simple Storage Service (S3)}, un storage object che è un sistema di archiviazione piatto cioè non è possibile creare cartelle al suo interno, i dati vengono salvati in formato binario e vengono distribuite automaticamente. 
+L'accesso può essere effettuato da chiamate web (REST, Soap, BitTorrent) o query SQL e gli oggetti possono anche essere molto grandi (fino a 5TB ciascuno).\\
+S3 sta alla base di tutta l'infrastruttura che sta alla base di Amazon e-commerce.
+Oltre a S3 Amazon fornisce anche un \textbf{EBS (Elastic Block Store)}, questo disco può essere formattato, montato e usato come hard disk locale, è un volume che persiste indipendentemente dal resto.
+Mentre le VM possono morire, i volumi rimangono sempre, e la garanzia di durabilità viene fornita da Amazon.\\
+EBS è categorizzato in SSD e HDD, a seconda del tipo di macchine/dischi si paga in maniera diversa.\\
+I \textbf{Security Group} definiscono l'insieme delle connessioni possibili per una certa istanza, e questi insiemi possono essere protocolli, porte, range delle IP.
 
-EC2(Elastic Cloud Computing)
-i concetti chiave che constituiscono EC2:
-\begin{itemize}
-	\item Amazon Machine Image (AMI):
-	contiene il sistema operativo e eventuali software, possono essere pre-built, create, modificate e vendute. Ciascun AMI ha un ID unico.
-	\item Istanza: rappresenta una copia di AMI in esecuzione, multiple copie di un unica AMI può essere messa in esecuzione
-	\item Elastic IP address: allocazione di un IP statico e collegarle alla propria istanza; 
+\subsection{EC2 - Elastic Cloud Computing}
+\textbf{EC2(Elastic Cloud Computing)} è uno dei servizi offerti per la creazione/gestione delle macchine virtuali on-demand. EC2 si basa sul concetto di data center programmabile, la possibilità di creare una propria infrastrutture (macchine in più availability zone o regioni) tramite linguaggi di programmazione.
+I concetti chiave che constituiscono EC2:
+\begin{myitemize}
+	\item \textbf{Amazon Machine Image} (AMI): è un file contenente una descrizione di una VM, cioè eventuali software e le configurazioni, possono essere pre-built, create, modificate e vendute. Ciascun AMI ha un ID unico;
+	\item \textbf{Istanza}: rappresenta una copia di AMI in esecuzione, multiple copie di un unica AMI può essere messa in esecuzione;
+	\item \textbf{Elastic IP address}: allocazione di un IP statico e collegarle alla propria istanza, ciascuna istanza può avere al più un IP statico.
+\end{myitemize}
+I core messi a disposizione dal server (di cui non sappiamo praticamente nulla) vengono virtualizzati, dividendo prima in core poi dividendo ulteriormente il core-time. L'unità di misura è Elastic Compute units che corrisponde a Intel Xeon (o AMD Opteron) da 1.0-1.2 GHz del 2007.\\
+Le risorse possono essere:
+\begin{itemize}[noitemsep,topsep=0ex,wide]
+	\item Persistenti: anche in caso di fallimento del hardware Amazon ci garantisce la sua persistenza attraverso ridondanza, recupero automatico e failover automatizzato. Le componenti persistenti sono:
+	\begin{myitemize}
+		\item Elastic IP Address
+		\item EBS
+		\item Elastic Load Balancer
+		\item Security Groups
+		\item AMI slavate in S3 o EBS
+	\end{myitemize}
+	\item Effimere: l'utente deve garantire la sua ridondanza e mantenimento attraverso atri servizi di EC2, in caso di fallimento i dati salvati vengono in generale persi. Le istanze sono effimere.
 \end{itemize}
-I core messi a disposizione dal server vengono virtualizzati sui separando i core che dividendo il core-time. L'unità di misura è EC2 Compute units che corrisponde a Intel Xeon a 1.0-1.2 GHz 2007.\\
-Le risorse possono essere persistenti cioè anche in caso di fallimento del hardware Amazon ci garantisce la sua persistenza oppure risorse ephimere cioè l'utente deve garantire la sua ridondanza e mantenimento come HardDisk, mentre le componenti persistenti sono:
-\begin{itemize}
-	\item Elastic IP Address
-	\item EBS
-	\item 
-\end{itemize}
-
 I modelli del prezzo sono:
-\begin{itemize}
-	\item On demand
-	\item Reservati
-	\item Spot (Asta)
+\begin{itemize}[noitemsep,topsep=0ex,wide]
+	\item \textbf{On demand}: Il pagamento avviene per le capacità (tempo) usate con nessun obbligo a lungo termine.
+	\item \textbf{Reservati}: Si fa una sorta di abbonamento con un pagamento di una somma prima e poi le macchine si possono usare per la durata dell'abbonamento a un prezzo scontato, è disponibile in 3 tipi Light, Medium e Heavy e può essere per 1 o 3 anni e può far risparmiare fino al 71\% rispetto a On-Demand. Attenzione non ci riserva delle risorse per la durata dell'abbonamento ma solo il prezzo.\\
+	\item \textbf{Spot}: Si fa asta per la potenza computazionale non usata da Amazon EC2, sono quelle che costano di meno, perché non mi viene garantita la durata della macchina nel tempo, nel caso il prezzo offerto è maggiore del costo necessario per eseguire quella macchina Amazon darà la sua macchina, ma siccome il prezzo di elettricità è variabile e se dovesse superare il prezzo offerto Amazon può spegnere tale macchina senza avvisare.
 \end{itemize}
+Un altro indice di costo è \textbf{Data Transfer}, il trasferimento dei dati dentro o fuori dalla istanza EC2 vengono pagati (in base alla quantità) se non il trasferimento avviene al di fuori della regione. 
+Il trasferimento dentro la regione è completamente gratuita.\\
 
-\section{Lezione 5 - 16/10}
-AutoScaling avviene per via dei trigger di solito sui utilizzo CPU/memory, l'auto scaling può avvenire sia per scale in che scale out all'interno di un scale group (max min) pre-definito. Una macchina può essere o spenta o terminata, nel caso viene terminata viene eliminata completamente.
-Le metriche più usate per il cloudWatch sono
-\begin{itemize}
-	\item CPU usage
-	\item Latenza
-	\item Numero di Richieste
-	\item Il numero di Host(macchine) in buona salute
-	\item Il numero di macchine che non stanno funzionando benissimo
-\end{itemize}
-In generale almeno due trigger sono necessari per mantenere un equilibrio desiderato.
-Un allarme è una metrica e verifica se questa metrica supera un limite stabilito per un certo tempo.
-Quindi per creare un allarme è necessario specificare:
-\begin{itemize}
+\subsection{AutoScaling}
+\begin{figure}[!b]
+	\centering
+	\includegraphics[width=\linewidth]{imgs/load_balancer.jpg}
+	\caption{Esempio di Auto Scaling for AWS}
+	\label{fig:autoscaleAWS}
+\end{figure}
+Uno servizio molto import di Amazon è \textbf{AutoScaling}(Fig \ref{fig:autoscaleAWS}). Per far funzionare AutoScaling è importante anche il \textbf{Elastic Load Balancer}, grazie al quale l'utente finale vedere solo un collegamento e Elastic Load Balancer pensa a distribuire le richiede alle nostre macchine. 
+Le istanze EC2 possono essere categorizzate in auto scaling groups, di solito con un range tra un minimo e un massimo, se una nuova macchina entra in esecuzione oppure viene de-allocata il Load Balancer viene avvertito della modifica in modo che possa funzionare bene.
+Gli Auto Scaling group sono istanze EC2 che condividono caratteristiche simili e devono essere fatte per scalare, e aggiunge automaticamente un nuovo nodo in base a policy definite dall'utente, programmazione oppure health checks e workload e la nuova istanza può venire anche da availability zone diverse della stessa regione.\\
+Auto Scaling group contiene solo un launch configuration che descrive le istanze che devono far partire (contiene i parametri delle AMI), se si aggiorna il launch configuration questo affliggerà solo le nuove istanze, le vecchie istanze rimangono tali ma esse vengono terminate prima durante un scale in.\\
+%\section{Lezione 5 - 16/10}
+Attenzione una macchina può essere o spenta o terminata, nel caso viene terminata viene eliminata completamente e AutoScaling group termina una macchina.\\
+L'ecosistema di Auto Scaling è composta da:
+\begin{myitemize}
+	\item Cloud Watch: Per monitorare le istanze EC2, le metriche più usate per il CloudWatch sono:
+	\begin{myitemize}
+		\item CPU usage
+		\item Latenza
+		\item Numero di Richieste
+		\item Il numero di Host(macchine) in buona salute
+		\item Il numero di macchine non in buona salute
+	\end{myitemize}
+	\item Elastic Load Balancer: Per distribuire il lavoro su un numero qualunque di istanze EC2 ed effettuare controlli periodici sulla salute del nodo (basandosi sul tempo di risposta) e in caso non siano in buona salute il load balancer smette di inviare a lui le richieste.
+	\item Auto Scaling: Utilizza i dati collezionati dal CloudWatch per costruire sistemi che posso scalare (dentro o fuori) all'intero del range
+\end{myitemize}
+Il \textbf{Trigger} è un meccanismo di attivare una policy, in questo caso di aumentare o diminuire il numero dei nodi. Il trigger può essere attivato da un allarme cloud watch (configurato per guardare una metrica di cloud watch) oppure un auto scaling policy che descrive cosa fare in caso di un allarme. Quando si attiva il trigger lancia un processo chiamato Scaling activity che esegue la auto scaling policy.
+Osservazione Auto Scaling supporta ma non necessita Elastic Load Balancer.
+In generale almeno due trigger sono necessari, uno per Scale up e uno per Scale down, per mantenere un equilibrio desiderato.
+Un allarme è una metrica e verifica se questa metrica supera un limite stabilito per un certo tempo.\\
+Un'allarme è un'entità in grado di osservare con continuità una certa metrica e ci indica se tale metrica ha superato un certo valore prefissato per un certo tempo, per creare un allarme è necessario specificare:
+\begin{myitemize}
 	\item Metrica da osservare
 	\item Il threshold della metrica
 	\item Il numero di periodo di valutazione
-\end{itemize}
-Gli stati in cui la metrica si può trovare sono:
-\begin{itemize}
-	\item Ok, tutto bene!
-	\item Alarm
-	\item Insufficient data
-\end{itemize}
-Se l'allarme cambia lo stato e vi rimane per un determinato periodo di valutazione, un'azione viene invocata.
-
+\end{myitemize}
+Gli stati in cui l'allarme si può trovare sono:
+\begin{myitemize}
+	\item Ok, tutto bene! Metrica è sotto il threshold.
+	\item Alarm: Metrica è sopra il threshold, è necessaria un azione.
+	\item Dati Insufficiente, metrica disponibile o non ci sono abbastanza dati.
+\end{myitemize}
+Se l'allarme cambia lo stato e vi rimane per un determinato periodo di valutazione, un'azione viene invocata in base alla policy.\\
 I scenari automatici dell'auto scaling sono:
-\begin{itemize}
-	\item Fleet Management: assicura il performance come dovrebbero, se un'istanza dovesse terminare questa viene individuata e si fa partire un'altra macchina. la determinazione della salute avviene con Health Check.
-	\item Scheduled scaling: 
-	\item Scaling Dinamico
-\end{itemize}
-
-
-
-
-i canditati per autoscaling sono:
-\begin{itemize}
-	\item Web Tier
+\begin{myitemize}
+	\item Fleet Management: assicura il performance ottimale della macchina, controllando la salute dell'istanza con Health Check: se un'istanza dovesse terminare questa viene individuata e si fa partire un'altra macchina.
+	\item Scheduled scaling: Azioni vengono eseguite in maniera programmata, quindi è una sorta di evento temporale per eventi ricorsivi o scheduled.
+	\item Scaling Dinamico: In base all'allarme su una metrica c'è una politica che risponde all'allarme. L'azione può dipendere step-wise da gravità dell'allarme oppure facendo tracking di una certa metrica e aggiusto il sistema in modo da calmare l'allarme.
+\end{myitemize}
+La terminazione della macchina può essere fatta anche per un ribilanciamento delle macchine nelle availability zone, la precedenza dello spegnimento viene data in modo da bilanciare tra le zone seguito dal fatto di voler preservare le macchine con il launch configuration più recente seguito dalla macchina prossima allo scatto dell'ora (per il prezzo che si paga ogni ora).
+Auto Scaling inizializza una nuova istanza prima di spegnerne una per non compromettere la disponibilità e le performance dell'applicazione.\\
+Dopo che è iniziata la fase di Auto Scaling esiste un periodo di cooldown, in questo periodo nessun altra attività di scaling può iniziare.\\
+I canditati per autoscaling sono:
+\begin{myitemize}
+	\item Web Tier - sistemi che forniscono servizi web
 	\item Application Tier
-	\item Load Balancing Tier
-	\item Stateless Tier
-\end{itemize}
+	\item Load Balancing Tier - sistemi che gestiscono il carico
+	\item Stateless Tier - sistemi sono prive di stato es. funzioni pure, sono prive di memoria e quindi da un punto di visto funzionale non cambia se faccio autoscaling o no.
+\end{myitemize}
+I candidati che non dovrebbero fare autoscaling:
+\begin{myitemize}
+	\item Database Relazionali
+	\item Database non-relazionali
+	\item Sistema di caching distribuito
+	\item Elastic Search
+	\item Sistemi con lo stato - es. Kafka, non avrebbe senso fare autoscaling automatico.
+\end{myitemize}
 
-I sistemi di database di NoSQL, cache distribuito non sono fatti per auto scalare.
+\section{PaaS with Azure}
 
 \end{document}
