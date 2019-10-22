@@ -277,9 +277,9 @@ Da un punto di vista dell'utente, lui non vuole sapere come e cosa viene fatto n
 \subsection{The 3 Service Model of cloud}
 Iniziamo con i tre modelli del servizio del cloud sono:
 \begin{enumerate}[wide, topsep=0ex, noitemsep]
-	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato.
-	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere e eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppato perde meno tempo nella configurazione delle macchine.
-	\item \textbf{SaaS (Software as a Service)}: es. GMail quindi utente non può fare niente tranne usare il software.
+	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato. Gestito da di solito un system administrator.
+	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere e eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppato perde meno tempo nella configurazione delle macchine. Gestito di solito da sviluppatori.
+	\item \textbf{SaaS (Software as a Service)}: es. GMail quindi utente non può fare niente tranne usare il software. Usato da utenti o business analyst.
 \end{enumerate}
 
 In realtà il cloud vero è un po' più offuscato di quanto detto sopra, spesso non è facile collocare il modello di cloud di un'azienda esattamente in uno dei 3 modelli.\\
@@ -480,5 +480,48 @@ I candidati che non dovrebbero fare autoscaling:
 \end{myitemize}
 
 \section{PaaS with Azure}
+%registration4 - 1:04:00 slide 7
+Essenzialmente il PaaS mette a disposizione un'interfaccia di programmazione, un linguaggio di programmazione (runtime) e tutta una sorta di servizi necessari. 
+Secondo l'approccio tradizionale, si sviluppa un'applicazione in locale e poi si deploya sul cloud, ma vi possono essere dei problemi come ``it works on my machine'': uno dovrebbe replicare esattamente le proprie condizioni di lavoro sul cloud.
+Mentre con il PaaS l'ambiente di sviluppo diventa l'ambiente di deployement e tale gestione dipende direttamente dal provider.\\
+I 5 servizi Paas principali di Azure sono:
+\begin{myitemize}
+	\item Web App - Servizi PaaS per lo sviluppo di applicazioni Web;
+	\item Mobile App - Servizi per lo sviluppo di applicazioni Mobile (gestione contenuti, utenti);
+	\item Function App - Azioni microscopiche (piccole funzione) che possono essere deployate sul cloud;
+	\item API App - Sviluppare API o usare API di terzi;
+	\item Logic App - Serve per scrivere logica di integrazioni per applicazioni.
+\end{myitemize}
+L'applicazione Web può avere 2 ruoli:
+\begin{myitemize}
+	\item Web Role: L'esecuzione di una web app, ha il compito della presentazione.
+	\item Worker Role: Supporta l'esecuzione backend.
+\end{myitemize}
+Osservazione: Un nuovo non è una VM è simile ad una sandbox (l'applicazione vede se stessa come l'unica app in corso), quindi si possono avere più ruoli sulla stessa macchina, inoltre nel caso di una WebApp non sappiamo né la memoria né informazioni sul CPU, si pagano solo le richieste servite (o cicli del processore usati), inoltre viene garantito autoscaling e auto load balancing.
+La comunicazione tra Web Role e Worker Role avviene attraverso un sistema di code di messaggi, e un load balancer distribuisce le richieste tra i vari Web Role.\\
+Per la persistenza dei dati Azure mette a disposizione:
+\begin{itemize}[noitemsep, topsep=0ex, wide]
+	\item \textbf{BLOB (Binary Large Obect) Storage}: è un object store molto simili al modello S3 di Amazon e può salvare qualunque tipo di file anche di grande dimensioni, è un filesystem distribuito ma la differenza rispetto all'S3 è che BLOB storage è a due strati, il primo livello prende il nome di Container e il secondo livello è BLOB.
+	L'interfaccio con cui si interagisce con BLOBS è REST API, quindi PUT, GET, (UN)DELETE, COPY, SNAPSHOT, LEASE. 
+	\item \textbf{Azure Cloud SQL}: Server SQL senza overhead amministrativi, si può scegliere se si vuole questo DB su hardware condiviso o riservato, il modello che segue è Pay-as-you-grow. 
+	E' con alta disponibilità ($99.99\%$ mensili). 
+	\item \textbf{Tables}: Uno storage leggermente strutturato, è un database key-value quindi NoSQL, ciascuna entità può avere 255 proprietà ed essere grande al più 1 MB, come altri modello key-value abbiamo due chiavi: una chiave per partizione e una per la riga. La chiave identifica univocamente un'entità e usa Timestamp.
+	Osservazione è fortemente \textbf{C}onsistente, ed è altamente \textbf{A}vailable, quindi secondo il teorema CAP non è particolarmente tollerante alle \textbf{P}artizioni.
+	\item \textbf{Queues}: Un sistema di code di messaggi simile a Apache Kafka.
+	\item \textbf{CosmoDB}: è un servizio equivalente a MongoDB offerto da Azure, è un poliglotta ed è un key-value, graph, column based e document type DB, supporta un indice automatico in base alle query molto richieste esattamente come Mongo.
+	Inoltre garantisce una latenza molto bassa in tutto il mondo.
+\end{itemize}
+Azure offre un suo servizio di Auto Scaling, ma fra le varie possibilità offerte vi è la possibilità di creare auto scaling proprio basato sulle regole. Le regole possono essere:
+\begin{myitemize}
+	\item Constraint Rules: minimo e massimo numero di istanze in esecuzione per un certo role e lasciar decidere a Azure di decidere come e quando scalare;
+	\item Reactive Rules: seguite in risposta a certi eventi, queste regole sono più complesse rispetto a quello che ci mette a disposizione Amazon, in particolare, possiamo aumentare il numero di Role in esecuzione ma Azure permette anche di cambiare il comportamento della nostra applicazione (Throttling) in maniera dinamica:
+	\begin{myitemize}
+		\item Rigetto delle richieste: Rigetta richieste di certi utenti in base a certe regole es. rigetta il 10\% di richieste dalla Cina o da utenti che hanno già fatto n richieste in un determinato periodo per abbassare il carico;
+		\item Disabilitare o degradare certe funzionalità finché la situazione non si stabilizza;
+		\item Ritardare operazioni eseguite per applicazioni con bassa priorità
+	\end{myitemize}
+\end{myitemize}
+Come in Amazon si possono definire i Scaling Groups per raggruppare Role multipli e definire le Scaling Rules per tutti i Roles nel gruppo.
+
 
 \end{document}
