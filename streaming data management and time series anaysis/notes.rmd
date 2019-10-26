@@ -613,4 +613,83 @@ ggplot() +
   geom_line(aes(y=season_dummy, x=Time))
 ```
 
+# Forma StateSpace
+
+Sostanzialemente sono due set di equazioni: equazione di trasizione (stato) e equazioni di osservazioni(misurazione).
+L'equazione di **osservazione** ha la sequente forma, indico con (t) componenti che potrebbe essere o non essere variabili nel tempo:
+$$ y_t =  c_{(t)} + Z_{(t)}\alpha_t + \varepsilon_t \quad \varepsilon_t \sim WN(0,H_{(t)})$$
+$\alpha_t$ è il vettore che contiene informazioni non osservabili direttamente ma che combinati linearmente mi formano la serie, $\alpha_t$ contiene il trend, lo slope ecc.
+L'equazione di **transizione** è della forma:
+$$ \alpha_{t+1} = d_{(t)} + T_{(t)}\alpha_t + \eta_t \quad \eta_t \sim WN(0, Q_{(t)})$$
+Inoltre supponiamo che $\eta_t$ e $\varepsilon_t$ siano tra loro incorrelate.
+I valori iniziali vengono attribuiti in base a una distribuzione (di solito Gaussiano): $\alpha_1 \sim D(a_{1|0}, P_{1|0})$, se voglio esprimere la mia ignoranza posso dire che $P_{1|0} = \infty$ così sono sicuro che il valore iniziale è incluso lì dentro e $\alpha_1$ è incorrelato da $\eta_t$ e $\varepsilon_t$.
+
+ATTENZIONE KFAS (il pacchetto di R), cambia un po' le equazioni aggiungendo una matrice davanti a $\eta_t$ e rimuovendo le costanti $d_{(t)}$:
+$$\alpha_{t+1} = T_{(t)}\alpha_t + R_{(t)}\eta_t$$
+Es 1. con la regressione lineare:
+$$\begin{cases}y_t = Z_t(=X_t^T)\alpha_t(=\beta) + \varepsilon_t \\ \alpha_{t+1} = \alpha_t\end{cases}$$
+Es 2. Regressione lineare con i coefficienti che evolvono come RW: Identico a prima ma $\alpha_{t+1} = \alpha_t + \eta_t$.
+
+Es 3. AR(2) $y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \varepsilon_t$
+$$
+\begin{cases}
+y_t = \begin{bmatrix} 1 & 0\end{bmatrix} \begin{bmatrix} \alpha_t^{(1)}\\ \alpha_t^{(2)}  \end{bmatrix}   \\
+\begin{bmatrix}
+\alpha_{t+1}^{(1)}\\
+\alpha_{t+1}^{(2)}
+\end{bmatrix} =
+\begin{bmatrix}
+\phi_1 & \phi_2\\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\alpha_{t}^{(1)}\\
+\alpha_{t}^{(2)}
+\end{bmatrix} +
+\begin{bmatrix}
+\varepsilon_t\\
+0
+\end{bmatrix}
+\end{cases}
+$$
+quindi in particolare $H=0$ e $Z = \begin{bmatrix} 1 & 0 \end{bmatrix}$, 
+$$
+T=\begin{bmatrix}
+\phi_1 & \phi_2\\
+1 & 0
+\end{bmatrix}
+\quad
+Q=\begin{bmatrix}
+\sigma^2_t & 0\\
+0 & 0
+\end{bmatrix}
+$$
+Siccome è un AR(2) a media 0 i valori iniziali sono tali che $a_{1|0} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$ mentre $P_{1|0} =\begin{bmatrix} \gamma_0 & \gamma_1 \\ \gamma_1 & \gamma_0 \end{bmatrix}$ poiché è la varianza covarianza tra il primo $alpha$ e il suo primo ritardo. 
+
+Es 4. MA(1) $y_t = \varepsilon_t + \theta \varepsilon_{t-1}$
+
+$$
+\begin{cases}
+y_t = \begin{bmatrix} 1 & \theta\end{bmatrix} \begin{bmatrix} \alpha_t^{(1)}\\ \alpha_t^{(2)}  \end{bmatrix}   \\
+\begin{bmatrix}
+\alpha_{t+1}^{(1)}\\
+\alpha_{t+1}^{(2)}
+\end{bmatrix} =
+\begin{bmatrix}
+0 & 0\\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\alpha_{t}^{(1)}\\
+\alpha_{t}^{(2)}
+\end{bmatrix} +
+\begin{bmatrix}
+\varepsilon_t\\
+0
+\end{bmatrix}
+\end{cases}
+$$
+
+i valori iniziali sono: $a_{1|0} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$ mentre $P_{1|0} =\begin{bmatrix} \sigma^2_\omega & 0 \\ 0 & \sigma^2_\omega \end{bmatrix}$.
+
 
