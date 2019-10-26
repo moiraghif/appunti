@@ -692,4 +692,90 @@ $$
 
 i valori iniziali sono: $a_{1|0} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$ mentre $P_{1|0} =\begin{bmatrix} \sigma^2_\omega & 0 \\ 0 & \sigma^2_\omega \end{bmatrix}$.
 
+Omettiamo le costanti e usiamo la forma che usa KFAS d'ora in poi:
+$$
+\begin{cases}
+\alpha_{t+1} = T\alpha_t + R\eta_t\\
+y_t = Z\alpha_t + \varepsilon_t
+\end{cases}
+$$
+Supponiamo di avere LLT (Local Linear Trend) + noise:
+$$ 
+\mu_{t+1} = \mu_t + \beta_t + \eta_t\\
+\beta_{t+1} = \beta_t + \zeta_t
+$$
+supponiamo di osservarlo con del rumore:
+$$
+y_t = \mu_t + \varepsilon_t
+$$
+Osserva che sembra già essere in state space. basta prendere 
+$$\alpha_t = \begin{bmatrix} \mu_{t+1} \\ \beta_{t+1} \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} \mu_t \\ \beta_t \end{bmatrix} + \begin{bmatrix} \eta_t \\ \zeta_t \end{bmatrix}$$
+quindi in particolare abbiamo $T = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$ e $R = \mathbb{I}_2$ 
+con $Q = \begin{bmatrix} \sigma_\eta^2 & 0 \\ 0 & \sigma_\zeta^2 \end{bmatrix}$ e
+$$ y_t =  \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} \mu_t \\ \beta_t \end{bmatrix} + \varepsilon_t$$
+con $H = \sigma^2_\varepsilon$ e non conoscendo nulla del RW metto $a_{1|0} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$ e $P_{1|0} = \begin{bmatrix} \infty & 0 \\ 0 & \infty \end{bmatrix}$
+Un altro esempio LLT con la componente ciclica stocastico:
+$$ y_t = \mu_t + \psi_t +\varepsilon $$
+$$\begin{bmatrix} \psi_t \\ \psi^*_{t+1} \end{bmatrix} = \rho\begin{bmatrix} \cos\lambda & \sin\lambda \\ -\sin\lambda & \cos\lambda \end{bmatrix} \begin{bmatrix} \psi_t \\ \psi^*_t \end{bmatrix} + \begin{bmatrix} k_t \\ k^*_t \end{bmatrix}$$
+per la forma state space applichiamo la formula LEGO: 
+$$
+\alpha_t=\begin{bmatrix} \mu_{t+1} \\ \beta_{t+1} \\ \psi_{t+1} \\ \psi^*_{t+1} \end{bmatrix} = 
+\begin{bmatrix} 1 & 1 & 0 & 0\\  
+0 & 1 & 0 & 0\\ 
+0 & 0 & \rho \cos\lambda & \rho\sin\lambda \\ 
+0 & 0 & -\rho \sin\lambda & \rho\cos\lambda \end{bmatrix} \begin{bmatrix} \mu_t \\ \beta_t \\ \psi_t \\ \psi^*_t \end{bmatrix} + \begin{bmatrix} \eta_t \\ \zeta_t\\ k_t \\ k^*_t \end{bmatrix}
+$$
+e 
+$$ y_t = \begin{bmatrix} 1 & 0 & 1 & 0 \end{bmatrix}\alpha_t + \varepsilon_t  $$
+Per la formula LEGO basta concatenare i vettori mettendo uno sopra l'altro, mentre le matrici vanno concatenate diagonalmente.
+
+## Filtro si Kalman
+La forma state space serve per il filtro di Kalman, che è un algoritmo ricorsivo che fa 2 passi:
+$a_{t|s} = \mathbb{P}[\alpha_t|y_1,...,y_s]$ sotto iptosi di Gaussianità è anche il valore atteso condizionato (predittore ottimale) quindi il mio valore atteso $\alpha_{t|s}$ diventa la proiezione del vettore di stato al tempo t con dati i noti fino ad s (oss: può essere sia nel presente che nel futuro). Abbiamo inoltre l'incertezza data dalla matrice di varianza covarianza degli errori $P_{t|s} = \mathbb E [(\alpha_t - a_{t|s})(\alpha_t - a_{t|s})^T]$.\\
+
+- Se $t>s$ è caso di forecast
+- Se $t=s$ è una stima a tempo reale è chiamato filter
+- Se $t<s$ è lo smoother
+
+KF a due passi funziona così, nota che è ricorsivo:
+$$(a_{t|t-1},P_{t|t-1}) \to (a_{t|t},P_{t|t}) \to (a_{t+1|t},P_{t+1|t})$$
+e all'inzio del modello state space si fornisce $(a_{1|0},P_{1|0})$. Quindi KF ci calcola il Filter (quando t=s) e restituisce le previsioni un passo in avanti: $\hat y_{t|t-1} = Z_{(t)}a_{t|t-1}$ e posso definire l'innvoazione: $i = y_t - \hat y_{t|t-1}$ e si defisce anche la sua varianza $F_t = \mathbb E [i\cdot i^T]$
+Se assumi la gaussianità cioé $y_t|y_1, ..., y_{t-1} \sim N(\hat y_{t|t+1}, F_t)$
+allora possiamo costruire la funzione di massima verosimglianza:
+$$ 
+L(\theta) = \sum_{t=1}^n -\frac{1}{2} \Big (\log(\det(F_t)) + (y_t - \hat y_{t|t-1})^T F^{-1} (y_t - \hat y_{t|t-1}) \Big ) 
+$$
+Se i dati non sono Gaussiana posso considerarla comunque come una funzione di perdita generale (come MSE), quindi comunque tutto funziona bene. In realtà nella funzione di massima verosomiglianza abbiamo che sia $F_t$ che $\hat y$ variano al variare dei parametri $\theta$, quindi la ottimizzazione è numerica e non analitica inoltre il KF ci trova sia $\hat y_{t|t-1}$ che la sua matrice di varianza covarianza $F_t$. 
+Esistono anche funzioni smoother per fare queste stime.
+```{r}
+library(KFAS)
+y <- log(AirPassengers)
+y[121:144] <- NA
+
+#SSMseasonal crea solo cicli stazionari (non stocastici)
+mod1 <- SSModel(y ~ 0 + SSMtrend(2, list(NA, NA)) + # 2 per LLT(local linear trend)
+                  SSMseasonal(12, NA, "dummy"), #NA nella varianza indica che non la so
+                H = NA)
+
+mod1$T #la matrice T di state space (la sua terza
+# dimesione indica la possibile variazione nel tempo) (13x13)
+
+mod1$Q #3 errori quindi una matrice 3x3
+
+mod1$R #matrice R che distribuisce i 3 errori sulle variabili quindi deve essere 13x3
+
+vary <- var(y, na.rm = TRUE) #la varianza di y che serve da stima per i parametri iniziali
+pars <- numeric(4) #parametri iniziali
+#si usano log varianze perché siccome le varianze sono sempre positive ma il computer può
+#portarle ad essere negative e ciò crea casini e passando all'exp diventa positivo.
+pars[1] <- log(vary/10) #log varianza del livello
+pars[2] <- log(0.1) # per lo slope metto un valore piccolo
+pars[3] <- log(0.1) # anche per la stagionalità
+pars[4] <- log(vary/10)# errore di osservazione
+
+fit1 <- fitSSM(mod1, inits = pars)
+fit1$optim.out$convergence #se è 0 vi è convergenza
+fit1$model$Q #osserva non sono più NA come nel mod1$Q o meglio ha stimato i valori
+```
+
 
