@@ -769,7 +769,7 @@ pars <- numeric(4) #parametri iniziali
 #si usano log varianze perché siccome le varianze sono sempre positive ma il computer può
 #portarle ad essere negative e ciò crea casini e passando all'exp diventa positivo.
 pars[1] <- log(vary/10) #log varianza del livello
-pars[2] <- log(0.1) # per lo slope metto un valore piccolo
+pars[2] <- log(0.1) # per la percentuale dello slope metto un valore piccolo 
 pars[3] <- log(0.1) # anche per la stagionalità
 pars[4] <- log(vary/10)# errore di osservazione
 
@@ -777,5 +777,100 @@ fit1 <- fitSSM(mod1, inits = pars)
 fit1$optim.out$convergence #se è 0 vi è convergenza
 fit1$model$Q #osserva non sono più NA come nel mod1$Q o meglio ha stimato i valori
 ```
+
+```{r, eval=FALSE}
+#la update function suppone che gli unici parametrici sono le varianze 
+# e che siano le log varianze
+
+#la update function deve essere così:
+updatefn(pars, model, ...){ 
+  #pars=parametri da stimare
+  transform(pars) #la mappa da applicare ai paramtri (es. Logistic, exp)
+  putInModelMatrix(pars) #metti nelle matrici giuste i vari parametri
+  model #return model
+}
+```
+
+```{r}
+library(KFAS)
+y <- log(AirPassengers)
+y[121:144] <- NA
+
+mod1 <- SSModel(y ~ 0 + SSMtrend(2, list(NA, NA)) + # 2 per LLT(local linear trend)
+                  SSMseasonal(12, NA, "dummy"), #NA nella varianza indica che non la so
+                H = NA)
+vary <- var(y, na.rm = TRUE)
+pars <- numeric(4)
+pars[1] <- log(vary/10)
+pars[2] <- log(0.01) #metto un valore piccolo
+pars[3] <- log(0.01) 
+pars[4] <- log(vary/10)
+
+fit1 <- fitSSM(mod1, inits = pars, control=list(maxit=1000))
+fit1$optim.out$convergence #se è 0 vi è convergenza
+fit1$optim.out
+fit1$model$Q #osserva non sono più NA come nel mod1$Q
+```
+
+```{r}
+library(ggplot2)
+smo1 <- KFS(fit1$model, smoothing = c("state","disturbance","signal"))
+colnames(smo1$alphahat)
+
+Tempo = 1:length(y)
+y = as.numeric(y)
+ggplot() +
+  geom_line(aes(y=y, x=Tempo)) +
+  geom_line(aes(y=smo1$alphahat[, "level"], x=Tempo), colour='red')
+
+stagion_piu_noise <- as.numeric(y-smo1$alphahat[, "level"])
+ggplot()+
+  geom_line(aes(y=stagion_piu_noise, x=Tempo)) +
+  geom_line(aes(y=smo1$alphahat[, "sea_dummy1"], x=Tempo), colour='red') #è la stagionalità
+
+
+#muhat è serie - noise ma il noise è basso quindi coincide praticamente con la serie
+ggplot() +
+  geom_line(aes(y=y, x=Tempo)) +
+  geom_line(aes(y=smo1$muhat, x=Tempo), colour='red')
+
+#per previsioni 1step ahead
+mod11 <- fit1$model #rubo il modello da fit1
+mod11$y[] <- log(AirPassengers) #passo tutta la serie (è illegale ma si fa lo stesso)
+
+smo11 <- KFS(mod11, filtering = "signal") #filtro solo il segnale
+
+Tempo = time(log(AirPassengers))
+df <- data.frame(as.numeric(Tempo), "log_AirPassenger" = as.numeric(log(AirPassengers)),
+                 "Prev_11" = as.numeric(smo11$m), "Prev_1" = as.numeric(smo1$muhat))
+ggplot(data=df, aes(x=Tempo)) +
+  geom_line(aes(y=log_AirPassenger, color="log(AirPassenger)"), lwd=1.5) +
+  geom_line(aes(y=Prev_11, color="Previsione model 2"))+
+  geom_line(aes(y=Prev_1, color="Previsione model 1"))+
+  scale_color_manual(values = c("log(AirPassenger)" = "black", 
+                                "Previsione model 2" = "red",
+                                "Previsione model 1" = "blue"),
+                     name = "") +
+  geom_vline(xintercept = 1959, lty=2) +
+  ylim(4.5, 7)
+
+stdresid <- rstandard(smo1, "recursive")
+# dà diversi tipi di residui standardizzati
+forecast::ggtsdisplay(stdresid)
+```
+
+```{r}
+dist1 <- rstandard(smo1, "state") #disturbance
+#tendenzialmente se sta tra -2 e 2 va bene, altrimenti forse c'è stato un evento
+# che ha causato una botta
+plot(dist1)
+```
+
+```{r}
+osserr1 <- rstandard(smo1, "pearson")
+ggplot() + 
+  geom_line(aes(x=Tempo, y=osserr1))
+```
+
 
 
