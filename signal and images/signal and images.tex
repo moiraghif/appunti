@@ -78,4 +78,129 @@ i cui primi due momenti sono:
   \hat{\sigma}^2 &= \frac{1}{N - 1} \sum_{i=0}^{N - 1} (f(t) - \mu)^2
 \end{align*}
 Questi valori possono essere usati al posto del segnale grezzo per poter allenare un classificatore.
+
+\section{Trasformata di Fourier}
+Data una funzione qualsiasi, questa può essere scomposta in armoniche fondamentali in modo tale da approssimarla con precisione arbitraria.
+\begin{equation*}
+  f(x) = \frac{a_0}{2} + \sum_{k=1}^{\infty}a_k \cdot \cos(\frac{2\pi}{N}Kx) + b_k \cdot \sin(\frac{2\pi}{N}Kx)
+\end{equation*}
+dove $N$ è il periodo della funzione, $\frac{1}{N}$ è la \textit{frequenza fondamentale} $F_0$.
+Il calcolo dei coefficienti è effettuato come segue:
+\begin{align*}
+  a_k &= \frac{2}{N} \int_{-\frac{N}{2}}^{\frac{N}{2}}f(x) \cdot \cos(2\pi f_0 Kx) dx \\
+  b_k &= \frac{2}{N} \int_{-\frac{N}{2}}^{\frac{N}{2}}f(x) \cdot \sin(2\pi f_0 Kx) dx
+\end{align*}
+I coefficienti sono unicamente determinati: è impossibile scomporre la funzione in modo diverso (imponendo un limite a cui terminare la scomposizione).
+
+La trasformata di Fourier permette di passare dal dominio temporale o spaziale al dominio delle frequenze, che facilita alcune operazioni necessarie all'analisi.
+Una sinusoide di ampiezza $A$ e periodo $T$ è rappresentata quindi come un picco di ampiezza $A$ nel punto $F = \frac{1}{T}$.
+\begin{equation*}
+  F(u) = \int_{-\infty}^{+\infty}f(x) \cdot e^{-i 2\pi ux}dx
+\end{equation*}
+La trasformata di Fourier è quindi una funzione con valori nel campo complesso $\mathbb{C}$.
+Con l'operazione di \textit{antitrasformata} la funzione è riportata dal dominio delle frequenze al dominio originario senza perdita d'informazione (a livello teorico):
+\begin{equation*}
+  f(x) = \int_{-\infty}^{+\infty}F(u) \cdot e^{i 2\pi ux} du
+\end{equation*}
+che restituisce il valore della funzione nel punto specifico.
+
+Con la trasformazione di Fourier è quindi possibile portare i dati in un dominio differente che semplifica alcune operazioni e riportarlo indietro al dominio originario.
+
+\begin{equation*}
+  F(u) = F[f(x)] = \Re(F(u)) + i \cdot \Im(F(u)) = |F(u)| \cdot e^{i \phi(u)}
+\end{equation*}
+Il modulo della trasformata $|F(u)|$ è definito come:
+\begin{equation*}
+  |F(u)| = \sqrt{\Re(u)^2 + \Im(u)^2}
+\end{equation*}
+mentre la fase:
+\begin{equation*}
+  \phi(u) = \tan^{-1}\frac{\Im(u)}{\Re(u)}
+\end{equation*}
+\newline
+
+Per il caso bidimensionale l'equazione della trasformata assume un'altra forma:
+\begin{align*}
+  F(u, v) &= \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}f(x, y) \cdot e^{-i2\pi(ux + vy)} dx dy \\
+  f(u, v) &= \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}F(x, y) \cdot e^{i2\pi(ux + vy)} dx dy
+\end{align*}
+che rimane molto simile a parte per il numero di assi. \newline
+
+\subsection{{Trasformata discreta}}
+Operando con segnali digitali (che quindi assumono valori discretizzati), l'integrale è sostituito dalla sommatoria:
+\begin{equation*}
+  F(u) = \frac{1}{N} \sum_{j=0}^{N-1} f(j) \cdot e^{-i 2 \pi u \frac{1}{N} j}
+\end{equation*}
+
+\subsection{Analisi di Fourier}
+La combinazione delle armoniche (tramite mera sommatoria) permette di stimare funzioni con precisione arbitraria.
+Ribaltando le armoniche nello spazio delle frequenze, si ottiene un fascio di linee parallele all'asse dell'ampiezza con altezza pari al contributo nel generare l'approssimazione; tuttavia un segnale reale non è così regolare da avere solamente dei picchi ma anche delle interferenze in prossimità.
+L'altezza delle rette è pari alla metà dell'ampiezza $A$ dell'armonica corrispondente, e lo spazio è simmetrico rispetto all'asse delle ampiezze.
+
+\subsection{Esempio: rimozione di frequenze}
+Si intende filtrare il suono di un'onda eliminando le frequenze sopra ad una certa soglia, conservando solamente i bassi.
+
+Effettuare l'operazione nel dominio del tempo è complicato: bisogna programmare un filtro di lunghezza arbitraria $l$ che, partendo dal primo campione, moltiplichi gli $l$ campioni successivi per dei pesi (la cui stima è oggetto di ricerca) per ottenere una proiezione del primo campione.
+Dunque si sposta il filtro alla posizione successiva e si ripete l'operazione fino a raggiungere la fine del file.
+
+Effettuare l'operazione nello spazio delle frequenze è nettamente più semplice: è necessario solamente programmare un filtro \textit{passa-banda} (ovvero una funzione che vale $0$ sulle frequenze da eliminare e $1$ su quelle da conservare) e moltiplicarlo per la trasformata $F(u)$, e dunque effettuare l'anti-trasformata per poter fruire nuovamente del file.
+
+Discorso analogo può essere fatto selezionando arbitrariamente qualsiasi intervallo di frequenze.
+Spesso al posto di usare filtri ideali (ovvero che assumono solamente valore $0$ o $1$) si usano filtri più morbidi (come i filtri gaussiani) per evitare la generazione di artefatti: questi assumono valori compresi nell'intervallo e riducono tutte le frequenze in modo progressivo. \newline
+
+Per effettuare la stessa cosa con un'immagine, si considera la trasformata bidimensionale del segnale: di questo si considera solamente il modulo (si conserva però la fase per poter tornare all'immagine originale).
+Più la rappresentazione del modulo è regolare, più l'immagine sarà ordinata.
+Per costruire un filtro basta considerare una circonferenza di raggio arbitrario per considerare solamente determinate frequenze.
+Considerando solamente le frequenze alte sono conservati i bordi dell'immagine, con frequenze basse le informazioni sul contenuto (si ottiene una sfocatura dell'immagine).
+
+\section{Operatori puntuali}
+
+\paragraph{Contrast Stretching}
+Serve per aumentare il contrasto compreso tra due valori di grigio in un'immagine.
+Con una funzione particolarmente angolata (caso estremo) tutti i valori sopra a una certa soglia sono mappati col nero ottico e sotto col bianco ottico: si ha quindi una binarizzazione.
+\begin{equation*}
+  s = T(r) = \frac{1}{1 + (^m/_r)^E}
+\end{equation*}
+Tipico caso è l'aumento nella ristrutturazione di negativi fotografici e pellicole.
+
+\paragraph{\textit{Smoothing}}
+Sono filtri che fanno perdere nitidezza all'immagine rendendo i contorni meno decisi.
+Sono usate per appiattire transazioni rapide che possono esserci tra un pixel e il successivo, rimuovere dettagli (\textit{blurring}) o collegare linee vicine che non sono collegate o ancora ridurre il rumore.
+I filtri possono essere costruiti o riassegnando il valore del pixel in base a una maschera di pesi o sfruttando momenti del campione estratto dalla maschera.
+I filtri con pesi sono usati con rumore gaussiano, mentre i filtri mediani sono molto efficaci nei casi di \textit{salt and pepper} (picchi molto scuri o chiari).
+
+\paragraph{\textit{Sharpening}}
+Sono filtri usati per migliorare la nitidezza dell'immagine, tramite un processo di derivazione (che può anche essere calcolata come la differenza tra un pixel e il successivo).
+Avendo a che fare con strutture bi-dimensionali, si sfruttano maschere bi-dimensionali, i cui pesi hanno somma nulla; in base a come sono distribuiti i pesi, sono evidenziati i dettagli orizzontali o verticali (ma non entrambi).
+Un filtro trasposto passa da evidenziare i dettagli da una direzione all'altra.
+Per evidenziare tutti i dettagli, si combinano entrambe le immagini combinando il gradiente bidimensionale.
+\begin{align*}
+  \partial^2 f &= \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2} \\
+  \frac{\partial^2 f}{\partial x^2} &= f(x + 1, y) + f(x - 1, y) - 2 f(x, y) \\
+  \frac{\partial^2 f}{\partial y^2} &= f(x, y + 1) + f(x, y - 1) - 2 f(x, y) \\
+\end{align*}
+Andando a sommare la derivata seconda all'immagine originale, si ottiene un'immagine i cui dettagli sono molto più marcati rispetto all'originale.
+
+\paragraph{\textit{Aliasing}}
+Riducendo la risoluzione di un'immagine, si eliminano frequenze che prima erano visibili: prima di effettuare questa operazione è buona norma effettuare uno \textit{smoothing} dell'immagine di partenza per eliminare le frequenze che comunque verrebbero tagliate.
+
+\section{Spazio dei colori}
+Il modello classico di codifica dei colori prevede l'uso di tuple (di 3 o 4 valori).
+Lo \textit{spazio dei colori} presuppone inoltre una definizione su come interpretare le informazioni.
+Esistono più spazi colore diversi, scelti a seconda dell'uso che se ne deve fare.
+
+\paragraph{RGB}
+È uno spazio colore dipendente dal dispositivo: una volta rappresentati i colori ``puri'', tutti i colori ottenibili abitano nel cubo così ottenuto.
+Il successo è dato dal fatto che sia uno standard, e quindi può essere usato su ogni dispositivo.
+L'informazione è codificata tramite tre numeri che definiscono le coordinate del colore nello spazio.
+
+\paragraph{Spazi colore intuitivi}
+Lo spazio è rappresentato come la distanza del colore rispetto ad un centro di simmetria radiale.
+La saturazione aumenta all'aumentare della distanza dal centro radiale; mentre l'intensità è data da quanto è scuro lo spazio.
+Esistono più tipologie di spazi colore di questo tipo in base alla forma che può ottenere (cilindrica, cono o doppio cono), ma gli assi rappresentano sempre le medesime informazioni. \newline
+
+Molti dispositivi sono in grado di codificare i colori in modo sia lineare (in ingresso) che non lineare (in uscita): per poter ottenere risultati migliori si preferisce progettare dispositivi che codificano i colori in entrata in modo non lineare.
+
+\paragraph{CYCbCr}
+Questa codifica separa la luminosità $Y$ dall'opponenza blu-giallo $Cb$ e rosso-verde $Cr$.
 \end{document}
