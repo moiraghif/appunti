@@ -522,6 +522,118 @@ Azure offre un suo servizio di Auto Scaling, ma fra le varie possibilità offert
 	\end{myitemize}
 \end{myitemize}
 Come in Amazon si possono definire i Scaling Groups per raggruppare Role multipli e definire le Scaling Rules per tutti i Roles nel gruppo.
+%\section{Lezione 6 - 22/10}
+\section{Containerization}
+Docker è un progetto open source che ha l'obiettivo di automatizzare il deployement dell'applicazione all'interno di un software container. L'idea alla base è avere un sistema di packaging uniforme che possa essere eseguito ovunque. Uno degli obiettivi principali è isolare le applicazioni cioè voglio che non vedano i processi del sistema per motivi di sicurezza. Inoltre sono lightweight poiché condividono il kernel di OS e non c'è uno strato di virtualizzazioni in mezzo.\\
+L'idea è quella di eliminare hypervisor ed eliminare GuestOS. La tecnologia container ha la dualità immagini - container, immagine è un file che contiene i meta data e file system e questo file viene usato per creare container, ma la differenza rispetto alle VM è che il container non è una copia dell'immagine bensì una sua esecuzione.\\
+Il filesystem di docker è solo di lettura e usa un approccio Copy-on-write. Tutte le tecnologie tranne il filesystem sono dovute usando il kernel linux, uno di questi processi è il namespace.\\
+Il ciclo di vita di un container:
+\begin{myitemize}
+	\item Create
+	\item Start
+	\item Stop
+	\item Pause
+	\item Kill
+\end{myitemize}
+Quando si elimina l'immagine in esecuzione si perdono tutti i dati, quindi nasce il concetto di volume che sono cartelle condivise con il sistema (in modo da non perdere i dati).
+I volumi sono di tre tipi:
+\begin{myitemize}
+	\item Bind Mound: una cartella montata è bindata(collegata a una cartella del sistema)
+	\item Volume: sono cartelle condivise ma gestiti dal docker, evitando problema di breech
+	\item tmpfs: cartelle che non sono sul disco dell macchina ma sulla memoria.
+\end{myitemize}
 
+\section{Apache Spark}
+L'idea di fondo non è quella di spostare i dati nelle varie macchine ma i codici (data locality), quindi una volta ottenuto il parallelismo e data locality e in più implementiamo un sistema che sia in grado di gestire i fallimenti a vari livelli allora otteniamo il framework chiamato Hadoop.
+Spark piano piano sta sostituendo una parte dell'ecosistema di Hadoop.\\
+Per introdurre il concetto degli operatori serve capire cos'è il linguaggio funzionale: è un paradigma di programmazione, che vede la computazione come processo di valutazioni di funzioni matematiche, queste funzioni devono essere immutabili e prive di stato. 
+Le proprietà della programmazione funzionale:
+\begin{myitemize}
+	\item Composizione di funzioni per ottenere funzione di ordine superiore
+	\item Le funzioni sono senza stato (sono pure), prendono stato grazie ad un accumulatore che è una variabile passata in ingresso a una funzione
+	\item Non possono modificare lo stato di altri funzioni (no side-effect)
+	\item Possibilità di Ricorsione
+	\item Lazy-Evaluation, esecuzione solo quando viene veramente richiesta
+	\item Le funzioni non modificano le strutture dati, ma ne creano altre durante il processo
+\end{myitemize}
+Grazie a queste proprietà si ottiene la parallelizzazione automatica, performance migliorata, nessun Bug e gestione della memoria.\\
+I due operatori più interessanti per Spark sono:
+\begin{myitemize}
+	\item \textbf{Map}: un operatore di ordine superiore, prende in ingresso una funzione e una input list e applica questa funzione in ingresso a tutti gli elementi della input list restituendo un'altra lista;
+	\item \textbf{Reduce}: un operatore di ordine superiore, prende in ingresso una funzione e una input list e applica questa funzione ricorsivamente a tutti gli elementi restituendo una combinazione della lista.
+\end{myitemize}
+\subsection{MapReduce}
+Una loro applicazione combinata è MapReduce, che serve a processare una grande quantità di dati con algoritmi parallelizzati e distribuiti su un cluster. 
+Il sistema shuffla i dati nelle fasi in mezzo a Map e Reduce(!?). 
+I nodi del sistema condividono un filesystem distribuito e vengono sfruttati nelle due fasi:
+\begin{myitemize}
+	\item Fase \textbf{Map}: Il master node partiziona i files in M splits attraverso una chiave, e assegna ai slaves i maps da eseguire.\\
+	Questi slaves dopo aver eseguito il task di Map, scrivono il loro output sul disco partizionato in R regioni attraverso una funzione hash;
+	\item Ad altri slaves viene assegnato il task \textbf{Reduce}, ciascuna slave legge i dati dal disco del mapper corrispondente e li raggruppano in base alla chiave ed eseguono la funzione di Reduce.
+\end{myitemize}
+Questo è l'architettura usata in Hadoop 1.x, uno dei suoi svantaggi sono il blocco che si crea ai vari slaves, poiché quando lavorano i Mapper i Reducer sono fermi e quando lavorano i Reducer i Mapper sono quelli fermi, quindi non si sfrutta la massima capacità del cluster. In Hadoop 2.x e Spark si è cercato di colmare questa problematica. 
+Un altro svantaggio è che ad ogni iterazione di Map e Reduce il file viene scritto sul disco che rallenta tutto il processo. 
+Inoltre non tutti lavori possono essere scritti in alberi di operazioni Map e Reduce, ad es. i cicli sui dati stessi.\\
+\subsection{Spark Ecosystem}
+Qua entra in gioco un'applicazione open source \textbf{Apache Spark}: effettua i calcoli in memoria senza riscriverli sul disco, se non necessario e permette di generalizzare i calcoli usando grafi aciclici ottenendo molta più flessibilità. Allarga il set di operazioni in \textbf{trasformazioni} e \textbf{azioni}, dove trasformazioni e azioni sono un set di operazioni diverse che possono essere combinate in maniera arbitraria e Spark 2 ha implementato anche un ottimizzatore di query (Catalyst). \\
+Apache Spark supporta:
+\begin{myitemize}
+	\item Manipolare i dati attraverso SQL, vedendo i file come delle tabelle SQL
+	\item Esiste una libreria MLlib per Data Science e Machine Learnig distribuito
+	\item Processamento di grafi di dimensioni enormi 
+	\item Processamento di dati in tempo reale
+	\item File system Distribuito in-memory(cache)
+	\item Query approssimate sui dati
+	\item Eredita da Hadoop il supporto dei file Avro, Parquet e le sorgenti di questi dati possono essere HDFS, Cassandra, Hive, Mongo ecc.
+	\item Sviluppo in linguaggi come Python, R, Scala, Java, .Net
+\end{myitemize}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{imgs/Spark_eco.png}
+	\caption{Spark Ecosystem}
+	\label{fig:SparkEco}
+\end{figure}
+Al centro di tutto l'ecosistema c'è il Spark Core che si occupa di
+\begin{myitemize}
+	\item Gestione del calcolo distribuito, quindi si occupa della distribuzione, coordinamento e scheduling dei task computazionali e inoltre si occupa di gestire i fallimenti e riduce al minimo la data shuffling tra i vari nodi;
+	\item Fornire le API per l'astrazione delle \textbf{RDD}, che è un collezione di oggetti, immutabili e fault tollerant partizionati su un cluster, che possono essere manipolati in parallelo.
+\end{myitemize}
+Spark può essere deployato in 3 modalità diverse:
+\begin{myenumerate}
+	\item Come una libreria che viene eseguita in un programma, fornendo le API delle RDD, ma si possono usare solo le risorse della macchina su cui gira il programma;
+	\item Può essere eseguito in maniera distribuita (su cluster), che può essere standalone (che non significa solo una macchina ma semplicemente il fatto che non ha bisogno di un scheduler esterno) oppure usando scheduler esterni tra cui YARN, Mesos e K8;
+	\item Accesso ai sistemi di storage attraverso le API di Hadoop per usare HBase, S3, Cassandra ecc.
+\end{myenumerate}
+L'applicazioni Spark ha due elementi fondamentali più un terzo facoltativo:
+\begin{myenumerate}
+	\item \textbf{Spark Driver} che è la parte del codice che viene eseguita non in parallelo, questo driver crea uno SparkContext per gestire i jobs, lo SparkContext deve capire quali pezzi del nostro codice sono parallelizzabile e deve inviarli al cluster;
+	\item Nei vari cluster ci sono degli agenti \textbf{Executor} che eseguono gli ordini dal SparkContext e riescono a gestire una serie di task in parallelo, una volta concluso il task il risultato viene ri-inviato al driver;
+	\item Nel mezzo può esserci un \textbf{Cluster Manager} per permettere la comunicazione tra il driver e i vari nodi e di allocare le risorse.
+\end{myenumerate}
+Il context era un oggetto che creava delle connessioni ad es. per connettere SQL si creava SQLContext, per connettere Hive si creata HiveContext, ciò creava confusione e rendeva difficile una loro collaborazione. 
+Questi diversi contesti, in Spark 2, vengono unificati in un unico oggetto chiamato SparkSession, ottenendo un entrypoint unificato per gestire i dati in spark.
+\subsection{RDD}
+RDD (Resilient Distributed Dataset), essenzialmente una lista di oggetti distribuita e resiliente, distribuita nel senso che sono partizionati (in base a una chiave) in memoria di vari nodi ma viene vista come un'unica lista grazie alla chiave di partizionamento ciascuna partizione contiene un unico record che può essere operato indipendentemente (simile all'approccio Shared Nothing), ciò permettere la loro gestione in maniera parallela con le trasformazioni (Map, Filter) e in caso di fallimento vengono automaticamente ricostruiti.\\
+Vengono di solito immagazzinati in memoria ma vi è la possibilità di scriverli sul disco, sono tipizzati (Integer, double, Objects), sono immutabili (quindi applicare una trasformazione significa creare un altro RDD) e sono lazy evaluated. Alcune possibili trasformazioni sono: map, filter, union, intersection, distinct e join (solo per RDD di tipo key-value).\\
+Ciascun RDD tiene traccia delle trasformazioni usate per costruirlo, questa traccia è detta lineage, che può essere usato per ricostruire i dati persi. 
+Le Action possono prendere un RDD e produrre un altro oggetto non RDD. 
+Le trasformazioni sono lazy e non vengono eseguite finché non c'è un azione su RDD che li convoca. \\
+Il Driver pianifica l'ordine di esecuzione convertendo le trasformazioni e azioni in un grafo aciclico diretto (DAG), queste DAG tracciano le dipendenze (Lineage) e i nodi del grafo sono RDD mentre gli archi rappresentano le trasformazioni.
+Le azioni sono il pezzo finale del grafo e triggerano l'esecuzione della DAG, un'azione per esempio può essere reduce, count, collect, save.\\
+Attenzione se io devo effettuare due azioni sullo stesso DAG, le trasformazioni del DAG vengono eseguite 2 volte, per evitare tale problema si può inserire il comando cache prima dell'esecuzione delle azioni. 
+Alcune trasformazioni, come sortByKey, join, groupByKey ecc., possono avere uno shuffle che può rallentare il sistema, le trasformazioni possono essere:
+\begin{myitemize}
+	\item Narrow dependency: Ciascuna RDD viene consumato da al più una partizione figlio ma un figlio può avere molteplici genitori, quindi non cambia il numero di partizioni tra una trasformazione e l'altra, e non avviene lo shuffle;
+	\item Wide dependency: Ciascun RDD può essere usato da molteplici partizioni figli, quindi cambia il numero di partizioni
+\end{myitemize}
+Spark fa questa distinzione perché eseguirà le operazione Narrow tutte insieme in parallelo, spark divide in lavoro in stage, in base alla presenza di operazioni shuffle, all'interno di ciascun stage le operazioni possono essere eseguite in parallelo, inoltre le trasformazioni nei vari stage vengono composte per velocizzare il tutto.\\
+I vantaggi di RDD sono il controllo a basso livello, grazie alle API, su cosa fa spark e sono typesafe: spark ci permette di fare operazioni in base al tipo di RDD e infine ci insegnano in profondità come funzione spark.\\
+I suoi svantaggi sono il fatto che sono difficile da gestire (per un data scientist che deve usare i DataFrames), inoltre cambia la velocità di esecuzione anche in base al linguaggio usato (usando Java/Scala si ottiene un boost di performance anche 2x rispetto a python) e infine l'ottimizzazione del codice non avviene e quindi programmi sono meno efficienti.\\
+\subsection{Spark SQL}
+E' una libreria che funzione su Spark Core e fornisce come astrazione del RDD il dataframe, con tutte le proprietà dei dataframe, sono delle tabelle con righe e colonne con i header e indici ecc.
+A questo punto si può usare la tecnologia molto sviluppata dei database SQL, Spark SQL ha implementato anche un ottimizzatore che viene usato da tanti motori SQL.
+Questo aumenta anche il supporto alle varie tipologie di file e sorgenti con cui spark può comunicare.\\
+I Dataframe essendo un'astrazione delle RDD hanno le sue proprietà: sono immutabili, distribuiti, rappresentano una collezione, sono lazyily evaluated e le azioni sono eagerly evaluated.\\
+Il risultato di usare i dataframe è non solo la stessa velocità indipendentemente dal linguaggio scelto ma addirittura un miglioramento rispetto a lavorare direttamente su RDD, questo anche perché i DataFrame sono compressi quindi usano meno memoria, inoltre viene tenuto in conto anche l'inefficienza dei programmatori mediamente parlando.
 
 \end{document}
