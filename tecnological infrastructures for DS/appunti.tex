@@ -524,24 +524,79 @@ Azure offre un suo servizio di Auto Scaling, ma fra le varie possibilità offert
 Come in Amazon si possono definire i Scaling Groups per raggruppare Role multipli e definire le Scaling Rules per tutti i Roles nel gruppo.
 %\section{Lezione 6 - 22/10}
 \section{Containerization}
-Docker è un progetto open source che ha l'obiettivo di automatizzare il deployement dell'applicazione all'interno di un software container. L'idea alla base è avere un sistema di packaging uniforme che possa essere eseguito ovunque. Uno degli obiettivi principali è isolare le applicazioni cioè voglio che non vedano i processi del sistema per motivi di sicurezza. Inoltre sono lightweight poiché condividono il kernel di OS e non c'è uno strato di virtualizzazioni in mezzo.\\
-L'idea è quella di eliminare hypervisor ed eliminare GuestOS. La tecnologia container ha la dualità immagini - container, immagine è un file che contiene i meta data e file system e questo file viene usato per creare container, ma la differenza rispetto alle VM è che il container non è una copia dell'immagine bensì una sua esecuzione.\\
-Il filesystem di docker è solo di lettura e usa un approccio Copy-on-write. Tutte le tecnologie tranne il filesystem sono dovute usando il kernel linux, uno di questi processi è il namespace.\\
-Il ciclo di vita di un container:
+Docker è un progetto open source che ha l'obiettivo di automatizzare il deployement dell'applicazione all'interno di un software container, fornendo un livello di astrazione superiore a quello del sistema operativo. 
+L'idea alla base è avere un sistema di packaging uniforme che possa essere eseguito ovunque (architetture x86(\_64) e kernel linux). 
+Il motivo per cui è utile docker è che lavora sul kernel linux ed è così indipendente dalla particolare distro e posso installarci delle librerie che in generale sarebbero in contrasto con le librerie del sistema.\\
+Docker aderisce alle policy delle OCI e non è l'unico sistema a farlo, tutti i sistema che vi si aderiscono in teoria dovrebbero permettere l'interoperabilità.
+Uno degli obiettivi principali è isolare le applicazioni, cioè voglio che non vedano i processi del sistema (per motivi di sicurezza). 
+Inoltre sono lightweight poiché condividono il kernel di OS e non c'è uno strato di virtualizzazioni in mezzo.\\
+L'idea è quella di eliminare hypervisor ed eliminare GuestOS, permettendo l'esecuzione delle applicazioni direttamente sul OS. 
+La tecnologia container ha la dualità immagini - container, immagine è un file/template che contiene i meta data e configurazione e questo file viene usato per creare container, la differenza rispetto alle VM è che il container non è una copia dell'immagine (vedi AMI) bensì una sua esecuzione, un'altra differenza è il tempo di esecuzione rispetto alle VM che ci mettono tempi in ordini di minuti siccome docker è un processo parte in ordini di secondi.\\
+Le immagini sono salvate di solito su Hub o registro locale.
+Il \textbf{filesystem} di docker è solo di lettura ed è a livelli (UnionFS), creare l'immagine a livello permette la massima riusabilità delle immagini, si può ripartire a creare un immagine a partire da una già esistente, ad esempio se ho un'immagine debian con emacs sopra posso partire da debian e mettere sopra nano e per fare ciò non devo riscaricare debian posso riusare già l'immagine di debian che possiedo. Riesce a creare questo modello a strati seguendo un approccio Copy-on-Write, cioè crea una copia del file modificato. 
+Tutte le tecnologie tranne il filesystem a strati sono dovute usando il kernel linux, uno di queste tecnologie è il \textbf{namespaces}: permette l'isolamento dei processi, individuando le cose che può e non può vedere il processo. 
+l'altra tecnologia principale che permette l'esecuzione dei docker è \textbf{cgroups}: che ha lo scopo di limitare e monitorare l'accesso alle risorse(CPU, Memoria, I/O, network).\\
+Docker è un demone linux che mostra un'interfaccia REST che è utilizzabile tramite una CLI (command line interface) fornita da docker.
+\begin{figure}[!h]
+	\includegraphics[width=\linewidth,height=7cm]{imgs/Docker_life.png}
+	\caption{Ciclo di vita del Docker}
+	\label{fig:dlife}
+\end{figure}
+Il ciclo di vita di un container è così fatto (Fig \ref{fig:dlife}) e i comandi principali sono:
 \begin{myitemize}
-	\item Create
-	\item Start
-	\item Stop
-	\item Pause
-	\item Kill
+	\item docker create: crea ma non esegue il docker
+	\item docker run: crea ed esegue il docker
+	\item docker stop
+	\item docker start
+	\item docker restart
+	\item docker rm
+	\item docker kill
 \end{myitemize}
-Quando si elimina l'immagine in esecuzione si perdono tutti i dati, quindi nasce il concetto di volume che sono cartelle condivise con il sistema (in modo da non perdere i dati).
+Essendo un processo come gli altri docker di default può vedere tutta le risorse che il computer ha a disposizione, è possibile limitare con dei soft limits (limite inferiore delle risorse) e hard limits (limite superiore) l'accesso a queste risorse.\\
+Quando si elimina l'immagine in esecuzione si perdono tutti i dati, quindi nasce il concetto di volume che sono cartelle condivise con il sistema (per non perdere i dati).
 I volumi sono di tre tipi:
 \begin{myitemize}
-	\item Bind Mound: una cartella montata è bindata(collegata a una cartella del sistema)
-	\item Volume: sono cartelle condivise ma gestiti dal docker, evitando problema di breech
-	\item tmpfs: cartelle che non sono sul disco dell macchina ma sulla memoria.
+	\item Bind Mount: è una cartella montata è in binding (collegata) a una cartella del sistema host;
+	\item Volume Mount: sono anch'esse cartelle condivise ma gestiti dal docker, evitando problema di breech;
+	\item tmpfs Mount: cartelle che non sono sul disco della macchina ma sulla memoria.
 \end{myitemize}
+Tutto questo modello dei volumi quando ci troviamo nel cloud non funziona possono esservi diversi errori (fallisce una VM) e il volume è esplicitamente al Host, per rendere la persistenza del volume anche nel cloud docker è stato scritto in una maniera da poter usare dei plugin, il plugin per lavorare in locale (quello che abbiamo visto) si chiama local persist, esistono diversi plugin già creati dai vari provider cloud per funzionare sul loro sistema.\\
+Il building process del docker è l'output di un dockerfile che contiene le istruzioni per far partire e il contesto che sono una serie di altre informazioni necessarie.
+Le istruzione sono sequenziali e vengono eseguite dal demone docker. Tra i comandi esistenti i più importanti sono:
+\begin{itemize}[wide, noitemsep, topsep=0ex]
+	\item \textbf{ENTRYPOINT}: definisce un processo che deve essere eseguita al lancio del container, può avere due forme:
+	\begin{verbatim}
+		ENTRYPOINT[``executable'', ``param1'',\ 
+		           ``param2'']   (exec form)
+		ENTRYPOINT executable param1\
+		             param2      (shell form)
+	\end{verbatim}
+	La differenza è che la shell form viene comandato dalla shell quindi ad es. si può terminare un processo con ctrl+c.
+	\item \textbf{CMD} ha lo stesso significato della CMD, ma ha una differenza, se esiste un ENTRYPOINT viene eseguito ENTRYPOINT e CMD gli passa i suoi parametri e se esistono molteplici CMD viene eseguito l'ultimo CMD. Es:
+	\begin{verbatim}
+		CMD[``--port 27017'']
+		ENTRYPOINT /usr/bin/mongod
+		# ENTRYPOINT riceve il parametro da CMD
+	\end{verbatim}
+\end{itemize}
+La comunicazione tra i vari container si fa attraverso il docker networking, che è una tecnologia di virtualizzazione della rete, i docker connessi credono di avere a disposizione una propria connessione, questa connessione è un plugin del docker, questa connessione è inoltre distribuita e decentralizzata quindi ogni docker ha una parte d'informazione della rete.
+Questa idea viene formalizzata nel CNM (Container Network Model) che consiste di 4 elementi principali:
+\begin{enumerate}[noitemsep, topsep=0ex]
+	\item Sandbox: è una struttura che contiene le configurazioni della rete a livello di container, quindi gestisce le interfacce, la tabella di routing e una serie di informazioni del DNS. Una sandbox può avere più di un endpoint e collegata a più reti ma ogni container può essere collegato solo ad una Sandbox;
+	\item Endpoint: è l'implementazione dell'interfaccia di rete (es. veth - Virtual Ethernet) Un endpoint può essere associato ad una sola rete e una sola sandbox;
+	\item Network: è l'insieme di tanti endpoint che possono comunicare tra di loro;
+	\item Cluster: l'insieme di docker collegati ad una rete.
+\end{enumerate}
+Quando creiamo una rete questa può essere di tipo:
+\begin{myitemize}
+	\item NULL: Il container non ha accesso alla rete;
+	\item Host: Il container e l'host hanno la stessa interfaccia di rete;
+	\item Bridge: E' un servizio a cui vari endpoint sono collegati;
+	\item Overlay: Una rete che viene creata tra più host docker;
+	\item Remote: E' un'interfaccia definita in modo tale da essere implementa da terze parti.
+\end{myitemize}
+
+\subsection{Docker-Compose}
 
 \section{Apache Spark}
 L'idea di fondo non è quella di spostare i dati nelle varie macchine ma i codici (data locality), quindi una volta ottenuto il parallelismo e data locality e in più implementiamo un sistema che sia in grado di gestire i fallimenti a vari livelli allora otteniamo il framework chiamato Hadoop.
