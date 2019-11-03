@@ -161,6 +161,13 @@ Da un punto di vista computazionale, aumentare il numero di livelli e il numero 
 L'apprendimento è fatto tramite la tecnica dell'\textit{auto-encoder}: ogni livello tenta di replicare il precedente, offrendo una rappresentazione in uno spazio diverso privo di rumore.
 L'operazione può essere effettuata anche in modo non supervisionato.
 
+\section{\textit{Overfitting} e migliorie del processo di apprendimento}
+Il processo di apprendimento può cadere nell'\textit{overfitting}: se i pesi per un neurone aumentano particolarmente, questo può adattarsi in modo perfetto ai dati non generalizzando per le previsioni.
+Per evitare questo fenomeno, esistono diverse strategie: prima tra tutte il \textit{dropout}, che elimina con una certa probabilità (arbitraria) dei nodi della rete per far sì che gli altri ``imparino'' a effettuare le previsioni senza basarsi su questo nodo.
+
+Altro sistema utilizzato è quello di modificare il \textit{train-set}, introducendo delle osservazioni artificiali (quali immagini leggermente ritoccate, capovolte o simili) basate su quelle reali.
+
+
 \newpage
 \part{Computer vision}
 
