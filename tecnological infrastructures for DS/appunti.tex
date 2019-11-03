@@ -3,6 +3,7 @@
 
 \usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
 
 \newenvironment{myitemize}
 { \begin{itemize}[topsep=0ex]
@@ -362,7 +363,7 @@ I 4 modelli primari che differenziano un cloud, basati sulle possibilità di acc
 \end{myitemize}
 
 \section{Amazon ECOSYSTEM-IaaS}
-Amazon Web Service sono creati per lavorare indipendentemente ma possono interagire tra di loro, condividendo tra di loro le stesse convenzioni di nomi e autenticazione e minimizzando le connessioni interne.
+\includegraphics[width=1.5cm,height=0.5cm]{imgs/AWSLogo.png} sono creati per lavorare indipendentemente ma possono interagire tra di loro, condividendo tra di loro le stesse convenzioni di nomi e autenticazione e minimizzando le connessioni interne.
 \\
 Amazon mette a disposizione il concetto di regione e di zona di disponibilità:
 \begin{itemize}[noitemsep, topsep=0ex, wide]
@@ -484,7 +485,7 @@ I candidati che non dovrebbero fare autoscaling:
 Essenzialmente il PaaS mette a disposizione un'interfaccia di programmazione, un linguaggio di programmazione (runtime) e tutta una sorta di servizi necessari. 
 Secondo l'approccio tradizionale, si sviluppa un'applicazione in locale e poi si deploya sul cloud, ma vi possono essere dei problemi come ``it works on my machine'': uno dovrebbe replicare esattamente le proprie condizioni di lavoro sul cloud.
 Mentre con il PaaS l'ambiente di sviluppo diventa l'ambiente di deployement e tale gestione dipende direttamente dal provider.\\
-I 5 servizi Paas principali di Azure sono:
+I 5 servizi Paas principali di \includegraphics[width=1.5cm,height=0.5cm]{imgs/azureLogo.png} sono:
 \begin{myitemize}
 	\item Web App - Servizi PaaS per lo sviluppo di applicazioni Web;
 	\item Mobile App - Servizi per lo sviluppo di applicazioni Mobile (gestione contenuti, utenti);
@@ -523,8 +524,9 @@ Azure offre un suo servizio di Auto Scaling, ma fra le varie possibilità offert
 \end{myitemize}
 Come in Amazon si possono definire i Scaling Groups per raggruppare Role multipli e definire le Scaling Rules per tutti i Roles nel gruppo.
 %\section{Lezione 6 - 22/10}
-\section{Containerization}
-Docker è un progetto open source che ha l'obiettivo di automatizzare il deployement dell'applicazione all'interno di un software container, fornendo un livello di astrazione superiore a quello del sistema operativo. 
+\section{Containerization/Docker}
+\includegraphics[width=1cm,height=1cm]{imgs/dockerLogo.png}
+è un progetto open source che ha l'obiettivo di automatizzare il deployement dell'applicazione all'interno di un software container, fornendo un livello di astrazione superiore a quello del sistema operativo. 
 L'idea alla base è avere un sistema di packaging uniforme che possa essere eseguito ovunque (architetture x86(\_64) e kernel linux). 
 Il motivo per cui è utile docker è che lavora sul kernel linux ed è così indipendente dalla particolare distro e posso installarci delle librerie che in generale sarebbero in contrasto con le librerie del sistema.\\
 Docker aderisce alle policy delle OCI e non è l'unico sistema a farlo, tutti i sistema che vi si aderiscono in teoria dovrebbero permettere l'interoperabilità.
@@ -542,7 +544,7 @@ Docker è un demone linux che mostra un'interfaccia REST che è utilizzabile tra
 	\caption{Ciclo di vita del Docker}
 	\label{fig:dlife}
 \end{figure}
-Il ciclo di vita di un container è così fatto (Fig \ref{fig:dlife}) e i comandi principali sono:
+Il ciclo di vita di un container è così come indicato in Figura \ref{fig:dlife} e i comandi principali sono:
 \begin{myitemize}
 	\item docker create: crea ma non esegue il docker
 	\item docker run: crea ed esegue il docker
@@ -597,6 +599,56 @@ Quando creiamo una rete questa può essere di tipo:
 \end{myitemize}
 
 \subsection{Docker-Compose}
+E' un linguaggio dichiarativo esprimibile attraverso file yaml, che descrive com'è costruita un'applicazione multicontainer come la rete e volume.
+In pratica usa i comandi docker dietro e semplifica la vita allo sviluppatore. Il file docker-compose.yml è composta da tre sezioni: Services, Networks e Volumes.\\
+Un \textbf{Docker Swarm} è un cluster di macchine che usano docker e si uniscono logicamente in un sistema, ai fini di deployement è come se diventassero un'unica macchina.
+Il cluster viene gestito non più dalle singole istanze di docker sulle macchine ma da una istanza sola che prende il nome di swarm manager, le altre macchine vengono chiamate worker (o nodes).
+Il manager può usare diverse strategie per eseguire i container nei vari workers, un esempio è emptiest node dove i container vengono fatti partire nel nodo può vuoto.
+Solo il manager può decidere di eseguire i comandi o autorizzare l'aggiunga nello swarm di altri worker, i worker quindi mettono a disposizione solo le risorse computazionali e ricevono ordini dal manager.\\
+Le funzionalità di docker swarm:
+\begin{myitemize}
+	\item Gestione del Cluster integrata con docker-machine, non necessita di software aggiuntivi esterni;
+	\item Modello di servizio dichiarativo;
+	\item Gestione della scalabilità automatica, creando anche repliche di container e costantemente continua a controllare lo stato di vita dei workers;
+	\item Riconciliazione dello stato attuale con lo stato dichiarato dall'utente;
+	\item Gestione della multi host networking con reti overlay;
+	\item Implementazione del servizio discovery per l'individuazione dei nodi in maniera unica;
+	\item Load Balancing, in caso di esistenza di varie istanze dello stesso servizio, queste riceveranno il carico distribuito;
+	\item Sicuro di default poiché i vari nodi comunicano attraverso protocolli http criptati utilizzando tecnologie TLS.
+\end{myitemize}
+Si possono avere più di un manager ma solo uno è leader gli altri sono detti Reachable e sono una sorta di leader di backup nel caso il leader fallisca ottenendo alta disponibilità, possono usare dei protocolli di consenso per prendere decisioni insieme.
+
+\section{Serverless}
+Esistono altri 2 modelli per il cloud oltre a IaaS, Paas e SaaS: \textbf{CaaS} (Container as a Service) e \textbf{FaaS} (Function as a Service).\\
+Serverless può essere inteso come BaaS (Backend as a Service) oppure FaaS.
+Il BaaS è l'incorporazione di servizi autonomi in modalità PaaS di un'applicazione ad esempio il servizio di autenticazione.
+Nel FaaS lo sviluppatore non deve sviluppare applicazioni intere, ma solo scrivere delle funzioni che siano più semplici possibili, queste funzioni devono avere un ruolo atomico e granulare.
+Sono dei container computazionali, che contengono una funzione effimera, che viene eseguita in caso di un evento esterno e queste funzioni sono gestite totalmente dal cloud provider.\\
+In questo caso non vi è un gestione centralizzata, infatti preferisce la coreografia (coordinazione) delle funzione rispetto all'orchestrazione (non c'è un decisore centrale che richiama le funzioni), ottenendo così:
+\begin{myitemize}
+	\item Flessibilità e Estendibilità: si possono aggiungere altre funzioni senza alterare quelle pre-esistenti; 
+	\item Divisione delle preoccupazione;
+	\item Costo ridotto: Non si paga se la funzione non è in esecuzione, quindi se una funzione è raramente usata non pago un server costantemente accesso.
+\end{myitemize}
+Inoltre non sono più vincolato solo dai linguaggi offerti dal cloud provider, qualunque linguaggio che compila su un processo UNIX (quindi nel docker) va bene.
+Vi sono dei contraints, ad esempio in AWS una funzione può al massimo durare 5 minuti, se una funzione richiede più di 5 minuti forse conviene prendere un IaaS o PaaS, oppure si possono splittare le funzioni in più funzioni.
+Inoltre non vi è la garanzia del fatto che gli stati persistano su invocazioni multiple successive poiché le variabili sono salvati su memoria o un disco locale.\\
+Le funzioni in FaaS sono tipicamente triggerate da eventi definiti dal cloud provider ad es. AWS include aggiornamenti sul S3, task schedulati, ricezioni di messaggi in un servizio di coda (come Kafka) oppure per le rispondere alle richieste HTTP che usano API Gateway.\\
+Un altro svantaggio è il così detto cold start - crea una nuova istanza, inizia le funzioni host ecc. e il periodo di accensione dipende dal linguaggio di programmazione, le librerie da caricare e la configurazione della funzione e la quantità di codice, pur essendo in ordini di secondi è molto lento rispetto a warm start, che riusa una istanza di Lambda function esistente da una chiamata precedente.\\
+I benefici sono molteplici:
+\begin{myitemize}
+	\item Costi Operazionali, di Sviluppo e Esecuzione Ridotti;
+	\item Computazione più \textcolor{OliveGreen}{\textbf{Green}} ed efficiente.
+\end{myitemize}
+Vi sono anche dei svantaggi:
+\begin{myitemize}
+	\item Il controllo del Vendor: I downtime, i limiti, cambiamenti di costo, aggiornamenti di API;
+	\item Problemi di mantenimento;
+	\item La durata di esecuzione;
+	\item Latenza di inizializzazione;
+	\item Testing, Debugging e monitoraggio difficile e limitato.
+\end{myitemize}
+Quindi il serverless è non ottimale per le funzioni che hanno bisogno di stati e sono più lunghe in generale ad es. Deep Learning Training, Streaming Pesante, Analitiche Hadoop, Gestione DB, streaming video ecc. Sono molto utili per eventi veloci, stateless e event-driven come microservizi, IoT, Inferenze ML, streaming leggero ecc.
 
 \section{Apache Spark}
 L'idea di fondo non è quella di spostare i dati nelle varie macchine ma i codici (data locality), quindi una volta ottenuto il parallelismo e data locality e in più implementiamo un sistema che sia in grado di gestire i fallimenti a vari livelli allora otteniamo il framework chiamato Hadoop.
@@ -630,7 +682,7 @@ Questo è l'architettura usata in Hadoop 1.x, uno dei suoi svantaggi sono il blo
 Un altro svantaggio è che ad ogni iterazione di Map e Reduce il file viene scritto sul disco che rallenta tutto il processo. 
 Inoltre non tutti lavori possono essere scritti in alberi di operazioni Map e Reduce, ad es. i cicli sui dati stessi.\\
 \subsection{Spark Ecosystem}
-Qua entra in gioco un'applicazione open source \textbf{Apache Spark}: effettua i calcoli in memoria senza riscriverli sul disco, se non necessario e permette di generalizzare i calcoli usando grafi aciclici ottenendo molta più flessibilità. Allarga il set di operazioni in \textbf{trasformazioni} e \textbf{azioni}, dove trasformazioni e azioni sono un set di operazioni diverse che possono essere combinate in maniera arbitraria e Spark 2 ha implementato anche un ottimizzatore di query (Catalyst). \\
+Qua entra in gioco un'applicazione open source \includegraphics[width=1cm,height=0.6cm]{imgs/sparkLogo.png}: esso effettua i calcoli in memoria senza riscriverli sul disco, se non necessario e permette di generalizzare i calcoli usando grafi aciclici ottenendo molta più flessibilità. Allarga il set di operazioni in \textbf{trasformazioni} e \textbf{azioni}, dove trasformazioni e azioni sono un set di operazioni diverse che possono essere combinate in maniera arbitraria e Spark 2 ha implementato anche un ottimizzatore di query (Catalyst). \\
 Apache Spark supporta:
 \begin{myitemize}
 	\item Manipolare i dati attraverso SQL, vedendo i file come delle tabelle SQL
@@ -692,3 +744,6 @@ I Dataframe essendo un'astrazione delle RDD hanno le sue proprietà: sono immuta
 Il risultato di usare i dataframe è non solo la stessa velocità indipendentemente dal linguaggio scelto ma addirittura un miglioramento rispetto a lavorare direttamente su RDD, questo anche perché i DataFrame sono compressi quindi usano meno memoria, inoltre viene tenuto in conto anche l'inefficienza dei programmatori mediamente parlando.
 
 \end{document}
+
+%Alcune Domande:
+%Posso creare un docker swarm di docker swarm per gestire cluster enormi?
