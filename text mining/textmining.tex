@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-\usepackage[english]{babel}
+\usepackage{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
@@ -35,52 +35,53 @@ AI (Artificial Intelligence) was born in early '900: Machine Learning is only a 
 Computational Linguistic and Statistics techniques are used as well.
 An Agent is considered \textit{intelligent} if can understand the semantics of its Ambient, in that case texts written by humans in a \textit{natural language}.
 To understand a text, the Agent must have a previous knowledge of the matter.
-Text Mining can be supported by Machine Learning but its techniques are more general and is built to emulate human behaviour.
+Text Mining can be supported by Machine Learning but its techniques are more general and is built to emulate human behavior.
 Other used techniques are DMs (Distributional Meanings) algorithms over time.
 
 In 2004, Ian Witten (Weka project leader) published a paper titled ``Text Mining'' in which he reports that the first workshop was started in summer 1999: texts were processed in an automatic way to extract useful information.
 
+Text Mining generally denotes any system that analyzes large quantity of natural language texts and detects lexical or linguistic usage patterns in an attempt to extract probably useful information.
+
 Examples of Text Mining are \textit{Sentiment} and \textit{Opinion Analysis}; another example is \textit{Text Summarization} (the ability to write a \textit{snippet}, a short description of a text).
-\textit{Reccomender Systems} are largely used by web-shopping platforms: they have revolutionized shopping and adverts suggesting useful information to users (positive filtering) or avoiding contents (negative filtering), analysing text content.
+\textit{Recommender Systems} are largely used by web-shopping platforms: they have revolutionized shopping and adverts suggesting useful information to users (positive filtering) or avoiding contents (negative filtering), analyzing text content.
 Users are profiled by \textit{Avatar}, their digital representations.
 
-Text Analytics is used in healthcare to reduce the number of \textit{fake news} on the web.
-
+Text Analytics is used in healthcare to reduce the number of \textit{fake news} on the web.\\
 \textit{Knowledge Graphs} are used to go behind traditional Text Mining techniques and have a better understanding of the text and improving the model.
 
-The particularity of Text Mining is that a information in the text are not hidden but well written, and humans can reach it with no difficulty (but for text length); is largely used to analyze in a semi-automatic way lot of unstructured documents for decision making.
+The particularity of Text Mining is that the information in the text is not hidden but well written, and humans can grasp it with no difficulty (but for text length); Text Mining is largely used to analyze in a semi-automatic way lot of unstructured documents for decision making.
 
 There are a lot of challenges in Text Mining:
 \begin{itemize}[noitemsep]
-\item Text annotation;
+\item Text annotation: documents are not in an accessible form for the computers;
 \item Dealing with large \textit{corpora} and \textit{streams};
 \item Organizing semi- and un-structured data;
 \item Dealing with ambiguities on many levels (lexical, syntactic, semantic and pragmatic).
 \end{itemize}
 
-\textit{Information Retrieval} aim is to find things on the Web, and has its roots in 70s.
-Techniques have to balance precision and efficiency.
+\textit{Information Retrieval} aims to find things on the Web, and has its roots in 70s.
+Techniques have to balance precision and efficiency in order to extract documents of interest from a huge pile of data.
 
-Text Mining needs big data: good performance are reached only with a huge quantity of data due to algorithms complexity.
+Text Mining needs big data: good performance are reached only with a huge quantity of data due to algorithms complexity, most of these algorithms are topic and language independent.
 For specific task contest-based, specific algorithms may have better performance or are less data-expensive.
 
-Text analysis does not use databases but \textit{corpora} (or \textit{collections}): a group of unstructured documents; but sometimes information is well structured in the text (names or dates).
+Text analysis does not use databases but \textit{corpora} (or \textit{collections}): a group of unstructured documents; but sometimes information is well structured in the text (names or dates). 
 
-A \textit{predictive analysis} of a text can recognise or detect a concept within a span of text, generally with supervised algorithms; examples are:
+A \textit{predictive analysis} of a text can recognize or detect a concept within a span of text, generally with supervised algorithms; examples are:
 \begin{itemize}[noitemsep]
-\item opinion mining (positive or negative);
-\item sentiment analysis (fear, hope, desperation...);
-\item bias detection (pro/against);
-\item information extraction (is a person, is a place...);
-\item relation learning (is CEO of, is parent of...);
-\item text-driven forecasting (predicting events from twitter);
-\item temporal summarization (monitoring news or opinions about an event).
+	\item opinion mining (positive or negative);
+	\item sentiment analysis (usually from a predefined emotions ex. fear, hope, desperation...);
+	\item bias detection (also here the view points are predefined ex. pro/against);
+	\item information extraction (is a person, is a place...);
+	\item relation learning (is CEO of, is parent of...);
+	\item text-driven forecasting (predicting events from twitter);
+	\item temporal summarization (monitoring news or opinions about an event).
 \end{itemize}
-On the other hand, an \textit{exploratory analysis} automatically discover patterns and trends of interest, generally done with an unsupervised approach.
+On the other hand, an \textit{exploratory analysis} automatically discover patterns and trends of interest, generally done with an unsupervised approach such as Text Clustering and Topic Modeling.
 
 \section{Text and documents}
 To analyze a text, it have to be written so that a computer can easily read it: it have to be processed by a process that starts with \textit{tokenization} (splitting text into units) and ends with the lexical analysis.
-Documents can be written in various ways, like free-format or in a semi-structued format (with descriptive and semantic metadata).
+Documents can be written in various ways, like free-format or in a semi-structured format (with descriptive and semantic metadata).
 
 The first step consists in identifying input files and understand how to read them (creating a readable representation).
 The most used representation of text is the so called \textit{bag of words}: introduced in 60s, each document is simply represented by a bag of words.
@@ -92,22 +93,24 @@ Both approaches do not consider words order, so ``John is quicker than Mary'' an
 \paragraph{Tokenization}
 In this phase of the process, the document is divided in small units, each one representing a concept.
 Each unit (or \textit{token}) is a sequence of characters with a semantic meaning (e.g. \textit{``tree''}, \textit{``San Francesco''} or \textit{``01/01/1970''}).
-A token does not always correspond to a single word
-The task is difficult due to language-specific syntax and conventions, but \textit{syntax-based} techniques have in general better performances.
-For example, in German word-splitting can boost performance in information retrieval tasks.
+A token does not always correspond to a single word.
+The task is difficult due to language-specific syntax and conventions (numbers, dates), but \textit{syntax-based} techniques have in general better performances.
+For example, in German word-splitting can boost performance in information retrieval tasks. 
+Arabic language is written right to left but have numbers written from left to right.
 Other oriental languages do not include spaces between words, so the tokenization process can return different solutions depending on the algorithm.
-Tokenization process is also context-depending (a social-media corpus contains a lot of abbreviations for example). \newline
+Tokenization process depends also corpus and context(a social-media corpus contains a lot of abbreviations for example). \newline
 The process is made with a \textit{parser} based on specific rules (defined with regular expressions) or statistical methods (machine learning or conditional probability).
 
 \paragraph{Normalization}
 It maps the text to query terms to the same form: sequence of characters with the same meaning have to be written in the same way (e.g. ``USA $\rightarrow$ U.S.A.'').
 The same concept is represented only in a single form: it is finalized to reduce tokens referred to the same concept.
-Uppercase and lowercase letters may be problematic due to semantic differences and language specific grammar.
+Uppercase and lowercase letters may be problematic due to semantic differences and language specific grammar. 
+The accents must be considered for the normalization process too since a lot of users don't type them while writing queries for the search engines.
 Thesaurus (or approximations like \textit{WordNet}) that represent synonymy are largely used during the process.
-Spelling mistakes are managed using heuristics like phonetic pronunciation.
+Spelling mistakes are managed using heuristics like phonetic pronunciation, an example of such normalization is Soundex.
 
 \paragraph{Stemming and Lemmatization}
-In the stemming process words are ``cutted'' at the root which may be common with other words.
+In the stemming process words are ``cut'' at the root which may be common with other words.
 In the lemmatization process instead words are transformed to their lemma.
 The second approach is more elegant but harder to implement (it is extremely language-depending and it requires a thesaurus), in some cases benefits are not high enough to justify its use.
 Stemming on the other hand is faster and easier to implement, but it is based on the hypotheses that words with the same root have similar meanings, that is not always true (e.g. ``author'' and ``authorize''); the task removes language specific suffixes, so algorithms are language depending.
@@ -128,7 +131,7 @@ A different approach to the bag-of-words is the $N$-gram construction: $N$ conse
 This approach is more resources-expensive but it can boost performance a lot.
 Than a vocabulary is used to extract meaningful sequence of words (instances) or to exclude stop words from the removing process (the word can be a stop word if used alone, but in that context it assumes a particular meaning).
 Data is not stored on a matrix (due to the amount of memory required) but is stored using dynamic data structures (such as dictionaries and lists).
-$N$-grams tries to consider word order, storing more information than Bag of Words.
+$N$-grams tries to consider word order, storing more information than Bag of Words but increases the vocabulary size.
 
 \section{Zipf's Law}
 Originally used in Economics and than applied to Computational Linguistics, Zipf's Law (1949) describes the frequency of an event in a set.
@@ -136,33 +139,36 @@ In particular, sorting words by frequencies in decreasing order, the product of 
 \begin{equation*}
   f(w) \propto \frac{1}{r(w)} = \frac{K}{r(w)}
 \end{equation*}
-where $K$ is the corpus constant.
+where $K$ is the corpus constant and $w$ is an event. 
+Different collections have different constant $K$. 
 So words can be divided in \textit{head words} and \textit{tail words} depending on the rank $r(w)$: head words are more frequent but in general are semantically meaningless.
 
 According to this Luhn's Analysis, words do not describe document content with the same accuracy: word importance depends not only on frequency but also on position.
 So frequencies have to be weighted according to their position: two cut-offs are experimentally signed to discriminate very common or very rare words.
 Most significant words are those between the two cut-offs, those that are neither common nor rare.
+It automatically generates a document specific stop list, the most frequent words.
 Weights are assigned according to two factors: word importance in the document and document importance in the collection.
+These weights can be measured using two basic heuristics:
 
-\paragraph{$tf_{t, d}$} It represent the frequency of the term $t$ in the document $d$, often normalized by document length:
+\paragraph{Term Frequency $tf_{t, d}$} It represent the frequency of the term $t$ in the document $d$, often normalized by document length:
 \begin{equation*}
   w_{t, d} = \frac{tf_{t, d}}{|d|}
 \end{equation*}
-To prevent bias towards longer documents, it is not considered document length but the frequency of the highest frequency in the document:
+To prevent bias towards longer documents, it doesn't consider the document length but the frequency of the most occurring word in the document:
 \begin{equation*}
   w_{t, d} = \frac{tf_{t, d}}{\displaystyle \max_{t_i \in d} \{tf_{t_i, d}\}}
 \end{equation*}
 
-\paragraph{$idf_t$} It represent the inverse of the informativeness of the document for a term $t$:
+\paragraph{Inverse Document Frequency $idf_t$} It represent the inverse of the informativeness of the document for a term $t$:
 \begin{equation*}
   idf_t = \log \Big( \frac{N}{df_t} \Big)
 \end{equation*}
 where $df_t$ is the number of documents that contains $t$, an inverse measure of informativeness of $t$, and $N$ is the total number of documents.
 \newline
 
-Weights are the product of the two indices:
+The Weights, called $tf$-$idf$ weights, are the product of the two indices:
 \begin{equation*}
-  w_{t, d} = tf.idf_{t, d} = \frac{tf_{t, d}}{\displaystyle \max_{t_i \in d} \{ tf_{t_i, d} \}} \cdot \log \Big(\frac{N}{df_t} \Big)
+  w_{t, d} = tf.idf(t, d) = \frac{tf_{t, d}}{\displaystyle \max_{t_i \in d} \{ tf_{t_i, d} \}} \cdot \log \Big(\frac{N}{df_t} \Big)
 \end{equation*}
 The weight $w$ increases with the number of occurrences within a document and with the rarity of the term in the collection; this procedure is the best-known to calculate wights from 1983 (G. Salton et al.).
 \newpage
@@ -174,26 +180,55 @@ The aim is to store identify and store positional information analyzing not $N$-
 
 \paragraph{Part of Speech Tagging}
 The aim of this procedure is to assign to each word its syntax role in the phrase.
-POS Tagging aims to make the Entities Recognition process easier, and can be managed in different ways.
-In addition, it can used to define rules in word generation (e.g. ``a possessive adjective is followed by a name'') and machine translation.
+POS Tagging helps making the Entities Recognition process easier, and can be managed in different ways.
+In addition, it can used to define rules in Parsing, word generation/prediction (e.g. ``a possessive adjective is followed by a name''), and machine translation.
 
-To have a perfect precision, a \textit{lexicon} is required but it is not enough: it cannot manage ambiguity, that have to be solved following rules (also made by machine learning or hidden Markov models).
-This is the problem of this procedure: statistical and rule-based procedure have been proposed.
+To have a perfect precision, a \textit{lexicon} is required but it is not enough: it cannot manage ambiguity, that have to be solved following rules or use machine learning or statistical models such as hidden Markov models. An example of such ambiguity is: \\Time[V/N] Flies[V/N] like[V/Prep] an[Det] arrow[N].\\
 Statistic methodologies are based on conditional probability (from a given \textit{corpus}): probability of a category depending on the previous one is maximized to assign the output for the word.
 Rule based is in general more accurate but more time consuming because it often requires manual intervention.
 The process is built starting with short sentences to identify word categories and then longer sentences to identify rules.
+POS tagging does not scale well with the data, it becomes slower for large collections, a better choice is to use the $N$-grams. They form a Zipf's distribution, but their downfall is that they uses a lot of space.
 
 \paragraph{Entities Recognition}
 The idea is to extract entities from text: it is a Information Extraction task.
 In this way the text representation is enriched with more information about its meaning.
 To complete the task, two approaches are identified: rule-based and statistics-based.
-According to the first approach, rules are used to identify if a (sequence of) word(s) can be an entity name; the second approach instead tries to maximize the probability with an hidden Markov model.
+According to the first approach, rules are used to identify if a (sequence of) word(s) can be an entity name, the rules can use lexicons or build manually by trial and error or use Machine Learning; the second approach instead tries to maximize the probability with a statistical model such as an hidden Markov model.
+HMM can resolve ambiguity in a word using context, which is developed using a generative model of the sequence of words (a small number of previous words).
 \newline
 
-Message is sent by the sender and received by the recipient, who infers morphological information of the words, uses lexical rules to reconstruct the original message and compare it with its knowledge to understand its semantic (what is explicit, and does not change with the context) and pragmatic (what is implicit or context related).
+Usually, a message is sent by the sender and received by the recipient, who \textit{infers} \textit{morphological} information of the words, uses lexical rules(\textit{syntax}) to reconstruct the original message and compare it with its knowledge to understand its \textit{semantic} (what is explicit, and does not change with the context) and \textit{pragmatic} (what is implicit or context related).
 In the same way, a program have to rebuild the message and compare it whit a base of knowledge (usually modeled as a graph) to understand its content.
 
-Anaphoras and cataphoras are constructions complex to manage correctly: to manage them, a \textit{parser} is used to build a tree of the sentence (according on a formal representation of the grammar).
+Anaphoras and cataphoras are constructions complex that need to be managed correctly: to manage them, a \textit{parser} is used to build a tree of the sentence (according on a formal representation of the grammar).
+
+\paragraph{Relation Extraction}
+It identifies the relationships among named entities, this can be used to convert chunks of text into a more formal representation using first order logic structures.
+
+\section{Statistical Language Models}
+A topic model is a unsupervised technique, very similar to a clustering. The topic model generates a probability distribution of the words in topics. 
+A language model is a formal representation of a specific language, it can be even used to profile a user based on his way of using a language (his specific language), which can be used as a recommender system.\\
+We assign a probability to a sequence of words, it can be used for:
+\begin{itemize}[noitemsep]
+	\item Machine Translation
+	ex. P(\textbf{High} winds tonight) > P(\textbf{Large} winds tonight) 
+	\item Spelling Correction
+	\item Speech Recognition
+	\item Summarization
+\end{itemize}
+We usually have a training sample (by Big Data), we need to learn a probability distribution P, a naive method would be given N training sentence $w_1 ... w_n$ take the sentences and count it: c($w_1 ... w_n$) and simply assign it's relative frequency as it's probability. A problem is that there are too many sentences.\\
+Another task is the prediction of an upcoming word: $P(w_t|w_1,..., w_{t-1})$, any model which computes any of the precedent is called a language model.\\
+The joint probability is computed relying on the chain rule of probability:
+$$ P(w_1,...,w_n) =P(w_1)P(w_2|w_1)\cdot ...\cdot P(w_n|w_1,...,w_{n-1}) $$
+A problem is that so many product could lead the numbers to decay pretty fast, so a solution is to consider the probability of one or two words preceding the word of which we are calculating the probability so we have the following bigram approximation:
+$$ P(w_i|w_1,...,w_{i-1}) \approx \prod_i P(w_i|w_{i-1}) $$
+or we could use the unigram model (the simplest):
+$$ P(w_1,...,w_n) \approx \prod_i P(w_i) $$
+The most used in IR(Information Retrieval) is the unigram model.
+\\
+The estimation of the probability of the words is done in log space, in order to avoid underflow, plus adding is faster than multypling:
+$$log(p_1 \times ... \times p_n) = \sum_i log(p_i)$$
+
 
 \section{Topic Model}
 It is an unsupervised algorithm that clusterize documents according to their content.
