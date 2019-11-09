@@ -39,6 +39,8 @@ L'esame consiste in 15 domande sia aperte che chiuse per parte e si può arrivar
 
 %\section{Lezione 2 - 08/10}
 
+\part*{Part I - Prof Ciavotta}
+
 \section{Componenti di NIST}
 NIST sviluppa standard di riferimento per il pubblico. Software Architecture è un organizzazione globale di sistemi software, quindi consiste in:
 \begin{myitemize}
@@ -743,7 +745,96 @@ Questo aumenta anche il supporto alle varie tipologie di file e sorgenti con cui
 I Dataframe essendo un'astrazione delle RDD hanno le sue proprietà: sono immutabili, distribuiti, rappresentano una collezione, sono lazyily evaluated e le azioni sono eagerly evaluated.\\
 Il risultato di usare i dataframe è non solo la stessa velocità indipendentemente dal linguaggio scelto ma addirittura un miglioramento rispetto a lavorare direttamente su RDD, questo anche perché i DataFrame sono compressi quindi usano meno memoria, inoltre viene tenuto in conto anche l'inefficienza dei programmatori mediamente parlando.
 
-\end{document}
+\section{Stream Processing}
+La differenza tra il batch processing e stream processing è:
+\paragraph{Batch Processing} lavora su batch di dati limitati ottenuti da un data store e il risultato è un altro batch di dati. Batch ha accesso a tutti i dati, si può lavorare a qualcosa di grande e complesso, la latenza è misurata in minuti, di solito uno è interessato all'output (qualità) di dati che alla latenza.
+\paragraph{Stream Processing} lavora su un flusso continuo (infinito) di dati, il risultato è un nuovo stream di dati e per ciò è dovuto al fatto che il processo stream non finisce. La funzione in questo casa è applicata ad un datapoint o una finestra piccola di dati recenti, inoltre la computazione deve essere leggera poiché lo stream deve continuare ad andare e la latenza deve essere near real time o al più secondi.\\
+Gli elementi principali di un'applicazione stream sono:
+\begin{myenumerate}
+	\item Sorgente: che produce i dati in input;
+	\item Trasformazioni: prende l'input del dataflow e producono alcuni output;
+	\item Sink: riceve/consuma i dati dell'output delle trasformazioni;
+	\item Data Pipeling: è una sequenza di trasformazioni, rappresentate di solito da un grafo aciclico diretto;
+	\item Event/Tuple/message: E' l'elemento atomico del data flow (come una riga di un dataframe).
+\end{myenumerate}
+Generalmente i sistemi di stream di dati sono generalmente distribuiti, per gestire più dati in parallelo e quindi con maggiore velocità, ma avvolte vi sono delle operazioni sequenziali e si fa fatica a renderli distribuiti. I dati in ingresso possono essere partizionati e ciascuna operatore può eseguirsi in una maniera concorrente. Ottiene le proprietà dei sistemi distribuiti tra quali: Fault-tollerance, Load Balancing.\\
+Lo stato dello streaming può essere molto utile, ad esempio per riconoscere qualche pattern negli eventi o per aggregazioni di dati, e viene gestito in utilizzando i due meccanismi di \textbf{Checkpoint and Replay}: salvataggio periodico dello stato dell'operatore su un storage sicuro (es. HDFS), in caso di fallimento tutti i dati dopo l'ultimo checkpoint dovranno essere rianalizzati (Replay).\\
+Nel caso di dati ``illimitati'' in streaming di solito si preferisce usare il windowing per tagliare i dati dando a loro il senso temporale. Queste finestre possono essere:
+\begin{myitemize}
+	\item Fixed (Tumbling) window es. calcolo di qualcosa ogni tot unità temporale
+	\item Sliding window es. calcola di qualcosa in un unità temporale ogni tot unità temporale (possibilmente diversa da quella del calcolo)
+	\item Sessione window, la sessione è definita come il periodo di attività terminato da un periodo di inattività più grande di una certa soglia, quindi sono finestre dinamiche e sono totalmente data driven, anzi sono molto compatibili con un sistema distribuito e ciascuna partizione avrà la sua finestra.
+\end{myitemize}
+Esistono anche altri metodi di approssimazione, oltre a windowing, per gestire dati illimitati ad es. sampling con streaming K-means ecc., essendo delle approssimazioni vi sono degli errori. 
+In generale sono algoritmi molto complessi poiché devono anche garantire un limitate superiore degli errori.\\
+\textbf{SQL on Streams} consiste nel vedere uno stream di dati come una tabella relazionale di dimensione infinita, a questo punto si può usare SQL per generare un'analisi o trasformazione, il sistema ci mostra una tabella (dinamica) ma sotto ha un sistema di streaming distribuito che genera a partire da uno streaming in entrata uno streaming in uscita.
 
-%Alcune Domande:
-%Posso creare un docker swarm di docker swarm per gestire cluster enormi?
+\subsection{Apache Storm}
+\includegraphics[width=1.5cm,height=0.5cm]{imgs/stormLogo.png} è disegnato per supportare lo stream di applicazioni e supporta fino ad 1 milione di messaggi al secondo, può scalare a miglia di nodi per cluster ed è fault tollerant e usando strumenti di terze parti, in particolare Trident, è in grado di applicare sono in grado di applicare anche la semantica temporale ``exactly once''.\\
+Il modello concettuale è un modello molto semplice ed include:
+\begin{myitemize}
+	\item Tupla: è l'unità core (il messaggio) e può essere vista come una coppia chiave valore;
+	\item Stream: è la sequenza infinità delle tuple;
+	\item Spout: è la sorgente dello stream e il suo compito è quelli di emettere delle tuple;
+	\item Bolt: riceve le tuple, fa una certa computazione (può anche leggere e scrivere dati da uno store) ed opzionalmente emette altre tuple.
+\end{myitemize}
+La topologia è un DAG di spouts e bolts, nella quale ciascun spout/bolt esegue solo un task, quindi durante la definizione della topologia bisogna specificare come i spout e bolt sono tra loro collegati, il partizionamento dei dati dello stream fra i bolt è detto \textbf{stream grouping}, i vari tipi di stream grouping sono:
+\begin{myitemize}
+	\item Shuffle: il partizionamento è randomico, i spout mandano in maniera randomica i dati verso i bolts a cui sono collegati;
+	\item Fields: il partizionamento è basato su un campo della tupla, può essere utile ad esempio nel conteggio di tuple con un certo valore in un campo;
+	\item All: ciascun bolt riceve una istanza di una tupla;
+	\item Custom;
+	\item Direct: già la sorgente decide a quale bolt mandare la tupla;
+	\item Global: Tutte le tuple generate da tutte le istanze di una sorgente vengono mandate a un unico target.
+\end{myitemize}
+Il cluster totale è gestito da Nimbus che calcola gli assignment e li invia allo ZooKeeper e lo ZooKeeper li invia ai vari supervisori sui vari cluster che scaricano la topologia da Nimbus, questa topologia viene mandata in esecuzione attraverso un processo Java. 
+Lo ZooKeeper si preoccupa anche di controllare la salute dei vari nodi con HeartBeat e se un Worker muore, il supervisore lo riavvia e se continua a morire Nimbus assegna il worker (che può contenere più di un operatore) a un altro supervisor, mentre se muore tutto il nodo il lavoro viene assegnato ad un altro nodo. Se dovesse morire Nimbus, i supervisor continuano a lavorare ma il riassegnamento diventa impossibile, quindi conviene mettere Nimbus con alta disponibilità (magari tenerne uno di backup), mentre Zookeeper è fault tollerant per se.\\
+I processi che garantiscono l'affidabilità (ad es. che una tupla venga per forza vista) sono:
+\begin{myitemize}
+	\item Ack and Fail: Ciascuna tupla generata ha un unico ID e ciascuna tupla processata deve essere ackata e fallita, in caso di processamento completato viene generato un ack e fail in caso di timeout, il messaggio viene tracciato da un task detto ``acker'' in caso di fallimento lo spout può far ripartire il messaggio se è programmato in tale modo;
+	\item Anchoring: Un bolt può emettere una nuova tupla ancorata alla tupla input, quindi nel caso del fallimento lo spout tuple alla radice del DAG andrà rieseguito.
+	%domanda ^ ma Anchoring allora a cosa serve se deve far ripartire tutto?
+\end{myitemize}
+Esiste una libreria esterna Trident che permette di scrivere ad alto livello anche architetture molto complesse, mentre rimane stateful senza che sia l'utente a basso livello a definirla, permette di lavorare al livello micro batch, cioè non lavora ogni singolo messaggio che gli arriva ma accorpa un numero di messaggi, questo migliora il throughput ma peggiora la latenza.
+Riesce a passare da at least one di storm a exactly once.
+
+\subsection{Spark Streaming}
+Spark è fatto per funzionare con l'idea del batch, per implementare lo streaming sfrutta il così detto mini-batch, quindi si aumenta la latenza ma si alza anche il thoughput. 
+Spark streaming quindi porta con sé tutte le proprietà già esistenti in spark tra cui: distributività, disponibilità e scalabilità.
+Il funzionamento inizia con i receiver che ricevono e emettono batch che in spark diventano RDD.\\
+Grazie a spark streaming la creazione di un'architettura lambda avviene non solo nello stesso linguaggio ma addirittura nello stesso programma.\\
+Alla base di spark ci sono gli RDD che possono essere distribuiti e replicati in memoria, quindi in caso di un problema di un nodo non perdo i dati, e grazie alla lineage posso anche capire da quale punto si dovrebbe far ripartire la computazione (a differenza di storm che deve far ripartire tutto).
+I minibatch discretizzati RDD si chiamano \textbf{Dstreams}, la loro misura è fatta in modo da avere una latenza di circa 1 secondo e hanno un potenziale di potersi combinare con i batch proccessing.
+Inoltre con la funzione union è stato possibile implementare il concetto di finestra.\\
+Il master continua a salvare gli stati dei Dstream in un file checkpoint e in caso di fallimento del master questo può essere reinizializzato a partire da questo file checkpoint, permettendo un recupero rapido.\\
+I Dstream richiedono una buona conoscenza di programmazione, quindi si è creata una sua astrazione sotto il nome id Spark Structured Streaming, che ha delle API a livello più alto rispetto a Dstreams.
+I Dstreams mostrano lo streaming come delle tabelle dinamiche, mentre le operazioni vengono eseguite incrementalmente, quindi il risultato è un altro dataframe con dati variabili nel tempo.
+L'analisi dei dati provenienti dal Output mode viene eseguita in base a un trigger: che può essere una funzione della sessione temporale.
+
+\subsection{Amazon Big Data}
+Amazon è il leader nel cloud computing, e offre un sacco di servizi direttamente lui pronti spesso anche per la scalabilità quindi non vi è neanche il bisogno di configurarli o mantenerli, e se un servizio non è direttamente offerto, è molto probabile che venga offerto nel marketplace. \\
+La Big Data pipeline è costituita a un livello alto da:
+\begin{myitemize}
+	\item Data Ingestion/Data collection;
+	\item Data Storage;
+	\item Processare e analizzare i data;
+	\item Consumare o visualizzare.
+\end{myitemize}
+e il suo obiettivo è minimizzare la latenza e il costo e massimizzare il throughput, nel cloud cerco di minimizzare la latenza ad esempio raggruppando le macchine vicine e inoltre massimizzo il thorughput alla scalabilità dello storage e tutte le macchine leggono alla stessa velocità quindi la velocità di lettura cresce linearmente col crescere dei nodi e per quanto riguarda i costi essi vengono minimizzati poiché pago solo ciò che uso.
+Il problema rimane il passaggio totale al cloud, ad esempio perché può essere costoso trasmettere tutti i dati, oppure potrebbero esserci problemi di privacy, esistono anche degli approcci ibridi in cui è possibile usare il proprio cloud per dati privati e Amazon per dati normali.\\
+Lo stream storage di amazon è possibile con: Apache Kafka (esiste una cosa simile anche in amazon detta Amazon MQ), Amazon Kinesis e Amazon DynamoDB (simile a SQL streaming di spark). 
+I file storage offerti possono essere HDFS, S3 e Amazon Glacier, sono tutte e tre supportati da Big Data Framework e sono altamente disponibili, la scelta avviene se i dati sono caldi (vengono acceduti molte volte) qua conviene usare HDFS o se sono freddi (pochi accessi) qua conviene Glacier, mentre S3 è una via di mezzo. Infine per i database e search engines abbiamo: Amazon ElastiCache, DynamoDB, RDS e ES.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=7cm]{imgs/amazon_insight.png}
+	\caption{Insight of the Amazon Services}
+	\label{fig:amazon}
+\end{figure}
+
+\newpage
+
+\part*{Part II - Prof Melen}
+
+
+\end{document}
