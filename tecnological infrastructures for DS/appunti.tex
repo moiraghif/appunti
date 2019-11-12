@@ -28,30 +28,26 @@
 
 \maketitle
 
-\begin{abstract}
-L'obiettivo del corso è forninre conoscenza solida delle piattaforme tecnologiche e computing platforms.
-Differenza delle responsabilità di Data Scientist e Data Engineer.
-Il corso è diviso in 2 parti.
-L'esame consiste in 15 domande sia aperte che chiuse per parte e si può arrivare a 30 con lo scritto, si può fare un progetto non obbligatorio che vale al più 3 punti.
-\end{abstract}
-
-%\section{Lezione 1 - 02/10}
-
-%\section{Lezione 2 - 08/10}
+%\begin{abstract}
+%L'obiettivo del corso è forninre conoscenza solida delle piattaforme tecnologiche e computing platforms.
+%Differenza delle responsabilità di Data Scientist e Data Engineer.
+%Il corso è diviso in 2 parti.
+%L'esame consiste in 15 domande sia aperte che chiuse per parte e si può arrivare a 30 con lo scritto, si può fare un progetto non obbligatorio che vale al più 3 punti.
+%\end{abstract}
 
 \part*{Part I - Prof Ciavotta}
 
 \section{Componenti di NIST}
-NIST sviluppa standard di riferimento per il pubblico. Software Architecture è un organizzazione globale di sistemi software, quindi consiste in:
+NIST sviluppa standard di riferimento per il pubblico. Software Architecture è un organizzazione globale di sistemi software, e consiste in:
 \begin{myitemize}
-	\item divisione della componenti software in sottosistemi; 
-	\item Definisce le politiche con cui questi sistemi interagiscono;
-	\item definisce le interfacce tra le varie componenti.
+	\item Divisione della componenti software in sottosistemi; 
+	\item Definizione delle politiche con cui questi sistemi interagiscono;
+	\item Definizione delle interfacce tra le varie componenti.
 \end{myitemize}
 Un'architettura di riferimento è essenzialmente un template (scatola vuota con elementi prefissati), fornisce solo il vocabolario usato comunemente per discutere le implementazioni di un dato software.\\
 Un'architettura di riferimento per il software non è altro che architettura software dove le strutture e i vari elementi e relazioni sono forniti dai template.
 \\
-NIST fornisce l'architettura di riferimento per i Big Data che:
+L'architettura di riferimento, fornita da NIST, per i Big Data:
 \begin{myitemize}
 	\item Fornisce un linguaggio comune per i stakeholders;
 	\item Incoraggia aderenza ai standard comuni;
@@ -67,8 +63,7 @@ L'architettura concettuale dei Big Data è un architettura a croce con due assi:
 	\caption{NBDRA Conceptual Model}
 	\label{fig:NBDRA}
 \end{figure*}
-I 5 ruoli principali sui 2 assi dei Big Data abbiamo:
-
+I 5 ruoli principali sui 2 assi dei Big Data sono:
 \subsubsection{System Orchestrator}
 Il system orchestrator coinvolge spesso anche Information Value chain, poiché si preoccupa di implementare e monitorare i processi business a livelli enterprise e le varie politiche sui dati: Redere i dati accessibili per un tempo limitato oppure fornire i dati a velocità diversa(passando il dato in memoria al disco).
 Può assegnare/fornire componenti framework fisici o virtuale al sistema, questa assegnazione può essere molto spesso elastica ed indipendente.
@@ -78,12 +73,12 @@ Es. Ambari/Cloudera
 
 \subsubsection{Data Provider}
 Può essere sia un software (ad es. in una pipeline più grande) che una persona. Se è una persona metterà i suoi dati e userà gli strumenti di collection e curation/preparation per caricare i dati sul sistemi e migliorarne la qualità, Se un software metterà is suoi dati a disposizione attraverso delle interfacce come Apache Scoop. 
-Il data provider può essere interno o esterno alla piattaforma, deve fornisce i diritti di accesso ai dati, ed è obbligato a seguire le policy di privacy e security fabbric. 
+Il data provider può essere interno o esterno alla piattaforma, deve fornire i diritti di accesso ai dati, ed è obbligato a seguire le policy di privacy e security fabbric. 
 I dati possono essere inseriti in pull o push.
 es. Flume per caricare i dati da MySQL a HDFS.
 
 \subsubsection{Data Consumer}
-Riceve i output dei sistemi BigData, può anche lui fare pull e push dei dati, può usarli le informazioni per data reporting, retrival/search e visualization. Ci deve essere l'autenticazione ed autorizzazione daparte della privacy and security fabbric per la comunicazione tra l'architettura e il Data Consumer.
+Riceve i output dei sistemi BigData, può anche lui fare pull e push dei dati, può usare le informazioni per data reporting, retrival/search e visualization. Ci deve essere l'autenticazione ed autorizzazione da parte della privacy and security fabbric per la comunicazione tra l'architettura e il Data Consumer.
 
 \subsubsection{Big Data Application Provider}
 Corrisponde alle attività tipiche di un Data Scientist, che esistono anche nei sistema tradizionali ma hanno delle trasformazioni nella implementazioni con i Big Data. Queste attività sono:
@@ -101,14 +96,14 @@ Fornisce le infrastrutture per supportare i Big Data Application Provider. Si oc
 \begin{myitemize}
 	\item Processing dei dati - ha una dualità: da una parte è un framework che mette a disposizione delle interfacce per la programmazione per fare certe cose (es. MapReduce) e dall'altra parte definisce come l'implementazione viene effettuata. I framework possono variare tra un proccessamento batch e in streaming.
 	\item Platforms per l'organizzazione e immagazzinamento dei dati - può contenere i meta-dati insieme alle descrizione semantiche dei dati. 
-	Può essere relazionale distribuito o non relazionale.
+	Può sia essere relazionale distribuito che non relazionale.
 	\item Infrastructures per l'esecuzione fisica del nostro software, è l'insieme delle risorse computazionali fisiche o virtuali sulle quali il nostro sistema Big Data gira, può essere costituito da server di grandi o piccole dimensione. 
 	Queste componenti forniscono:
 	\begin{myitemize}
 		\item Networking - Possono essere definiti attraverso software e possono essere reti fisiche che può essere a sua volta partizionato in reti virtuali. 
-		Possono essere reti puramente virtualizzate cioè tutto quanto (firewall, router, load balancing) sono realizzate in maniera virtuale (es. VM dentro la nostra macchine);
+		Possono essere reti puramente virtualizzate cioè tutto quanto (firewall, router, load balancing) è realizzato in maniera virtuale (es. VM dentro la nostra macchine);
 		\item Computing - Hardware, Software, OS, memoria per il computing;
-		\item Storage - dischi per storare (in locale), RAID, in rete ecc.
+		\item Storage - dischi per storare (in locale), RAID, in rete ecc.;
 		\item e altri servizi come il Raffrendamento, l'apparto elettrico e la sicurezza
 	\end{myitemize}
 	Può essere deployato su ambienti fisici che virtualizzati (nativi, hostati o contenerizzati).
@@ -120,10 +115,10 @@ Inoltre ha 2 ruoli diffusi nelle 3 componenti sopraindicate:
 \end{myitemize}
 
 \subsection{I 2 ruoli diffusi per Big Data}
-questi 2 ruoli prendono il nome di Fabric, il termine Fabric(tessuto) viene usato perché queste 2 ruoli cross-cutting, cioè sono presenti un pò ovunque nell'architettura.
+Questi 2 ruoli prendono il nome di Fabric, il termine Fabric(tessuto) viene usato perché questi due ruoli sono cross-cutting, cioè sono presenti un pò ovunque nell'architettura.
 
 \subsubsection{Management fabbric}
-Le due attività principali associate:
+Le due attività principali associate sono:
 \begin{myitemize}
 	\item Gestione del sistema per provvedere le risorse, gestione dei software e pacchetti e infine la gestione delle configurazioni e performance delle varie pipeline;
 	\item Ciclo di vita dei Big Data, BDLM (Big Data Life Cycle Management), contiene l'enforcing delle Policy (es. encoding/decoding), gestione dei meta data (data governance), accessibilità dei dati, data recovery e la loro preservazione.
@@ -154,14 +149,14 @@ Per i computer sono stati definiti con le 5 componenti classiche:
 La virtualizzazione permette l'esecuzione di più sistemi operativi simultaneamente sulla macchina in maniera totalmente isolata. 
 Può essere visto come una emulazione di un software o hardware su cui altri software possono eseguirsi, questo ambiente emulato è detto virtual machine.
 Il concetto di VM è stato sviluppato negli anni 60 da IBM sui mainframes.
-Viene abbandonato con la nascita di PC moderni e ripreso con la crescita recente di cloud. La virtual machine viene ottenuto attraverso un Virtual Machine Monitor detto anche ipervisore.\\
+Viene abbandonato con la nascita di PC moderni e ripreso con la crescita recente di cloud. La virtual machine viene ottenuto attraverso un Virtual Machine Monitor (VMM) detto anche ipervisore.\\
 L'\textbf{Hypervisor}(Ipervisore) è un software che giace sotto gli OS virtualizzati per offrire le funzionalità di condivisione delle risorse disponibili in modo tale che il programma o OS in esecuzione veda queste risorse come se fosse a lui dedicate. 
 Le risorse sono CPU, memoria, storage e la rete.\\
 Vi sono diversi benefici della virtualizzazione:
 \begin{myitemize}
 	\item Visione unificata delle risorse es. vedo tanti dischi come un unico disco;
-	\item Consolidazione delle risorse virtualizzate, in modo da avere l'ottimo utilizzo delle risorse;
-	\item Facilità di implementare la ridondanza per copiare gli ambienti virtualizzati;
+	\item Consolidazione delle risorse virtualizzate, in modo da avere utilizzo ottimale delle risorse;
+	\item Facilità nell'implementazione della ridondanza per copiare gli ambienti virtualizzati;
 	\item Facilità la migrazioni di sistema su un altro, inoltre se non cambio ipervisore la macchina(virtuale) funzionerà identicamente a prima;
 	\item Gestione centralizzata del hardware e software.
 \end{myitemize}
@@ -184,17 +179,17 @@ Poiché possiamo spostare tutto l'ambiente virtualizzato su una nuova macchina i
 \end{figure}
 I diversi tipi di HyperVisor sono (Fig \ref{fig:hypervisor_type}):
 \begin{myitemize}
-	\item \textbf{Hosted}: in questo caso ipervisore è un processo che gira al di sopra del sistema operativo e permette l'esecuzione di più macchine Guest.
-	In questo caso quindi bisogna installa prima un OS su cui verrà installa VMM (ipervisore) e adesso l'host potrà eseguire le applicazioni all'interno della sua finestra.
-	Il vantaggio qua è la facilità di installazione e configurazione, inoltre la HostOS e GuestOS sono non modificati e non dipendono dal particolare hardware, ma gli svantaggi sono la degradazione delle performance e la mancanza di supporto real time OS poiché vi sono varie entità/software in mezzo;
-	\item \textbf{Bare-Metal}: in questo caso ipervisore funziona direttamente al di sopra del Hardware.
+	\item \textbf{Hosted}: in questo caso l'ipervisore è un processo che gira al di sopra del sistema operativo e permette l'esecuzione di più macchine Guest.
+	In questo caso quindi bisogna installare prima un OS su cui verrà installata VMM (ipervisore) e a questo punto l'host potrà eseguire le applicazioni all'interno della sua finestra.
+	Il vantaggio qua è la facilità di installazione e configurazione, inoltre la HostOS e GuestOS rimangono non modificati e non dipendono dal particolare hardware, ma gli svantaggi sono la degradazione delle performance e la mancanza di supporto real time OS poiché vi sono varie entità/software in mezzo;
+	\item \textbf{Bare-Metal}: in questo caso l'ipervisore funziona direttamente al di sopra del Hardware.
 	In questo caso l'ipervisore è un OS molto leggero e comunica direttamente con hardware al posto di dipendere su un altro OS. 
-	I vantaggi sono miglioramento in I/O e supporto real time, mentre gli svantaggi sono la difficoltà di istallazione e configurazione e la dipendenza dal tipo di hardware specifico.
+	I vantaggi sono miglioramento in I/O e supporto real time, mentre gli svantaggi sono la difficoltà di installazione e configurazione e la dipendenza dal tipo di hardware specifico.
 \end{myitemize}
 Ci sono principalmente 2 tecniche di virtualizzazione: \textbf{Software Virtualization} (di cui abbiamo parlato fino ad adesso) e \textbf{Hardware Assisted Virtualization}.\\
 Nella \textbf{Virtualizzazione Totale} VMM si preoccupa di emulare in maniera completa tutto l'hardware, quindi avremo un processore, memoria, disco e network virtuale.
-in questo caso OS ospite non è consapevole dell'esistenza dell'ambiente virtuale e ogni macchina è del tutto indipendente.
-A livello CPU, avviene la traduzione binaria: Questo avviene in diversi anelli di sicurezza, in particolare sono 4, dove l'anello 0 è quello più privilegiato e permette l'esecuzione del codice direttamente sul hardware e qua dove viene eseguito il kernel dell'OS.
+In questo caso OS ospite non è consapevole dell'esistenza dell'ambiente virtuale e ogni macchina è del tutto indipendente.
+A livello CPU, avviene la traduzione binaria: Questo avviene in diversi anelli di sicurezza, in particolare gli anelli sono 4, dove l'anello 0 è quello più privilegiato e permette l'esecuzione del codice direttamente sul hardware e qua viene eseguito il kernel dell'OS.
 Le applicazione dell'utente vengono eseguite sull'ultimo anello (anello 3).\\
 L'ipervisore gira sull'anello 0 mentre le GuestOS gira sull'anello 1, quindi hanno più permessi delle normali applicazioni. 
 VMM ha accesso sul anello 0 per avere accesso diretto sulla CPU piuttosto che virtualizzarla. \\
@@ -204,11 +199,11 @@ Ci sono 3 modelli di servizio:
 \begin{myenumerate}
 	\item \textbf{Server Virtualization}: supponiamo di avere diversi server su macchine diverse, in caso di un problema (crash di un nodo) o vi è un bisogno di upgrade, in caso di macchine fisiche dovrò prendere lo stesso modello o lo stesso vendore, la soluzione è quella di sfruttare una medesima macchina con un virtualizzatore e mettere i diversi server insieme.
 	In questo modo ho una consolidazione, risorse condivise, una gestione centralizzata, facilità di migrazione, maggiore ROI e meno spazio occupato.
-	La Disaster Ricovery e scalabilità viene facilitata, diversi modelli a scelta (basta che sia uguale l'ipervisore), ho maggiore disponibilità.
+	La Disaster Ricovery e scalabilità viene facilitata, diversi modelli (hardware) a scelta (basta che sia uguale l'ipervisore) e ho maggiore disponibilità.
 	\item \textbf{Desktop Virtualization}: è la tecnologia che separa l'ambiente desktop e le applicazione software dal cliente fisico che lo usa. 
 	Il nostro desktop diventa un thin client che usa PC privo della memoria RAM e potenza calcolo necessaria per far funzionare una macchina reale, la macchina gira su un pool di VM su un server su un data center.\\
 	I benefici sono molteplici: Upgrade di software e OS facilitato, alta disponibilità, fault tolerance, accessibile da LAN, WAN, Internet, inoltre vi è la possibilità di far eseguire una piccola parte della computazione dal dispositivo locale.
-	\item \textbf{Application Virtualization}: Molto simile alla Desktop virtualizzazione, solo che al posto di tutto il desktop, sono le applicazione ad essere in virtualizzate, quindi un applicazione che gira sul desktop, fa la computazione sul cloud, una piccola parte della computazione può essere effettuata anche in locale.
+	\item \textbf{Application Virtualization}: Molto simile alla Desktop Virtualization, solo che al posto di tutto il desktop, sono le applicazione ad essere in virtualizzate, quindi un applicazione che gira sul desktop, fa la computazione sul cloud, una piccola parte della computazione può essere effettuata anche in locale.
 	I vantaggi sono molto simili a quelli del Desktop Virtualization, un vantaggio aggiuntivo può essere che pago solo quello che uso, riducendo i costi delle licenze.
 \end{myenumerate}
 %\section{Lezione 3 - 09/10}
@@ -220,7 +215,7 @@ Sostanzialmente il cloud è la possibilità di avere accesso alle risorse comput
 
 \subsection{The 5 Properties of cloud}
 Le 5 proprietà aggirano attorno ad una idea centrale del cloud: Utility Computing, SOA (Service Oriented Architecture) + SLA(Service Level Agrement).\\
-\textbf{Utility Computing} nel senso che il service provider fornisce le risorse computazionali e le infrastrutture che servono al cliente e li fa pagare in base all'utilizzo piuttosto che con un costo fisso, come i servizi on-demand per massimizzare l'uso efficiente, minimizzando i costi nella maniera meno trasparente possibile(Senza mostrare al cliente tutto ciò che si fa).\\
+\textbf{Utility Computing} nel senso che il service provider fornisce le risorse computazionali e le infrastrutture che servono al cliente e li fa pagare in base all'utilizzo piuttosto che con un costo fisso, come i servizi on-demand, per massimizzare l'uso efficiente, minimizzando i costi nella maniera meno trasparente possibile(senza mostrare al cliente tutto ciò che si fa).\\
 \textbf{SOA (Service Oriented Architecture)}: è un insieme di servizio che comunicano tra di loro poiché non basta di solito un solo servizio per implementare un servizio web completo per utente.\\
 \textbf{SLA (Service Level Agreement)}: è un contratto tra il service provider e il cliente che specifica il livello di servizio che il service provider deve fornire in termini di QoS.
 Il \textbf{QoS}(Quality of Service) è un set di tecnologie per gestire il traffico della rete in modo da migliorare la user experience, ormai è associato a un significato più generico riguardante le valutazioni di tecnologie non funzionali, cioè non mi interessa solo la funzionalità (il risultato della mia richiesta) ma anche la sua efficienza.\\
@@ -254,8 +249,7 @@ Le 5 \textbf{proprietà/caratteristiche} che identificano il cloud sono:
 		Le caratteristiche principali sono che non ha un singolo punto di fallimento, la componente fallita viene individuata ed isolata per prevenire la propagazione del fallimento;
 		\item Resilience è l'abilità di offrire e mantenere un livello di servizio accettabile anche dopo un fallimento, essenzialmente ritornare allo stato di funzionamento dopo un caso di fallimento del sistema (ad es. viene a mancare l'elettricità).
 		Quindi i sistemi devono avere le policy e procedure per il recupero, ad es. Backup (dei dati off-site oppure di tutto il sistema) oppure preparazione contro fault come un una corrente non-interrompibile (UPS) oppure sbalzi di corrente/tensione.
-		\item Sicurezza
-		La sicurezza riguarda l'impiego di politiche e tecnologie e sistemi di controllo per protegge applicazioni e infrastrutture da accessi malevoli, quindi abbiamo il suo impiego in:
+		\item Sicurezza, che riguarda l'impiego di politiche e tecnologie e sistemi di controllo per protegge applicazioni e infrastrutture da accessi malevoli, quindi abbiamo il suo impiego in:
 		\begin{itemize}[noitemsep, topsep=0ex, leftmargin=*]
 			\item la protezione i dati, mantenendo l'accesso ai dati riservato solo in base ai privilegi;
 			\item Gestione dell'identità per garantire l'accesso alle risorse in base ai loro privilegi (protezione dei dati);
@@ -273,15 +267,15 @@ Le 5 \textbf{proprietà/caratteristiche} che identificano il cloud sono:
 	\item \textbf{Ottimizzazione, Performance}
 	Il \textbf{Load Balancing} è una tecnica per la distribuzione del workload su un sistema di più computer, CPU, HD ecc. per ottenere l'utilizzo ottimale, migliorando così: l'utilizzo del sistema, la performance e l'efficienza energetica riducendo overload.\\
 	Il \textbf{Job Scheduler} è un applicazione che ha il compito di eseguire i processi in background (chiamati anche processi batch).
-	Nel cloud i task intensivi computazionalmente o task che crescono dinamicamente vanno pianificato con Job Scheduler.
+	Nel cloud i task intensivi computazionalmente o task che crescono dinamicamente vanno pianificati con Job Scheduler.
 \end{enumerate}
 Da un punto di vista dell'utente, lui non vuole sapere come e cosa viene fatto né chi gestisce il servizio, ma vuole solo un servizio funzionale.
 
 \subsection{The 3 Service Model of cloud}
 Iniziamo con i tre modelli del servizio del cloud sono:
 \begin{enumerate}[wide, topsep=0ex, noitemsep]
-	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato. Gestito da di solito un system administrator.
-	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere e eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppato perde meno tempo nella configurazione delle macchine. Gestito di solito da sviluppatori.
+	\item \textbf{IaaS (Infrastructure as a Service)}: es. le macchine virtuali, in questo caso il provider/vendor gestisce la virtualizzazione, il cliente ottiene le risorse virtuali, di solito da un catalogo che contiene le specifiche hardware (virtualizzato) pre-selezionate dal provider. Nella maggior parte dei casi gli OS sono anche prefissate per questioni di prestazioni/stabilità e compatibilità con hypervisor da loro usato. Gestito di solito da un system administrator.
+	\item \textbf{PaaS (Platform as a Service)}: ci viene fornito una scatoletta dove scrivere ed eseguire/testare le applicazioni, il provider sarà il garante del fatto che il sistema sia abbastanza responsive e abbia un runtime sufficiente. E' meno flessibile rispetto allo IaaS ma allo stesso momento lo sviluppatore perde meno tempo nella configurazione delle macchine. Gestito di solito da sviluppatori.
 	\item \textbf{SaaS (Software as a Service)}: es. GMail quindi utente non può fare niente tranne usare il software. Usato da utenti o business analyst.
 \end{enumerate}
 
@@ -315,7 +309,7 @@ L'architettura è composta dall'hardware seguita da un layer di virtualizzazione
 
 
 \subsubsection{PaaS}
-PaaS mette a disposizione all'utente i linguaggi di programmazione e i tools (come IDE) supportati dal provider, quindi il controllo sul deployement dell'applicazione è in mani del consumer ma il controllo sulle infrastrutture sottostante è gestita dal cloud provider.
+PaaS mette a disposizione dell'utente i linguaggi di programmazione e i tools (come IDE) supportati dal provider, quindi il controllo sul deployement dell'applicazione è nelle mani del consumer ma le infrastrutture sottostanti sono gestite dal cloud provider.
 \\
 Alla base vi è una archittettura come quella di IaaS, vengono aggiunti i Runtime Environment e sopra questi ci sono i Programming IDE e le API/tools supportati dall'ambiente, spesso hanno in comune le funzioni come: computation e lo storage.\\
 Il Runtime Environment si riferisce a una collezione di software, implementati con una collezione di librerie, le proprietà fornite dal Runtime Environment sono:
@@ -327,7 +321,7 @@ Il Runtime Environment si riferisce a una collezione di software, implementati c
 \end{myitemize}
 L'interfaccia messa a disposizione per il controllo del sistema mette a disposizione un set di azioni in base a:
 \begin{itemize}
-	\item Policy based control: le azioni seguono delle regole per prendere delle decisioni quindi azioni seguite con if <> then <>
+	\item Policy based control: le azioni seguono delle regole per prendere delle decisioni quindi azioni seguite con if $<>$ then $<>$
 	\item Controllo del workflow: descrizione del flusso di installazione e configurazione delle risorse oppure dei daemon.
 \end{itemize}
 
@@ -421,7 +415,7 @@ Il trasferimento dentro la regione è completamente gratuita.\\
 	\caption{Esempio di Auto Scaling for AWS}
 	\label{fig:autoscaleAWS}
 \end{figure}
-Uno servizio molto import di Amazon è \textbf{AutoScaling}(Fig \ref{fig:autoscaleAWS}). Per far funzionare AutoScaling è importante anche il \textbf{Elastic Load Balancer}, grazie al quale l'utente finale vedere solo un collegamento e Elastic Load Balancer pensa a distribuire le richiede alle nostre macchine. 
+Uno servizio molto importanti di Amazon è \textbf{AutoScaling}(Fig \ref{fig:autoscaleAWS}). Per far funzionare AutoScaling è importante anche il \textbf{Elastic Load Balancer}, grazie al quale l'utente finale vedere solo un collegamento e Elastic Load Balancer pensa a distribuire le richieste alle nostre macchine. 
 Le istanze EC2 possono essere categorizzate in auto scaling groups, di solito con un range tra un minimo e un massimo, se una nuova macchina entra in esecuzione oppure viene de-allocata il Load Balancer viene avvertito della modifica in modo che possa funzionare bene.
 Gli Auto Scaling group sono istanze EC2 che condividono caratteristiche simili e devono essere fatte per scalare, e aggiunge automaticamente un nuovo nodo in base a policy definite dall'utente, programmazione oppure health checks e workload e la nuova istanza può venire anche da availability zone diverse della stessa regione.\\
 Auto Scaling group contiene solo un launch configuration che descrive le istanze che devono far partire (contiene i parametri delle AMI), se si aggiorna il launch configuration questo affliggerà solo le nuove istanze, le vecchie istanze rimangono tali ma esse vengono terminate prima durante un scale in.\\
@@ -438,9 +432,9 @@ L'ecosistema di Auto Scaling è composta da:
 		\item Il numero di macchine non in buona salute
 	\end{myitemize}
 	\item Elastic Load Balancer: Per distribuire il lavoro su un numero qualunque di istanze EC2 ed effettuare controlli periodici sulla salute del nodo (basandosi sul tempo di risposta) e in caso non siano in buona salute il load balancer smette di inviare a lui le richieste.
-	\item Auto Scaling: Utilizza i dati collezionati dal CloudWatch per costruire sistemi che posso scalare (dentro o fuori) all'intero del range
+	\item Auto Scaling: Utilizza i dati collezionati dal CloudWatch per costruire sistemi che possono scalare (dentro o fuori) all'intero del range
 \end{myitemize}
-Il \textbf{Trigger} è un meccanismo di attivare una policy, in questo caso di aumentare o diminuire il numero dei nodi. Il trigger può essere attivato da un allarme cloud watch (configurato per guardare una metrica di cloud watch) oppure un auto scaling policy che descrive cosa fare in caso di un allarme. Quando si attiva il trigger lancia un processo chiamato Scaling activity che esegue la auto scaling policy.
+Il \textbf{Trigger} è un meccanismo per l'attivazione di una policy, in questo caso di aumentare o diminuire il numero dei nodi. Il trigger può essere attivato da un allarme cloud watch (configurato per guardare una metrica di cloud watch) oppure un auto scaling policy che descrive cosa fare in caso di un allarme. Quando si attiva il trigger lancia un processo chiamato Scaling activity che esegue la auto scaling policy.
 Osservazione Auto Scaling supporta ma non necessita Elastic Load Balancer.
 In generale almeno due trigger sono necessari, uno per Scale up e uno per Scale down, per mantenere un equilibrio desiderato.
 Un allarme è una metrica e verifica se questa metrica supera un limite stabilito per un certo tempo.\\
@@ -454,7 +448,7 @@ Gli stati in cui l'allarme si può trovare sono:
 \begin{myitemize}
 	\item Ok, tutto bene! Metrica è sotto il threshold.
 	\item Alarm: Metrica è sopra il threshold, è necessaria un azione.
-	\item Dati Insufficiente, metrica disponibile o non ci sono abbastanza dati.
+	\item Dati Insufficiente, metrica non disponibile o non ci sono abbastanza dati.
 \end{myitemize}
 Se l'allarme cambia lo stato e vi rimane per un determinato periodo di valutazione, un'azione viene invocata in base alla policy.\\
 I scenari automatici dell'auto scaling sono:
@@ -500,7 +494,7 @@ L'applicazione Web può avere 2 ruoli:
 	\item Web Role: L'esecuzione di una web app, ha il compito della presentazione.
 	\item Worker Role: Supporta l'esecuzione backend.
 \end{myitemize}
-Osservazione: Un nuovo non è una VM è simile ad una sandbox (l'applicazione vede se stessa come l'unica app in corso), quindi si possono avere più ruoli sulla stessa macchina, inoltre nel caso di una WebApp non sappiamo né la memoria né informazioni sul CPU, si pagano solo le richieste servite (o cicli del processore usati), inoltre viene garantito autoscaling e auto load balancing.
+Osservazione: Un nuovo role non è una VM è simile ad una sandbox (l'applicazione vede se stessa come l'unica app in corso), quindi si possono avere più ruoli sulla stessa macchina, inoltre nel caso di una WebApp non sappiamo né la memoria né informazioni sul CPU, si pagano solo le richieste servite (o cicli del processore usati), inoltre viene garantito autoscaling e auto load balancing.
 La comunicazione tra Web Role e Worker Role avviene attraverso un sistema di code di messaggi, e un load balancer distribuisce le richieste tra i vari Web Role.\\
 Per la persistenza dei dati Azure mette a disposizione:
 \begin{itemize}[noitemsep, topsep=0ex, wide]
@@ -576,7 +570,7 @@ Le istruzione sono sequenziali e vengono eseguite dal demone docker. Tra i coman
 		             param2      (shell form)
 	\end{verbatim}
 	La differenza è che la shell form viene comandato dalla shell quindi ad es. si può terminare un processo con ctrl+c.
-	\item \textbf{CMD} ha lo stesso significato della CMD, ma ha una differenza, se esiste un ENTRYPOINT viene eseguito ENTRYPOINT e CMD gli passa i suoi parametri e se esistono molteplici CMD viene eseguito l'ultimo CMD. Es:
+	\item \textbf{CMD} ha lo stesso significato della ENTRYPOINT, ma ha una differenza, se esiste un già ENTRYPOINT viene eseguito ENTRYPOINT e CMD gli passa i suoi parametri e se esistono molteplici CMD viene eseguito l'ultimo CMD. Es:
 	\begin{verbatim}
 		CMD[``--port 27017'']
 		ENTRYPOINT /usr/bin/mongod
@@ -673,7 +667,7 @@ I due operatori più interessanti per Spark sono:
 \end{myitemize}
 \subsection{MapReduce}
 Una loro applicazione combinata è MapReduce, che serve a processare una grande quantità di dati con algoritmi parallelizzati e distribuiti su un cluster. 
-Il sistema shuffla i dati nelle fasi in mezzo a Map e Reduce(!?). 
+Il sistema shuffla i dati nelle fasi in mezzo a Map e Reduce. 
 I nodi del sistema condividono un filesystem distribuito e vengono sfruttati nelle due fasi:
 \begin{myitemize}
 	\item Fase \textbf{Map}: Il master node partiziona i files in M splits attraverso una chiave, e assegna ai slaves i maps da eseguire.\\
@@ -684,17 +678,17 @@ Questo è l'architettura usata in Hadoop 1.x, uno dei suoi svantaggi sono il blo
 Un altro svantaggio è che ad ogni iterazione di Map e Reduce il file viene scritto sul disco che rallenta tutto il processo. 
 Inoltre non tutti lavori possono essere scritti in alberi di operazioni Map e Reduce, ad es. i cicli sui dati stessi.\\
 \subsection{Spark Ecosystem}
-Qua entra in gioco un'applicazione open source \includegraphics[width=1cm,height=0.6cm]{imgs/sparkLogo.png}: esso effettua i calcoli in memoria senza riscriverli sul disco, se non necessario e permette di generalizzare i calcoli usando grafi aciclici ottenendo molta più flessibilità. Allarga il set di operazioni in \textbf{trasformazioni} e \textbf{azioni}, dove trasformazioni e azioni sono un set di operazioni diverse che possono essere combinate in maniera arbitraria e Spark 2 ha implementato anche un ottimizzatore di query (Catalyst). \\
+Qua entra in gioco un'applicazione open source \includegraphics[width=1cm,height=0.6cm]{imgs/sparkLogo.png}: esso effettua i calcoli in memoria senza riscriverli sul disco se non necessario e permette di generalizzare i calcoli usando grafi aciclici ottenendo molta più flessibilità. Allarga il set delle operazioni da solo Map e Reduce in \textbf{trasformazioni} e \textbf{azioni}, dove trasformazioni e azioni sono un set di operazioni diverse che possono essere combinate in maniera arbitraria e Spark 2 ha implementato anche un ottimizzatore di query (Catalyst). \\
 Apache Spark supporta:
 \begin{myitemize}
-	\item Manipolare i dati attraverso SQL, vedendo i file come delle tabelle SQL
-	\item Esiste una libreria MLlib per Data Science e Machine Learnig distribuito
-	\item Processamento di grafi di dimensioni enormi 
-	\item Processamento di dati in tempo reale
-	\item File system Distribuito in-memory(cache)
-	\item Query approssimate sui dati
-	\item Eredita da Hadoop il supporto dei file Avro, Parquet e le sorgenti di questi dati possono essere HDFS, Cassandra, Hive, Mongo ecc.
-	\item Sviluppo in linguaggi come Python, R, Scala, Java, .Net
+	\item Manipolare i dati attraverso SQL, vedendo i file come delle tabelle SQL;
+	\item Esiste una libreria MLlib per Data Science e Machine Learnig distribuito;
+	\item Processamento di grafi di dimensioni enormi;
+	\item Processamento di dati in tempo reale;
+	\item File system Distribuito in-memory(cache);
+	\item Query approssimate sui dati;
+	\item Eredita da Hadoop il supporto dei file Avro, Parquet e le sorgenti di questi dati possono essere HDFS, Cassandra, Hive, Mongo ecc.;
+	\item Sviluppo in linguaggi come Python, R, Scala, Java, .Net;
 \end{myitemize}
 \begin{figure}
 	\centering
@@ -702,7 +696,7 @@ Apache Spark supporta:
 	\caption{Spark Ecosystem}
 	\label{fig:SparkEco}
 \end{figure}
-Al centro di tutto l'ecosistema c'è il Spark Core che si occupa di
+Al centro di tutto l'ecosistema c'è il Spark Core che si occupa di:
 \begin{myitemize}
 	\item Gestione del calcolo distribuito, quindi si occupa della distribuzione, coordinamento e scheduling dei task computazionali e inoltre si occupa di gestire i fallimenti e riduce al minimo la data shuffling tra i vari nodi;
 	\item Fornire le API per l'astrazione delle \textbf{RDD}, che è un collezione di oggetti, immutabili e fault tollerant partizionati su un cluster, che possono essere manipolati in parallelo.
@@ -711,7 +705,7 @@ Spark può essere deployato in 3 modalità diverse:
 \begin{myenumerate}
 	\item Come una libreria che viene eseguita in un programma, fornendo le API delle RDD, ma si possono usare solo le risorse della macchina su cui gira il programma;
 	\item Può essere eseguito in maniera distribuita (su cluster), che può essere standalone (che non significa solo una macchina ma semplicemente il fatto che non ha bisogno di un scheduler esterno) oppure usando scheduler esterni tra cui YARN, Mesos e K8;
-	\item Accesso ai sistemi di storage attraverso le API di Hadoop per usare HBase, S3, Cassandra ecc.
+	\item In modalità MR, in questo caso l'accesso ai sistemi di storage attraverso le API di Hadoop per usare HBase, S3, Cassandra ecc.
 \end{myenumerate}
 L'applicazioni Spark ha due elementi fondamentali più un terzo facoltativo:
 \begin{myenumerate}
@@ -736,10 +730,10 @@ Alcune trasformazioni, come sortByKey, join, groupByKey ecc., possono avere uno 
 	\item Wide dependency: Ciascun RDD può essere usato da molteplici partizioni figli, quindi cambia il numero di partizioni
 \end{myitemize}
 Spark fa questa distinzione perché eseguirà le operazione Narrow tutte insieme in parallelo, spark divide in lavoro in stage, in base alla presenza di operazioni shuffle, all'interno di ciascun stage le operazioni possono essere eseguite in parallelo, inoltre le trasformazioni nei vari stage vengono composte per velocizzare il tutto.\\
-I vantaggi di RDD sono il controllo a basso livello, grazie alle API, su cosa fa spark e sono typesafe: spark ci permette di fare operazioni in base al tipo di RDD e infine ci insegnano in profondità come funzione spark.\\
+I vantaggi di RDD sono il controllo a basso livello, grazie alle API, su cosa fa spark e sono inoltre typesafe: spark ci permette di fare operazioni in base al tipo di RDD e infine ci insegnano in profondità come funzione spark.\\
 I suoi svantaggi sono il fatto che sono difficile da gestire (per un data scientist che deve usare i DataFrames), inoltre cambia la velocità di esecuzione anche in base al linguaggio usato (usando Java/Scala si ottiene un boost di performance anche 2x rispetto a python) e infine l'ottimizzazione del codice non avviene e quindi programmi sono meno efficienti.\\
 \subsection{Spark SQL}
-E' una libreria che funzione su Spark Core e fornisce come astrazione del RDD il dataframe, con tutte le proprietà dei dataframe, sono delle tabelle con righe e colonne con i header e indici ecc.
+E' una libreria che funziona su Spark Core e fornisce come astrazione del RDD il dataframe, con tutte le proprietà dei dataframe, sono delle tabelle con righe e colonne con i header e indici ecc.
 A questo punto si può usare la tecnologia molto sviluppata dei database SQL, Spark SQL ha implementato anche un ottimizzatore che viene usato da tanti motori SQL.
 Questo aumenta anche il supporto alle varie tipologie di file e sorgenti con cui spark può comunicare.\\
 I Dataframe essendo un'astrazione delle RDD hanno le sue proprietà: sono immutabili, distribuiti, rappresentano una collezione, sono lazyily evaluated e le azioni sono eagerly evaluated.\\
@@ -748,17 +742,17 @@ Il risultato di usare i dataframe è non solo la stessa velocità indipendenteme
 \section{Stream Processing}
 La differenza tra il batch processing e stream processing è:
 \paragraph{Batch Processing} lavora su batch di dati limitati ottenuti da un data store e il risultato è un altro batch di dati. Batch ha accesso a tutti i dati, si può lavorare a qualcosa di grande e complesso, la latenza è misurata in minuti, di solito uno è interessato all'output (qualità) di dati che alla latenza.
-\paragraph{Stream Processing} lavora su un flusso continuo (infinito) di dati, il risultato è un nuovo stream di dati e per ciò è dovuto al fatto che il processo stream non finisce. La funzione in questo casa è applicata ad un datapoint o una finestra piccola di dati recenti, inoltre la computazione deve essere leggera poiché lo stream deve continuare ad andare e la latenza deve essere near real time o al più secondi.\\
+\paragraph{Stream Processing} lavora su un flusso continuo (infinito) di dati, il risultato è un nuovo stream di dati e per ciò è dovuto al fatto che il processo stream non finisce. La funzione in questo caso è applicata ad un datapoint o una finestra piccola di dati recenti, inoltre la computazione deve essere leggera poiché lo stream deve continuare ad andare e la latenza deve essere near real time o al più secondi.\\
 Gli elementi principali di un'applicazione stream sono:
 \begin{myenumerate}
 	\item Sorgente: che produce i dati in input;
 	\item Trasformazioni: prende l'input del dataflow e producono alcuni output;
 	\item Sink: riceve/consuma i dati dell'output delle trasformazioni;
-	\item Data Pipeling: è una sequenza di trasformazioni, rappresentate di solito da un grafo aciclico diretto;
+	\item Data Pipeline: è una sequenza di trasformazioni, rappresentate di solito da un grafo aciclico diretto;
 	\item Event/Tuple/message: E' l'elemento atomico del data flow (come una riga di un dataframe).
 \end{myenumerate}
 Generalmente i sistemi di stream di dati sono generalmente distribuiti, per gestire più dati in parallelo e quindi con maggiore velocità, ma avvolte vi sono delle operazioni sequenziali e si fa fatica a renderli distribuiti. I dati in ingresso possono essere partizionati e ciascuna operatore può eseguirsi in una maniera concorrente. Ottiene le proprietà dei sistemi distribuiti tra quali: Fault-tollerance, Load Balancing.\\
-Lo stato dello streaming può essere molto utile, ad esempio per riconoscere qualche pattern negli eventi o per aggregazioni di dati, e viene gestito in utilizzando i due meccanismi di \textbf{Checkpoint and Replay}: salvataggio periodico dello stato dell'operatore su un storage sicuro (es. HDFS), in caso di fallimento tutti i dati dopo l'ultimo checkpoint dovranno essere rianalizzati (Replay).\\
+Lo stato dello streaming può essere molto utile, ad esempio per riconoscere qualche pattern negli eventi o per aggregazioni di dati, e lo stato di fault tolerance viene gestito in utilizzando i due meccanismi di \textbf{Checkpoint and Replay}: salvataggio periodico dello stato dell'operatore su un storage sicuro (es. HDFS), in caso di fallimento tutti i dati dopo l'ultimo checkpoint dovranno essere rianalizzati (Replay).\\
 Nel caso di dati ``illimitati'' in streaming di solito si preferisce usare il windowing per tagliare i dati dando a loro il senso temporale. Queste finestre possono essere:
 \begin{myitemize}
 	\item Fixed (Tumbling) window es. calcolo di qualcosa ogni tot unità temporale
@@ -770,7 +764,7 @@ In generale sono algoritmi molto complessi poiché devono anche garantire un lim
 \textbf{SQL on Streams} consiste nel vedere uno stream di dati come una tabella relazionale di dimensione infinita, a questo punto si può usare SQL per generare un'analisi o trasformazione, il sistema ci mostra una tabella (dinamica) ma sotto ha un sistema di streaming distribuito che genera a partire da uno streaming in entrata uno streaming in uscita.
 
 \subsection{Apache Storm}
-\includegraphics[width=1.5cm,height=0.5cm]{imgs/stormLogo.png} è disegnato per supportare lo stream di applicazioni e supporta fino ad 1 milione di messaggi al secondo, può scalare a miglia di nodi per cluster ed è fault tollerant e usando strumenti di terze parti, in particolare Trident, è in grado di applicare sono in grado di applicare anche la semantica temporale ``exactly once''.\\
+\includegraphics[width=1.5cm,height=0.5cm]{imgs/stormLogo.png} è disegnato per supportare lo stream di applicazioni e supporta fino ad 1 milione di messaggi al secondo, può scalare a miglia di nodi per cluster ed è fault tollerant e usando strumenti di terze parti, in particolare Trident è in grado di applicare anche la semantica temporale ``exactly once''.\\
 Il modello concettuale è un modello molto semplice ed include:
 \begin{myitemize}
 	\item Tupla: è l'unità core (il messaggio) e può essere vista come una coppia chiave valore;
@@ -807,7 +801,7 @@ Alla base di spark ci sono gli RDD che possono essere distribuiti e replicati in
 I minibatch discretizzati RDD si chiamano \textbf{Dstreams}, la loro misura è fatta in modo da avere una latenza di circa 1 secondo e hanno un potenziale di potersi combinare con i batch proccessing.
 Inoltre con la funzione union è stato possibile implementare il concetto di finestra.\\
 Il master continua a salvare gli stati dei Dstream in un file checkpoint e in caso di fallimento del master questo può essere reinizializzato a partire da questo file checkpoint, permettendo un recupero rapido.\\
-I Dstream richiedono una buona conoscenza di programmazione, quindi si è creata una sua astrazione sotto il nome id Spark Structured Streaming, che ha delle API a livello più alto rispetto a Dstreams.
+I Dstream richiedono una buona conoscenza di programmazione, quindi si è creata una sua astrazione sotto il nome di Spark Structured Streaming, che ha delle API a livello più alto rispetto a Dstreams.
 I Dstreams mostrano lo streaming come delle tabelle dinamiche, mentre le operazioni vengono eseguite incrementalmente, quindi il risultato è un altro dataframe con dati variabili nel tempo.
 L'analisi dei dati provenienti dal Output mode viene eseguita in base a un trigger: che può essere una funzione della sessione temporale.
 
@@ -820,7 +814,7 @@ La Big Data pipeline è costituita a un livello alto da:
 	\item Processare e analizzare i data;
 	\item Consumare o visualizzare.
 \end{myitemize}
-e il suo obiettivo è minimizzare la latenza e il costo e massimizzare il throughput, nel cloud cerco di minimizzare la latenza ad esempio raggruppando le macchine vicine e inoltre massimizzo il thorughput alla scalabilità dello storage e tutte le macchine leggono alla stessa velocità quindi la velocità di lettura cresce linearmente col crescere dei nodi e per quanto riguarda i costi essi vengono minimizzati poiché pago solo ciò che uso.
+e il suo obiettivo è minimizzare la latenza e il costo e massimizzare il throughput, nel cloud cerco di minimizzare la latenza ad esempio raggruppando le macchine vicine e inoltre massimizzo il thorughput grazie alla scalabilità dello storage e tutte le macchine leggono alla stessa velocità quindi la velocità di lettura cresce linearmente col crescere dei nodi e per quanto riguarda i costi essi vengono minimizzati poiché pago solo ciò che uso.
 Il problema rimane il passaggio totale al cloud, ad esempio perché può essere costoso trasmettere tutti i dati, oppure potrebbero esserci problemi di privacy, esistono anche degli approcci ibridi in cui è possibile usare il proprio cloud per dati privati e Amazon per dati normali.\\
 Lo stream storage di amazon è possibile con: Apache Kafka (esiste una cosa simile anche in amazon detta Amazon MQ), Amazon Kinesis e Amazon DynamoDB (simile a SQL streaming di spark). 
 I file storage offerti possono essere HDFS, S3 e Amazon Glacier, sono tutte e tre supportati da Big Data Framework e sono altamente disponibili, la scelta avviene se i dati sono caldi (vengono acceduti molte volte) qua conviene usare HDFS o se sono freddi (pochi accessi) qua conviene Glacier, mentre S3 è una via di mezzo. Infine per i database e search engines abbiamo: Amazon ElastiCache, DynamoDB, RDS e ES.
