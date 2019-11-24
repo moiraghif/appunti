@@ -1,29 +1,86 @@
 ---
 title: "Streaming Data Management and Time Series Analsis"
-output: pdf_document
+output: 
+  pdf_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.width=10, fig.height=6)
+knitr::opts_chunk$set(fig.width=4, fig.height=3)
+knitr::opts_chunk$set(fig.align = 'center')
 knitr::opts_chunk$set(warning = FALSE)
-```
+knitr::opts_chunk$set(message = FALSE)
 
+```
+\newpage 
+# Exponential Smoothing
+
+La serie storica può essere essere pensata come somma o prodotto di 4 componenti: 
+$$y_t = T_t +C_t+ S_t+A_t \quad \text{ oppure } \quad y_t = T_t\cdot C_t \cdot S_t\cdot A_t$$
+dove $T_t$ è il trend che descrive la serie a lungo termine, $C_t$ è il ciclo che è definto come componente di oscillazione periodica, $S_t$ è la componente stagionale e cattura i movimenti ripetitivi e infine la parte $A_t$ è parte accidentale.
+Oss: Il modello moltiplicativo può essere riportato al modello additivo attraverso un logaritmo.
+
+Se le serie sono molto corte un modo molto semplice e spesso efficace è quello di effetuare una regressione usando come variabile esplicativa il tempo o dummy stagionali oppure una loro combinazione: 
+$$y_t = \beta_0 + \beta_1t + ... + \beta_n t^n + \beta_{n+1}D^{(1)} + ... + \beta_{m+n}D^{(m)} + \varepsilon_t$$
+
+Assumiamo la serie come come somma di componente trend che varia accidentalmente e una componenete casuale non autocorrelata, in questo caso dato un valore il valore successivo ha la stessa probabilità di essere sia sopra che sotto il valore attuale, quindi l'idea migliore sembrerebbe di dire che il valore successivo è il valore attuale.
+Ma si il valore successivo osservato è la somma del valore attuale con una componente casuale a media nulla, per elimianare tale valore si dovrebbe fare la media dei valori osservati fino all'istante attuale, ma siccome è una componente casuale non osservabile, si cerca un compromesso che è raggiunto dal modello *exponential smoothing* che pesa più gli ultimi valori che i valori più remoti, in particolare usa pesi esponenzialmente decrescenti più ci si allontana dall'istante attuale.
+Di solito si presenta in questa forma:
+$$\hat y_{t|t} = \alpha y_t + (1-\alpha)\hat y_{t-1|t-1}$$
+dove $\alpha \in [-1,+1]$ è un coefficiente da stimare, espandendo ricorsivamente la formula sopra abbiamo:
+\begin{align*}
+\hat y_{t|t} &= \alpha y_t + (1-\alpha)[\alpha y_{t-1} + (1-\alpha)\hat y_{t-2|t-2}]\\
+             &= \alpha\sum_{i=0}^m (1-\alpha)^i y_{t-i} + (1-\alpha)^{m+1} \hat y_{t-m-1|t-m-1}\\
+             &\to \alpha \sum_{i=0}^\infty (1-\alpha)^i y_{t-i}
+\end{align*}
+Osserviamo che quello sopra è esattamente la media ponderata delle $y_i$ inoltre i pesi sommano ad uno poiché la serie geometrica $\sum_{i=0}^\infty (1-\alpha)^i \to \frac {1}{\alpha}$ moltiplicati per il $\alpha$ (fuori dalla serie) fa proprio uno.
+
+Il coefficiente $\alpha$ viene stimato usando il metodo dei minimi quadrati degli errori di previsione un periodo in avanti $\hat \alpha = \arg\min_\alpha \sum (y_t - \hat y_{t|t-1})^2$.
+
+Ma spesso questo modello da risultati deludenti poiché non tiene conto del fatto che spesso le serie temporali possono rallentare o accelerare, l'evoluzione del exponential smoothing semplice è il modello exponential smoothing di Holt-Winters. In questo caso indichiamo con $T_t$ la stima del trend a tempo t e $b_t$ la stima dell'incremento del trend al tempo t basando sui dati fino al tempo t, le equazioni di HOLT quindi sono:
+\begin{align*}
+T_t &= \alpha y_t + (1-\alpha)(T_{t-1} + b_{t-1})\\
+b_t &= \beta(T_t - T_{t-1}) + (1-\beta)b_{t-1}
+\end{align*}
+mentre le previsioni si ottengono con la seguente proiezione:
+$$\hat y_{t+k|t} = T_t + b_t \cdot k \quad \text{ con qualche }k \in \mathbb{N^+}$$
+si può aggiungere anche al parte stagionale a questo modello nel modo seguente nel caso il modello sia addittivo:
+\begin{align*}
+T_t &= \alpha (y_t - S_{t-s}) + (1-\alpha)(T_{t-1} + b_{t-1})\\
+b_t &= \beta(T_t - T_{t-1}) + (1-\beta)b_{t-1}\\
+S_t &= \gamma(y_t - T_t) + (1-\gamma)S_{t-s}\\
+\end{align*}
+
+nel caso sia moltiplicativo abbiamo:
+\begin{align*}
+T_t &= \alpha \dfrac{y_t}{S_{t-s}} + (1-\alpha)(T_{t-1} + b_{t-1})\\
+b_t &= \beta(T_t - T_{t-1}) + (1-\beta)b_{t-1}\\
+S_t &= \gamma \dfrac{y_t}{T_t} + (1-\gamma)S_{t-s}\\
+\end{align*}
+con $0\leq\alpha\leq 1,0\leq\beta\leq 1$ e $0\leq\gamma\leq1-\alpha$, e la proiezione risulta essere nel caso addittivo e moltiplicativo rispettivamente:
+\begin{align*}
+\hat y_{t+k|t} &= T_t + b_t \cdot k + S_{t+k-s\cdot \lceil k/s \rceil} \quad \text{ con qualche } k \in \mathbb{N}\\
+\hat y_{t+k|t} &= (T_t + b_t \cdot k)\cdot S_{t+k-s\cdot \lceil k/s \rceil} \quad \text{ con qualche } k \in \mathbb{N}
+\end{align*}
+Gli exponential smoothing non essendo modello stocastici né pemettono inferenza sui coefficienti stimati né forniscono dei intevalli di confidenza per le previsioni.
+
+# Modelli ARIMA
 $X_1, X_2, ..., X_n$ variabili casuali, tra loro dipendenti altrimenti non avrebbe senso la serie storica, e se tale dipendenza rimane costante nel tempo posso prevedere la serie storica. 
 La stazionarietà è la omogeinità nella dipendenza tra queste variabili.
 
-# Stazionarietà debole o in covarianza
+## Stazionarietà debole o in covarianza
 
 Una serie storica ${X_t}$ è stazionaria in senso debole (o in covarianza) se $\forall t$ 
-$$
-E[X_t] = \mu < \infty\\
-Var(X_t) = \sigma^2 = \gamma_0 < \infty\\
-Cov(X_t,X_{t-k}) = \gamma_k < \infty
-$$
+\begin{align*}
+E[X_t] &= \mu < \infty\\
+Var(X_t) &= \sigma^2 = \gamma_0 < \infty\\
+Cov(X_t,X_{t-k}) &= \gamma_k < \infty
+\end{align*}
 
 cioè ho omogenieità temporale nella serie, la dipendenza è relativa rispetto al t scelto ma indipendete da tale t quindi posso proiettare ciò che ho nel passato nel futuro. 
 
-# Stazionarietà forte
+## Stazionarietà forte
 Una serie storia equispaziata è stazionaria in senso forte  $\forall h-upla$ $t_1, t_2, ..., t_h$, $\forall k$ 
 $$X_{t_1}, X_{t_2},...,X_{t_h} =^{(d)} X_{t_1+k}, X_{t_2+k},...,X_{t_h+k}$$
 cioè la distribuzione è invariante rispetto alle traslazioni della serie storica.
@@ -61,7 +118,7 @@ ggplot(aes(y=log_y, x=year),
 ```
 Questo appiatisce la varianza negli negli anni, adesso dovrò solo aggiustare il trend e la stagionalità, poi la serie sarà stazionaria.
 
-# Il Random Walk
+## Il Random Walk
 
 Supponiamo $X_t = X_{t-1} + \varepsilon_t$ con $\varepsilon_t \ i.i.d. (0,\sigma^2)$, questo è un Random Walk, il RW non è stazionaria: 
 
@@ -77,12 +134,12 @@ ${X_t} \sim I(d)$ se ${X_t}$ non è stazionario $\Delta^{k} X_t$ per $k=1,...,d-
 Oss: $\Delta^2 X_t \neq X_t - X_{t-2}$ bensì $\Delta^2 X_t = X_t - 2X_{t-1} + X_{t-2}$.
 
 
-# Predittore Ottimale
+## Predittore Ottimale
 
 Il predittore minimizza il valore atteso della funzione di perdita $l()$, in funzione di $p(X_1,...,X_m)$ che è una funzione misurabile:
 $$\min_p \mathbb{E}(l(Y-p(X_1,...,X_m)))$$
 
-# Integrazione Stagionale
+## Integrazione Stagionale
 
 Differenza stagionale $\Delta_k$ è così definita: 
 $$\Delta_k = \mathbb{I}-B^k \to \Delta_kX_t = X_t - X_{t-k}$$
@@ -105,7 +162,7 @@ ggplot(data=data.frame(diff_y=as.numeric(dly), year=as.numeric(time(dly))),
 ```
 Si vede che il trend non c'è più ma la stagionalità è ancora evidente, inoltre perdo anche l'informazione dell'intercetta in questo modo, quindi vorrei che il modelli trovi e salvi l'intercetta (drift) in qualche modo.
 
-# White noise
+## White noise
 
 $\varepsilon_t$ è white noise se $\mathbb{E[\varepsilon_t]}=0$, $Var(\varepsilon_t)=\sigma^2$ e $Var(\varepsilon_t,\varepsilon_{t-k})=0 \quad \forall k \neq 0$. 
 White noise è un processo stazionario e per rendere il white noise a media non nulla basta aggiungere una costante, quindi ho $X_t = X_{t-1} + \varepsilon_t + c$ detto Random walk con drift, si osserva che $X_t = X_0 + ct + \sum_{i=1}^t \varepsilon_i$, il pezzo $c\cdot t$ è il drift.
@@ -123,8 +180,6 @@ E adesso sembra non avere più la stagionalità, chiaramente un po' di memoria s
 Osserva siccome siamo sul logaritmo, il dato adesso è in percentuali.
 
 Spesso non si è sicuro se la serie dopo la trasformazione è ancora stazionario o meno, vi sono dei test ma uno potrebbe applicare 2 modelli uno considerandolo come stazionario e l'altro come non stazionario e poi si prende il modello migliore.
-
-# Modelli ARIMA
 
 ## Modello Autoregressivo
 
@@ -259,7 +314,9 @@ urca::summary(urca::ur.df(rw, type="drift", lags=10, "AIC"))
 Il valore del test è a doppia coda quindi accetto l'ipotesi nulla se il valore della statistica (t-value di z.lag.1) sta a destra di 5pct tau (-2.89) e rifiuto nel caso sta a sinistra di tale valore, ad esempio sulla x di prima che sappiamo non avere radice unitaria $H_0$ viene rifiutata:
 
 ```{r}
-urca::summary(urca::ur.df(x, type="drift", lags=10, "AIC"))
+#non stampo tutto il summary infondo interessa solo la statistica,
+#per il confronto guardare i treshold sopra.
+print(urca::ur.df(x, type="drift", lags=10, "AIC"))
 ```
 
 ## Moving Average
@@ -339,7 +396,7 @@ mod1 <- Arima(y, c(0, 1, 1), c(0, 1, 1), lambda = 0) #con lambda = 0 diventa una
 plot(mod1)
 ```
 ```{r}
-print(mod1)
+#print(mod1)
 ```
 
 ```{r}
@@ -357,7 +414,7 @@ for (i in 1:24){
 meanloss <- cbind(RMSE = sqrt(colMeans(err1^2, na.rm = T)),
                   MAE  = colMeans(err1, na.rm = T),
                   MAPE = colMeans(abs(err1)/(err1+pre1), na.rm = T)*100)
-meanloss
+t(meanloss)
 ```
 
 # ARIMAX
@@ -495,7 +552,7 @@ Osservazione: è identico al caso di AR(1) con $\rho=\phi$.
 
 Se il ciclo stocastico ha stagionalità $S$ e il ciclo ha una durata di $k\cdot S$ allora la frequenza $\lambda$ è data dal rapporto: $\lambda = \dfrac{\pi}{kS}$.
 
-```{r}
+```{r, fig.height=4}
 #~~ In R
 library(ggplot2)
 sim_cyc <- function(n, rho, lambda, sd_kappa, psi0){
@@ -517,7 +574,7 @@ Nei 2 cicli generati sopra se uno prende la loro correlazione, dovrebbe essere c
 cor(ciclo[,1], ciclo[,2])
 ```
 Se $\sigma_k$ la prendiamo $= 0$ cioè elimino la stocasticità in teoria la serie diventa un seno che piano piano scompare, in base al coefficiente $\rho$:
-```{r}
+```{r, fig.height=4}
 ciclo = sim_cyc(n = 200, rho = 0.96, lambda = 2*pi/48, sd_kappa = 0, rnorm(2))
 plot(ts(ciclo), main = 'Ciclo con sigma_k = 0')
 ```
@@ -757,13 +814,17 @@ mod1 <- SSModel(y ~ 0 + SSMtrend(2, list(NA, NA)) + # 2 per LLT(local linear tre
                   SSMseasonal(12, NA, "dummy"), #NA nella varianza indica che non la so
                 H = NA)
 
+```
+```{r, eval=FALSE}
+#non stampo usa troppo spazio per niente
 mod1$T #la matrice T di state space (la sua terza
 # dimesione indica la possibile variazione nel tempo) (13x13)
 
 mod1$Q #3 errori quindi una matrice 3x3
 
 mod1$R #matrice R che distribuisce i 3 errori sulle variabili quindi deve essere 13x3
-
+```
+```{r}
 vary <- var(y, na.rm = TRUE) #la varianza di y che serve da stima per i parametri iniziali
 pars <- numeric(4) #parametri iniziali
 #si usano log varianze perché siccome le varianze sono sempre positive ma il computer può
