@@ -225,7 +225,7 @@ In un processo stazionario abbiamo: $\gamma_k = Cov(X_t, X_{t-k})$ abbiamo che $
 $$\alpha_k = Cor(X_t - \mathbb{P}(X_t|X_{t-1},...,X_{t-k+1}), X_{t-k} - \mathbb{P}(X_{t-k}|X_{t-1},...,X_{t-k+1}))$$
 da cui deriva la ACF e PACF:
 
-In caso di un processo AR(p) abbiamo p ritardi di PACF non nulli e dopo p ritardi vanno a zero, mentre ACF tende a tornare a zero geometricamente.
+In caso di un processo AR(p) abbiamo p ritardi di PACF non nulli e dopo p ritardi vanno a zero, mentre ACF tende a tornare a zero geometricamente (questo perché si scorda dei shock dopo infiniti periodi).
 
 Supponiamo una periodicità stagionale S, SAR(P) è molto simile a AR(p) ma lavora su multipli di s, quindi ho 
 $$ X_t = c + \Phi_1 X_{t-S}+...+\Phi_P X_{t-P\cdot S}+\varepsilon_t $$
@@ -344,7 +344,7 @@ si può mettere tutto insieme in un modello ARIMA(p,d,q)(P,D,Q$)_S$:
 $$\phi_p(B) \Phi_P(B) \Delta^d \Delta_S^D X_t = c + \theta_q(B) \Theta_Q(B) \varepsilon_t$$
 
 
-# Il Metodo di Box&Jenkins
+## Il Metodo di Box&Jenkins
 
 - Faccio grafico della serie, media-sd e mi chiedo 
   - è stazionaria in varianza?
@@ -466,7 +466,7 @@ ggplot()+
   xlab("Time") + ylab("Value")
 ```
 
-Sia $\gamma_t$ la stagionalità di periodo s quindi $\gamma_t = \gamma_{t-s}$, se sommo $\sum_{i=0}^{s-1}\gamma{t-i}$ questa somma va a 0: $\sum_{i=0}^{s-1}\gamma{t-i}=0$, inoltre vista la stagionalità ho che: 
+Sia $\gamma_t$ la stagionalità di periodo s quindi $\gamma_t = \gamma_{t-s}$, se sommo $\sum_{i=0}^{s-1}\gamma_{t-i}$ questa somma va a 0, inoltre vista la stagionalità ho che: 
 $$ \gamma_t = \sum_{j=1}^{\big \lfloor \frac{s}{2} \big\rfloor} \alpha_j \cos(\frac{2\pi}{s}jt) + \beta_j \sin(\frac{2\pi}{s}jt) $$
 Oss: se s pari per $j=\frac{s}{2}$ $\sin(\frac{2\pi}{s}\frac{s}{2}t) = 0$, quindi ho un regressore in meno.
 
@@ -547,8 +547,9 @@ Osserviamo che la matrice è la matrice di Rotazione $R(\lambda)$ che ruota il v
 Tipicamente si prende solo $\psi_t$ l'altro $\psi_t^*$ è ortogonale al primo e serve solo per la sua costruzione. 
 Il primo pezzo dell'equazione non rappresenta altro che un ciclo e la parte di WN aggiunge il rumore per renderlo stocastico. 
 Il $\rho$ serve per far assorbile il ciclo a lungo andare (geometricamente tende a far portare a 0), se $\rho=0$ allora rimane solo il WN mentre se $\rho=1$, il ciclo diventa non stazionario.
-Se è stazionario abbiamo che la varianza $\mathbb{E}(\psi\psi^t) = \dfrac{\sigma^2}{1-\rho^2}\mathbb{I}$
-Osservazione: è identico al caso di AR(1) con $\rho=\phi$.
+Se è stazionario abbiamo che la varianza $\mathbb{E}(\psi\psi^t) = \dfrac{\sigma^2}{1-\rho^2}\mathbb{I}$.
+
+Osservazione: La formula della varianza è identica al caso di AR(1) con $\rho=\phi$.
 
 Se il ciclo stocastico ha stagionalità $S$ e il ciclo ha una durata di $k\cdot S$ allora la frequenza $\lambda$ è data dal rapporto: $\lambda = \dfrac{\pi}{kS}$.
 
@@ -675,14 +676,18 @@ ggplot() +
 Sostanzialemente sono due set di equazioni: equazione di trasizione (stato) e equazioni di osservazioni(misurazione).
 L'equazione di **osservazione** ha la sequente forma, indico con (t) componenti che potrebbe essere o non essere variabili nel tempo:
 $$ y_t =  c_{(t)} + Z_{(t)}\alpha_t + \varepsilon_t \quad \varepsilon_t \sim WN(0,H_{(t)})$$
-$\alpha_t$ è il vettore che contiene informazioni non osservabili direttamente ma che combinati linearmente mi formano la serie, $\alpha_t$ contiene il trend, lo slope ecc.
+dove $y_y$ è la variabile osservabile e $\alpha_t$ è il vettore che contiene informazioni non osservabili direttamente ma che combinati linearmente mi formano la serie es. il trend, lo slope ecc.
 L'equazione di **transizione** è della forma:
 $$ \alpha_{t+1} = d_{(t)} + T_{(t)}\alpha_t + \eta_t \quad \eta_t \sim WN(0, Q_{(t)})$$
-Inoltre supponiamo che $\eta_t$ e $\varepsilon_t$ siano tra loro incorrelate.
+Inoltre supponiamo che $\eta_t$ e $\varepsilon_t$ siano tra loro incorrelate (questo per semplicità in generale quest'ipotesi può essere rilassata).
 I valori iniziali vengono attribuiti in base a una distribuzione (di solito Gaussiano): $\alpha_1 \sim D(a_{1|0}, P_{1|0})$, se voglio esprimere la mia ignoranza posso dire che $P_{1|0} = \infty$ così sono sicuro che il valore iniziale è incluso lì dentro e $\alpha_1$ è incorrelato da $\eta_t$ e $\varepsilon_t$.
+
+Oss: $\alpha_t, y_t$ devono essere distribuiti come una normale perché possono essere espressi come combinazioni lineari di $\eta_t, \varepsilon_t$ e $\alpha_0$ che sono normali.
 
 ATTENZIONE KFAS (il pacchetto di R), cambia un po' le equazioni aggiungendo una matrice davanti a $\eta_t$ e rimuovendo le costanti $d_{(t)}$:
 $$\alpha_{t+1} = T_{(t)}\alpha_t + R_{(t)}\eta_t$$
+Possiamo per semplicità assumere  $T, R, Z, d, c, Q=\mathbb{E}[\eta_t\eta_t'], H=\mathbb{E}[\varepsilon_t\varepsilon_t']$ costanti nel tempo (in generale possono dipendere dal tempo), questo perché è una condizione necessaria (ma non sufficiente) per la stazionarità nel tempo.
+
 Es 1. con la regressione lineare:
 $$\begin{cases}y_t = Z_t(=X_t^T)\alpha_t(=\beta) + \varepsilon_t \\ \alpha_{t+1} = \alpha_t\end{cases}$$
 Es 2. Regressione lineare con i coefficienti che evolvono come RW: Identico a prima ma $\alpha_{t+1} = \alpha_t + \eta_t$.
@@ -788,7 +793,7 @@ Per la formula LEGO basta concatenare i vettori mettendo uno sopra l'altro, ment
 
 ## Filtro si Kalman
 La forma state space serve per il filtro di Kalman, che è un algoritmo ricorsivo che fa 2 passi:
-$a_{t|s} = \mathbb{P}[\alpha_t|y_1,...,y_s]$ sotto iptosi di Gaussianità è anche il valore atteso condizionato (predittore ottimale) quindi il mio valore atteso $\alpha_{t|s}$ diventa la proiezione del vettore di stato al tempo t con dati i noti fino ad s (oss: può essere sia nel presente che nel futuro). Abbiamo inoltre l'incertezza data dalla matrice di varianza covarianza degli errori $P_{t|s} = \mathbb E [(\alpha_t - a_{t|s})(\alpha_t - a_{t|s})^T]$.\\
+$a_{t|s} = \mathbb{P}[\alpha_t|y_1,...,y_s]$ sotto iptosi di Gaussianità è anche il valore atteso condizionato (predittore ottimale) quindi il mio valore atteso $\alpha_{t|s}$ diventa la proiezione del vettore di stato al tempo t con dati i noti fino ad s (oss: può essere sia nel presente che nel futuro). Abbiamo inoltre l'incertezza data dalla matrice di varianza covarianza degli errori $P_{t|s} = \mathbb E [(\alpha_t - a_{t|s})(\alpha_t - a_{t|s})^T]$.
 
 - Se $t>s$ è caso di forecast
 - Se $t=s$ è una stima a tempo reale è chiamato filter
