@@ -820,15 +820,143 @@ Lo stream storage di amazon è possibile con: Apache Kafka (esiste una cosa simi
 I file storage offerti possono essere HDFS, S3 e Amazon Glacier, sono tutte e tre supportati da Big Data Framework e sono altamente disponibili, la scelta avviene se i dati sono caldi (vengono acceduti molte volte) qua conviene usare HDFS o se sono freddi (pochi accessi) qua conviene Glacier, mentre S3 è una via di mezzo. Infine per i database e search engines abbiamo: Amazon ElastiCache, DynamoDB, RDS e ES.
 
 \begin{figure}
-	\centering
-	\includegraphics[width=\linewidth,height=7cm]{imgs/amazon_insight.png}
-	\caption{Insight of the Amazon Services}
-	\label{fig:amazon}
+  \centering
+  \includegraphics[width=\linewidth,height=7cm]{imgs/amazon_insight.png}
+  \caption{Insight of the Amazon Services}
+  \label{fig:amazon}
 \end{figure}
 
 \newpage
 
 \part*{Part II - Prof Melen}
+%19/11
+\section{Introduzione}
+L'Iot è un infrastruttura globale per la società (informatica), che crea servizi avanzati attraverso interconnesione di cose basate su tecnologie informatiche e di comunicazioni interoperabili.
+Per il funzionamento dell'IoT la comunicazione Machine2Machine è essenziale.\\
+Gli ingredienti principali quindi sono: Smart things, tanti oggetti intelligenti, applicazioni autonome e tecnologie specializzate.\\
+\begin{figure}[!h]
+	\centering	\includegraphics[width=\linewidth,height=5cm]{imgs/basic_layer.png}
+	\caption{Uno dei possibili modelli a strati}
+	\label{fig:basic_layer}
+\end{figure}
+      
+\noindent Dalla Figura \ref{fig:basic_layer} si evince subito che le tecnologie abilitanti per IoT sono:
+\begin{myitemize}
+  \item Sensoristica;
+  \item Connettività e Protocolli;
+  \item Software e Algoritmi specializzate per IoT.
+\end{myitemize}
+I settori dove queste tecnologie sono state sviluppate sono: automotica, logistica, manufatturazione, energia e utilità, healthcare, gestione e costruzione delle case, settori pubblici come illuminazione ecc. e settore militare.
+
+\subsection{Smart Metering}
+Una delle prime cose che osserviamo è che un servizio di metering può avere la necessità di non essere alimentato con una rete elettrica (es. contatore del Gas) quindi si usano batterie, e se essa si esaurisce bisogna andare a sostiturla e questa sostituzione cosa di più di un controllo manuale del contatore.\\
+I contatori di Enel oggi hanno 2 catene di distribuzione dei dati:
+\begin{myenumerate}
+  \item Chain 1: va verso l'operatore che gestisce la rete, per i dati ufficiali della tariffazione;
+  \item Chain 2: va verso il cliente finali o venditori, per permettere la gestione delle offerte ecc. 
+\end{myenumerate}
+L'idea dello smart metering serve per arrivare alla fine alla smart grid, questo serve poiché alcuni centrali per la produzione dell'energia hanno una produzione fissa es. centrali a combusitione, ma altri hanno dei picchi e vuoti es. centrali eoliche o solari.
+Le centrali sono molto poco adatte ad immagazzinare energia, un metodo potrebbe essere offrire dei sconti al cliente per consumare energia in una certa fascia es. se ricarica macchina elettrica in una certa fascia orario ti costa di meno, ottimizzando così il consumo.
+
+\section{Sensori}
+Un circuito basilare è costituito da un generatore e un impedenza (es. resistenza, condensatore, induttanza), la corrente che passa attraverso questa impedenza genera una differenza di potenziale quindi un certo livello di tensione.\\
+Usando i circuiti posso misurare o grazie alla tensione sull'impedenza (usando un voltometro) o grazie la corrente che passa attraverso il circuito (usando un amperametro).\\
+Le componenti del circuito possono cambiare a seconda di un fenomeno fisico, e questi cambiamenti si possono misurare in base al cambiamento che apportano al circuito, ottenendo così un sensore. Esempio un circuito può cambiare resistenza in base alla temperatura, quindi cambia il voltaggio se la corrente rimane costante (dalla legge di Ohm $V=RI$).\\ 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/curcuit.png}
+  \caption{Esempio di un circuito semplice.}
+  \label{fig:circuit}
+\end{figure}
+      
+\noindent Un effetto abbastanza importante per il mondo della sensoristica è l'effetto piezzoelelettrico: vi sono dei cristalli che se vengono schiacciati generano un impulso quindi converte effetti meccanici(vibrazione) in effetti elettrici(impulsi di corrente), e il viceversa.\\
+%20/11
+Alcuni esempi di fenomeni fisci che vogliamo misurare sono:
+\begin{myitemize}
+  \item Ambiente: Temperatura, umidità, pioggia, rumore, inquinamento;
+  \item Veicoli: Posizione, velocità, parametri dei motori per la manutenzione, pneumatici, carburante;
+  \item Smart Phones/Wearables: posizione, parametri vitali;
+  \item Edifici: Metering, Sicurezza.
+\end{myitemize}
+I sensori di solito si basano su un elemento sensibile e sfrutta le sue proprietà fisiche per effettuare la misura e quindi un sensore fatto per un certo ambiente non è detto che funzioni su un altro ambiente es. il termometro per misurare la temperatura corporea non può essere usato per misurare la temperatura del sole.
+La pipeline della conversione in dati di un sensore è un po' complessa:
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/catena_sensore.png}
+  \caption{La pipeline/struttura di un sistema di sensore.}
+  \label{fig:circuit_chain}
+\end{figure}
+\noindent La pipeline nella Figura \ref{fig:circuit_chain} inizia con una conversione analog2analog che serve per l'amplificazione del segnale, che viene seguita da un elaborazione analogica per cercare di togliere errori/disturbi dopo questa fase il segnale viene convertito in digitale usando il campionamento (usando il teorema di Niels) e quantizzazione che introduce un po' di errore che serve per la fase della digital processing.
+Il vantaggio dell'elaborazione digitale è che è meno costosa computazionalmente rispetto all'elaborazione del segnare analogico, inoltre o funziona o non funziona mentre quello analogico in caso di errore funziona a metà creato dei problemi più gravi.\\
+In parallelo a questa catena di traduzione effetto fisico-digitale ho delle funzioni che servono per la calibrazioni e compensazioni.
+In uscita ho un Network Interface che manda i dati e metadati all'esterno.\\
+Gli output di un sensore dipendono da:
+\begin{myitemize}
+  \item struttura dei dati:
+  \begin{myitemize}
+    \item Dati Binari, discreti o ``continui'';
+    \item Valori Singoli o una Serie temporale;
+    \item Scalare o Vettoriale.      
+   \end{myitemize}
+  \item Timing, che può essere:
+  \begin{myitemize}
+    \item Eventuale - è asincrono, in caso di un evento invia un segnare, es. gomma della macchina bucata;
+    \item Periodico - ogni tot tempo invia un segnale;
+    \item On-Demand - Il segnale viene inviata solo in caso di una richiesta.
+  \end{myitemize}
+\end{myitemize}
+Il sensore può anche fare il preprocessing, es. può riempire buchi nei segnali attraverso interpolazioni e può fornire anche i metadati: i metadati sono la posizione, tempo e affidabilità.
+Attenzione, invio di dati in maniera periodica non garantisce sia esattamente periodico, es. il tempo del calcolo può avere fluttuazioni temporali.\\
+\vspace{-0.5cm}
+\subsection{Rapporto misurando e principi fisici}
+Un misurando può essere misurato usando l'effetto di tanti fenomeni fisici.
+Per esempio nel caso di temperatura alcuni sensori si basano su:
+\begin{myitemize}
+  \item Espansione Termica;
+  \item Variazioni di resistenza elettrica;
+  \item Tensione di polarizzazione nei diodi: i diodi fanno passare la corrente se c'è una certa tensione di polarizzazioni ai capi e questo threshold dipende dalla temperatura;
+  \item Effetto Seebeck: è una differenza di tensioni fra due conduttori di due leghe differenti che si ha quando i due conduttori vengono posti a una certa temperatura;
+  \item Radiazioni Infrarosse.
+\end{myitemize}
+Esempi di circuiti elettrici:\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/on_off.png}
+  \caption{Sensori di Temperatura On/Off basati sull'espansione termica.}
+  \label{fig:on_off}
+\end{figure}\\
+Nel Primo caso (Figura \ref{fig:on_off}) il circuito può aprirsi o chiudersi in base alla temperatura, mentre nel secondo caso in base alla temperatura il circuito cambia il circuito secondario a cui è collegato. 
+Questo sistema appena spiegato ha lo svantaggio di non essere integrabili in componenti piccole.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/thermistor.png}
+  \caption{Sensori di Temperatura basato su termistore.}
+  \label{fig:thermistor}
+\end{figure}\\
+Il secondo esempio (Figura \ref{fig:thermistor}) che introduciamo si basa su un termistore con resistore a coefficiente negativo, chiamiamo $V_1$ il potenziale tra i due vertici del NTC e $V_2$ il potenziale tra i due vertici della resitenza, se la temperatura cresce $V_2$ aumenta (segue dal fatto che $V_1+V_2 = V$ non cambia).
+Questo valore viene portato in un amplicatore detto voltage follower, questo follower serve anche da barriera perché la componente alla sinistra è molto sensibile e non deve essere perturbato in nessun modo, inoltre ha il vantaggio di avere dimensioni molto piccole e quindi di entrare anche dentro componenti molto piccole.\\
+Un altro vantaggio è che i dispositivi a coefficiente negativo costano poco, poiché si potrebbe usare benissimo anche un resistore con coefficiente positivo ma costa molto di più.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/termocoppia.png}
+  \caption{Termocoppia con effetto Seebeck.}
+  \label{fig:termocoppia}
+\end{figure}\\
+Si può usare anche la termocoppia che è un dispositivo che si basa sull'effetto seebeck che usa delle coppie leghe mettaliche (speciali) diversi (Figura \ref{fig:termocoppia}), scaldando un endpoint collegato a due fili di queste due leghe mettaliche genera una tensione tra i due fili anche a una distanza molto lunga, quindi si possono misurare temperature di certi ambienti dove un circuito potrebbe finire per fondersi.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/diodo.png}
+  \caption{Circuito basato sul Diodo.}
+  \label{fig:diodo}
+\end{figure}\\
+Un altro esempio è quello che sfrutta diodi (Figura \ref{fig:diodo}), supponiamo l'esistenza di un generatore di corrente costante e un diodo sensibile alla temperatura, misuro il potenziale, e si nota che il potenziale (data la stessa corrente) cambia in base alla temperatura.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/piezoelettrico.png}
+  \caption{Effetto Piezoelettrico.}
+  \label{fig:piezoelettrico}
+\end{figure}
+Per misurare invece la pressione di solito si usa l'effetto piezzoelettrico, nel quale comprimo lungo un certo asse un cristallo (che deve essere non centro simmetrico), e questa compressione genera un impulso elettrico (Figura \ref{fig:piezoelettrico}), questo materiale misura non l'intensità della pressione ma solo la variazione quindi può misurare le vibrazioni.
 
 
-\end{document}
+\end{document}\vspace{-0.5cm}

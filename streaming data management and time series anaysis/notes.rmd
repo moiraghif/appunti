@@ -794,6 +794,7 @@ Per la formula LEGO basta concatenare i vettori mettendo uno sopra l'altro, ment
 ## Filtro si Kalman
 La forma state space serve per il filtro di Kalman, che è un algoritmo ricorsivo che fa 2 passi:
 $a_{t|s} = \mathbb{P}[\alpha_t|y_1,...,y_s]$ sotto iptosi di Gaussianità è anche il valore atteso condizionato (predittore ottimale) quindi il mio valore atteso $\alpha_{t|s}$ diventa la proiezione del vettore di stato al tempo t con dati i noti fino ad s (oss: può essere sia nel presente che nel futuro). Abbiamo inoltre l'incertezza data dalla matrice di varianza covarianza degli errori $P_{t|s} = \mathbb E [(\alpha_t - a_{t|s})(\alpha_t - a_{t|s})^T]$.
+Nell'equazione $a_{t|s} = \mathbb{P}[\alpha_t|y_1,...,y_s]$ al variare di $s$ abbiamo queste tre categorie:
 
 - Se $t>s$ è caso di forecast
 - Se $t=s$ è una stima a tempo reale è chiamato filter
