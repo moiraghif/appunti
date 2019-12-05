@@ -1,6 +1,10 @@
 % !TeX spellcheck = it_IT
 \documentclass[11pt, twocolumn]{article}
 
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage[dvipsnames]{xcolor}
@@ -956,7 +960,129 @@ Un altro esempio è quello che sfrutta diodi (Figura \ref{fig:diodo}), supponiam
   \caption{Effetto Piezoelettrico.}
   \label{fig:piezoelettrico}
 \end{figure}
-Per misurare invece la pressione di solito si usa l'effetto piezzoelettrico, nel quale comprimo lungo un certo asse un cristallo (che deve essere non centro simmetrico), e questa compressione genera un impulso elettrico (Figura \ref{fig:piezoelettrico}), questo materiale misura non l'intensità della pressione ma solo la variazione quindi può misurare le vibrazioni.
-
-
-\end{document}\vspace{-0.5cm}
+Per misurare invece la pressione di solito si usa l'effetto piezzoelettrico, nel quale comprimo lungo un certo asse un cristallo (che deve essere non centro simmetrico), e questa compressione genera un impulso elettrico (Figura \ref{fig:piezoelettrico}), questo materiale misura non l'intensità della pressione ma solo la variazione quindi può misurare le vibrazioni.\\
+%26/11
+Esiste anche l'effetto piezoresistivo, che è un conduttore costituito da strati un materiale piezoresistivo es. Silicio (speciale), applicando pressione ottengo un impedenza che varia le sue caratterische a seconda della pressone, ottengo quindi un misuratore di pressione, che a differenza dei materiali piezoelettrico misura anche la pressione costante.
+Bisogna tenere conto che i valori della variazione sono molto bassi quindi si usano dei circuiti ponte che fanno da amplificatore (Figura \ref{fig:amplifier}).
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/amplifier.jpg}
+  \caption{Esempio di un amplificatore di segnale.}
+  \label{fig:amplifier}
+\end{figure}\\
+Vi sono anche dei circuiti che misurano lo spostamento fisico di una membrana (ad es. per misurare la pressione dell'atmosfera), di solito vi è un pezzo ferro magnetico collegato alla membrana e il suo movimento affligge il campo magnetico, quindi dalla varianza del campo magnetico riesco a capire la pressione ma purtroppo non è molto precisa come misurazione.\\
+Un modo meno naive di misurare la pressione di una membrana è sfruttare l'effetto Hall (Figura \ref{fig:hall}), nel quale un magnete è collegato alla membrana e il suo movimento affligge la differenza di potenziale su un materiale conduttore inserito in un circuito in cui gira una corrente, calcolando la variazione del potenziale (creata dal cambiamento del percorso degli elettroni) si può calcolare il potenziale.
+L'effetto Hall è molto più generico e può funzionare in molti altri casi in cui bisogna rilevare un movimento fisico di una componente.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/hall.png}
+  \caption{Effetto Hall.}
+  \label{fig:hall}
+\end{figure}\\
+Una delle categorie molto importanti dei sensori di pressione sono i sensori di ruomore es. microfono.\\
+Uno dei sensori di prossimità più usati sono i sensori di touch screen che non si basa sulla pressione, sotto lo schermo vi sono degli elettrodi, e generano dei campi magnetici, e il touch è la variazione del campo magnetico (cambio la capacità, infatti è detto capacitive sensor).\\
+I sensori di prossimità possono essere:
+\begin{myitemize}
+  \item Attivo: Si basano essenzialmente su ultrasuoni invio un ultrasuono e una perturbazione/variazione della sua risposta indica un movimento, altri meccanismi attivi sono basati su laser, nel caso di laser le risposte e variazioni sono estremamente precise, che possono indicare anche la distanza dell'oggetto;
+  \item Passivo: Si basano principalmete su infrarossi.
+\end{myitemize}
+Un altro settore molto importante della sensoristica è quella riguardante il movimento, quindi ho bisogno di conoscere l'accelerazioni e rotazioni nei 3 assi.
+IMU (Interial Measurement Unit) è un dispositivo in grado di darmi informazioni riguardanti l'accelerazione e rotazione nei 3 assi, che quindi misurano la forza che si esercita su una massa nelle tre direzioni ortogonali.\\
+I MEMS (Mirco-Electro-Meccanincal-Systems) sono dei sistemi che scalano su dimensioni estremamente ridotte i principi dei sensori macroscopici, e normalmente sono integrabili in maniera particolarmente efficaci.\\
+Il sensore dell'accelerazione è fatto come nella Figura \ref{fig:accel}, costituito da 3 dischi dove il disco A e B ricevono corrente alternata e nel caso del movimento del disco C cambia la capacità del condensatore formato e quindi il potenziale e misurando la variazione del potenziale si ottiene la forza di accelerazione in una certa direzione. 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=2.5cm]{imgs/accelaration.png}
+  \includegraphics[width=\linewidth,height=2cm]{imgs/rotation.png}
+  \caption{Sensore per misurare l'accelerazione e rotazione.}
+  \label{fig:accel}
+\end{figure}\\
+Il sensore di rotazione non è un giroscopio poiché è di difficile implementazione.
+Il sensore è formato da una massa sospesa da due molle come nella Figura \ref{fig:accel}, se provo a farlo ruotare lungo il suo asse ortogonale, mentre è in oscillazione, lui genera una forza opposta.
+Siccome deve oscillare mi serve un materiale piezoelettrico a cui fornisco corrente elettrica alternata.
+A questo punto misurando queste forze riesco a misurare la coppia di forza con sensori di pressione. Mi servono 3 due questi per ciascuna direzione.
+\subsection{Sensore Ideale e Reale}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/ideal-real.jpg}
+  \caption{Differenza Segnale Reale ed Ideale.}
+  \label{fig:ideal_real}
+\end{figure}
+Nel sensore ideale dato il fenomeno X, che assume valori tra $0$ e $X_{\max}$, l'output varia linearmente in maniera continua con X.
+Nel sensore reale è molto diverso dal sensore ideale:
+\begin{myitemize}
+  \item Lo zero non esite;
+  \item La risposta non è lineare con X;
+  \item La misurazione ha livelli di sensibilità quindi certe variazioni dell'input non vengono percepite dal sensore (si può pensare un grafico fatto a gradini in base alla sensibilità);
+  \item La linea della variazione non è unica, è influenzata da fattori esterni es. temperatura;
+  \item esistono drift temporali, quindi la stessa misura può cambiare nel tempo.
+\end{myitemize}
+Visto che sono troppi problemi si prova ad eliminarne alcuni usando processi di compensazione e calibrazione, dopo aver corretto il più possibile rimane comunque imperfetto ma bisogna sapere quanto non si è corretto.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=3cm]{imgs/compensazione.png}
+  \caption{Es. di una compensazione}
+  \label{fig:compensazione}
+\end{figure}\\
+Assumiamo che ci sia una variazione della misura in base alla temperatura come indicato nella Figura \ref{fig:compensazione}, allora creo una variazione opposta a quella del disturbo ottenendo una misura compensata, chiaramente la compensazione non potrà essere identica al disturbo, di solito viene accettato sotto un livello di variabilità.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/calibrazione.png}
+  \caption{Errore prima della Calibrazione.}
+  \label{fig:calibrazione}
+\end{figure}\\
+La calibrazione serve per rendere la caratteristica lineare, ciò può essere effettuato attraverso una trasformazione che può essere anche a livello analogico ma è molto più facile a livello digitale.
+\subsubsection{Caratteristiche dei Sensori}
+Le caratterische dei sensori possono essere statiche e dinamiche.\\
+Le caratteristiche statiche sono le caratteristiche che non dipendono dal tempo o dipendono debolmente dal tempo e sono:
+\begin{myenumerate}
+  \item Accuratezza: Scarto percentuale fra la misura e il valore reale, intuitivamente l'errore;
+  \item Precisione: La varianza delle misure (dello stesso ambiente), quanto sono vicine le misurazione, intuitivamente il Rumore;
+  \item Rumore: Fluttuazione della misura (sia interno che esterno);
+  \item Stabilità nel tempo: Assenza di drift nel tempo, cioè il comportamento del sensore non cambia nel tempo; 
+  \item Risoluzione: Minimo valore di variazione dell'input che produce variazione dell'output attenzione non è per forza identico al numero delle cifre decimale che lo strumento dà, ma non le cifre significative non possono essere superiori alla risoluzione; 
+  \item Selettività: Insensibilità del sensore alle interferenze;
+  \item Campo di misura: Il campo può essere (di solito lo è) più ristretto rispetto al range della quantità misurata (termometro con Hg non può misurare $-157^oC$), posso anche restringere il campo laddove la misura è più affidabile;
+  \item Isteresi: Differenza tra la misurazione in crescita e in decrescita, per un esempio grafico vedi Figura \ref{fig:ideal_real}.
+\end{myenumerate}
+Le caratteristiche dinamiche sono le caratteristiche dipendenti dal tempo, quando inizio una misura devo aspettare un minimo prima della misurazione corrispondente.
+Assumiamo un sensore calibrato, pensando la X come un impulso, l'output si avvicina a X, l'avvicinamento può essere di ordine 0 (immediato, sistema ideale), ordine 1 in maniera esponenziale ($y=X(1-e^{-t/\tau}$) e ordine 2 invece è più complesso ed è dato dalla soluzione di un equazione differenziale del secondo ordine (Vedi Figura \ref{fig:First_sec}).\\
+Nel primo ordine $\tau$ decide il tempo dopo il quale il segnale raggiunge il valore necessario, mentre nel caso del secondo ordine il segnale oscilla attorno al valore (in maniera periodica) prima di rientrare in una banda di variabilità accettabile.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/first_sec.jpg}
+  \caption{First vs Second order Response.}
+  \label{fig:First_sec}
+\end{figure}\\
+Riassumendo le cause che rendono una misura imperfetta sono:
+\begin{myenumerate}
+  \item Intrinseche: poco accurato, non preciso, non compensato ecc.;
+  \item All'ambiente: ambiente rumoroso, con interferenze, si può risolvere con sensori più precise e costose o usando più sensore e combinare le misure da più sensore oppure isolando il sensore il più possibile;
+  \item Guasti: Danneggiamenti accidentali, sovraccarichi - problema è può mandare dati a caso;
+  \item Imprecisione nei metadati: es. impreciso nel dare l'istante di misurazione, 
+  \item Rete: es. può non trasmettere dati per causa di un guasto.
+\end{myenumerate}
+\section{Reti}
+Le reti sono 
+\textbf{a pacchetto}: In questo caso l'informazione è fatta a blocchi con un etichetta detta header, che contiene l'informazione controllo.
+Questi reti usano il concetto di \textbf{protocollo}, che è un insieme di definizione che descrive il formato dei dati, sequenze logiche e infine i tempi (che serve in caso di timeout di un messaggio).\\
+Questi protocolli a pacchetto sono fatti \textbf{a strati}: tutte le funzioni che fanno funzionare la rete sono tante e complicate, è estremamente difficile avere una visione completa di tutto, se tutto fosse scritto in un unico blocco, correggere i bug diventerebbe impossibile e i test diventerebbero enorme. Il livello più basso è quello fisico, la stratificazione della rete può essere vista (in maniera molto alta) come:
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/network.jpeg}
+  \caption{Strati della rete.}
+  \label{fig:Network}
+\end{figure}\\
+Il livello più basso lavora su bit, il data link permette dei definire i pacchetti, lo strato della rete vede la rete nel suo complesso quindi riesce a capire i percorsi migliori ecc. Il trasporto invece virtualizza la rete per renderla più affidabile, l'applicazione invece serve per utilizzare la rete.\\
+I protocolli usati sono diversi quando si usa l'internet normale e l'internet per la sensoristica.
+Ad es. per internet si usa HTTP per le applicazione, TCP o UDP per trasporto, IP per la Rete e Ethernet (802.3) o WiFi (802.11) per il Data Link, mentre per la sensoristica non posso spesso usare questi protocolli perché richiede molte risorse, ad esempio per Data Link si può usare BLE (Bluetooth Low Energy), ZigBee, W-MBUS (per le misurazioni), LoRa, PLC e per il trasporto si usa MTTP, CoAP, WebSockets.\\
+%% 27/11
+Osserviamo che diversi protocolli implicano diverse strutture fisiche (e logiche), ad esempio le reti locali possono  cui avere diverse strutture fisiche, infatti può essere un bus in cui la rete è in comune a tutti i terminali che prendono turni per parlare, la strutture fisica è associabile a quella di un cavo elettrico.
+Questa topologia è diversa da quella a stella nel quale ogni terminale parla solo con il Gateway.\\
+Si ha una divisione in 2 macrocategorie per le reti geografiche:
+\begin{myitemize}
+  \item Diretto: In questo caso il terminale deve essere più sofisticato per poter comunicare, avviene solo il semplice trasferimento di informazione in questo caso.
+  \item Gateway: In questa situazione posso avere reti locali che usano protocolli diversi e il gateway si preoccupa di tradurli in protocolli starndard, il gateway può fare anche cose in più es. salvare messaggi, risparmiare energia chiudendo alcuni canali non utilizzati ecc. 
+\end{myitemize}
+A livello locale invece si può dividere la rete nelle due famiglie: Wired e Wireless.
+\end{document}
