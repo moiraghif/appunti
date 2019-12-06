@@ -1084,5 +1084,44 @@ Si ha una divisione in 2 macrocategorie per le reti geografiche:
   \item Diretto: In questo caso il terminale deve essere più sofisticato per poter comunicare, avviene solo il semplice trasferimento di informazione in questo caso.
   \item Gateway: In questa situazione posso avere reti locali che usano protocolli diversi e il gateway si preoccupa di tradurli in protocolli starndard, il gateway può fare anche cose in più es. salvare messaggi, risparmiare energia chiudendo alcuni canali non utilizzati ecc. 
 \end{myitemize}
-A livello locale invece si può dividere la rete nelle due famiglie: Wired e Wireless.
+A livello locale invece si può dividere la rete nelle due famiglie: Wireline e Wireless.
+\subsection{Rete Wired}
+\textbf{Una rete Wired} è costituita da fili fisici che raggiungono il terminale, questi collegamenti possono essere in rame o fibra ottica.\\
+Una delle famiglie più importante costituita dalle reti ethernet (per gli amici 802.3), queste reti nascono per le reti tra i calcolatori e l'obiettivo è sempre stato quello di costruire reti ad alte prestazioni per la comunicazione a grandi velocità e tempo di risposta molto elevate.
+Oggi le velocità arrivano a velocità anche molto elevate.\\
+La rete ethernet non è pensata per i bassi consumi e il cablaggio costa molto perché i cavi sono di un qualità molto alta.\\
+In uno dei tantissimi standard per l'ethernet vi è uno un pelino più speciale: \textbf{PoE}(Power Over Ethernet), se si ha ethernet organizzata sul rame, si può usare questo collegamento per trasmettere sia dati che potenza elettrica dai 25 ai 90W, questo mi permette con un unico cavo raggiungere un terminale collegandolo e alimentandolo.\\
+Un cavo ethernet in rame è fatto da doppini (coppie di fili di rame arrotolati), questi doppini sono molto simili ai cavi telefonici ma sono di un qualità molto più elevata.
+I fili vengono fatti come doppini perché in questo modo diventa immune  alle interferenze esterne, ma se vengono avvolti con la stessa frequenza riescono a parlare tra di loro molto bene (``auto interferenza'') quindi si usano passo di intrecciamento diverso.\\
+Il PoE serve per fare la Power Line Comunication \textbf{PLC}, il problema è che i fili sono antenne (non intrecciate) quindi si accoppiano molto facilmente, l'idea per risolverlo è molto semplice, si prende il collegamento già esistente in casa e un condensatore che fa passare alcune frequenze, ma questo non era facilmente realizzabile per moltissimo tempo perché richiede molta potenza calcolo (che oggi abbiamo) per il Digital Signal Process sopra il Power Line.\\
+Quando si parla di Power Line ci sono due mondi diversi:
+\begin{itemize}[wide,noitemsep,topsep=0ex]
+  \item Narrow Band: Sono protocolli che trasmettono pochi bit al secondo (5-10 kbps), che vanno benissimo per applicazioni di misurazione(metering), ha due canali A e C, che sono due bande riservate dove il canale A va da 3 a 95 kHz e il canale C va da 125-150 kHz.
+  Questi due canali hanno utilizzo diverso il canale A viene usato per le applicazioni di misurazione utilizzata dal gestore per le fatturazioni mentre il canale C può essere utilizzato come canale secondario che va all'utente per diventare applicazione controllo.
+  Questi canali vengono usati per collegare tanti contatori elettrici a un punto di raccolta dell'informazione delle misurazioni.
+  Questo protocollo è governato da un accesso a contesa (CSMA/CA). 
+  \item Broad Band: ci sono degli standard che si chiama home plug, che permettono di trasferire a velocità elevate, sono pensati per lavorare in contesto limitato.
+  Sostanzialmente 3 versioni: 1.0 (velocità $<100$Mbit/s), AV ($<200$Mbit/s) e AV2 ($<1$Gbit/s). 
+\end{itemize}
+Un altro standard è \textbf{BACNET}: importante in uno specifico settore del riscaldamento e condizionamento aria, va dal livello fisico a quello logico/applicativo, a livello fisico assomiglia a un doppino telefonico.
+\subsection{Rete Wireless}
+Premessa: Segnale radio è molto diverso dal segnale fisico, ad esempio il segnale radio si attenua di più del segnale fisico, perché la potenza del segnale decresce come $\frac{1}{r^2}$, inoltre l'antenna può essere omnidirezionale o direzionale, e non posso utilizzare certi protocolli, ma grazie alle antenne direzionali riesco a bloccare le interferenze provenienti da altre direzioni, che è anche uno svantaggio perché devo sapere la direzione dove girare l'antenna, inoltre la capacità di attraversare gli ostacoli dipende dalla frequenza, le onde con frequenza bassa non hanno problemi ma quelli con alta frequenza sì, quindi maggiore velocità voglio maggiore sarà il disturbo che essa riceve.\\
+Non si possono usare tutte le frequenze che si vogliono, le frequenze possono essere licenziate o non licenziate dallo stato.
+Le frequenze licenziate sono date in concessione ai concessionari come Radio, TV e Cellulari, essi pagano allo stato per ottenere il diritto esclusivo su una banda di frequenza tutelata per legge (un altro tizio non può usare la loro frequenza).
+Mentre le frequenze non licenziate sono libere ma non possono essere usate a caso, ma solo da dispositivi adeguati e certificati in base al paese nel quale sono.
+Es. le frequenze a 2.4 GHz che vengono usate anche dai dispositivi WiFi, ma non posso modificare/costruire uno strumento che usa questa frequenza perché il dispositivo deve essere certificato, poiché ci sono dei limiti di potenza che questi dispositivi possono avere, altri esempi di frequenze non licenziate sono: 169 MHz e 868 MHz.\\
+Abbiamo un altro problema: se trasmettiamo a 2.4 GHz ho canali molto grandi ($\approx 20$MHz) perché non si può trasmettere a una frequenza così precisa, mentre quando trasmetto a basse frequenze la larghezza dei canali si riduce moltissimo e quindi non posso avere HD.\\
+I bit al secondo sono quanti bit trasmetto su una certa frequenza, nel caso di una frequenza di trasmissione proporzionale alla frequenza fondamentale dell'onda (di solito 2$\times$) e qua anche in caso di perdita di potenza riesco a capire quanti il dato se era 1 o 0, se invece prova a trasmettere sulla stessa frequenza più informazione es. 11, 10, 01, 00 al posto di 1 e 0 in caso di perdita di potenza non riesco a capire l'informazione quindi aumento la velocità ma rischio di perdere informazione.\\
+Protocolli della \textbf{Rete Wireless} sono Rete Locale Radio (\textbf{WiFi} per amici 802.11), è l'equivalente wireless di ethernet, cioè pensata per interconnettere terminali ad alte velocità.
+Il primi WiFi arrivava fino a 11 Mbit/s, l'ultimo standard di WiFi permette di raggiungere teoricamente 10 Gbit/s.\\
+Non era pensato per un protocollo per risparmiare energia ma con la nascita degli smartphone si cambia il protocollo per consumare meno energia.
+Comunque il WiFi consuma tanto per essere usato insieme a sensori isolati alimentati a batteria, però in dispositivi come frigo, lavatrice che già consumano tanta energia, non hanno problemi ad avere sensori che comunicano usando WiFi.\\
+Il WiFi è specificato a due frequenze 2.4 e 5 GHz.
+Un altro protocollo che funziona sempre su 2.4 GHz e adattato per il mondo della sensoristica è il \textbf{Bluetooth}.
+Ha un meccanismo di utilizzo delle risorse che è molto peculiare, al posto di usare una banda di frequenze fissa ne utilizza 79 diverse ogni uno di questi a 1 MHz, e salta da una banda all'altra, questo tipo sistema è detto FHSS (Frequency Hopping Spread Spectrum).
+Il vantaggio è che il trasmettitore sta su una banda per un tempo molto piccolo riducendo gli effetti del rumore causati su una certa banda.\\
+Di solito ogni applicazione che lo usa è molto specifica es. audio con cuffie o macchine, si possono anche comunicare dati generici quindi nel mondo della sensoristica.
+Ma per entrare in questo mondo della sensoristica usa un sotto standard detto Bluetooth Low Energy, consuma molto poca energia usando solo 40 canali a 2MHz che quindi trasmette 1 Mbit/s.
+Una delle applicazioni più importanti sono i così detti iBeacon, sono dei sistemi che irradiano intorno fornendo la sua posizione nello spazio, e quindi permettono di determinare la prossimità di un terminale da un certo posto, viene usato principalmente per delle applicazioni di proximity marketing (esempio IKEA), ultimamente viene usato anche per applicazioni domestiche.
+Un altro protocollo molto importante è \textbf{ZigBee}, 
 \end{document}
