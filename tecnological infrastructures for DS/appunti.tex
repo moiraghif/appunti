@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath}
+
 
 \newenvironment{myitemize}
 { \begin{itemize}[topsep=0ex]
@@ -1122,6 +1124,107 @@ Ha un meccanismo di utilizzo delle risorse che è molto peculiare, al posto di u
 Il vantaggio è che il trasmettitore sta su una banda per un tempo molto piccolo riducendo gli effetti del rumore causati su una certa banda.\\
 Di solito ogni applicazione che lo usa è molto specifica es. audio con cuffie o macchine, si possono anche comunicare dati generici quindi nel mondo della sensoristica.
 Ma per entrare in questo mondo della sensoristica usa un sotto standard detto Bluetooth Low Energy, consuma molto poca energia usando solo 40 canali a 2MHz che quindi trasmette 1 Mbit/s.
-Una delle applicazioni più importanti sono i così detti iBeacon, sono dei sistemi che irradiano intorno fornendo la sua posizione nello spazio, e quindi permettono di determinare la prossimità di un terminale da un certo posto, viene usato principalmente per delle applicazioni di proximity marketing (esempio IKEA), ultimamente viene usato anche per applicazioni domestiche.
-Un altro protocollo molto importante è \textbf{ZigBee}, 
+Una delle applicazioni più importanti sono i così detti iBeacon, sono dei sistemi che irradiano intorno fornendo la sua posizione nello spazio, e quindi permettono di determinare la prossimità di un terminale da un certo posto, viene usato principalmente per delle applicazioni di proximity marketing (esempio IKEA), ultimamente viene usato anche per applicazioni domestiche.\\
+Un altro protocollo molto importante è \textbf{ZigBee} (per amici 802.15.4), è una rete con organizzazione gerarchica nata per la domotica con velocità minore di 250 kbit/s, quindi per velocità basse.
+Nella gerarchia vi sono due tipi di nodi: reduced functional (RF) e full functional (FF).
+Un nodo FF è un nodo che può raccogliere un numero anche molto grande di collegamenti con nodi RF, il nodo RF è nodo che comunica sporadicamente con il nodo FF quindi è una comunicazione di tipo asincrono e utilizza un meccanismo di comunicazione simile a WiFi (CSMA/CA) ma è diverso dal WiFi perché WiFi si aspetta periodicamente dei beacon, nel caso di ZigBee quando la stazione RF ha qualcosa da trasmettere lui trasmette, quindi può rimanere fuori comunicazione anche per periodi molto lunghi.
+Il CSMA/CA funziona nel modo seguente quando devo trasmettere mi metto in ascolto e se il canale su cui devo trasmettere è libero, trasmetto, in caso di conflitto si entra in un backoff esponenziale randomico: rinvia il segnale dopo un numero casuale di secondi in un range pre-determinato, in caso di conflitti continui il range viene aumentato.
+Vi è la possibilità di usare oltre a CSMA/CA anche dei slot dedicati per ascolto, nel quale dopo un contatto viene garantito uno slot temporale per le successive connessioni.\\
+ZigBee usa il canale a 2.4 GHz, tuttavia lo si può usare anche a 868 MHz  e questo si riesce usando ZWave, di solito 868 MHz si usa solo per applicazioni locali es. apertura del cancello.
+Di solito l'architettura è a centro stella, il centro stella traduce dei protocolli e apre delle sessioni, quindi il centro stella può fungere da bridge quindi la comunicazione avviene dal RF al FF centro, ma deve avere degli indirizzi di rete, ma usare IP diventa pesante perché ogni header pesa 20 bytes, quindi si usa un protocollo IP semplificato: 6LoWPAN.
+Otteniamo due possibili configurazioni: se trasmettiamo dati al gateway che poi pensa a rimaneggiarli oppure i dati possono attraversare il gateway in maniera trasparente usando 6LoWPAN.\\
+\textbf{Wireless M-BUS} è il protocollo più diffuso per il metering di cui quelli più importanti sono quelli del Gas, Acqua e Elettricità.
+Usa due bande di frequenze 868 MHz e 169 MHz (169 ha più penetrazione rispetto a 868), è pensato per il basso consumo ed per sistemi alimentati a batteria purtroppo molto antico come protocollo.
+Ha un architettura Master-Slave dove lo slave è il meter e il master è il Gateway che raccoglie i dati.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=3cm]{imgs/mbus.png}
+  \caption{Invio/Ricezione segnale MBUS.}
+  \label{fig:mbus}
+\end{figure}\\
+Vi sono due modi per comunicare indicati anche nella Figura \ref{fig:mbus}, nel primo lo slave ha una misure e manda un messaggio SND-NR (Send No Response), dopo il quale lo slave apre una finestra di ricezione nella quale aspetta un eventuale messaggio dal master, se non riceve risposta entra in sleep, e questo sleep è di durata imprevedibile finché non decide di mandare un altro messaggio, nel secondo caso invece il master risponde al messaggio dello slave mandando un messaggio SND-UD (Send User Data) che sono un riscontro oppure dati di configurazione es cambio precisione, frequenza campionamento ecc. a cui lo slave risponde con un ACK (acknowledgement) e va in sleep.
+Bisogna notare che in questo schema qui non vi è una garanzia che il messaggio/dati siano stati trasmessi, il fallimento potrebbe essere avvenuto a qualunque punto e nessuno si accorge dell'errore.\\
+La velocità dipende dai canali, ne caso di 169 MHz vi sono due bande a 12,5 kHz che trasmette fino a 4.8 kbit/s e 50 kHz fino a 19.2 kbit/s, mentre nel caso di 868 MHz le velocità variano dai 32 ai 100 kbit/s.
+Osserviamo che le comunicazione sono molto sicuro perché uso circa 3 frequenze per trasmettere un bit.
+I messaggi sono della seguente forma, dove DIF sono le cifre decimali e VIF è il valore:
+\[
+\begin{bmatrix}
+  \text{DEV TYPE} & \text{temperature}\\
+  \text{DIF} & \text{2-digit}\\
+  \text{VIF} & \text{<valore>}
+\end{bmatrix}
+\]
+Tutto il messaggio è dell'ordine di $4|8|20$ bits quindi è molto compatto, il gateway che riceve il messaggio diventa lui il terminale che ragiona su questa misurazione, in un messaggio possono esserci più misurazioni, questo serve per la compensazione del fatto che qualche dato potrebbe essersi perso in precedenza.
+\subsection{Rete Geografica}
+La rete fissa geografica ha delle prestazioni elevate e supporta protocolli anche molto sofisticati, le tipologie delle reti di accesso pubbliche sono:
+\begin{myitemize}
+  \item Rame  - ADSL2+
+  \item Fibra - FTTB/FTTH 
+  \item Misto - FTTC
+\end{myitemize}
+La rete radio mobile è l'alternativa senza filo della rete fissa, la rete radio mobile sono una sequenza di architetture e tecnologie:
+\begin{myitemize}
+  \item 2G: GSM introdotta nel 1990, era pensato per la voce e sms;
+  \item 3G: UMTS introdotta nel 2000, inizialmente andava a 384 kbit/s ma successivamente nel 2007 con la nascita del primo iPhone si raggiungono a decine di Mbit/s;
+  \item 4G: LTE/LTE-A introdotta nel 2010, teoricamente raggiunge centinaia di Mbit/s come velocità;
+  \item 5G: ?N/D? verrà introdotta nel 2020, teoricamente si potranno raggiungere anche 10 Gbit/s;
+\end{myitemize}
+Con il 5G ci si accorge che con le reti mobile stavamo andando in una direzione opposta a quella che ci serve, essenzialmente è stato definito un triangolo di 3 possibili direzioni di evoluzione:
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/5g.png}
+  \caption{Tre triangoli dello sviluppo.}
+  \label{fig:5g}
+\end{figure}\\
+Il vertice in alto è eMB (Enhanced Mobile Broadband) nel quale si vuole passare da 100 Mbit/s a 10 Gbit/s, il vertice a sinitra è MMTC (Massive Machine Type Communication) nel quale si vuole aumentare 100 volte il numero di dispositivi che comunicano tra di loro, la terza direzione è URLLC (Ultra Reliable Low Latency Communications) nel quale si vuole ridurre la velocità di risposta da 10 ms a 1 ms e che sia sempre in piedi.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=3cm]{imgs/2g.png}
+  \caption{Architettura rete 2G.}
+  \label{fig:2g}
+\end{figure}\\
+Per le reti 2G, abbiamo un pezzo a circuito collegato ad un antenna che si collega a due componenti, uno serve per gestire la localizzazione e l'altro per raccogliere pacchetti di dati che si aggiunta dopo, e serviva perché il primo pezzo era un po' debole.
+La SIM è essenziale per identificare il cliente e il suo contratto e permette anche di poter cambiare il terminale.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=3cm]{imgs/3g.png}
+  \caption{Architettura rete 3G.}
+  \label{fig:3g}
+\end{figure}\\
+Il 3G è una versione turbo charged della rete 2G, quindi ha un architettura molto simile ma ogni funzione è migliorata parecchio e la rete è stata resa più sicura.\\
+I problemi sono che hanno iniziato a usare il 2G per far comunicare i vari dispositivi come caldaie, macchine ecc. perché i dispositivi 2G costavano poco, ma il 2G come tecnologia è ormai morta e le frequenze del 2G devono essere buttate via e usarli per il 5G, ma il problema sono i terminali che usano il 2G sono rimasti sopratutto in contatori e cambiarli costerebbe tantissimo quindi è sarà più facile riciclare le frequenze del 3G.\\
+La SIM è un oggetto fisico che è proprietà dell'operatore e contiene una certa quantità di dati come il numero di telefono, dati di sicurezza e alcune applicazioni.
+Nel mondo dell'IoT vi sono tre problemi sostanziali con le SIM:\\
+Se devo cambiare l'operatore devo cambiare le SIM presenti in tutti i dispositivi IoT poiché le SIM sono proprietà dell'operatore.\\
+La SIM è un oggetto fisico quindi in casi di macchinari che generano vibrazioni continue finisce per deteriorare subito per via dei contatti meccanici.\\
+Il problema di Roaming, in caso un azienda compra  tantissimi contratti Wind ma dov'è posizionato il sensore il segnale non arriva deve richiedere Roaming permanente ad un altro operatore ma perché questo operatore debba servire un cliente non suo permanentemente quando il roaming dovrebbe essere una cosa temporanea.\\
+E qua nascono due soluzioni La e-SIM e la embedded SIM. 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/esim.png}
+  \caption{E-SIM.}
+  \label{fig:esim}
+\end{figure}\\
+La e-SIM è una SIM logica/virtuale, in questo caso si tende a distinguere la smart card dall'operatore, la SIM diventa un'applicazione che ha tre profili diversi (Figura \ref{fig:esim}):
+\begin{myitemize}
+  \item Provisional Profile: Questo profilo serve solamente a un particolare operatore radio mobile che fa il configuratore, manda tutti i dati necessari all'operatore per accendere la Operational Profile;
+  \item Operation Profile: E' il profilo caricato dal Provisional Profile che funziona come la SIM, e questo operatore può essere cambiato sempre da provisioning provider;
+  \item FallBack Profile: E' una sorta di piano di Backup, viene usato non caso Operation Profile non può essere usato risolvendo così il problema di Roaming, poiché basterebbe usare un altro operatore come Backup nel caso di assenza di segnale ecc.
+\end{myitemize}
+Ci sono anche delle embedded SIM, sono delle SIM che si saldano sui dispositivi risolvendo le problematiche meccanici, la soluzione migliore sarebbe un integrazione delle e-SIM con le embedded SIM.
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=3cm]{imgs/4g.png}
+  \caption{Architettura rete 4G.}
+  \label{fig:4g}
+\end{figure}\\
+Il 4G è una rete totalmente a pacchetto quindi c'è il solito Gateway e siccome è totalmente su IP anche lo voce passa su IP.
+Per la comunicazione Machine2Machine vi sono due protocolli:
+\begin{myitemize}
+  \item LTE-M: vengono tagliati all'interno delle bande disponibili delle fette di banda dedicate a questo tipo di comunicazione, funziona a 1.4 MHz e trasmette fino a 1Mbit/s (molto cauto come approccio) qua il guadagno è nella sensibilità dello strumento.
+  Ha un power budget di 160 dB, facendo una prova in basement si vede che trasmettendo a 800MHz la percentuale di trasmissione è 99\%, e a 2600MHz la percentuale di trasmissione è 86\%;
+  \item NarrowBand IoT: ha più potenza disponibile di 164dB ma raggiunge velocità fino 250 kbit/s quindi è pensato per il basso consumo, qua nella prova basement abbiamo con 800MHz il 99\% e con 2600MHz 92\%;
+\end{myitemize}
+Questi protocolli è che sono stati costruiti come modifiche agli oggetti già esistenti (radio mobile) quindi si possono usare insieme alla rete già esistente (non devo cambiare la rete) ma ereditano il problema della comunicazione asincrona quindi una parte dell'energia si spreca per rimanere sincronizzati.\\
+Una delle soluzione è la creazione delle Reti ad Hoc a bassisimo consumo e grandissima penetrazione solo per queste applicazioni, queste reti si chiamano LPWAN (Low Power Wide Area Network) di cui una delle applicazioni più importanti sono LoRaWAN (Long Range WAN), grazie a questo protocollo si passa da 3 anni usando NB-IoT a 10 anni usando LoRa.
 \end{document}
