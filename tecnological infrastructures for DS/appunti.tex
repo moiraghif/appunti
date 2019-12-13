@@ -1305,5 +1305,47 @@ PING e PONG servono solo per controllare se l'interlocutore è ancora vivo.
 Il segnale CLOSE serve per chiudere la connessione totalmente.\\
 Il modello che vogliamo raggiungere (per il mondo della sensoristica) è quello di tipo publisher-subscriber (fino ad adesso abbiamo visto client-server) nel quale qualcuno pubblica dei dati e sono disponibili a tutti quelli che fanno subscribe, che viene raggiunto con il protocollo MQTT.
 % 11/12
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/mqtt.png}
+  \caption{L'architettura del protocollo MQTT.}
+  \label{fig:mqtt}
+\end{figure}\\
+MQTT sta nello strato applicativo, e sostituisce HTTP, a differenza di HTTP non c'è collegamento tra chi crea e chi riceve gli eventi.
+È un modello di tipo publish subscriber, e per diventare subscriber si un messaggio nel quale viene comunicata la gerarchia a cui si vuole sottoscrivere, la gerarchia viene indicata con questo formato: gerarchia/sotto-gerarchia/sotto-sotto-gerarchia... preceduto da SUBSCRIBE.
+Un subscriber può anche essere un publisher.  
+Il Broker sta in mezzo ai publisher e subscriber, non è un sistema di code, lui semplicemente distribuisce i messaggi ai subscriber quindi non si preoccupa della persistenza dei dati ricevuti dal publisher ma si può creare una connessione persistente (con QoS indicati dopo) nel quale l'ultimo messaggio viene memorizzato relativo a un certo topic.
+MQTT funziona sopra TCP/TLS (TLS è un protocollo di trasporto sicuro basato su TCP) che a loro volta funzionano su IP, ma sono stati studiati MQTT su diversi protocollo es. MQTT su ZigBee o su UDP (sempre su IP). \\
+I messaggi di MQTT possono essere divisi nei seguenti gruppi:
+\begin{myenumerate} 
+\item CONNECT, CONNACK e DISCONNECT: sono messaggi tra publisher e broker per connettersi e creare una connessione applicativa;
 
+\item SUBSCRIBE, SUBACK, UNSUBSCRIBE, UNSUBACK: sono messaggi tra subscriber e broker per connettersi, con SUBSCRIBE viene specificato anche l'argomento nella gerarchia; 
+
+\item PUBLISH per pubblicare i dati e gli eventi, può avere dei flags, ad es. per indicare la Quality of Service: QoS=0, è solo un publish senza nessun controllo, mentre usando QoS=1 il PUBLISH viene risposto con il PUBACK, infine QoS=2 è una catena di 4 messaggi, PUBLISH/PUBREC/PUBREL/PUBCOMP, osserva QoS=0 è at most once,  QoS=1 è al least one e infine QoS=2 è exactly once; 
+
+\item PINGREQ, PINGRES per controllare lo stato di vita. 
+\end{myenumerate} 
+Il messaggio CONNECT contiene un LAST WILL \& TESTAMENT es. EMERGENCY/SHUTDOWN nel caso di anomalia e il LAST WILL \& TESTAMENT viene inviato a tutti i suoi subscriber, è un meccanismo molto utile nel caso vi è un subscriber che non fa altro che controllare se i publisher stanno bene. 
+Questo sistema presuppone che il broken sia molto roubusto, i broker devono stare in vita per una maggiore affidabilità quindi si possono avere due Broker, il che non è così complicato, poiché allinearli sono è così difficile visto che deve persistere pochi dati.\\  
+Il messaggio MQTT è molto leggero, il control header pesa 1 byte, il packet lenght varia tra 1-4 byte in base alla lunghezza del messaggio:
+\begin{verbatim}
+    |Control|Packet|Message|Data|
+    |Header |Length|       |    |
+\end{verbatim}
+Questo protocollo è più di tipo middleware cioè sembra più un protocollo di messaggistica (ma non totalmente ad esempio non il servizio delle code dei messaggi) che applicativo (è applicativo per forza visto che sta sopra il protocollo di trasporto.
+E' il protocollo più diffuso nel mondo del IoT.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=4cm]{imgs/coap.png}
+  \caption{L'architettura del protocollo CoAP.}
+  \label{fig:coap}
+\end{figure}\\
+Un altro protocollo \textbf{CoAP}, è un protocollo che è mappabile su un sottoinsieme di HTTP, in particolare usa comandi GET, PUT, POST, DELETE di HTTP, è pensato per ambienti IoT.
+CoAP è pensato per viaggiare sopra UDP, opzionalmente si può inserire, tra UDP e CoAP, uno strato di sicurezza come DTLS.
+Più tardi è stato mappato su quasi tutti i protocolli di trasporto tra cui anche SMS.\\
+Gli endpoint in CoAP possono comunicare direttamente con dei server e tra di loro senza passare per un Gateway, poiché è intercambiabile con HTTP, questo è il vantaggio di usare le istruzioni si traducono in HTTP direttamente.
+Il meccanismo CoAP non è completamento Publish Subscriber, ma esiste una pseudo-subscription usando opzione Observe con il comando GET, che osserva e manda ogni aggiornamento di uno stato al richiedente.
+E' diverso dal MQTT , infatti l'Observe è più debole visto che non posso ricevere aggiornamento su più oggetti (sotto directory della directory osservata) a meno di specificare a mano tutti gli oggetti offerti come servizio.
+%ultima lezione
 \end{document}
