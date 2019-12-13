@@ -1226,5 +1226,84 @@ Per la comunicazione Machine2Machine vi sono due protocolli:
   \item NarrowBand IoT: ha più potenza disponibile di 164dB ma raggiunge velocità fino 250 kbit/s quindi è pensato per il basso consumo, qua nella prova basement abbiamo con 800MHz il 99\% e con 2600MHz 92\%;
 \end{myitemize}
 Questi protocolli è che sono stati costruiti come modifiche agli oggetti già esistenti (radio mobile) quindi si possono usare insieme alla rete già esistente (non devo cambiare la rete) ma ereditano il problema della comunicazione asincrona quindi una parte dell'energia si spreca per rimanere sincronizzati.\\
-Una delle soluzione è la creazione delle Reti ad Hoc a bassisimo consumo e grandissima penetrazione solo per queste applicazioni, queste reti si chiamano LPWAN (Low Power Wide Area Network) di cui una delle applicazioni più importanti sono LoRaWAN (Long Range WAN), grazie a questo protocollo si passa da 3 anni usando NB-IoT a 10 anni usando LoRa.
+Una delle soluzione è la creazione delle Reti ad Hoc a bassisimo consumo e grandissima penetrazione solo per queste applicazioni, queste reti si chiamano LPWAN (Low Power Wide Area Network) di cui una delle applicazioni più importanti sono LoRaWAN (Long Range WAN), grazie a questo protocollo si passa da 3 anni usando NB-IoT a 10 anni usando LoRa.\\
+LPWAN: Non funzionano su bande licenziate quindi non sono gestite da operatori radio mobili e non sono mobili e non prevedono una copertura come le reti radio mobili, es. quello di Vodafone, un esempio è Sigfox pensata per consuma bassissimi e gittata lunga (30-50km) quindi ricoprono le zone con poche antenne, velocità è circa centinaia di bit al giorno, serve di solito per il metering molto famosa in Francia, problema è che è totalmente un sistema chiuso, tutto proprietario. 
+Un esempio ancora più rilevante è LoRa(LoRaWAN) che è un tecnologia di accesso(LoRa) (la parte di WAN invece riguarda la rete) ed è proprietaria (patentata da Sentex) e Sentex fabbrica i chip e li vende e lo si può attaccare dove voglio ma a differenza di Sigfox si conoscono le specifiche di LoRa.\\
+LoRaWAN funziona su bande non licenziate tipicamente 868MHz, quindi è sottoposta a certe regolazioni che varia a seconda dei paesi, in generale a 868MHz vi sono diversi canali, che possono essere usati se la massima potenza è sotto 20dBm (e 165 dB).
+Ci sono anche delle limitazioni sulle duty cycle, quindi  non posso trasmettere costantemente.\\
+LoRa usa CSS (Chirp Spread Sprectrum) per la modulazione(come metto i bit sul canale radio) che si basa su un'onda come indicata nella Figura \ref{fig:chirp} (come un uccello che chirpa), il segnale cresce di frequenza fino al massimo (Upchirp) oppure il contrario (Downchirp), usando upchirp e downchirp permette di codificare il messaggio:
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/chirp.png}
+  \caption{Chirp effect on a wave.}
+  \label{fig:chirp}
+\end{figure}\\
+Alcuni tipi di spread spectrum sono:
+\begin{myitemize}
+\item FHSS (del BT), qua ho una banda a disposizione e questa viene divisa in molto sottobande e salto tra queste bande durante la trasmissione;
+\item DSSS(Direct Sequence Spread Spectrum) viene usato da alcuni standard WiFi;
+\item OFDM che assomiglia molto a FHSS (ho tanti sottocanali), ma qua trasmetto a tutti i sottocanali contemporaneamente a bassa velocità;
+\item CSS (chirp) usata in LoRa e alcune applicazioni radar.
+\end{myitemize}
+Le varie modulazioni servono i problemi specifici, ad es. per evitare disturbi su alcuni canali sia FHSS che OFDM vanno bene, mentre il CSS è una modulazione estremamente efficiente e robusta.\\
+LoRa è molto efficiente dal punto di vista del basso consumo e grande penetrazione, infatti consuma $32mA$ durante trasmissione e $1\mu A$ durante lo sleep, per confrontare con NB-IoT dove abbiamo $120mA$ durante trasmissione e $5\mu A$ durante lo sleep.
+Questo è dovuto al fatto che LoRa è un protocollo totalmente asincrono, quindi poco durante lo sleep, mentre NB deve periodicamente comunque aggiornare il terminale della sua presenza (sincronizzazione).
+
+
+In LoRa vi sono 3 protocolli per accedere alla rete che sono delle opzioni sempre crescente che si possono applicare al protocollo base:
+\begin{myitemize} 
+\item Protocollo (A) usato per i battery operated Sensors: manda un segnare poi attende un tempo $t_1$ per una risposta su un canale e dopo su un altro canale apre un'altra finestra per la ricezione dando così due possibili istanti nei quale può ricevere un riscontro;\\
+\includegraphics[width=\linewidth,height=1.4cm]{imgs/loraMAC1.png}
+\item Protocollo (B) usato per i battery powered actuator: questo consuma di più perché deve ricevere dei comandi e implementarli in un determinato periodo (sorta di deadline), quindi lui usa un canale un frame di 128 secondi con dei beacon (per la sincronizzazione) e riserva per un determinato terminale alcuni slot;\\
+\includegraphics[width=\linewidth,height=1.2cm]{imgs/loraMAC2.png}
+\item Protocollo (C) usato per i mains powered actuator: qui non c'è un problema di consumo perché viene alimentato dalla rete elettrica e quindi usa due canali il primo è simile al Protocollo (A), mentre il secondo canale riceve in tutte le fasi in cui non è attivo il canale 1 (infondo deve risparmiare il più possibile quindi chiude il canale se è attivo il primo).\\
+\includegraphics[width=\linewidth,height=1.4cm]{imgs/loraMAC3.png}
+\end{myitemize} 
+Chiaramente il caso A è il caso teoricamente meno consumante, e anche in pratica la differenza di consumo è netta.\\
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=\linewidth,height=5cm]{imgs/loraArch.jpg}
+  \caption{L'architettura di una LoRaWAN.}
+  \label{fig:loraArch}
+\end{figure}\\
+Nell'architettura LoRaWAN (Figura \ref{fig:loraArch}) un sensore può vedere più GateWay e trasmette il messaggio su tutte i gateway che vede, in questo caso tutti gateway mandano lo stesso messaggio al Network Server che poi procede ad eliminare le eventuali copie, quindi c'è una totale libertà e flessibilità nel mettere i gateway, chiaramente aumentando i gateway aumento la probabilità della ricezione del messaggio (Availability).
+Dopo il Network Server possono esserci delle Application server.
+Per la sicurezza abbiamo due livelli inscatolati: il primo dal end device (sensore) al network server e il secondo livello che è end to end dal end device al application server  ma siccome le application server sono libere di essere quello che vogliono, quindi il secondo livello di sicurezza è lasciata per un implementazione libero ad esempio si può usare MQTT. 
+\section{Trasporto}
+Il livello del trasporto virtualizza la rete per le applicazioni, assumiamo di avere due terminali e in mezzo a loro un host, i pacchetti trasmessi (segmenti) sono solo visibili alle applicazioni per i livello di rete sono solo dei pacchetti con qualche dato.\\
+I due protocolli più usati per il trasporto di base sono UDP e TCP, dove UDP è un protocollo molto elementare e fa pochissime cose: prende un pacchetto dalle applicazioni e lo porta alle direttamente alle applicazioni del terminale ricevente attraverso le porte (che devono essere rese visibili), dopo aver ceduto controlla se tutto è andato bene, inoltre non crea una sessione end to end per la trasmissione del messaggio ma considera ogni messaggio a se stante.  
+Sopra UDP si possono aggiungere dei protocolli un esempio è UDP + RTP (Real Time Protocol) per gestire applicazioni che trasmettono in tempo reale, UPD capisce se c'è un errore ma non ritrasmette in caso di errore. 
+L'header di un pacchetto UDP è abbastanza leggero - 8 byte.\\
+TCP è un protocollo alternativo completamente diverso, in cui viene creata una sessione di trasporto (collegamento di trasporto) all'interno del quali i dati sono ordinati.
+TCP ragiona sul flusso di byte e verifica che ci sia un ordinamento e in caso di mancanza di dati può ricostruire il messaggio con il meccanismo della ritrasmissione.
+L'header di un protocollo TCP pesa 20 byte. 
+Gestisce anche la congestione della rete, adattandosi alle potenzialità della rete cercando di saturare le sue capacità.\\
+Il protocollo TCP funziona così:
+All'inizio per aprire una connessione il terminale A con B invia il segnale di SYN e se B vuole aprire la connessione rinvia un segnale SYN-ACK e poi c'è una terza conferma da parte di A che invia un segnale ACK a B dopo di che inizia una sessione di trasporto, anche la chiusura funziona in 3 fasi, nel quale B invia un segnare FIN a A che viene risposto o con un ACK o ACK-FIN (se non chiudere o chiudere) e poi B rinvia un segnale ACK. 
+Per la trasmissione invece a ogni invio di dato, riceve un ACK in caso di recezione con successo del dato e in caso non riceve ACK per un certo periodo rinvia il dato, questo meccanismo diventa sempre più complesso con presenza/invio di tanti dati.
+E in caso di morte di uno dei terminale, il terminale vivo continua a mandare i pacchetti senza ricevere riscontro fino ad entrare in timeout e la connessione si chiude.\\
+Si può notare che il TCP non va bene per invio dei dati della sensoristica (tranne eccezioni come le telecamere) visti i tantissimi controlli della qualità, ma anche UDP non va bene perché in realtà non mi aggiunge nulla, il vantaggio di UDP è che riesco a usarlo per indirizzare e distinguere tante applicazioni o per un supporto per applicazione che richiedono trasmissione in tempo reale. \\
+Il livello superiore del trasporto (applicazione) può usare HTTP serve per fare uno scambio di oggetti (Documenti): 
+\begin{myitemize} 
+  \item HTTP 1.1 è un protocollo client-server del 1997, dove il client apre una conessione TCP con il server e poi trasmette il documento, alcune delle operazioni sono GET, HEAD, POST, PUT, DELETE.
+Questo protocollo è molto verboso nel senso che l'header dei pacchetti è grande e questo perché: 
+  \begin{myenumerate} 
+    \item Le richieste sono in ASCII (es. GET), che già pesa abbastanza pesante (circa 1 kbyte); 
+    \item  Inoltre si aggiungono delle opzioni alla richiesta che occupa anche esso memoria;
+    \item E' pensata per reti che non hanno problemi di consumo.
+  \end{myenumerate} 
+Il vantaggio è che HTTP è implementato ovunque, quindi non richiede la costruzione di né il client né del server. 
+
+  \item HTTP 2.0 (2015) Il vantaggio è che si passa dal modello richiesta-risposta del HTTP 1.1 al modello richiesta-tante risposte (usando il meccanismo di server push), es. mandami aggiornamento sul cambiamento di uno certo stato (di solito si usava JavaScript nel 1.1 mentre in 2.0 entra a far parte del protocollo stesso). 
+Inoltre nel 2.0 vi possono essere dei stream indipendenti (in HTTP 1.1 si usavano dei pipeline), ma la cosa più importante è che nel HTTP 2.0 esiste una compressione del header, risolvendo il problema del overhead pesante.
+\end{myitemize} 
+Esiste un modo per avere TCP senza usare HTTP (poiché HTTP può essere molto pesante per il mondo della sensoristica), un modo è scrivere a mano il codice che lo fa sicuramente è un modo molto efficiente ma esiste il concetto di WebSockets (RFC 6455) che usa HTTP in una maniera molto particolare, usa HTTP GET usando l'opzione `Upgrade: WebSockets', che cambia il protocollo passando da HTTP a WebSockets, la risposta contiene la stringa `Switch Protocol'.
+Il vantaggio è che è compatibili con tutto ciò che è compatibili con HTTP (cioè tutto), WebSockets è un stream TCP end-to-end su cui vengono solo trasmessi bytes su pacchetto con l'overhead che è costruito con un opCode e campo lunghezza, il campo lunghezza è un campo variabile.
+I messaggi che opCode può mandere sono DATA, PING, PONG, CLOSE.
+Questo overhead ha una dimensione minore di 2 byte se la lunghezza è inferiore a 126 byte, a questo overheader segue un campo MASK (che pesa 4 byte) che serve per evitare che chiunque possa imitare un messaggio e il campo DATI.
+PING e PONG servono solo per controllare se l'interlocutore è ancora vivo.
+Il segnale CLOSE serve per chiudere la connessione totalmente.\\
+Il modello che vogliamo raggiungere (per il mondo della sensoristica) è quello di tipo publisher-subscriber (fino ad adesso abbiamo visto client-server) nel quale qualcuno pubblica dei dati e sono disponibili a tutti quelli che fanno subscribe, che viene raggiunto con il protocollo MQTT.
+% 11/12
+
 \end{document}
