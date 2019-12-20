@@ -1,8 +1,34 @@
 \documentclass[11pt, a4page]{article}
 
+%%%
+%%% PROGETTO (max 3 punti + 1 per la lode):
+%%%
+%
+% tokenization
+% normalization
+% stemming
+% stop words
+% (altro nel preprocessing)
+%
+% rappresentazione (embeddings/TF-IDF)
+%
+% classification (e.g. topics)
+% clustering
+% summarization
+%
+% valutazione (metrica adeguata)
+%
+%
+%%%
+%%% CONSEGNA:
+%%%
+% Tutto il materiale, completo di README.txt su come installare e far
+% girare il progetto; report e presentazione (powerpoint).
+% Da consegnare 7 giorni prima dell'esame scritto.
+
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-\usepackage{babel}
+\usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
@@ -11,7 +37,7 @@
 \usepackage{enumitem}
 \usepackage{chngcntr}
 \counterwithin*{section}{part}
-
+\setcounter{tocdepth}{1}
 
 \title{\textbf{Text Mining}}
 \author{}
@@ -46,7 +72,7 @@ Examples of Text Mining are \textit{Sentiment} and \textit{Opinion Analysis}; an
 \textit{Recommender Systems} are largely used by web-shopping platforms: they have revolutionized shopping and adverts suggesting useful information to users (positive filtering) or avoiding contents (negative filtering), analyzing text content.
 Users are profiled by \textit{Avatar}, their digital representations.
 
-Text Analytics is used in healthcare to reduce the number of \textit{fake news} on the web.\\
+Text Analytics is used in healthcare to reduce the number of \textit{fake news} on the web.
 \textit{Knowledge Graphs} are used to go behind traditional Text Mining techniques and have a better understanding of the text and improving the model.
 
 The particularity of Text Mining is that the information in the text is not hidden but well written, and humans can grasp it with no difficulty (but for text length); Text Mining is largely used to analyze in a semi-automatic way lot of unstructured documents for decision making.
@@ -360,5 +386,254 @@ Now the idea is to give a better user experience: the search process considers o
 In a search engine the query is usually not written in a formal language (but in a natural language): conditions have to be extrapolated from the text to reduce number of results.
 Information can be extrapolated from supports of different kinds: there are a lot of technical (due to different formats) and semantic (information is synthesized and represented preserving its meaning) problems.
 
-A search engine is composed by two aspects (off-line and on-line): in the first part (offline) documents have to be indexed (and updated regularly by sub-parts of the archive) and represented in a formal way so that query can be done; than in the online part, the query is parsed to represent it in a logical language and than the match is made, according to classic set theory or using a similarity index on a vector space (cosine similarity, proximity and so on).
+A search engine is composed by two aspects (off-line and on-line): in the first part (offline) documents have to be indexed (and updated regularly by sub-parts of the archive) and represented in a formal way so that query can be done; than in the online part, the query is parsed to represent it in a logical language and than the match is made, according to classic set theory (binary matching) or using a similarity index on a vector space (cosine similarity, proximity and so on, that permit a fuzzy match).
+
+\section{Indexing}
+Documents have to be indexed to retreive them easily: this process extracts a small portion of text that will be used to search a document.
+This process is extremely resource expensive, so are implemented in a particular way to optimize the process.
+Each document is characterized by a different set of terms weighted in a different way: documents are indexed to reduce the dimensionality of the matrix so that the number of terms will be lower than the number of documents.
+The resulting matrix is inverted so that documents are on columns and terms on rows: retrieving a file is just as easy as checking in which document the term is present.
+The data structure used in practise is a dictionary in which the key is the term, the value is a list of tuples \verb|<document; weight>| so that looking for a document will not scan useless documents.
+
+\section{Matching}
+The query the user ask to the search engine is represented in a formal way to compare it with the (indexed) database.
+To speed up the process, the database is inverted (inverted-index) so that documents are indexed basing on terms, ordered by relevance.
+
+\subsection{Boolean matching}
+Boolean matching is based on set theory:
+\begin{equation*}
+  R(d_j) := \{t_i | w_{ij} = 1\} \hspace{15pt} w_{ij} \in \{0, 1\}
+\end{equation*}
+the document is a set of terms, so relevance is modeled as a binary property (a document is either relevant or not, it is not possible to rank documents).
+A query is formally represented by boolean operations like \verb|AND|, \verb|OR| or \verb|NOT|.
+Using the inverted representation the matching process returns a sub-set of documents that satisfy user's query.
+Evaluations order of operations must be clearly specified because a different order can produce different results.
+In general operations are a priority order pre-imposed in the representation process.
+
+The evaluation is make using a recursive algorithm on a binary tree (the formal representation of the query) starting from leaves, with some optimizations that evaluate longer list for lasts (to save memory).
+
+This matching model is fast and simple, but it is not able to produce a ranking of results: in some cases it is not sufficient for accomplish the task.
+
+\subsection{Vector Space matching}
+To solve problems of the Boolean model, the Vector Space model is presented: documents  are presented as vectors (defined by a word-embedding algorithm) in a space with a number of dimensions equal to vocabulary size $|V|$.
+Documents are represented using some indices (like presence-absence of the term, ($\log$ or normalized) frequency, $tf$, $tf\text{-}idf$ value...) as vectors (points) in this space.
+In general, are used:
+\begin{align*}
+  w_{t, d} &= \frac{tf_{t,d}}{\displaystyle \max_{t_i \in d} tf_{t_i, d}} \\
+  w_{t, d} &= \frac{tf_{t, d}}{|d|} \\
+  w_{t, d} &= \begin{cases}
+    1 + \log(tf_{t, d}) \hspace{10pt} &tf_{t, d} > 0 \\
+    0 & otherwise
+    \end{cases}
+\end{align*}
+Also the query is presented as a vector, so that the matching problem is just as easy as compute similarity between vectors.
+
+\newpage
+\part{Web Search}
+%% TODO: translate
+La struttura del web è un grafo (struttura dinamica costituita da nodi $V$ e archi $E$) orientato.
+Si definiscono \textit{componenti strettamente connessi} un insieme di nodi  raggiungibili in una direzione e nell'altra ($A \to B$ e $B \to A$): astraendo la costruzione del grafo alle sue componenti strettamente connessi, si ottiene la struttura del Web.
+Si ottiene così una struttura \textit{a cravattino}, cioè che comprende una \textit{componente sorgente} (da cui si può accedere facilmente ad altre pagine ma a cui è difficile accedere), una \textit{componente gigante} (che costituisce la maggior parte dei documenti) e una \textit{componente pozzo} (a cui è facile accedere ma è difficile tornare indietro); a queste si aggiunge un rumore di documenti isolati o collegati in modo casuale.
+
+La ricerca può essere fatta tramite \textit{browsing} (sfruttando i collegamenti tra le pagine), link diretto (se si conosce l'indirizzo preciso) o tramite motori di ricerca.
+La prima generazione di \textit{search engines} usava solamente la frequenza delle parole all'interno dei documenti; poi si sono considerati anche i link all'interno delle pagine.
+Con l'arrivo del \textit{semantic web} si prende in considerazione anche la necessità di ricerca dell'utente.
+L'indicizzazione delle pagine web è fatta esplorando in modo automatico il grafo per trovare i documenti.
+È possibile quindi trovare i documenti solamente se sono stati indicizzati: la maggior parte del web non è indicizzato, appartenendo al \textit{deep web}; esempi sono pagine dinamiche (il cui contenuto cambia in base all'input), ad accesso limitato (tramite CAPTCHAs o login) o semplicemente perché non linkato.
+Il processo di \textit{gathering} è effettuato o in modo manuale dai manutentori dei siti che informano i gestori dei motori di ricerca o in modo automatico da \textit{crawlers}, bot che esplorano il web esplorando tutti i link delle pagine partendo da istituzioni ricche di link (url noti popolari usato come \textit{seed set}).
+Durante il processo sono salvati anche dei meta-dati, rispettando però la politica di \textit{politeness} (generalmente scritte in \verb|robots.txt|), linee guida fornite all'esterno quali latenza e periodicità delle richieste.
+L'esplorazione è fatta con un algoritmo simile a quello di \textit{Dijkstra} senza però arrivare ad un punto preciso (si ferma quando non ci sono più link da seguire).
+Si da maggiore priorità a link di siti diversi da quello di partenza per poi esplorare nel dettaglio i singoli siti.
+Il processo deve essere effettuato di continuo aggiornando periodicamente le pagine.
+
+Le pagine restituite da un motore di ricerca non sono indicizzate solamente in base alla rilevanza ma anche in base ad altre caratteristiche temporali o qualitative.
+
+\section{\textit{PageRank}}
+È l'algoritmo che ha reso famoso Google: l'idea è quella di simulare il processo di navigazione dell'utente attribuendo un punteggio alle pagine in base alla facilità che si ha a raggiungere la pagina e ai collegamenti di questa.
+Il \textit{rank} è dato dalla formula:
+\begin{equation*}
+  PR(p) = Kd + K(1 - d)\sum \frac{PR(p_i)}{C(p_i)}
+\end{equation*}
+dove $K$ è un fattore di normalizzazione, $d$ dipende dal sistema, $PR(p)$ è il numero di pagine collegate a $p$ e $C(p)$ è il numero di collegamenti che partono da $p$.
+Il processo è effettuato in modo ricorsivo per ogni pagina fino alla convergenza.
+L'autorità di una pagina dipende quindi non solo da come è stata trovata (cioè dalle pagine a lei collegate) ma anche dalle pagine raggiungibili.
+Le pagine autorevoli sono chiamate \textit{hub pages}.
+
+\section{HITS}
+Rispetto alla query dell'utente, si considera come insieme di pagine reperite non solo
+
+\newpage
+\part{Recommender Systems}
+A \textit{recommender system} is a \textit{push} technology: it provides the user with contents without a query; it suggests other contents according to user's behaviour and previous queries.
+A good recommender system should not suggest common objects but unknown items that users might like.
+The system should consider user's feedback and not only contents that he or she had actually searched: a \textit{relevance score} is extracted during the retrieval process.
+In general the systems are based on \textit{Information Filtering}: contents are monitored producing data (virtually in real-time) that have to be filtered to inform the user.
+
+A recommender system can follow 3 main paradigms, but there can are also be hybrid approaches.
+Assumptions of a recommender system are that users rate and catalog items and that a person will not change tastes during time.
+
+
+\section{Collaborative filtering}
+In this architecture the user is clusterized and contents are suggested according to the belonging cluster (a not-seen content is presented if is appreciated in the cluster).
+This approach is based to data provided by users: to get more data, some indicators are stored (such as web-surfing behaviour) to improve the process, although the behaviour can be misunderstood.
+
+At beginning there are no user information: so he or she is forced to rate a set of items, demographic data are user to do some assumptions or a default set is presented.
+
+In this paradigms, an important part is to compute the \textit{user-item matrix}: the output is a numerical prediction that indicates if user will like a certain item or not.
+So a \textit{top-}$N$ list can be extracted.
+That matrix is a sparse matrix with users stored as rows and items as columns.
+
+Given a \textit{target user} $a$, an item $i$ not yet seen by $A$ is suggested after that procedure:
+\begin{itemize}[noitemsep]
+\item is extracted a subset of users $U_{a, i}$ similar to $a$ that have reted item $i$;
+\item a model (machine learning or an heuristics) is provided to compute a rating $\hat{r}_{a, i}$ for item $i$ according to $U_{a, i}$;
+\item if $\hat{r}_{a, i}$ is greater a certain value, $i$ is suggested to $a$.
+\end{itemize}
+
+The subset $U_{a, i}$ is extracted computing the \textit{Pearson correlation} $\varrho$ between ratings of $a$ and each other user $U_{a, i} = \{ b | \varrho_{a, b} \geq r \hspace{5pt} \forall b \in \text{Users} \}$.
+A common predicting function for $\hat{r}_{a, i}$ is:
+\begin{equation*}
+  \hat{r}(a, i) = \overline{r}_a + \frac{\sum_{b \in U_{a, i}} sim(a, b) \cdot (r_{b, i} - \overline{r}_b)}{\sum_{b \in U_{a, i}} sim(a, b)}
+\end{equation*}
+This process have scalability issues: number of users is much higher than number of items $U >> I$, so computing similarity between users can be very expensive.
+In addiction, operating with very sparse matrices, is very difficult to have a match between users.
+
+To respond to those problems, other approaches are used: for example, a \textit{item-item} matrix is computed, so that the prediction $\hat{r}_{a, i}$ is computed with the formula:
+\begin{align*}
+  sim(\vec{a}, \vec{b}) &= \frac{\sum_{u \in U}(r_{u, a} - \overline{r}_u)(r_{u, b} - \overline{r}_u)}{\sqrt{\sum_{u \in U}(r_{u, a} - \overline{r}_u)^2} \cdot \sqrt{\sum_{u \in U}(r_{u, b} - \overline{r}_u)^2}} \\
+  \hat{r}_{a, i} &= \frac{\sum_{p \in R_u} sim(\vec{p}, \vec{i}) \cdot r_{u, p}}{\sum_{p \in R_u} sim(\vec{p}, \vec{i})}
+\end{align*}
+where $R_u$ is the set of items rated by the user $u$.
+
+A machine learning model (traied on a subset of users) can be used to predict future ratings; this approach requires regular updating of the model.
+
+
+\section{Content-based filtering}
+The algorithm considers only features of all the items and the user profile (with contextual parameters): a similarity measure is than used to match the profile with items.
+This approach is not based on a community, so it works even with a few users.
+The content can be presented in a structured or unstructured way, and is used to compute the \textit{cosine similarity} $sim(\vec{i}, \vec{u})$ between user behaviour and item.
+
+Another simpler approach is to use a \textit{Nearest Neighbors} approach: given a set $I_a$ of items rated by the user $a$, the $k$ not-yet-seen nearest items $i \in (I - I_a)$ are presented to the user (according to cosine similarity).
+Users' rating can be also used as additional information to improve rating performance.
+
+
+\section{Knowledge-based filtering}
+This approach is similar to the previous one but products are stored in a \textit{knowledge base} that should improve the item embedding and filtering.
+
+
+\section{Hybrid approaches}
+
+\subsection{Monolithic}
+The algorithm that gives estimation of rating receives input from different sources of different nature (e.g. ratings, log of clicks and textual descriptions).
+So user profile is represented both as ratings and keywords.
+
+\subsection{Parallel}
+In this approach there are more than one recommender systems: each one returns a list of suggested items sorted by score; lists are than merged together in a new sorted list.
+
+\subsection{Pipeline}
+A recommender system yields a list of items that are filtered and sorted by a pipeline of other algorithm to obtain more accurate suggestions.
+This approach works well if algorithms used in the pipeline are different.
+
+\section{Evaluation}
+For a search engine, should be evaluated functionality (implementation is mathematically correct), \textit{efficiency} (how much time between a query and the results) and \textit{effectiveness} (how accurate and completed are results).
+
+\subsection{Effectiveness}
+A returned document is considered well included if is relevant, brings information about similar topics or can be used to reach other relevant documents.
+\textit{Precision} and \textit{Recall} are used to calculate effectiveness of a search engine, with a subset of documents labeled by users (non-labeled documents are considered always non-relevant).
+\begin{align*}
+  P &= \frac{\# \{relevant \wedge returned\}}{\#\{returned\}} \in [0, +1] \\
+  R &= \frac{\# \{relevant \wedge returned\}}{\#\{relevant\}} \in [0, +1]
+\end{align*}
+With a lot of documents, a high value of recall is not permitted (there are too much relevant document in the collection for the user), so the two measures are combined in \textit{f-measure}
+\begin{equation*}
+  f_1 = 2 \cdot \frac{P + R}{P \cdot R} \in [0, +1]
+\end{equation*}
+in addiction, there are non labeled documents that do not permit computing measures (\textit{recall} is particularly difficult due to number of documents).
+
+To overcome those limits, different approaches have been introduced that consider relevance as fuzzy concept or consider documents in order by ranking and not as sets.
+\textit{Precision}$_k$ and \textit{Recall}$_k$ are measures that consider the measure only for the first $k$ elements according to their relevance rank.
+\begin{align*}
+  P_k &= \sum_{i=1}^k \frac{r(i)}{k} \\
+  P_{average} &= \sum_{i=1}^{\#\{relevant\}} \frac{P_i}{i}  % \frac{1}{\#\{relevant\}}
+\end{align*}
+
+\newpage
+\part{Classification and Clustering}
+
+\section{Clustering}
+Documents are clustered using algorithms such as Doc2Vec to represent them on an embedding; the process should be based on a \textit{semantic web} approach to embed them according to their semantics; but to improve algorithm speed a frequency approach is used.
+
+After the embedding, algorithms are the same as numeric data: \textit{soft} (if a document can belong to more than one cluster, even with a belonging value) and \textit{hard} (each document belongs to one and only one cluster) clustering, \textit{hierarchical} or \textit{flat}.
+\newline
+
+With \textit{k-means} (the most used hard-flat algorithm), centroids are stored to cache clusters:
+\begin{equation*}
+  \vec{\mu}(\omega_i) = \frac{1}{|\omega_i|}\sum_{\vec{x} \in \omega_i}\vec{x}
+\end{equation*}
+where $\omega$ is the subset of elements belonging to the same $i$-th cluster.
+A new document belongs to the closer cluster (computing distance between document and centroids).
+
+Hierarchical clustering is less used due to computation needed: those algorithms starts with a number of clusters equal to number of documents to agglomerate them according to distance (method \textit{botton-up}) until all documents belong to the same cluster or vice versa (\textit{dop-down}).
+Splits and agglomerations can be decided in four ways: \textit{single links} (distance between two clusters $\omega_i$ and $\omega_j$ is equal to the lower distance between elements $dist(d_i, d_j)$: $sim(\omega_i, \omega_j) = \displaystyle \min_{d_i \in \omega_i, d_j \in \omega_j} dist(d_i, d_j)$), \textit{complete links} (same as previous one but with greater distance), \textit{average links} (same, but with average distance) or \textit{centroid links} (distance between two clusters $\omega_i$ and $\omega_j$ is equal to the distance between centroids $c_i$ and $c_j$).
+
+
+\subsection{Common issues}
+In Information Retrieval, documents are often represented as vectors (Doc2Vec) to improve query speed (only documents belonging to the same cluster are considered): if clusters are \textit{trivial} (too big or too small) the process impacts on process speed or accuracy.
+Cluster size should be decided according to user's behaviour: only a small part of results is checked, so big clusters are useless.
+In addition, number of clusters is decided by capillarity of results: using more clusters will yield more detailed results.
+
+\subsection{Evaluation}
+A good clustering algorithm should aggregates similar documents in the same cluster: two clusters should contain dissimilar documents.
+A clustering index is \textit{silhouette} $S$:
+\begin{equation*}
+  S(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}} \in [-1; +1]
+\end{equation*}
+where $a$ is the mean \textit{intra}-class distance and $b$ is the distance between $i$ and the closer other cluster.
+
+Another evaluation index is \textit{purity} $P$:
+\begin{equation*}
+  P(\omega_i) = \frac{1}{|\omega_i|}\max\{ \}
+\end{equation*}
+
+\textit{Rand Index} is the corresponding to \textit{accuracy} in the unsupervised family: a \textit{ground truth} is required.
+This approach considers in the same way a \textit{False Positive} and a \textit{False Negative}: to prevent this inconvenient, other indexes are used such as \textit{precision}, \textit{recall} or $F_1$.
+
+\newpage
+\part{Summarization}
+\textit{Text summarization} is the process to retrieval informations from a set of documents considering only sentences with a particoular meaning.
+Sumamrization is essential for humans to extract information from a huge amount of documents, but also for automatic algorithms that benefits in scalability parsing a lower number of documents.
+In \textit{question answering} algorithms, this process extracts the answare from a collection.
+
+Algorithms can be \textit{generic} if there are no assumptions about document content, \textit{domain specific} if it is built \textit{ad hoc} for the domain, or \textit{query-based} if is built interactivelly depending on a user query (as a search engine).
+An algorithm can simply retrieve sentence from the collection that are meaningfull; other more complex approaches generate a new text from the collection.
+
+Simplest approach to text summarization is to consider just first sentence or paragraph for each document to create an intermediate representation of the text; then this representation is ranked according to a scoring algorithm.
+Sentences with higher scores are selected as a summary.
+
+A more complex approach uses text representation to guess document topic, according to which sentences are scored.
+Scoring algorithms uses word frequencies to consider words that are both rare and significative.
+
+\section{Weightings}
+Word probability and tf-idf are used to create a representation of the document to the ranking algorithm.
+With \textit{SumBasic system}, ranking score is equal to the sum of probabilities $P(w)$ of all words composing the sentence.
+There is a penality for repetition given by elevating the probability of the word by its frequency.
+\begin{equation*}
+  score(\text{sentence}) = \sum_{w \in \text{sentence}} P(w)^{f(w)}
+\end{equation*}
+
+Tf-idf is also used to cluster documents and then computing centroids, from which are removed words under a certain number: the score is the similarity between document and its centroid.
+
+There are other approaches based on graphs: two sentences are linked toghether if they are similar: documents then are ranked according to number of links.
+Word semantic is ignored, but this approach can be used in multi-lingual contexts, if word spaces are aligned.
+\textit{LexRank} and \textit{TextRank} are the two most famouse algorithms using this approach.
+
+Global summary selection is a NP-hard problem: sentences are not parsed one by one, but just one time for the whole collection.
+
+\section{Evaluation}
+To evaluate a summarization algorithm, human evaluation is often used, but with an ideal summary available, ROUGE measures are used:
+\begin{itemize}
+\item ROUGE-n: $\frac{p}{q}$, where $p$ is the number of $n$-grams in common with ideal summary and the extracted one, divided by the number of $n$-grams of the reference summary;
+\item ROUGE-L: (\textit{Longest common subsequence}) represent the length of the longest subsequence of text in common between the two summaries, divided by the length of the summary; it considers also semantic aspects ignored by ROUGE-n;
+  \item ROUGE-SU: it is a hybrid approach that acts like ROUGE-L but consider also the possibility of words inside the sequence.
+\end{itemize}
 \end{document}
