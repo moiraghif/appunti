@@ -54,22 +54,17 @@
   On e-learning suggested books will be published.
 \end{abstract}
 \tableofcontents
-\newpage
 
-\part{Introduction and Text Representation}
-AI (Artificial Intelligence) was born in early '900: Machine Learning is only a small branch, started in '70s.
-Computational Linguistic and Statistics techniques are used as well.
-An Agent is considered \textit{intelligent} if can understand the semantics of its Ambient, in that case texts written by humans in a \textit{natural language}.
-To understand a text, the Agent must have a previous knowledge of the matter.
-Text Mining can be supported by Machine Learning but its techniques are more general and is built to emulate human behavior.
-Other used techniques are DMs (Distributional Meanings) algorithms over time.
+\part{Introduction}
+Text Mining can be supported by Machine Learning but its techniques are more general and is built to emulate human behavior: AI is born in early '900 and Machine Learning is only a small branch of it.
+An Agent is considered \textit{intelligent} if can understand the semantics of its Ambient: in this case texts written by humans in a \textit{natural language}; to understand a text, the Agent must have a previous knowledge of the matter.
 
 In 2004, Ian Witten (Weka project leader) published a paper titled ``Text Mining'' in which he reports that the first workshop was started in summer 1999: texts were processed in an automatic way to extract useful information.
 
 Text Mining generally denotes any system that analyzes large quantity of natural language texts and detects lexical or linguistic usage patterns in an attempt to extract probably useful information.
 
 Examples of Text Mining are \textit{Sentiment} and \textit{Opinion Analysis}; another example is \textit{Text Summarization} (the ability to write a \textit{snippet}, a short description of a text).
-\textit{Recommender Systems} are largely used by web-shopping platforms: they have revolutionized shopping and adverts suggesting useful information to users (positive filtering) or avoiding contents (negative filtering), analyzing text content.
+\textit{Recommender Systems} are largely used by web-shopping platforms: they have revolutionized shopping and adverts suggesting useful information to users (positive filtering) or avoiding contents (negative filtering), analyzing text.
 Users are profiled by \textit{Avatar}, their digital representations.
 
 Text Analytics is used in healthcare to reduce the number of \textit{fake news} on the web.
@@ -105,7 +100,9 @@ A \textit{predictive analysis} of a text can recognize or detect a concept withi
 \end{itemize}
 On the other hand, an \textit{exploratory analysis} automatically discover patterns and trends of interest, generally done with an unsupervised approach such as Text Clustering and Topic Modeling.
 
-\section{Text and documents}
+
+\newpage
+\part{Natural Language Processing}
 To analyze a text, it have to be written so that a computer can easily read it: it have to be processed by a process that starts with \textit{tokenization} (splitting text into units) and ends with the lexical analysis.
 Documents can be written in various ways, like free-format or in a semi-structured format (with descriptive and semantic metadata).
 
@@ -120,11 +117,11 @@ Both approaches do not consider words order, so ``John is quicker than Mary'' an
 In this phase of the process, the document is divided in small units, each one representing a concept.
 Each unit (or \textit{token}) is a sequence of characters with a semantic meaning (e.g. \textit{``tree''}, \textit{``San Francesco''} or \textit{``01/01/1970''}).
 A token does not always correspond to a single word.
-The task is difficult due to language-specific syntax and conventions (numbers, dates), but \textit{syntax-based} techniques have in general better performances.
+The task is difficult due to language-specific syntax and conventions (numbers, dates), but ad-hoc techniques achive in general better performances compared to more general ones.
 For example, in German word-splitting can boost performance in information retrieval tasks. 
 Arabic language is written right to left but have numbers written from left to right.
 Other oriental languages do not include spaces between words, so the tokenization process can return different solutions depending on the algorithm.
-Tokenization process depends also corpus and context(a social-media corpus contains a lot of abbreviations for example). \newline
+Tokenization process depends also on corpus and context (a social-media corpus contains a lot of abbreviations for example). \newline
 The process is made with a \textit{parser} based on specific rules (defined with regular expressions) or statistical methods (machine learning or conditional probability).
 
 \paragraph{Normalization}
@@ -157,7 +154,38 @@ A different approach to the bag-of-words is the $N$-gram construction: $N$ conse
 This approach is more resources-expensive but it can boost performance a lot.
 Than a vocabulary is used to extract meaningful sequence of words (instances) or to exclude stop words from the removing process (the word can be a stop word if used alone, but in that context it assumes a particular meaning).
 Data is not stored on a matrix (due to the amount of memory required) but is stored using dynamic data structures (such as dictionaries and lists).
-$N$-grams tries to consider word order, storing more information than Bag of Words but increases the vocabulary size.
+$N$-grams tries to consider word order, storing more information than Bag of Words but increases the vocabulary size. \newline
+
+Syntax is managed by two techniques: \textit{Part of Speech Tagging} (POS) and \textit{Entities Recognition}.
+The aim is to store identify and store positional information analyzing not $N$-grams but other data structures like pairs \verb|<word, position>|.
+
+\paragraph{Part of Speech Tagging}
+The aim of this procedure is to assign to each word its syntax role in the phrase.
+POS Tagging helps making the Entities Recognition process easier, and can be managed in different ways.
+In addition, it can used to define rules in Parsing, word generation/prediction (e.g. ``a possessive adjective is followed by a name''), and machine translation.
+
+To have a perfect precision, a \textit{lexicon} is required but it is not enough: it cannot manage ambiguity, that have to be solved following rules or use machine learning or statistical models such as hidden Markov models. An example of such ambiguity is: \\Time[V/N] Flies[V/N] like[V/Prep] an[Det] arrow[N].\\
+Statistic methodologies are based on conditional probability (from a given \textit{corpus}): probability of a category depending on the previous one is maximized to assign the output for the word.
+Rule based is in general more accurate but more time consuming because it often requires manual intervention.
+The process is built starting with short sentences to identify word categories and then longer sentences to identify rules.
+POS tagging does not scale well with the data, it becomes slower for large collections, a better choice is to use the $N$-grams. They form a Zipf's distribution, but their downfall is that they uses a lot of space.
+
+\paragraph{Entities Recognition}
+The idea is to extract entities from text: it is a Information Extraction task.
+In this way the text representation is enriched with more information about its meaning.
+To complete the task, two approaches are identified: rule-based and statistics-based.
+According to the first approach, rules are used to identify if a (sequence of) word(s) can be an entity name, the rules can use lexicons or build manually by trial and error or use Machine Learning; the second approach instead tries to maximize the probability with a statistical model such as an hidden Markov model.
+HMM can resolve ambiguity in a word using context, which is developed using a generative model of the sequence of words (a small number of previous words).
+\newline
+
+Usually, a message is sent by the sender and received by the recipient, who \textit{infers} \textit{morphological} information of the words, uses lexical rules (\textit{syntax}) to reconstruct the original message and compare it with its knowledge to understand its \textit{semantic} (what is explicit, and does not change with the context) and \textit{pragmatic} (what is implicit or context related).
+In the same way, a program have to rebuild the message and compare it whit a base of knowledge (usually modeled as a graph) to understand its content.
+
+Anaphoras and cataphoras are constructions complex that need to be managed correctly: to manage them, a \textit{parser} is used to build a tree of the sentence (according on a formal representation of the grammar).
+
+\paragraph{Relation Extraction}
+It identifies the relationships among named entities, this can be used to convert chunks of text into a more formal representation using first order logic structures.
+
 
 \section{Zipf's Law}
 Originally used in Economics and than applied to Computational Linguistics, Zipf's Law (1949) describes the frequency of an event in a set.
@@ -173,6 +201,8 @@ According to this Luhn's Analysis, words do not describe document content with t
 So frequencies have to be weighted according to their position: two cut-offs are experimentally signed to discriminate very common or very rare words.
 Most significant words are those between the two cut-offs, those that are neither common nor rare.
 It automatically generates a document specific stop list, the most frequent words.
+
+\section{Text Representation}
 Weights are assigned according to two factors: word importance in the document and document importance in the collection.
 These weights can be measured using two basic heuristics:
 
@@ -197,55 +227,27 @@ The Weights, called $tf$-$idf$ weights, are the product of the two indices:
   w_{t, d} = tf.idf(t, d) = \frac{tf_{t, d}}{\displaystyle \max_{t_i \in d} \{ tf_{t_i, d} \}} \cdot \log \Big(\frac{N}{df_t} \Big)
 \end{equation*}
 The weight $w$ increases with the number of occurrences within a document and with the rarity of the term in the collection; this procedure is the best-known to calculate wights from 1983 (G. Salton et al.).
-\newpage
 
-\part{Natural Language Processing}
-To have a better representation of a text, $N$-grams are used to include a bit of semantics.
-Syntax is managed by two techniques: \textit{Part of Speech Tagging} (POS) and \textit{Entities Recognition}.
-The aim is to store identify and store positional information analyzing not $N$-grams but other data structures like pairs \verb|<word, position>|.
-
-\paragraph{Part of Speech Tagging}
-The aim of this procedure is to assign to each word its syntax role in the phrase.
-POS Tagging helps making the Entities Recognition process easier, and can be managed in different ways.
-In addition, it can used to define rules in Parsing, word generation/prediction (e.g. ``a possessive adjective is followed by a name''), and machine translation.
-
-To have a perfect precision, a \textit{lexicon} is required but it is not enough: it cannot manage ambiguity, that have to be solved following rules or use machine learning or statistical models such as hidden Markov models. An example of such ambiguity is: \\Time[V/N] Flies[V/N] like[V/Prep] an[Det] arrow[N].\\
-Statistic methodologies are based on conditional probability (from a given \textit{corpus}): probability of a category depending on the previous one is maximized to assign the output for the word.
-Rule based is in general more accurate but more time consuming because it often requires manual intervention.
-The process is built starting with short sentences to identify word categories and then longer sentences to identify rules.
-POS tagging does not scale well with the data, it becomes slower for large collections, a better choice is to use the $N$-grams. They form a Zipf's distribution, but their downfall is that they uses a lot of space.
-
-\paragraph{Entities Recognition}
-The idea is to extract entities from text: it is a Information Extraction task.
-In this way the text representation is enriched with more information about its meaning.
-To complete the task, two approaches are identified: rule-based and statistics-based.
-According to the first approach, rules are used to identify if a (sequence of) word(s) can be an entity name, the rules can use lexicons or build manually by trial and error or use Machine Learning; the second approach instead tries to maximize the probability with a statistical model such as an hidden Markov model.
-HMM can resolve ambiguity in a word using context, which is developed using a generative model of the sequence of words (a small number of previous words).
-\newline
-
-Usually, a message is sent by the sender and received by the recipient, who \textit{infers} \textit{morphological} information of the words, uses lexical rules(\textit{syntax}) to reconstruct the original message and compare it with its knowledge to understand its \textit{semantic} (what is explicit, and does not change with the context) and \textit{pragmatic} (what is implicit or context related).
-In the same way, a program have to rebuild the message and compare it whit a base of knowledge (usually modeled as a graph) to understand its content.
-
-Anaphoras and cataphoras are constructions complex that need to be managed correctly: to manage them, a \textit{parser} is used to build a tree of the sentence (according on a formal representation of the grammar).
-
-\paragraph{Relation Extraction}
-It identifies the relationships among named entities, this can be used to convert chunks of text into a more formal representation using first order logic structures.
 
 \section{Statistical Language Models}
-A topic model is a unsupervised technique, very similar to a clustering. The topic model generates a probability distribution of the words in topics. 
-A language model is a formal representation of a specific language, it can be even used to profile a user based on his way of using a language (his specific language), which can be used as a recommender system.\\
-We assign a probability to a sequence of words, it can be used for:
+A topic model is a unsupervised technique, very similar to a clustering.
+The topic model generates a probability distribution of the words in topics.
+A language model is a formal representation of a specific language, it can be even used to profile a user based on his own writing-style, which can be used as a recommender system.\\
+A probability to a sequence of words can be used for:
 \begin{itemize}[noitemsep]
-	\item Machine Translation
-	ex. P(\textbf{High} winds tonight) > P(\textbf{Large} winds tonight) 
-	\item Spelling Correction
-	\item Speech Recognition
-	\item Summarization
+\item Machine Translation (ex. $P(\text{\textit{High} winds tonight}) > P(\text{\textit{Large} winds tonight})$)
+\item Spelling Correction
+\item Speech Recognition
+\item Summarization
 \end{itemize}
-We usually have a training sample (by Big Data), we need to learn a probability distribution P, a naive method would be given N training sentence $w_1 ... w_n$ take the sentences and count it: c($w_1 ... w_n$) and simply assign it's relative frequency as it's probability. A problem is that there are too many sentences.\\
-Another task is the prediction of an upcoming word: $P(w_t|w_1,..., w_{t-1})$, any model which computes any of the precedent is called a language model.\\
+With a train sample (of the magnitude of Big Data), a probability distribution $P$ can be extimed: beginning from a naive method with $N$ training sentence $w_1 ... w_n$ is computed the probability for each sentence $P(w_i)$ as its relative frequency.
+This approach altough does not works well due to number of possible sentences..
+Another task is the prediction of an upcoming word: $P(w_t|w_1,..., w_{t-1})$.
+Any model which computes any of the precedent is called a language model.\\
 The joint probability is computed relying on the chain rule of probability:
-$$ P(w_1,...,w_n) =P(w_1)P(w_2|w_1)\cdot ...\cdot P(w_n|w_1,...,w_{n-1}) $$
+\begin{equation*}
+P(w_1,...,w_n) =P(w_1)P(w_2|w_1)\cdot ...\cdot P(w_n|w_1,...,w_{n-1})  
+\end{equation*}
 A problem is that so many product could lead the numbers to decay pretty fast, so a solution is to consider the probability of one or two words preceding the word of which we are calculating the probability so we have the following bigram approximation:
 $$ P(w_i|w_1,...,w_{i-1}) \approx \prod_i P(w_i|w_{i-1}) $$
 or we could use the unigram model (the simplest):
@@ -279,8 +281,8 @@ Results changes depending on the training corpus and its domain; often pre-train
 The model is trained trying to represent a word knowing its context (all other words in a defined \textit{window} that set the size).
 So weights are taken counting how often a word co-occurs with another one.
 The number $f_{i.j}$ is the number of times that the word $w_i$ appears in the context $c_j$: it is used to compute $P(w_i)$:
-\begin{align*}  % todo
-  P(w_i) &= \frac{to}{do}
+\begin{align*}
+  P(w_i) &= \frac{f_{i.j}}{c_j}
 \end{align*}
 The raw frequency is not a good representation: more used weights are frequency, tf-idf or PMI (\textit{Pointwise Mutual Information}).
 \begin{equation*}
@@ -307,8 +309,7 @@ This approach counts how many times two words (a word $w$ and its neighbor $c$) 
 Algorithms to reduce the number of dimensions are LDA (\textit{Latent Dirichlet Allocation}), SVD (\textit{Single Value Decomposition}) or GloVe (\textit{Global Vectors for word representation}).
 
 SVD is not really used due to its complexity (eigen values and vectors have to be computed for a very large matrix).
-From a mathematical point of view, the matrix $X$ is decomposed in three matrices $U$ (the matrix containing eigen vectors of $X X^\prime$), $S$ (a diagonal matrix containing eigen values of $X^\prime X$) and $V$ (the inverse of $U$ % rivedere
-) so that $X = U S V^\prime$.
+From a mathematical point of view, the matrix $X$ is decomposed in three matrices $U$ (the matrix containing eigen vectors of $X X^\prime$), $S$ (a diagonal matrix containing eigen values of $X^\prime X$) and $V$ (the inverse of $U$) so that $X = U S V^\prime$.
 Eigen values $\sigma_i$ (the element $S_{i.i}$) represent the variability of $X$ captured by that eigen vector: removing them reduces the dimensions of the matrix.
 So, reducing dimensions of matrices to $k$ (the selected eigen value that captures the desired percentage of variability) reduces dimensions of the matrix $X$ minimizing information loss.
 In this way, words are mapped in a new space in which closer words are similar, but in which the original co-occurrence of words is lost (so it becomes a \textit{black-box}).
@@ -331,7 +332,7 @@ The problem is to find a valid $F$, but it can be simplified by
 In this way however weights $b$ are equally computed for both rare and frequent co-occurrences: the learning of vectors becomes a Least Squares Regression problem (with a weighting function):
 \begin{align*}
   J(\theta) &= \sum_{i, k = 1}^V f(X_{i.k})(w_i^\prime w_k + b_i + b_k - \log(X_{i.k}))^2 \\
-  J(\theta) &= \frac{1}{2} \sum_{i, k = 1}^V f(X_{i.k})(w_i^\prime w_k - \log(X_{i.k}))^2
+   &= \frac{1}{2} \sum_{i, k = 1}^V f(X_{i.k})(w_i^\prime w_k - \log(X_{i.k}))^2
 \end{align*}
 the weighting function $f$ most common is:
 \begin{equation*}
@@ -351,7 +352,7 @@ This approach is fast to train, scalable and yields good performance.
 \subsection{Predictive models}
 Those models extract a subset of the corpus as train set, used to build an auto-encoder to map words in a new space with a Neural Network.
 The most popular algorithm belonging to this family is Word2Vec, introduced in 2013 to solve problems of SVD.
-It operate on a sample of the raw text, used to train a neural network that generate an auto-encoder of the text.
+It operate on a sample of the raw text, used to train an auto-encoder.
 Train data grows with the size of the window used to train the algorithm.
 The algorithm is used to predict the context knowing the original word (minimizing $J(\theta) = 1 - P(c | w)$ that maximize the probability of the prediction).
 Literature offers a better approach: the algorithm is used first to predict the context $c$ (up to a certain level) giving a word $w$ and then to predict the original word $w$ knowing its context.
@@ -390,27 +391,31 @@ A search engine is composed by two aspects (off-line and on-line): in the first 
 
 \section{Indexing}
 Documents have to be indexed to retreive them easily: this process extracts a small portion of text that will be used to search a document.
-This process is extremely resource expensive, so are implemented in a particular way to optimize the process.
+This process is extremely resource expensive, so are implemented in a particular way to optimize the process. 
 Each document is characterized by a different set of terms weighted in a different way: documents are indexed to reduce the dimensionality of the matrix so that the number of terms will be lower than the number of documents.
 The resulting matrix is inverted so that documents are on columns and terms on rows: retrieving a file is just as easy as checking in which document the term is present.
 The data structure used in practise is a dictionary in which the key is the term, the value is a list of tuples \verb|<document; weight>| so that looking for a document will not scan useless documents.
 
+There are cases in which index can not be stored on RAM due to amount of documents: in this case the use of a column-storage database system is required.
+In fact this strategy garantees both efficent management of a sparse matrix and scalability on a cluster of machines.
+
+
 \section{Matching}
 The query the user ask to the search engine is represented in a formal way to compare it with the (indexed) database.
-To speed up the process, the database is inverted (inverted-index) so that documents are indexed basing on terms, ordered by relevance.
+To speed up the process, the database is inverted (inverted-index) so that documents are indexed basing on terms, ordered by relevance (if available) or by progressive number (if the scoring is abstent or done \textit{on-the-fly}).
 
 \subsection{Boolean matching}
 Boolean matching is based on set theory:
 \begin{equation*}
   R(d_j) := \{t_i | w_{ij} = 1\} \hspace{15pt} w_{ij} \in \{0, 1\}
 \end{equation*}
-the document is a set of terms, so relevance is modeled as a binary property (a document is either relevant or not, it is not possible to rank documents).
+the document is a set of terms, so relevance is modeled as a binary property (a document is either relevant or not, ranking is not permitted).
 A query is formally represented by boolean operations like \verb|AND|, \verb|OR| or \verb|NOT|.
 Using the inverted representation the matching process returns a sub-set of documents that satisfy user's query.
 Evaluations order of operations must be clearly specified because a different order can produce different results.
 In general operations are a priority order pre-imposed in the representation process.
 
-The evaluation is make using a recursive algorithm on a binary tree (the formal representation of the query) starting from leaves, with some optimizations that evaluate longer list for lasts (to save memory).
+The evaluation is made using a recursive algorithm on a binary tree (the formal representation of the query) starting from leaves, with some optimizations that evaluate longer list for lasts (to save memory).
 
 This matching model is fast and simple, but it is not able to produce a ranking of results: in some cases it is not sufficient for accomplish the task.
 
@@ -426,64 +431,78 @@ In general, are used:
     0 & otherwise
     \end{cases}
 \end{align*}
-Also the query is presented as a vector, so that the matching problem is just as easy as compute similarity between vectors.
+Also the query is presented as a vector, so that the matching problem is just as easy as compute similarity between vectors or using a KDTree to cache documents.
 
 \newpage
 \part{Web Search}
-%% TODO: translate
-La struttura del web è un grafo (struttura dinamica costituita da nodi $V$ e archi $E$) orientato.
-Si definiscono \textit{componenti strettamente connessi} un insieme di nodi  raggiungibili in una direzione e nell'altra ($A \to B$ e $B \to A$): astraendo la costruzione del grafo alle sue componenti strettamente connessi, si ottiene la struttura del Web.
-Si ottiene così una struttura \textit{a cravattino}, cioè che comprende una \textit{componente sorgente} (da cui si può accedere facilmente ad altre pagine ma a cui è difficile accedere), una \textit{componente gigante} (che costituisce la maggior parte dei documenti) e una \textit{componente pozzo} (a cui è facile accedere ma è difficile tornare indietro); a queste si aggiunge un rumore di documenti isolati o collegati in modo casuale.
+As its name says, the Web is structured as a graph, dynamic and oriented.
+Edges reachable in both direction ($A \to B$ e $B \to A$) are told \textit{Strong connected spaces}: the whole structure is often abstracted as a set of Strong Connected Spaces instead of pages.
+In this way the graph assumes a \textit{papillon} structure: there is a \textit{source component} (from which it is easy to reach other pages but difficult to access), a \textit{huge component} (that represent the majority of documents) and a \textit{shaft component} (easily reachable but from which it is difficult to exit); there are also some noisy documents isolated or random linked.
+To retrieve a document, a web search engine must had indexed it: documents not retrievable by search engines belong to \textit{deep web}.
+Those documents represent the majority of the web and include dynamic web pages (which content changes according to a input), private pages (hidden by CAPTCHAs or login) or just because there are no incoming links.
 
-La ricerca può essere fatta tramite \textit{browsing} (sfruttando i collegamenti tra le pagine), link diretto (se si conosce l'indirizzo preciso) o tramite motori di ricerca.
-La prima generazione di \textit{search engines} usava solamente la frequenza delle parole all'interno dei documenti; poi si sono considerati anche i link all'interno delle pagine.
-Con l'arrivo del \textit{semantic web} si prende in considerazione anche la necessità di ricerca dell'utente.
-L'indicizzazione delle pagine web è fatta esplorando in modo automatico il grafo per trovare i documenti.
-È possibile quindi trovare i documenti solamente se sono stati indicizzati: la maggior parte del web non è indicizzato, appartenendo al \textit{deep web}; esempi sono pagine dinamiche (il cui contenuto cambia in base all'input), ad accesso limitato (tramite CAPTCHAs o login) o semplicemente perché non linkato.
-Il processo di \textit{gathering} è effettuato o in modo manuale dai manutentori dei siti che informano i gestori dei motori di ricerca o in modo automatico da \textit{crawlers}, bot che esplorano il web esplorando tutti i link delle pagine partendo da istituzioni ricche di link (url noti popolari usato come \textit{seed set}).
-Durante il processo sono salvati anche dei meta-dati, rispettando però la politica di \textit{politeness} (generalmente scritte in \verb|robots.txt|), linee guida fornite all'esterno quali latenza e periodicità delle richieste.
-L'esplorazione è fatta con un algoritmo simile a quello di \textit{Dijkstra} senza però arrivare ad un punto preciso (si ferma quando non ci sono più link da seguire).
-Si da maggiore priorità a link di siti diversi da quello di partenza per poi esplorare nel dettaglio i singoli siti.
-Il processo deve essere effettuato di continuo aggiornando periodicamente le pagine.
+Web search can be done by  \textit{browsing} (using links between pages), direct link (if the address is known) or using a \textit{web search engine}.
+First generation of \textit{web search engines} considered only documents word frequency, but then also links are considered to rank documents by authority.
+\textit{Semantic web} considers also the meaning of the documents to improove user experience.
 
-Le pagine restituite da un motore di ricerca non sono indicizzate solamente in base alla rilevanza ma anche in base ad altre caratteristiche temporali o qualitative.
+\section{Updating documents: \textit{gathering}}
+\textit{Gathering} is the process of index updating by a search engine: due to mutability of documents in the web, index have to be constantly updated to include new documents or to update existing ones.
+This process can be automatically done asking the search engine to update the document manually, but is ofen done in an automatic way using \textit{crawlers}: bots that surf the net following links and storing documents.
+A \textit{crawler} starts its search process with a \textit{set seed} of reliable pages (such as public organization) taken randomly; then it checks the presence of unseen links in the text, stores them and opens one (per thread) so that a server is not filled of requests at the same time (latency is given by \textit{politeness rules} in the \verb|robot.txt| file).
+Then the document is processed and usfull information (such as url, title and content) are stored in a column-based database.
+The process goes on until there are no more links to visit or the disk is full.
 
-\section{\textit{PageRank}}
-È l'algoritmo che ha reso famoso Google: l'idea è quella di simulare il processo di navigazione dell'utente attribuendo un punteggio alle pagine in base alla facilità che si ha a raggiungere la pagina e ai collegamenti di questa.
-Il \textit{rank} è dato dalla formula:
+During the process, also \textit{meta-data} are stored, according to \textit{politiness rules} (written on a sitemap file called \verb|robots.txt|): those meta-data include importance, update log and frequency for each page, latency of requests and so on.
+Documents are then cleaned to parse text: it is considered 
+
+A document is considered \textit{fresh} if its last version is indexed; otherwise it is \textit{stale}: \textit{freshness} is the percentage of fresh documents stored in the index.
+Freshness altough is maximized if no document is stored at all: to prevent this inconvenient, another metric is \textit{Age}, the time passed from the updating of a document to the updating of the index.
+
+\section{Ranking}
+Pages are retrieved by a score calculated on relevance to the query, popularity and position in the Web structure.
+The main idea is that a good document (a document with high \textit{authority}) is linked to many other good documents (\textit{hub score}): analyzing the Web graph it is possible to estimate a document \textit{authority} to improove the search.
+
+\subsection{\textit{PageRank}}
+It is Google algorithm: the main idea is to simulate a \textit{random walk} across the web: a user, every fixed time, goes to a random page on the web (with a very low probability of $\lambda$) or follows a link in the current document.
+The score given by \textit{PageRank} is the probability that in a random moment the user is reading that page.
 \begin{equation*}
   PR(p) = Kd + K(1 - d)\sum \frac{PR(p_i)}{C(p_i)}
 \end{equation*}
-dove $K$ è un fattore di normalizzazione, $d$ dipende dal sistema, $PR(p)$ è il numero di pagine collegate a $p$ e $C(p)$ è il numero di collegamenti che partono da $p$.
-Il processo è effettuato in modo ricorsivo per ogni pagina fino alla convergenza.
-L'autorità di una pagina dipende quindi non solo da come è stata trovata (cioè dalle pagine a lei collegate) ma anche dalle pagine raggiungibili.
-Le pagine autorevoli sono chiamate \textit{hub pages}.
+where $K$ is a normalization constant, $d$ depends on the system and $C(p)$ is the number of documents of the page $p$.
+The fact that $PR$ is in both side of the formula means that it is computed recoursively until convergence.
 
-\section{HITS}
-Rispetto alla query dell'utente, si considera come insieme di pagine reperite non solo
+\subsection{HITS}
+This algorithm estimates both \textit{authority} and \textit{hub} scores for each page: the process is iterative and converges after a small number of passages (depending on graph size); during estimation only graph structure is considered.
+The algorithm initialize each document with both scores equal to $1$ and for each iteration updates them according to formulas:
+\begin{align*}
+  A(p) &= \sum_{q \to p} H(q) \\
+  H(p) &= \sum_{q \to p} A(q)
+\end{align*}
+
 
 \newpage
 \part{Recommender Systems}
 A \textit{recommender system} is a \textit{push} technology: it provides the user with contents without a query; it suggests other contents according to user's behaviour and previous queries.
-A good recommender system should not suggest common objects but unknown items that users might like.
+A good recommender system should not suggest common objects but unknown items that users do not know but might like.
 The system should consider user's feedback and not only contents that he or she had actually searched: a \textit{relevance score} is extracted during the retrieval process.
 In general the systems are based on \textit{Information Filtering}: contents are monitored producing data (virtually in real-time) that have to be filtered to inform the user.
 
-A recommender system can follow 3 main paradigms, but there can are also be hybrid approaches.
+A recommender system can follow different paradigms, and there are also hybrid approaches.
 Assumptions of a recommender system are that users rate and catalog items and that a person will not change tastes during time.
+This second assumption is too strong for a real environment: techinques were developed to update a user profile making the process dynamic (computing users embeddings in a \textit{never-ending} learning pipeline).
 
 
 \section{Collaborative filtering}
 In this architecture the user is clusterized and contents are suggested according to the belonging cluster (a not-seen content is presented if is appreciated in the cluster).
 This approach is based to data provided by users: to get more data, some indicators are stored (such as web-surfing behaviour) to improve the process, although the behaviour can be misunderstood.
 
-At beginning there are no user information: so he or she is forced to rate a set of items, demographic data are user to do some assumptions or a default set is presented.
+At beginning there are no user information: so he or she is forced to rate a set of items, demographic data are used to do some assumptions or a default set is presented.
 
 In this paradigms, an important part is to compute the \textit{user-item matrix}: the output is a numerical prediction that indicates if user will like a certain item or not.
 So a \textit{top-}$N$ list can be extracted.
 That matrix is a sparse matrix with users stored as rows and items as columns.
 
-Given a \textit{target user} $a$, an item $i$ not yet seen by $A$ is suggested after that procedure:
+Given a \textit{target user} $a$, an item $i$ not yet seen by $a$ is suggested after that procedure:
 \begin{itemize}[noitemsep]
 \item is extracted a subset of users $U_{a, i}$ similar to $a$ that have reted item $i$;
 \item a model (machine learning or an heuristics) is provided to compute a rating $\hat{r}_{a, i}$ for item $i$ according to $U_{a, i}$;
@@ -614,14 +633,14 @@ A more complex approach uses text representation to guess document topic, accord
 Scoring algorithms uses word frequencies to consider words that are both rare and significative.
 
 \section{Weightings}
-Word probability and tf-idf are used to create a representation of the document to the ranking algorithm.
+Word probability and \textit{tf.idf} are used to create a representation of the document to the ranking algorithm.
 With \textit{SumBasic system}, ranking score is equal to the sum of probabilities $P(w)$ of all words composing the sentence.
 There is a penality for repetition given by elevating the probability of the word by its frequency.
 \begin{equation*}
   score(\text{sentence}) = \sum_{w \in \text{sentence}} P(w)^{f(w)}
 \end{equation*}
 
-Tf-idf is also used to cluster documents and then computing centroids, from which are removed words under a certain number: the score is the similarity between document and its centroid.
+\textit{Tf-idf} is also used to cluster documents and then computing centroids, from which are removed words under a certain number: the score is the similarity between document and its centroid.
 
 There are other approaches based on graphs: two sentences are linked toghether if they are similar: documents then are ranked according to number of links.
 Word semantic is ignored, but this approach can be used in multi-lingual contexts, if word spaces are aligned.
