@@ -855,7 +855,7 @@ Gli ingredienti principali quindi sono: Smart things, tanti oggetti intelligenti
 I settori dove queste tecnologie sono state sviluppate sono: automotica, logistica, manufatturazione, energia e utilità, healthcare, gestione e costruzione delle case, settori pubblici come illuminazione ecc. e settore militare.
 
 \subsection{Smart Metering}
-Una delle prime cose che osserviamo è che un servizio di metering può avere la necessità di non essere alimentato con una rete elettrica (es. contatore del Gas) quindi si usano batterie, e se essa si esaurisce bisogna andare a sostiturla e questa sostituzione cosa di più di un controllo manuale del contatore.\\
+Una delle prime cose che osserviamo è che un servizio di metering può avere la necessità di non essere alimentato con una rete elettrica (es. contatore del Gas) quindi si usano batterie, e se essa si esaurisce bisogna andare a sostiturla e questa sostituzione costa di più di un controllo manuale del contatore.\\
 I contatori di Enel oggi hanno 2 catene di distribuzione dei dati:
 \begin{myenumerate}
   \item Chain 1: va verso l'operatore che gestisce la rete, per i dati ufficiali della tariffazione;
@@ -866,16 +866,14 @@ Le centrali sono molto poco adatte ad immagazzinare energia, un metodo potrebbe 
 
 \section{Sensori}
 Un circuito basilare è costituito da un generatore e un impedenza (es. resistenza, condensatore, induttanza), la corrente che passa attraverso questa impedenza genera una differenza di potenziale quindi un certo livello di tensione.\\
-Usando i circuiti posso misurare o grazie alla tensione sull'impedenza (usando un voltometro) o grazie la corrente che passa attraverso il circuito (usando un amperametro).\\
+Usando i circuiti si possono misurare i fenomeni fisici, sfruttando o la tensione sull'impedenza (usando un voltometro) o la corrente che passa attraverso il circuito (usando un amperametro).\\
 Le componenti del circuito possono cambiare a seconda di un fenomeno fisico, e questi cambiamenti si possono misurare in base al cambiamento che apportano al circuito, ottenendo così un sensore. Esempio un circuito può cambiare resistenza in base alla temperatura, quindi cambia il voltaggio se la corrente rimane costante (dalla legge di Ohm $V=RI$).\\ 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth,height=5cm]{imgs/curcuit.png}
   \caption{Esempio di un circuito semplice.}
   \label{fig:circuit}
-\end{figure}
-      
-\noindent Un effetto abbastanza importante per il mondo della sensoristica è l'effetto piezzoelelettrico: vi sono dei cristalli che se vengono schiacciati generano un impulso quindi converte effetti meccanici(vibrazione) in effetti elettrici(impulsi di corrente), e il viceversa.\\
+\end{figure}\\
 %20/11
 Alcuni esempi di fenomeni fisci che vogliamo misurare sono:
 \begin{myitemize}
@@ -884,7 +882,7 @@ Alcuni esempi di fenomeni fisci che vogliamo misurare sono:
   \item Smart Phones/Wearables: posizione, parametri vitali;
   \item Edifici: Metering, Sicurezza.
 \end{myitemize}
-I sensori di solito si basano su un elemento sensibile e sfrutta le sue proprietà fisiche per effettuare la misura e quindi un sensore fatto per un certo ambiente non è detto che funzioni su un altro ambiente es. il termometro per misurare la temperatura corporea non può essere usato per misurare la temperatura del sole.
+I sensori di solito si basano su un elemento sensibile e sfrutta le sue proprietà fisiche per effettuare la misura e quindi un sensore fatto per un certo ambiente non è detto che funzioni su un altro ambiente es. il termometro per misurare la temperatura corporea non può essere usato per misurare la temperatura del sole.\\
 La pipeline della conversione in dati di un sensore è un po' complessa:
 \begin{figure}[!h]
   \centering
@@ -894,7 +892,7 @@ La pipeline della conversione in dati di un sensore è un po' complessa:
 \end{figure}
 \noindent La pipeline nella Figura \ref{fig:circuit_chain} inizia con una conversione analog2analog che serve per l'amplificazione del segnale, che viene seguita da un elaborazione analogica per cercare di togliere errori/disturbi dopo questa fase il segnale viene convertito in digitale usando il campionamento (usando il teorema di Niels) e quantizzazione che introduce un po' di errore che serve per la fase della digital processing.
 Il vantaggio dell'elaborazione digitale è che è meno costosa computazionalmente rispetto all'elaborazione del segnare analogico, inoltre o funziona o non funziona mentre quello analogico in caso di errore funziona a metà creato dei problemi più gravi.\\
-In parallelo a questa catena di traduzione effetto fisico-digitale ho delle funzioni che servono per la calibrazioni e compensazioni.
+In parallelo a questa catena di traduzione effetto fisico-digitale si hanno delle funzioni che servono per la calibrazioni e compensazioni.
 In uscita ho un Network Interface che manda i dati e metadati all'esterno.\\
 Gli output di un sensore dipendono da:
 \begin{myitemize}
@@ -941,21 +939,21 @@ Questo sistema appena spiegato ha lo svantaggio di non essere integrabili in com
 \end{figure}\\
 Il secondo esempio (Figura \ref{fig:thermistor}) che introduciamo si basa su un termistore con resistore a coefficiente negativo, chiamiamo $V_1$ il potenziale tra i due vertici del NTC e $V_2$ il potenziale tra i due vertici della resitenza, se la temperatura cresce $V_2$ aumenta (segue dal fatto che $V_1+V_2 = V$ non cambia).
 Questo valore viene portato in un amplicatore detto voltage follower, questo follower serve anche da barriera perché la componente alla sinistra è molto sensibile e non deve essere perturbato in nessun modo, inoltre ha il vantaggio di avere dimensioni molto piccole e quindi di entrare anche dentro componenti molto piccole.\\
-Un altro vantaggio è che i dispositivi a coefficiente negativo costano poco, poiché si potrebbe usare benissimo anche un resistore con coefficiente positivo ma costa molto di più.
+Un altro vantaggio è che i dispositivi a coefficiente negativo costano poco, poiché si potrebbe usare benissimo anche un resistore con coefficiente positivo ma costano molto di più.
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth,height=4cm]{imgs/termocoppia.png}
   \caption{Termocoppia con effetto Seebeck.}
   \label{fig:termocoppia}
 \end{figure}\\
-Si può usare anche la termocoppia che è un dispositivo che si basa sull'effetto seebeck che usa delle coppie leghe mettaliche (speciali) diversi (Figura \ref{fig:termocoppia}), scaldando un endpoint collegato a due fili di queste due leghe mettaliche genera una tensione tra i due fili anche a una distanza molto lunga, quindi si possono misurare temperature di certi ambienti dove un circuito potrebbe finire per fondersi.
+Si può usare anche la termocoppia che è un dispositivo che si basa sull'effetto seebeck che usa delle coppie leghe mettaliche (speciali) diversi (Figura \ref{fig:termocoppia}), scaldando un endpoint collegato a due fili di queste due leghe mettaliche genera una tensione tra i due fili anche a una distanza molto lunga, quindi si possono misurare temperature di certi ambienti dove un circuito finirebbe per fondersi.
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth,height=5cm]{imgs/diodo.png}
   \caption{Circuito basato sul Diodo.}
   \label{fig:diodo}
 \end{figure}\\
-Un altro esempio è quello che sfrutta diodi (Figura \ref{fig:diodo}), supponiamo l'esistenza di un generatore di corrente costante e un diodo sensibile alla temperatura, misuro il potenziale, e si nota che il potenziale (data la stessa corrente) cambia in base alla temperatura.
+Un altro esempio è quello che sfrutta i diodi (Figura \ref{fig:diodo}), supponiamo l'esistenza di un generatore di corrente costante e un diodo sensibile alla temperatura, misuro il potenziale, e si nota che il potenziale (data la stessa corrente) cambia in base alla temperatura.
 \begin{figure}[!h]
   \centering
   \includegraphics[width=\linewidth,height=5cm]{imgs/piezoelettrico.png}
@@ -971,7 +969,8 @@ Bisogna tenere conto che i valori della variazione sono molto bassi quindi si us
   \includegraphics[width=\linewidth,height=5cm]{imgs/amplifier.jpg}
   \caption{Esempio di un amplificatore di segnale.}
   \label{fig:amplifier}
-\end{figure}\\
+\end{figure}
+
 Vi sono anche dei circuiti che misurano lo spostamento fisico di una membrana (ad es. per misurare la pressione dell'atmosfera), di solito vi è un pezzo ferro magnetico collegato alla membrana e il suo movimento affligge il campo magnetico, quindi dalla varianza del campo magnetico riesco a capire la pressione ma purtroppo non è molto precisa come misurazione.\\
 Un modo meno naive di misurare la pressione di una membrana è sfruttare l'effetto Hall (Figura \ref{fig:hall}), nel quale un magnete è collegato alla membrana e il suo movimento affligge la differenza di potenziale su un materiale conduttore inserito in un circuito in cui gira una corrente, calcolando la variazione del potenziale (creata dal cambiamento del percorso degli elettroni) si può calcolare il potenziale.
 L'effetto Hall è molto più generico e può funzionare in molti altri casi in cui bisogna rilevare un movimento fisico di una componente.
@@ -990,7 +989,7 @@ I sensori di prossimità possono essere:
 \end{myitemize}
 Un altro settore molto importante della sensoristica è quella riguardante il movimento, quindi ho bisogno di conoscere l'accelerazioni e rotazioni nei 3 assi.
 IMU (Interial Measurement Unit) è un dispositivo in grado di darmi informazioni riguardanti l'accelerazione e rotazione nei 3 assi, che quindi misurano la forza che si esercita su una massa nelle tre direzioni ortogonali.\\
-I MEMS (Mirco-Electro-Meccanincal-Systems) sono dei sistemi che scalano su dimensioni estremamente ridotte i principi dei sensori macroscopici, e normalmente sono integrabili in maniera particolarmente efficaci.\\
+I MEMS (Mirco-Electro-Meccanincal-Systems) sono dei sistemi che scalano, su dimensioni estremamente ridotte, i principi dei sensori macroscopici, e normalmente sono integrabili in maniera particolarmente efficace.\\
 Il sensore dell'accelerazione è fatto come nella Figura \ref{fig:accel}, costituito da 3 dischi dove il disco A e B ricevono corrente alternata e nel caso del movimento del disco C cambia la capacità del condensatore formato e quindi il potenziale e misurando la variazione del potenziale si ottiene la forza di accelerazione in una certa direzione. 
 \begin{figure}[!h]
   \centering
@@ -1002,7 +1001,7 @@ Il sensore dell'accelerazione è fatto come nella Figura \ref{fig:accel}, costit
 Il sensore di rotazione non è un giroscopio poiché è di difficile implementazione.
 Il sensore è formato da una massa sospesa da due molle come nella Figura \ref{fig:accel}, se provo a farlo ruotare lungo il suo asse ortogonale, mentre è in oscillazione, lui genera una forza opposta.
 Siccome deve oscillare mi serve un materiale piezoelettrico a cui fornisco corrente elettrica alternata.
-A questo punto misurando queste forze riesco a misurare la coppia di forza con sensori di pressione. Mi servono 3 due questi per ciascuna direzione.
+A questo punto misurando queste forze riesco a misurare la coppia di forza con sensori di pressione. Mi servono 3 di questi sensori per ciascuna direzione.
 \subsection{Sensore Ideale e Reale}
 \begin{figure}[!h]
   \centering
@@ -1033,7 +1032,7 @@ Assumiamo che ci sia una variazione della misura in base alla temperatura come i
   \caption{Errore prima della Calibrazione.}
   \label{fig:calibrazione}
 \end{figure}\\
-La calibrazione serve per rendere la caratteristica lineare, ciò può essere effettuato attraverso una trasformazione che può essere anche a livello analogico ma è molto più facile a livello digitale.
+La calibrazione serve per rendere la caratteristica lineare, ciò può essere effettuato attraverso una trasformazione matematica che può essere anche a livello analogico ma è molto più facile a livello digitale.
 \subsubsection{Caratteristiche dei Sensori}
 Le caratterische dei sensori possono essere statiche e dinamiche.\\
 Le caratteristiche statiche sono le caratteristiche che non dipendono dal tempo o dipendono debolmente dal tempo e sono:
@@ -1079,7 +1078,7 @@ Il livello più basso lavora su bit, il data link permette dei definire i pacche
 I protocolli usati sono diversi quando si usa l'internet normale e l'internet per la sensoristica.
 Ad es. per internet si usa HTTP per le applicazione, TCP o UDP per trasporto, IP per la Rete e Ethernet (802.3) o WiFi (802.11) per il Data Link, mentre per la sensoristica non posso spesso usare questi protocolli perché richiede molte risorse, ad esempio per Data Link si può usare BLE (Bluetooth Low Energy), ZigBee, W-MBUS (per le misurazioni), LoRa, PLC e per il trasporto si usa MTTP, CoAP, WebSockets.\\
 %% 27/11
-Osserviamo che diversi protocolli implicano diverse strutture fisiche (e logiche), ad esempio le reti locali possono  cui avere diverse strutture fisiche, infatti può essere un bus in cui la rete è in comune a tutti i terminali che prendono turni per parlare, la strutture fisica è associabile a quella di un cavo elettrico.
+Osserviamo che diversi protocolli implicano diverse strutture fisiche (e logiche), ad esempio le reti locali possono avere diverse strutture fisiche, infatti può essere un bus in cui la rete è in comune a tutti i terminali che prendono turni per parlare, la strutture fisica è associabile a quella di un cavo elettrico.
 Questa topologia è diversa da quella a stella nel quale ogni terminale parla solo con il Gateway.\\
 Si ha una divisione in 2 macrocategorie per le reti geografiche:
 \begin{myitemize}
@@ -1102,7 +1101,7 @@ Quando si parla di Power Line ci sono due mondi diversi:
   Questi due canali hanno utilizzo diverso il canale A viene usato per le applicazioni di misurazione utilizzata dal gestore per le fatturazioni mentre il canale C può essere utilizzato come canale secondario che va all'utente per diventare applicazione controllo.
   Questi canali vengono usati per collegare tanti contatori elettrici a un punto di raccolta dell'informazione delle misurazioni.
   Questo protocollo è governato da un accesso a contesa (CSMA/CA). 
-  \item Broad Band: ci sono degli standard che si chiama home plug, che permettono di trasferire a velocità elevate, sono pensati per lavorare in contesto limitato.
+  \item Broad Band: ci sono degli standard che si chiamano home plug, che permettono di trasferire a velocità elevate, sono pensati per lavorare in contesto limitato.
   Sostanzialmente 3 versioni: 1.0 (velocità $<100$Mbit/s), AV ($<200$Mbit/s) e AV2 ($<1$Gbit/s). 
 \end{itemize}
 Un altro standard è \textbf{BACNET}: importante in uno specifico settore del riscaldamento e condizionamento aria, va dal livello fisico a quello logico/applicativo, a livello fisico assomiglia a un doppino telefonico.
@@ -1113,9 +1112,9 @@ Le frequenze licenziate sono date in concessione ai concessionari come Radio, TV
 Mentre le frequenze non licenziate sono libere ma non possono essere usate a caso, ma solo da dispositivi adeguati e certificati in base al paese nel quale sono.
 Es. le frequenze a 2.4 GHz che vengono usate anche dai dispositivi WiFi, ma non posso modificare/costruire uno strumento che usa questa frequenza perché il dispositivo deve essere certificato, poiché ci sono dei limiti di potenza che questi dispositivi possono avere, altri esempi di frequenze non licenziate sono: 169 MHz e 868 MHz.\\
 Abbiamo un altro problema: se trasmettiamo a 2.4 GHz ho canali molto grandi ($\approx 20$MHz) perché non si può trasmettere a una frequenza così precisa, mentre quando trasmetto a basse frequenze la larghezza dei canali si riduce moltissimo e quindi non posso avere HD.\\
-I bit al secondo sono quanti bit trasmetto su una certa frequenza, nel caso di una frequenza di trasmissione proporzionale alla frequenza fondamentale dell'onda (di solito 2$\times$) e qua anche in caso di perdita di potenza riesco a capire quanti il dato se era 1 o 0, se invece prova a trasmettere sulla stessa frequenza più informazione es. 11, 10, 01, 00 al posto di 1 e 0 in caso di perdita di potenza non riesco a capire l'informazione quindi aumento la velocità ma rischio di perdere informazione.\\
+I bit al secondo sono quanti bit trasmetto su una certa frequenza, nel caso di una frequenza di trasmissione proporzionale alla frequenza fondamentale dell'onda (di solito 2$\times$) e qua anche in caso di perdita di potenza riesco a capire se il dato se era 1 o 0, se invece prova a trasmettere sulla stessa frequenza più informazione es. 11, 10, 01, 00 al posto di 1 e 0 in caso di perdita di potenza non riesco a capire l'informazione quindi aumento la velocità ma rischio di perdere informazione.\\
 Protocolli della \textbf{Rete Wireless} sono Rete Locale Radio (\textbf{WiFi} per amici 802.11), è l'equivalente wireless di ethernet, cioè pensata per interconnettere terminali ad alte velocità.
-Il primi WiFi arrivava fino a 11 Mbit/s, l'ultimo standard di WiFi permette di raggiungere teoricamente 10 Gbit/s.\\
+Il primo WiFi arrivava fino a 11 Mbit/s, l'ultimo standard di WiFi permette di raggiungere teoricamente 10 Gbit/s.\\
 Non era pensato per un protocollo per risparmiare energia ma con la nascita degli smartphone si cambia il protocollo per consumare meno energia.
 Comunque il WiFi consuma tanto per essere usato insieme a sensori isolati alimentati a batteria, però in dispositivi come frigo, lavatrice che già consumano tanta energia, non hanno problemi ad avere sensori che comunicano usando WiFi.\\
 Il WiFi è specificato a due frequenze 2.4 e 5 GHz.
@@ -1144,7 +1143,7 @@ Ha un architettura Master-Slave dove lo slave è il meter e il master è il Gate
 \end{figure}\\
 Vi sono due modi per comunicare indicati anche nella Figura \ref{fig:mbus}, nel primo lo slave ha una misure e manda un messaggio SND-NR (Send No Response), dopo il quale lo slave apre una finestra di ricezione nella quale aspetta un eventuale messaggio dal master, se non riceve risposta entra in sleep, e questo sleep è di durata imprevedibile finché non decide di mandare un altro messaggio, nel secondo caso invece il master risponde al messaggio dello slave mandando un messaggio SND-UD (Send User Data) che sono un riscontro oppure dati di configurazione es cambio precisione, frequenza campionamento ecc. a cui lo slave risponde con un ACK (acknowledgement) e va in sleep.
 Bisogna notare che in questo schema qui non vi è una garanzia che il messaggio/dati siano stati trasmessi, il fallimento potrebbe essere avvenuto a qualunque punto e nessuno si accorge dell'errore.\\
-La velocità dipende dai canali, ne caso di 169 MHz vi sono due bande a 12,5 kHz che trasmette fino a 4.8 kbit/s e 50 kHz fino a 19.2 kbit/s, mentre nel caso di 868 MHz le velocità variano dai 32 ai 100 kbit/s.
+La velocità dipende dai canali, nel caso di 169 MHz vi sono due bande: a 12,5 kHz che trasmette fino a 4.8 kbit/s e 50 kHz fino a 19.2 kbit/s, mentre nel caso di 868 MHz le velocità variano dai 32 ai 100 kbit/s.
 Osserviamo che le comunicazione sono molto sicuro perché uso circa 3 frequenze per trasmettere un bit.
 I messaggi sono della seguente forma, dove DIF sono le cifre decimali e VIF è il valore:
 \[
@@ -1209,7 +1208,7 @@ La e-SIM è una SIM logica/virtuale, in questo caso si tende a distinguere la sm
 \begin{myitemize}
   \item Provisional Profile: Questo profilo serve solamente a un particolare operatore radio mobile che fa il configuratore, manda tutti i dati necessari all'operatore per accendere la Operational Profile;
   \item Operation Profile: E' il profilo caricato dal Provisional Profile che funziona come la SIM, e questo operatore può essere cambiato sempre da provisioning provider;
-  \item FallBack Profile: E' una sorta di piano di Backup, viene usato non caso Operation Profile non può essere usato risolvendo così il problema di Roaming, poiché basterebbe usare un altro operatore come Backup nel caso di assenza di segnale ecc.
+  \item FallBack Profile: E' una sorta di piano di Backup, viene usato nel caso Operation Profile non può essere usato risolvendo così il problema di Roaming, poiché basterebbe usare un altro operatore come Backup nel caso di assenza di segnale ecc.
 \end{myitemize}
 Ci sono anche delle embedded SIM, sono delle SIM che si saldano sui dispositivi risolvendo le problematiche meccanici, la soluzione migliore sarebbe un integrazione delle e-SIM con le embedded SIM.
 \begin{figure}[!h]
