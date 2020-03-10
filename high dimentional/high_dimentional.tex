@@ -1,0 +1,223 @@
+\documentclass[12pt, a4page]{article}
+
+\title{\textbf{High Dimentional Data Analysis}}
+% https://unimib.webex.com/webappng/sites/unimib/dashboard/attendee/gianna.monti?siteurl=unimib
+% 846956484
+\date{}
+
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+\usepackage[margin=1.2in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{minted}
+\usemintedstyle{emacs}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Il corso è erogato, parzialmente in via \href{https://unimib.webex.com/webappng/sites/unimib/dashboard/attendee/gianna.monti?siteurl=unimib}{telematica}, in italiano. L'esame è composto da un progetto (individuale o svolto in gruppi di massimo tre persone) accompagnato da una prova scritta comprendente domande aperte e a risposta multipla.
+\end{abstract}
+\tableofcontents
+
+\newpage
+L'analisi di dati può avere obiettivi di predizione o di inferenza: per il primo è sufficiente utilizzare un modello di \textit{machine learning}, mentre per il secondo si passa da un modello allenato su un campione all'intera popolazione.
+Per la predizione, non è necessario conoscere il nesso tra la variabile risposta alle variabili di input: il modello è usato come \textit{black box}; nell'inferenza invece è necessario conoscere il nesso tra le variabili, utilizzando modelli statistici interpretabili.
+Lo \textit{statistical learning} si pone a metà tra le due discipline: tenta di prevedere una variabile risposta basandosi su processi interpretabili di \textit{machine learning}
+
+Con il proliferare dei \textit{big data}, è facile raccogliere grosse quantità di dati da analizzare: \textit{i dati non sono conoscenza} (Albert Einstein), quindi è necessario processarli per analizzarli.
+Per il processo di analisi, è tipico lavorare su una matrice di dati $X$ di dimensioni $n \times p$ che possono diventare problematiche: se $n$ diventa troppo grande si hanno problemi computazionali (troppi dati per poter analizzarli), mentre se $p$ diventa troppo grande si rischia anche di cadere nella \textit{maledizione della dimensionalità}.
+
+\newpage
+\part{Decomposizione Distorsione-Varianza}
+Un modello di \textit{supervised learning} prevede la variabile $Y$ in funzione di una matrice di dati $X$:
+\begin{equation*}
+  Y = f(X) + \varepsilon
+\end{equation*}
+dove $f$ rappresenta una funzione fissa e non nota e $\varepsilon$ la componente stocastica, indipendente da $X$ e con media nulla.
+In pratica l'equazione è semplificata con:
+\begin{equation*}
+  \hat{Y} = \hat{f}(X)
+\end{equation*}
+siccome non è possibile prevedere l'errore $\varepsilon$ (per definizione).
+Per scopi predittivi, la funzione $\hat{f}$ è stimata e non necessariamente interpretabile; mentre per fare inferenza è necessario conoscerne almeno la forma funzionale.
+Per il processo di inferenza, si cerca di capire quali e quante sono le variabili più importanti nel processo di stima e il loro rapporto con la variabile risposta.
+Il processo di stima della funzione $f$ si dice \textit{parametrico} se si ipotizza una forma funzionale, altrimenti è detto \textit{non parametrico}.
+Un metodo parametrico impone una forma funzionale, stimando i parametri in base ai dati a disposizione: si sceglie generalmente una funzione semplice e di facile interpretazione (anche a discapito della forza predittiva) per rendere più facile il processo di inferenza.
+Una funzione non parametrica invece predilige la bontà di adattamento a scapito dell'interpretabilità dei parametri: in questo caso è più importante il risultato del procedimento. \newline
+
+Il processo di stima si effettua con un processo di ottimizzazione di una generica funzione di perdita; una delle funzioni più utilizzate è l'errore quadratico medio:
+\begin{equation*}
+  E[(Y - f(X))^2]
+\end{equation*}
+che minimizza errori sia in positivo che in negativo (considerando i quadrati).
+Si dimostra che la funzione di regressione minimizza i quadrati dei residui.
+Non è possibile prevedere esattamente $Y$ in funzione di $X$ data la presenza di una componente stocastica $\varepsilon$: si ha in ogni caso un errore \textit{irriducibile}.
+Si ha inoltre un errore dovuto alla \textit{distorsione} nel caso in cui la stima della funzione $f$ appartiene a una classe diversa da quella della funzione stimata $\hat{f}$.
+Può darsi anche che, avendo a disposizione pochi dati o di bassa qualità, si abbia una forte varianza nelle stime e i valori dei parametri siano particolarmente influenzati dal campione considerato (\textit{varianza di stima}). \newline
+
+Si definiscono il vettore risposta $y$ e la matrice del disegno $X$ come:
+\begin{equation*}
+  \underset{n \times 1}y =
+  \begin{bmatrix}
+    y_1 \\
+    \vdots \\
+    y_i \\
+    \vdots \\
+    y_n
+  \end{bmatrix}\hspace{20pt}
+  \underset{n \times p}X =
+  \begin{bmatrix}
+    x_{1.1} & \cdots & x_{1.j} & \cdots & x_{1.p} \\
+    \vdots       &  & \vdots &     &   \vdots \\
+    x_{i.1} & \cdots & x_{i.j} & \cdots & x_{i.p} \\
+    \vdots       &  & \vdots &     &   \vdots \\
+    x_{n.1} & \cdots & x_{n.j} & \cdots & x_{n.p}
+  \end{bmatrix}
+\end{equation*}
+dove per convenzione l'indice $i$ scorre sulle righe e $j$ sulle colonne.
+Ogni valore $y_i$ è realizzazione di una variabile casuale $Y_i = f(x_i) + \varepsilon_i$, dove la prima parte è la funzione (ignota) di regressione e la seconda l'errore.
+Si presuppone che ogni $\varepsilon_i$ sia identicamente distribuito, con media nulla e varianza costante.
+Per il \textit{test set} invece si contrassegna la matrice con un asterisco (star): $y^* = \hat{f}(x) + \varepsilon^*$.
+
+Si calcola l'\textit{errore quadratico medio} sul \textit{test set}, che è generalmente l'indice da minimizzare:
+\begin{equation*}
+  MSE_{Te} = \frac{1}{n} \sum_{i = 1}^n(y^*_i - \hat{f}(x_i))^2
+\end{equation*}
+Si minimizza il valore calcolato sul \textit{test set} e non sul \textit{train set} per garantire alte prestazioni su dati non osservati.
+Si definisce \textit{errore di previsione} ($PE$) l'errore medio della stima sui nuovi dati:
+\begin{align*}
+  PE &= E[MSE_{Te}] \\
+     &= E[\frac{1}{n} \sum_{i = 1}^n(y^*_i - \hat{f}(x_i))^2] \\
+     &= \frac{1}{n} \sum_{i = 1}^n E[(y^*_i - \hat{f}(x_i))^2]
+\end{align*}
+Questo indice è il valore da minimizzare: si cerca di ridurre l'errore sul \textit{test set} indipendentemente dal campionamento effettuato.
+Essendo $\hat{y}^* = \hat{f}(x)$, si scompone la varianza come:
+\begin{align*}
+  &\sigma^2_y = E[(y_i^* - \hat{y_i}^*)^2] \\
+  &= E[(y_i^* -f(x_i) + f(x_i) -\hat{y_i}^*)^2] \\
+  &= E[(y_i^* -f(x_i))^2] + E[(f(x_i) -\hat{y_i}^*)^2] + 2E[(y_i^* -f(x_i))(f(x_i) -\hat{y_i}^*)] \\
+  &= E[(y_i^* -f(x_i))^2] + E[(f(x_i) -\hat{y_i}^*)^2] + E[(y_i^* -f(x_i))]E[(f(x_i) -\hat{y_i}^*)] \\
+  &= E[(y_i^* -f(x_i))^2] + E[(f(x_i) -\hat{y_i}^*)^2] + E[f(x_i) + \varepsilon_i -f(x_i))]E[(f(x_i) -\hat{y_i}^*)] \\
+  &= E[(y_i^* -f(x_i))^2] + E[(f(x_i) -\hat{y_i}^*)^2] + E[\varepsilon_i]E[(f(x_i) -\hat{y_i}^*)] \\
+  &= E[(y_i^* -f(x_i))^2] + E[(f(x_i) -\hat{y_i}^*)^2] + 0\\
+  &= \underset{\text{errore irriducibile}}{E[(\varepsilon_i^*)^2]} + \underset{\text{errore riducibile}}{E[(f(x_i) - \hat{f}(x_i))^2]} \\
+  &= \sigma^2_\varepsilon + E[(f(x_i) - E[\hat{f}(x_i)] + E[\hat{f}(x_i)] - \hat{f}(x_i))^2] \\
+  &= \sigma^2_\varepsilon + E[(\hat{f}(x_i) - f(x_i))^2] + E[(\hat{f}(x_i) - E[\hat{f}(x_i)])^2] + 2E[(\hat{f}(x_i) - E[\hat{f}(x_i)])(E[\hat{f}(x_i)]- f(x_i))] \\
+  &= \sigma^2_\varepsilon + E[(\hat{f}(x_i) - f(x_i))^2] + E[(\hat{f}(x_i) - E[\hat{f}(x_i)])^2] + 0 \\
+  &= \sigma^2_\varepsilon + (E[\hat{f}(x_i)] - f(x_i))^2 + Var(\hat{f}(x_i)) \\
+  &= \underset{\text{errore irriducibile}}{\sigma^2_\varepsilon} + \underset{\text{distorsione}^2}{\frac{1}{n}\sum_{i=1}^n(E[(\hat{f}(x_i)] - f(x_i))^2} + \underset{\text{varianza}}{\frac{1}{n}\sum_{i=1}^n Var(\hat{f}(x_i))}
+\end{align*}
+Tutte e tre le quantità sono positive: è impossibile minimizzare contemporaneamente le tre quantità, bisogna trovare un compromesso che si adatti alle esigenze del singolo caso.
+Si ha un'alta distorsione con modelli non flessibili (lineare) e alta varianza con modelli particolarmente variabili e flessibili (funzioni complesse).
+
+Nel caso specifico del modello lineare, utilizzando lo stimatore a minimi quadrati (non distorto, Teorema di Gauss-Markov\footnote{Lo stimatore a minimi quadrati è BLUE: \textit{Best Linear Unbiased Estimator}.}), la distorsione sarà nulla e l'unico errore (riducibile) è dovuto alla varianza del modello.
+Quindi qualsiasi altro metodo di stima offre un MSE maggiore o uguale a quello ottenuto coi minimi quadrati.
+\begin{align*}
+  Err &= \sigma^2 + 0 + \frac{1}{n} \sum_{i=1}^n Var(\hat{f}(x_i)) \\
+      &= \sigma^2 + \frac{1}{n} \sum_{i=1}^n Var(x_i^{\prime} \hat{\beta}) \\
+      &= \sigma^2 + \frac{1}{n} \cdot trace (Var(X \hat{\beta})) \\
+      &= \sigma^2 + \frac{1}{n} \cdot trace (\underset{H}{\underline{X (X^{\prime}X)^{-1} X^{\prime}}} y) \\
+      &= \sigma^2 + \frac{1}{n} \cdot trace (H \underset{Var(y)}{\underline{\sigma^2 I_p}} H) \\
+      &= \sigma^2 + \frac{\sigma^2}{n} \cdot trace(H) \\
+      &= \sigma^2 + \frac{\sigma^2}{n} \cdot trace(X(X^{\prime}X)^{-1}X^{\prime}) \\
+      % per le proprietà della traccia: trace(ABC) = trace(BCA) per qualsiasi permutazione
+      &= \sigma^2 + \frac{\sigma^2}{n} \cdot trace(I_p) \\
+      &= \sigma^2 + \frac{\sigma^2 \cdot p}{n}
+\end{align*}
+% slide 17, seconda lezione
+La varianza riducibile del modello lineare dipende solamente dal numero di regressori $p$: per ridurre la varianza del modello sono preferibili matrici di bassa dimensionalità.
+
+\section{Applicazione in R}
+Si consideri la simulazione in R:
+\begin{minted}{R}
+n <- 50
+p <- 30
+X <- matrix(rnorm(n * p), nrow = n)
+# si estraggono 10 parametri con valori "bassi"
+# e 20 con valori "alti": alcuni coefficienti sono
+# utili e altri no
+b.star <- c(runif(10, 0.5, 1), runif(20, 0, 0.3))
+mu <- as.numeric(X %*% bstar)
+\end{minted}
+Così facendo si genera una matrice $X$ di dimensioni $50 \times 30$ (contenente valori casuali) e un vettore di parametri stimati $\hat{\beta}$ contenente alcuni coefficienti significativi e altri no.
+Si ottiene, col metodo Montecarlo la distribuzione dell'errore del modello:
+\begin{minted}{R}
+R <- 100
+fit <- matrix(0, R, n)
+err <- numeric(fit)
+for (i in 1:R) {
+  y <- mu + rnorm(n)
+  y.hat <- mu + rnorm(n)
+  mod <- lm(y ~ X + 0)  # modello di regressione senza intercetta
+  bls <- coef(mod)
+  fit[i, ] <- X %*% bls
+  err[i] <- mean((y_hat - fit[i, ])^2)  # MSE
+}
+# si calcolano quindi le singole componenti della varianza:
+prediction.error <- mean(err)
+bias <- sum((colMeans(fit) - mu)^2) / n
+var <- sum(apply(fit, 2, var)) / n
+\end{minted}
+I valori dovrebbero tendere ai valori teorici: \verb|bias| tende a 0, \verb|var| tende a $\frac{p}{n}$ e la loro somma (più $1$ per la varianza dell'errore casuale dato da \verb|rnorm|) tende al valore di \verb|prediction.error|.
+
+In generale, aumentando il grado del polinomio interpolante, l'MSE diminuisce progressivamente sul \textit{train set}: il modello diventa sempre più flessibile, riducendo la distorsione.
+Tuttavia, all'aumento del grado del polinomio, la variabilità del modello aumenta drasticamente rischiando di ridurre la capacità di generalizzazione: il modello si adatta perfettamente al \textit{train set} ma perde completamente capacità predittiva sul \textit{test set} e quindi significato (si verifica \textit{overfitting}).
+Il modello quindi si adatta al rumore trascurando il segnale di fondo.
+
+\section{Ottimismo}
+Con \textit{ottimismo} si intende la differenza tra le prestazioni di previsione del modello sul \textit{train set} rispetto a quelle del \textit{test set}:
+\begin{equation*}
+  Opt = E[MSE_{Te}] - E[MSE_{Tr}] \hspace{10pt} > 0
+\end{equation*}
+Nel caso del \textit{fixed-x settings}:
+\begin{align*}
+  Opt &= E[\frac{1}{n} \sum_{i = 1}^n(y_i^* - \hat{f}(x_i))^2 - \frac{1}{n} \sum_{i = 1}^n(y_i - \hat{f}(x_i))^2] \\
+  &= \frac{2}{n} \sum_{i=1}^n Cov(y_i, \hat{f}(x_i))
+\end{align*}
+più alta è la correlazione e i valori stimati dal modello, più l'ottimismo è elevato.
+
+Nel caso del modello lineare, l'ottimismo si riscrive come:
+\begin{equation*}
+  Err_F = E[MSE_{Te}] = E[MSE_{Tr}] + Opt_F
+\end{equation*}
+L'ottimismo offre una stima dell'errore di previsione:
+\begin{equation*}
+  \hat{Err_F} = MSE_{Tr} + \hat{Opt}_F = MSE_{Tr} + \frac{2\sigma^2 p}{n}
+\end{equation*}
+
+Si dimostra che il valore atteso dell'MSE per il \textit{train set} è minore del valore atteso per il \textit{test set} (e dunque che l'\textit{ottimismo} è positivo):
+\begin{align*}
+  E[(y_i - \hat{y}_i)^2] &= Var(y_i - \hat{y}_i) + E[(y_i - \hat{y}_i)]^2 \\
+                         &= Var(y_i) + Var(\hat{y}_i) - 2Cov(y_i - \hat{y}_i) + (E[y_i] + E[\hat{y}_i])^2 \\
+  &= Var(y_i) + Var(\hat{y}_i) - 2Cov(y_i - \hat{y}_i) \\
+  \vspace{5pt} \\
+  E[(y_i^* - \hat{y}_i)^2] &= Var(y_i^* - \hat{y}_i) + E[(y_i^* - \hat{y}_i)]^2 \\
+                         &= Var(y_i^*) + Var(\hat{y}_i) - 2Cov(y_i^* - \hat{y}_i) + (E[y_i^*] + E[\hat{y}_i])^2 \\
+                         &= Var(y_i) + Var(\hat{y}_i)
+\end{align*}
+$y_i^*$ e $y_i$ hanno la stessa distribuzione, stessa varianza e stesso valore atteso, inoltre $y_i^*$ e $\hat{y}_i$ sono indipendenti.
+Dunque:
+\begin{align*}
+  Opt &= E[MSE_{Te}] - E[MSE_{Tr}] \\
+                         &= [Var(y_i) + Var(\hat{y}_i) - \frac{2}{n}\sum_{i=1}^n Cov(y_i - \hat{y}_i)] - [Var(y_i) + Var(\hat{y}_i)] \\
+                         &= - \frac{2}{n}\sum_{i=1}^n Cov(y_i - \hat{y}_i)
+                           = - \frac{2}{n}\sum_{i=1}^n \sigma^2H_{i.i}
+                           = \frac{2\sigma^2 p}{n}
+\end{align*}
+Dunque l'ottimismo è direttamente proporzionale rispetto a $\sigma^2$ e $p$ e inversamente proporzionale rispetto a $n$.
+Ottimizzando l'MSE del \textit{training set} si ignora quindi la distorsione data dall'ottimismo.
+Il problema della formula è che $\sigma^2$ è incognita: la migliore stima è usare la somma dei quadrati dei residui $RSS$ (\textit{Residual Sum of Squares}).
+\begin{align*}
+  \sigma^2 &= \frac{RSS}{n - p} \\
+  \hat{Err} &= MSE_{Tr} + 2\frac{p}{n} \cdot \frac{RSS}{n - p}
+\end{align*}
+La stima dell'errore è chiamato \textit{indice $C_p$ di Mallow}: è una penalità, che tiene conto della complessità del modello.
+Questo indice è usato per quantificare la bontà del modello: più è basso, migliore è il modello.
+\end{document}

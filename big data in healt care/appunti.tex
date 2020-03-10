@@ -1,0 +1,98 @@
+\documentclass[a4page, twocolumn]{article}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{minted}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\title{\textbf{Big Data in Healt Care}}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+Lo scopo della ricerca biomedica è quella di scoprire nessi di causa-effetto grazie ai dati a propria disposizione.
+I modelli statistici utilizzati devono dunque essere interpretabili e generalizzare bene da un campione all'intera popolazione.
+Per definire una tassonomia degli studi clinici, ci si basa su \textit{An Overview of clinical research: the lay of the land}, D.A. Grimes, K.F. Schulz, Lancet 2002: la ricerca clinica è divisa tra studi \textit{sperimentali} e studi \textit{osservazionali}, basandosi sul fatto che il ricercatore ha assegnato una esposizione (un farmaco) o meno.
+
+Si definisce \textit{incidenza} la frequenza di casi nuovi nel periodo di controllo; mentre si definisce \textit{prevalenza} la frequenza di casi in un dato momento temporale.
+
+\section{Studio sperimentale}
+In questo tipo di studio, l'esposizione (il farmaco, il trattamento o simili) è assegnata dal ricercatore e viene modificata per verificare effetti sull'esito.
+Lo studio è effettuato in modo controllato, anche con randomizzazione dei pazienti; qualora non si randomizzino i pazienti, si studia in modo \textit{concomitante} o \textit{storico} (se si hanno indicazioni temporali sui soggetti o meno).
+L'approccio storico tuttavia non è sempre così affidabile date variazioni non registrate nelle caratteristiche dei soggetti, così come metodologie di diagnosi, trattamenti e simili.
+Dunque il rischio è che la popolazione di partenza non sia sovrapponibile alla popolazione di controllo successiva.
+La randomizzazione corregge errori sistematici, dividendo in gruppi (senza preferenze) la popolazione, aumentando la qualità dei dati e offrendo un trattamento informato e di qualità ai pazienti (rendendolo il metodo più etico).
+
+In mancanza di un gruppo di controllo, è impossibile valutare correttamente l'effetto di un trattamento sperimentale (deve esserci un confronto, standard o placebo).
+
+\section{Studio osservazionale}
+In questo caso la decisione dell'esposizione è indipendente dalla decisione di includere il paziente nello studio (la prescrizione di farmaci è effettuata da procedure diagnostiche e valutative descritte dall'AIFA - \textit{Associazione Italiana del Farmaco}).
+In questo caso, il ricercatore osserva l'effetto di un'esposizione sul paziente senza modifiche.
+
+\subsection{Studi descrittivi}
+Questa tipologia di studio è molto semplice e serve per dare informazioni iniziali in nuove aree di studio.
+Descrivono distribuzione geografica, temporale, demografica, frequenza, enti determinanti di caratteristiche, fattori o sorveglianza sanitaria.
+I risultati sono qualitativi e descrivono distribuzioni e caratteristiche di patologie o di loro cause.
+
+\subsection{Studi analitici}
+Nel caso ci sia una divisione in gruppi della popolazione (come un campione di riferimento), si parla di studio \textit{analitico}.
+Uno studio analitico a sua volta è detto \textit{di cohorte} se si parte dalla misura dell'esposizione per studiare il nesso col risultato (andando avanti nel tempo); negli studi \textit{caso-controllo} si parte dalla misura del risultato per studiare ipotetici nessi con la relazione (andando quindi indetro nel tempo); negli studi \textit{cross-sectional} l'esposizione e il risultato sono studiati nello stesso tempo (rendendo difficile comprendere nessi di causa-effetto).
+Gli studi caso-controllo possono essere affetti da \textit{recall bias}: la difficoltà di reperire dati di qualità andando particolarmente indietro nel tempo; tuttavia sono più economici pur non garantendo una facile e corretta interpretazione dei risultati.
+Gli studi di cohorte invece sono più precisi ma sono lunghi (soprattutto con eventi rari) e costosi.
+
+Gli studi \textit{epidemiologici} di questo tipo si occupano generalmente di studiare la relazione tra fattori di rischio o protettivi e la frequenza della malattia; gli studi di \textit{epidemiologia clinica} sono generalmente studi di farmacovigilanza: verificano l'impatto di un trattamento nella pratica clinica.
+
+\section{Piano di studio}
+Per far sì che lo studio sia affidabile e riproducibile, è necessario un buon \textit{piano di studio}, che deve essere:
+\begin{itemize}
+\item \textit{valido}: l'effetto osservato in risposta a un trattamento deve essere attribuito con certezza al trattamento stesso e non a fattori esterni, generalmente è ottenibile tramite randomizzazione;
+\item \textit{preciso}: l'errore casuale irriducibile deve essere sufficientemente basso da evitare errori nelle conclusioni, ovvero è necessario operare su basi campionarie sufficientemente grandi;
+\item \textit{applicabile}: i risultati devono poter generalizzare bene, considerando le popolazioni di riferimento, le procedure di reclutamento dei soggetti e ai criteri utilizzati.
+\end{itemize}
+
+Generalmente gli studi di farmaco-cinetica e farmaco-dinamica si dividono in tre fasi: si parte da degli \textit{studi di fase 1}, per garantire un profilo di sicurezza del prodotto, generalmente partendo da volontari sani, seguiti da \textit{studi di fase 2}, per valutare il profilo di sicurezza in condizioni cliniche ideali controllate, da perfezionare negli \textit{studi di fase 3}, in cui è verificata l'efficacia e la posologia ottimale del trattamento.
+La seconda fase è utilizzata per verificare dimensione campionaria, posologia iniziale e popolazione di partenza per la fase successiva.
+L'ultima fase è condotta in parallelo (almeno) due volte in modo indipendente per verificare anche la riproducibilità del risultato; inoltre tutte le condizioni sperimentali e i risultati sono riportati sul foglietto illustrativo del trattamento.
+
+% primo esercizio (dire che tipo di studio è):
+% + 1: gastroprotettori - demenza, farmaco-epidemiologici
+% |  diversi farmaci influenzano il rischio di demenza, si cerca di prevenirla
+% |  studi precedenti dicono che i gastroprotettori possono influire
+% |  2004-2011, dati assicurativi-sanitari comprendenti diagnosi e farmaci
+% |  usato un modello statistico (regressione)
+% |  73'000 soggetti sani in partenza (75>), farmaci presi regolarmente
+% |  esito: scoperto nesso gastroprotettori -> demenza
+% |     da studiare in maggior dettaglio
+%
+% + 2: somministrazione combo farmaci per prevenzione coronarica post-menopausa
+% |  motivato da studi osservazionali non confermato da trial medici
+% |  (riduzione della malattia prendendo estrogeni) 
+% |  studio randomizzato e cieco, due popolazioni (farmaco & placebil)
+% |  20 centri, ~2'000 donne sane
+% |  intervento dato da combinazione di farmaci
+% |  _follow up_ di 4 anni
+% |  si misura infarto coronalico e altri problemi simili
+% |  esito: non rivelano significative differenze tra i gruppi
+%
+% + 3: bevande alcoliche -> cancro allo stomaco?
+% |  usati dei modelli statistici su dati storici
+% |  esito: probabilità alzata da cereali e patate
+% |                     abbassata da frutta e verdura
+%
+% + 4: farmaci usati per la polmonite
+% |  non è noto se combinazioni fisse sono efficaci
+% |  l'obiettivo è studiare se esistono peggioramenti col trattamento
+% |    rispetto a quelli trattati con un altro
+% |  i pazienti soffrono già di COV-D cronico
+% |  esito: differenza statisticamente significativa con il farmaco
+%
+\end{document}
